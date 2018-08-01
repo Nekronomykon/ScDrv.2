@@ -6,8 +6,6 @@
 #include <QCloseEvent>
 
 #include "EditWorkspace.h"
-
-
 #include "FrameFile.h"
 
 #include "ui_FrameWkspace.h"
@@ -51,6 +49,7 @@ public:
 public slots:
   //
 protected slots:
+  void on_actionOpen__triggered();
 
 protected:
   void changeEvent(QEvent *e);

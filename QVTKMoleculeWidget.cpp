@@ -65,6 +65,13 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
 QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
 
-void QVTKMoleculeWidget::ShowMolecule(const vtkMolecule *pMol)
+void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
 {
+  mol_mapper_->RemoveAllInputs();
+  if (pMol)
+  {
+    mol_mapper_->SetInputData(pMol);
+    mol_mapper_->Update();
+  }
+  this->GetRenderWindow()->Render();
 }

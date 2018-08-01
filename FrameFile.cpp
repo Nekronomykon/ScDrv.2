@@ -1,11 +1,26 @@
 #include "FrameFile.h"
 
+// static functions
 QStringList FrameFile::recent_files;
 
 FrameFile* FrameFile::New(QWidget*parent)
 {
   return new FrameFile(parent);
 }
+
+QString FrameFile::GetFileInputContextString()
+{
+  return tr("XYZ file (*.xyz);;All files (*.*)");
+}
+
+void FrameFile::SetupFileInputContext(const QString& context)
+{
+  if (context.isEmpty())
+    return;
+}
+
+void FrameFile::ClearFileInputContext()
+{}
 
 FrameFile::FrameFile(QWidget* parent)
 	: QTabWidget(parent)
@@ -25,6 +40,8 @@ FrameFile::FrameFile(QWidget* parent)
 
   this->addTab(view_molecule_, tr("Molecule"));
   this->addTab(edit_source_, tr("Source"));
+
+  a_molecule_->Initialize();
 }
 
 

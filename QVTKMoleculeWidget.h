@@ -19,7 +19,7 @@ public:
   ~QVTKMoleculeWidget() override;
 
 public:
-  void ShowMolecule(const vtkMolecule * /*pmol*/ = nullptr);
+  void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
 
 private:
   typedef vtkSmartPointer<vtkActor> Actor;

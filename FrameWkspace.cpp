@@ -2,6 +2,7 @@
 
 #include <QRect>
 #include <QString>
+#include <QStringList>
 #include <QByteArray>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -9,6 +10,8 @@
 #include <QFileInfo>
 #include <QSettings>
 #include <QMdiSubWindow>
+#include <QMessageBox>
+#include <QFileDialog>
 
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkPolyDataMapper.h>
@@ -16,6 +19,8 @@
 #include <vtkRenderWindow.h>
 #include <vtkSphereSource.h>
 #include <vtkSmartPointer.h>
+
+#include "FileInputContext.h"
 
 // Constructor
 FrameWkspace::FrameWkspace(QWidget* parent)
@@ -178,4 +183,40 @@ void FrameWkspace::restoreSettings()
   {
     QSettings settings;
     settings.setValue("Geometry", this->saveGeometry());
+  }
+
+  //
+  void FrameWkspace::on_actionOpen__triggered()
+  {
+    QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
+      | QFileDialog::ReadOnly                    // read-only is also to read
+      | QFileDialog::DontUseCustomDirectoryIcons // uniformity
+      ;
+
+    QString all_context = FrameFile::GetFileInputContextString();
+    QString the_context;
+    QString dir_name;
+
+    QStringList all_paths =
+      // FrameFile::queryInputFiles(the_context);
+      QFileDialog::getOpenFileNames(this
+        , tr("Specify input files")
+        , dir_name
+        , all_context
+        , &the_context
+        , options
+      );
+
+    if (all_paths.isEmpty())
+      return;
+
+    FileInputContextSetup<FrameFile> context(the_context);
+
+    for (const auto &one_path : all_paths)
+    {
+      QFileInfo fi(one_path);
+      Child *pFrame = this->addFileToWorkspace(fi.canonicalFilePath()
+        , true); // ...and now open
+                 //  pFrame;
+    }
   }
