@@ -36,7 +36,6 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget* parent)
   Actor sphereActor = Actor::New();
   sphereActor->SetMapper(sphereMapper);
 
-  vtkNew<vtkNamedColors> colrs;
 
 
   // Molecule actor
@@ -45,7 +44,11 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget* parent)
 
   // VTK Renderer
   Renderer renderer = Renderer::New();
+
+  vtkNew<vtkNamedColors> colrs;
+  // renderer->SetBackground(colrs->GetColor3d("Gainsboro").GetData());
   renderer->SetBackground(colrs->GetColor3d("SlateGray").GetData());
+
   renderer->AddActor(sphereActor);
   renderer->AddActor(mol);
 

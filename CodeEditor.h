@@ -1,5 +1,5 @@
-#ifndef CODEEDITOR_H
-#define CODEEDITOR_H
+#ifndef __Code_Editor_h__
+#define __Code_Editor_h__
 
 #include <QPointer>
 
@@ -9,7 +9,7 @@
 #include <QTemporaryFile>
 #include <QIODevice>
 
-class LineNumberArea;
+class SideBarDecorator;
 
 //![codeeditordefinition]
 
@@ -21,8 +21,8 @@ public:
     explicit CodeEditor(QWidget *parent = 0);
     ~CodeEditor () override;
 
-    void lineNumberAreaPaintEvent(QPaintEvent *event);
-    int lineNumberAreaWidth();
+    void SideBarDecoratorPaintEvent(QPaintEvent *event);
+    int SideBarWidth();
 
     void load(QIODevice* /*pIO*/);
     void save(QIODevice* /*pIO*/);
@@ -35,40 +35,14 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void updateLineNumberAreaWidth(int newBlockCount);
+    void updateSideBarDecoratorWidth(int newBlockCount);
     void highlightCurrentLine();
-    void updateLineNumberArea(const QRect &, int);
+    void updateSideBarDecorator(const QRect &, int);
 
 private:
-    QPointer<LineNumberArea> lineNumberArea;
+    QPointer<SideBarDecorator> side_bar_;
 
     QTemporaryFile file_dump_;
 };
 
-//![codeeditordefinition]
-//![extraarea]
-
-class LineNumberArea
-        : public QWidget
-{
-public:
-    LineNumberArea(CodeEditor *editor) : QWidget(editor) {
-        codeEditor = editor;
-    }
-
-    QSize sizeHint() const override {
-        return QSize(codeEditor->lineNumberAreaWidth(), 0);
-    }
-
-protected:
-    void paintEvent(QPaintEvent *event) override {
-        codeEditor->lineNumberAreaPaintEvent(event);
-    }
-
-private:
-    CodeEditor *codeEditor;
-};
-
-//![extraarea]
-
-#endif
+#endif // !__Code_Editor_h__
