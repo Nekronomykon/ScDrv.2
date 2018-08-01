@@ -36,8 +36,8 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   // Sphere
   vtkSmartPointer<vtkSphereSource> sphereSource =
       vtkSmartPointer<vtkSphereSource>::New();
-  sphereSource->SetThetaResolution(26);
-  sphereSource->SetPhiResolution(26);
+  sphereSource->SetThetaResolution(14);
+  sphereSource->SetPhiResolution(14);
   sphereSource->Update();
   vtkSmartPointer<vtkPolyDataMapper> sphereMapper =
       vtkSmartPointer<vtkPolyDataMapper>::New();

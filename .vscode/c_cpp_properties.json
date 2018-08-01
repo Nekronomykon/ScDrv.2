@@ -17,6 +17,19 @@
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:/Serge/VTK/include/vtk-9.0/*",
+                "C:/Qt/5.11.1/msvc2017_64/include/*",
+                "C:/Qt/5.11.1/msvc2017_64/include/QtCore/*",
+                "C:/Qt/5.11.1/msvc2017_64/include/QtGui/*",
+                "C:/Qt/5.11.1/msvc2017_64/include/QtWidgets/*",
+                "C:/Qt/5.11.1/msvc2017_64/include/QtOpenGL/*",
+                "C:/Qt/5.11.1/msvc2017_64/include/QtPrintSupport/*",
+                "${workspaceFolder}/*"
+            ]
         }
     ],
     "version": 4
