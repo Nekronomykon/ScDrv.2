@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FrameWkspace</class>
+ <widget class="QMainWindow" name="FrameWkspace">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>[ScDrv]</string>
+  </property>
+  <widget class="FrameFile" name="viewMoleculeFile_"/>
+  <widget class="QMenuBar" name="barMenu_">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>640</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile_">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionNew_"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpen_"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit_"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp_">
+    <property name="title">
+     <string>&amp;?</string>
+    </property>
+    <addaction name="actionAbout_"/>
+    <addaction name="actionAboutQt_"/>
+   </widget>
+   <addaction name="menuFile_"/>
+   <addaction name="menuHelp_"/>
+  </widget>
+  <widget class="QStatusBar" name="barStatus_"/>
+  <widget class="QToolBar" name="barTools_">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionNew_">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;New..</string>
+   </property>
+  </action>
+  <action name="actionOpen_">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Open..</string>
+   </property>
+  </action>
+  <action name="actionPrint_">
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionHelp_">
+   <property name="text">
+    <string>&amp;Help</string>
+   </property>
+  </action>
+  <action name="actionSave_">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionExit_">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionAbout_">
+   <property name="text">
+    <string>&amp;About..</string>
+   </property>
+  </action>
+  <action name="actionAboutQt_">
+   <property name="text">
+    <string>About &amp;Qt..</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FrameFile</class>
+   <extends>QTabWidget</extends>
+   <header>FrameFile.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
