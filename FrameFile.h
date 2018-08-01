@@ -2,6 +2,7 @@
 #define __Frame_File_h__
 
 #include <QPointer>
+
 #include <QStringList>
 #include <QWidget>
 
@@ -26,6 +27,8 @@ public:
 	~FrameFile() override;
 
   static FrameFile* New(QWidget* /*parent*/ = Q_NULLPTR);
+
+	static QStringList getRecentFiles() {return recent_files;}
 
 private:
 	static QStringList recent_files;

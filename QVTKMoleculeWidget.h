@@ -10,22 +10,24 @@
 #include <vtkMolecule.h>
 #include <vtkMoleculeMapper.h>
 
-
 class QVTKMoleculeWidget
-	: public QVTKOpenGLWidget
+    : public QVTKOpenGLWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 public:
-	QVTKMoleculeWidget(QWidget* /*parent*/ = Q_NULLPTR);
-	~QVTKMoleculeWidget() override;
+  QVTKMoleculeWidget(QWidget * /*parent*/ = Q_NULLPTR);
+  ~QVTKMoleculeWidget() override;
 
+public:
+  void ShowMolecule(const vtkMolecule * /*pmol*/ = nullptr);
+
+private:
   typedef vtkSmartPointer<vtkActor> Actor;
   typedef vtkSmartPointer<vtkMoleculeMapper> MolMapper;
   typedef vtkSmartPointer<vtkRenderer> Renderer;
 
 private:
   MolMapper mol_mapper_;
-
 };
 
 #endif // !__QVTK_MoleculeWidget_h__

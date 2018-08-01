@@ -10,7 +10,12 @@
 #include <vtkActor.h>
 #include <vtkLODActor.h>
 
+#include <vtkMolecule.h>
+
 #include <vtkRenderer.h>
+
+#include <vtkOpenGLRenderer.h>
+#include <vtkOpenGLMoleculeMapper.h>
 
 #include <vtkNamedColors.h>
 
@@ -18,32 +23,34 @@
 
 typedef vtkSmartPointer<vtkLODActor> LODActor;
 
-QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget* parent)
-  : QVTKOpenGLWidget(parent)
-  , mol_mapper_(MolMapper::New())
+typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
+typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> OpenGLMolMapper;
+
+QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
+    : QVTKOpenGLWidget(parent), mol_mapper_(OpenGLMolMapper::New())
 {
-  this->setAttribute(Qt::WA_NativeWindow,false);
+  this->setAttribute(Qt::WA_NativeWindow, false);
   vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
   this->SetRenderWindow(renderWindow);
 
   // Sphere
   vtkSmartPointer<vtkSphereSource> sphereSource =
-    vtkSmartPointer<vtkSphereSource>::New();
+      vtkSmartPointer<vtkSphereSource>::New();
+  sphereSource->SetThetaResolution(26);
+  sphereSource->SetPhiResolution(26);
   sphereSource->Update();
   vtkSmartPointer<vtkPolyDataMapper> sphereMapper =
-    vtkSmartPointer<vtkPolyDataMapper>::New();
+      vtkSmartPointer<vtkPolyDataMapper>::New();
   sphereMapper->SetInputConnection(sphereSource->GetOutputPort());
   Actor sphereActor = Actor::New();
   sphereActor->SetMapper(sphereMapper);
-
-
 
   // Molecule actor
   LODActor mol = LODActor::New();
   mol->SetMapper(mol_mapper_.Get());
 
   // VTK Renderer
-  Renderer renderer = Renderer::New();
+  Renderer renderer(OpenGLRenderer::New());
 
   vtkNew<vtkNamedColors> colrs;
   // renderer->SetBackground(colrs->GetColor3d("Gainsboro").GetData());
@@ -56,7 +63,8 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget* parent)
   this->GetRenderWindow()->AddRenderer(renderer);
 }
 
+QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
 
-QVTKMoleculeWidget::~QVTKMoleculeWidget()
+void QVTKMoleculeWidget::ShowMolecule(const vtkMolecule *pMol)
 {
 }

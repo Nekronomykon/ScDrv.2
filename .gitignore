@@ -31,5 +31,8 @@
 *.out
 *.app
 
-#CMake addititonals
+#CMake additionals
+Build
 Build/*
+build
+build/*
