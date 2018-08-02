@@ -149,7 +149,9 @@ SOURCES += \
     ResetCursor.cpp \
     SideBarDecorator.cpp \
     TraitsAcquireAtoms.cpp \
-    FrameWorkspace.cpp
+    FrameWorkspace.cpp \
+    ModelTextFiles.cpp \
+    ViewFilesystem.cpp
 
 HEADERS += \
     EditWorkspace.h \
@@ -182,11 +184,12 @@ HEADERS += \
     SideBarDecorator.h \
     TraitsAcquireAtoms.h \
     FileFormatContext.h \
-    FrameWorkspace.h
+    FrameWorkspace.h \
+    ModelTextFiles.h \
+    ViewFilesystem.h
 
 FORMS += \
-    FrameWkspace.ui \
-    FrameWkspace.ui
+    FrameWorkspace.ui
 
 RESOURCES += \
     ScDrv.qrc \
@@ -194,7 +197,6 @@ RESOURCES += \
 
 DISTFILES += \
     CMakeLists.txt \
-    ScDrv.pro.user \
     CMakeLists.txt
 
 SUBDIRS += \

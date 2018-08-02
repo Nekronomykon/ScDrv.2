@@ -25,7 +25,7 @@ FrameFile::FrameFile(QWidget* parent)
     //, extend_(new QToolButton(this))
     //, compress_(new QToolButton(this))
     , edit_source_(new CodeEditor(this))
-    // , view_molecule_(new QVTKMoleculeWidget(this))
+    , view_molecule_(new QVTKMoleculeWidget(this))
 {
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setTabPosition(QTabWidget::South);
@@ -37,7 +37,7 @@ FrameFile::FrameFile(QWidget* parent)
     //this->setCornerWidget(compress_, Qt::BottomRightCorner);
 
   this->addTab(edit_source_, tr("Source"));
-  // this->addTab(view_molecule_, tr("Molecule"));
+  this->addTab(view_molecule_, tr("Molecule"));
 
   a_molecule_->Initialize();
 }

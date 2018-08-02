@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
   QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
   QVTKApplication app(argc, argv);
-  app.setAttribute(Qt::AA_NativeWindows, false);
+  // app.setAttribute(Qt::AA_NativeWindows, false);
   QCoreApplication::setApplicationName("ScrewDriver");
   QCoreApplication::setOrganizationName("Nekronomykon");
   QCoreApplication::setApplicationVersion(QT_VERSION_STR);

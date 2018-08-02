@@ -43,9 +43,14 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   //pSW->show();
 
 
-  QDockWidget *pInit = new QDockWidget(tr("Workspace"), this);
-  pInit->setWidget(edit_workspace_);
+  QDockWidget *pInit;
+  QDockWidget* pNext;
+  pInit = new QDockWidget(tr("Files"), this);
+  pInit->setWidget(view_files_);
+  pNext = new QDockWidget(tr("Workspace"), this);
+  pNext->setWidget(edit_workspace_);
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
+  this->tabifyDockWidget(pInit, pNext);
 
   // reread
   this->restoreSettings();
@@ -58,7 +63,7 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
 
 FrameWorkspace::Child* FrameWorkspace::getActiveChild() const
 {
-    return this->viewMoleculeFile_;
+  return this->viewMoleculeFile_;
 }
 void FrameWorkspace::changeEvent(QEvent *e)
 {
@@ -83,7 +88,7 @@ void FrameWorkspace::closeEvent(QCloseEvent *event)
   //}
   //else
   //{
-    event->accept();
+  event->accept();
   //}
 }
 
@@ -170,57 +175,57 @@ FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, b
 void FrameWorkspace::restoreSettings()
 {
   QSettings stored;
-    const QByteArray geometry = stored.value("Geometry", QByteArray()).toByteArray();
-    if (geometry.isEmpty())
-    {
-      const QRect availableGeometry = QApplication::desktop()->availableGeometry(this);
-      this->resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
-      this->move((availableGeometry.width() - this->width()) / 2, (availableGeometry.height() - this->height()) / 2);
-    }
-    else
-    {
-      this->restoreGeometry(geometry);
-    }
-  }
-  //
-  void FrameWorkspace::storeSettings()
+  const QByteArray geometry = stored.value("Geometry", QByteArray()).toByteArray();
+  if (geometry.isEmpty())
   {
-    QSettings settings;
-    settings.setValue("Geometry", this->saveGeometry());
+    const QRect availableGeometry = QApplication::desktop()->availableGeometry(this);
+    this->resize(availableGeometry.width() / 3, availableGeometry.height() / 2);
+    this->move((availableGeometry.width() - this->width()) / 2, (availableGeometry.height() - this->height()) / 2);
   }
-
-  //
-  void FrameWorkspace::on_actionOpen__triggered()
+  else
   {
-    QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
-      | QFileDialog::ReadOnly                    // read-only is also to read
-      | QFileDialog::DontUseCustomDirectoryIcons // uniformity
-      ;
-
-    QString all_context = FrameFile::GetFileInputContextString();
-    QString the_context;
-    QString dir_name;
-
-    QStringList all_paths =
-      // FrameFile::queryInputFiles(the_context);
-      QFileDialog::getOpenFileNames(this
-        , tr("Specify input files")
-        , dir_name
-        , all_context
-        , &the_context
-        , options
-      );
-
-    if (all_paths.isEmpty())
-      return;
-
-    FileInputContextSetup<FrameFile> context(the_context);
-
-    for (const auto &one_path : all_paths)
-    {
-      QFileInfo fi(one_path);
-      Child *pFrame = this->addFileToWorkspace(fi.canonicalFilePath()
-        , true); // ...and now open
-                 //  pFrame;
-    }
+    this->restoreGeometry(geometry);
   }
+}
+//
+void FrameWorkspace::storeSettings()
+{
+  QSettings settings;
+  settings.setValue("Geometry", this->saveGeometry());
+}
+
+//
+void FrameWorkspace::on_actionOpen__triggered()
+{
+  QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
+    | QFileDialog::ReadOnly                    // read-only is also to read
+    | QFileDialog::DontUseCustomDirectoryIcons // uniformity
+    ;
+
+  QString all_context = FrameFile::GetFileInputContextString();
+  QString the_context;
+  QString dir_name;
+
+  QStringList all_paths =
+    // FrameFile::queryInputFiles(the_context);
+    QFileDialog::getOpenFileNames(this
+      , tr("Specify input files")
+      , dir_name
+      , all_context
+      , &the_context
+      , options
+    );
+
+  if (all_paths.isEmpty())
+    return;
+
+  FileInputContextSetup<FrameFile> context(the_context);
+
+  for (const auto &one_path : all_paths)
+  {
+    QFileInfo fi(one_path);
+    Child *pFrame = this->addFileToWorkspace(fi.canonicalFilePath()
+      , true); // ...and now open
+               //  pFrame;
+  }
+}

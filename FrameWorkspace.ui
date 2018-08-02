@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FrameWkspace</class>
- <widget class="QMainWindow" name="FrameWkspace">
+ <class>FrameWorkspace</class>
+ <widget class="QMainWindow" name="FrameWorkspace">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -19,8 +19,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
-     <height>21</height>
+     <width>800</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_">

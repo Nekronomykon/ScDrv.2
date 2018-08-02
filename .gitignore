@@ -32,6 +32,9 @@
 *.app
 *.x
 
+#Qt Creator / qmake
+*.user
+
 #CMake additionals
 Build
 Build*

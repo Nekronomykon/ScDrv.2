@@ -29,7 +29,7 @@ typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> OpenGLMolMapper;
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
     : QVTKOpenGLWidget(parent), mol_mapper_(OpenGLMolMapper::New())
 {
-  this->setAttribute(Qt::WA_NativeWindow, false);
+  // this->setAttribute(Qt::WA_NativeWindow, false);
   vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
   this->SetRenderWindow(renderWindow);
 
