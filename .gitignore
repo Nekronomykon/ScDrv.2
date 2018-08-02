@@ -33,6 +33,8 @@
 
 #CMake additionals
 Build
+Build*
 Build/*
 build
+build*
 build/*

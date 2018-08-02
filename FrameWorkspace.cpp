@@ -1,4 +1,4 @@
-#include "FrameWkspace.h"
+#include "FrameWorkspace.h"
 
 #include <QRect>
 #include <QString>
@@ -20,10 +20,10 @@
 #include <vtkSphereSource.h>
 #include <vtkSmartPointer.h>
 
-#include "FileInputContext.h"
+#include "FileFormatContext.h"
 
 // Constructor
-FrameWkspace::FrameWkspace(QWidget* parent)
+FrameWorkspace::FrameWorkspace(QWidget* parent)
   : QMainWindow(parent)
   , edit_workspace_(new EditWorkspace(this))
 {
@@ -56,7 +56,11 @@ FrameWkspace::FrameWkspace(QWidget* parent)
 
 }
 
-void FrameWkspace::changeEvent(QEvent *e)
+FrameWorkspace::Child* FrameWorkspace::getActiveChild() const
+{
+    return this->viewMoleculeFile_;
+}
+void FrameWorkspace::changeEvent(QEvent *e)
 {
   QMainWindow::changeEvent(e);
   switch (e->type())
@@ -69,7 +73,7 @@ void FrameWkspace::changeEvent(QEvent *e)
   }
 }
 
-void FrameWkspace::closeEvent(QCloseEvent *event)
+void FrameWorkspace::closeEvent(QCloseEvent *event)
 {
   this->storeSettings();
   //mdiArea_->closeAllSubWindows();
@@ -84,7 +88,7 @@ void FrameWkspace::closeEvent(QCloseEvent *event)
 }
 
 //
-void FrameWkspace::addPathToWorkspace(const QString &name, bool bAutoOpen)
+void FrameWorkspace::addPathToWorkspace(const QString &name, bool bAutoOpen)
 {
   assert(!name.isEmpty());
   if (name.isEmpty())
@@ -123,14 +127,14 @@ void FrameWkspace::addPathToWorkspace(const QString &name, bool bAutoOpen)
 //                                     : a fully qualified (absolute) path to a dir
 //                             Returns : (none)
 //----------------------------------------------------------------------------------------
-void FrameWkspace::addDirToWorkspace(const QString &dir, bool bRecurse)
+void FrameWorkspace::addDirToWorkspace(const QString &dir, bool bRecurse)
 {
   // TODO: Probably here we should enumerate all suitable files
   // in the "name" dir and at least copy only their paths to the wkspace_,
   // but it is not Ok at the moment
   edit_workspace_->listDir(dir, bRecurse);
 }
-FrameWkspace::Child *FrameWkspace::addLinkToWorkspace(const QString & /* path */, bool /* bOpen */)
+FrameWorkspace::Child *FrameWorkspace::addLinkToWorkspace(const QString & /* path */, bool /* bOpen */)
 {
   Child *pResult(nullptr);
   // TODO: how to resolve link?
@@ -145,7 +149,7 @@ FrameWkspace::Child *FrameWkspace::addLinkToWorkspace(const QString & /* path */
 //                           Returns : pointer to a corresponding FrameFile object,
 //                                   : if there is any
 //----------------------------------------------------------------------------------------
-FrameWkspace::Child *FrameWkspace::addFileToWorkspace(const QString &path, bool bOpen)
+FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, bool bOpen)
 {
   Child *pChild = nullptr;
 
@@ -158,12 +162,12 @@ FrameWkspace::Child *FrameWkspace::addFileToWorkspace(const QString &path, bool 
     //if ((pChild = (this->*toCall)(path)))
     //  pChild->show();
   }
-  
+
 
   return pChild;
 }
 
-void FrameWkspace::restoreSettings()
+void FrameWorkspace::restoreSettings()
 {
   QSettings stored;
     const QByteArray geometry = stored.value("Geometry", QByteArray()).toByteArray();
@@ -179,14 +183,14 @@ void FrameWkspace::restoreSettings()
     }
   }
   //
-  void FrameWkspace::storeSettings()
+  void FrameWorkspace::storeSettings()
   {
     QSettings settings;
     settings.setValue("Geometry", this->saveGeometry());
   }
 
   //
-  void FrameWkspace::on_actionOpen__triggered()
+  void FrameWorkspace::on_actionOpen__triggered()
   {
     QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
       | QFileDialog::ReadOnly                    // read-only is also to read

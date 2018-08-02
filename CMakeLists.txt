@@ -15,7 +15,6 @@ foreach(policy
   endif()
 endforeach()
 
-
 PROJECT(ScDrv)
 
 find_package(VTK REQUIRED)
@@ -29,7 +28,6 @@ find_package(Qt5Core REQUIRED QUIET)
 find_package(Qt5Gui REQUIRED QUIET)
 find_package(Qt5PrintSupport REQUIRED QUIET)
 find_package(Qt5OpenGL REQUIRED QUIET)
-
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 

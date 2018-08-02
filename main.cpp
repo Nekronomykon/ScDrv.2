@@ -5,7 +5,7 @@
 
 #include <QVTKApplication.h>
 
-#include "FrameWkspace.h"
+#include "FrameWorkspace.h"
 
 int main(int argc, char *argv[])
 {
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
   bool bDoOpen = parser.isSet(auto_open);
 
-  FrameWkspace mainWin;
+  FrameWorkspace mainWin;
   for (const auto &arg : parser.positionalArguments())
     mainWin.addPathToWorkspace(arg, bDoOpen);
 

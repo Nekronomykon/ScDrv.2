@@ -1,5 +1,10 @@
-#ifndef __Frame_Wkspace_h__
-#define __Frame_Wkspace_h__
+#ifndef __Frame_Workspace_h__
+#define __Frame_Workspace_h__
+
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
 
 #include <QPointer>
 #include <QEvent>
@@ -11,16 +16,18 @@
 #include "ui_FrameWkspace.h"
 #include <QMainWindow>
 
-class FrameWkspace
-	: public QMainWindow
-	, private Ui_FrameWkspace
+class FrameWorkspace
+    : public QMainWindow
+    , private Ui_FrameWkspace
 {
   Q_OBJECT
 public:
 
   typedef FrameFile Child;
 
-  explicit FrameWkspace(QWidget* /*parent*/ = Q_NULLPTR);
+  explicit FrameWorkspace(QWidget* /*parent*/ = Q_NULLPTR);
+
+  Child* getActiveChild() const;
 
   // general...
   void addPathToWorkspace(const QString & /*arg */, bool /*bOpen*/);
@@ -28,7 +35,7 @@ public:
 
   //----------------------------------------------------------------------------------------
   // addFileToWorkspace(path, to_open) : adds path to the workspace, immediately try to open
-  //                                   : if requested. It is assumed that 'path' contains 
+  //                                   : if requested. It is assumed that 'path' contains
   //                                   : the fully qualified (absolute) path to a file
   //----------------------------------------------------------------------------------------
   //                           Returns : pointer to a corresponding FrameFile object,
@@ -38,9 +45,9 @@ public:
   Child* addLinkToWorkspace(const QString & /* path */, bool /* bOpen */ = false);
 
   //----------------------------------------------------------------------------------------
-  // addDirToWorkspace(path, to_recurse) : adds all files in the dir pointed by 'path' 
+  // addDirToWorkspace(path, to_recurse) : adds all files in the dir pointed by 'path'
   //                                     : to the workspace, subdirs are added recursively
-  //                                     : if requested. It is assumed that 'path' contains 
+  //                                     : if requested. It is assumed that 'path' contains
   //                                     : the fully qualified (absolute) path to a dir
   //                             Returns : (none)
   //----------------------------------------------------------------------------------------
@@ -60,7 +67,7 @@ private:
   void restoreSettings();
   void storeSettings();
 
-	// data members:
+  // data members:
 private:
   QPointer<EditWorkspace> edit_workspace_;
 
