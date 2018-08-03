@@ -25,6 +25,7 @@
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget* parent)
   : QMainWindow(parent)
+  , view_files_(new ViewFilesystem(this))
   , edit_workspace_(new EditWorkspace(this))
 {
   this->setupUi(this);

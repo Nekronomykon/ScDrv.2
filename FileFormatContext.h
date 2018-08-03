@@ -11,44 +11,42 @@
 #include "ImplFileName.h"
 
 template<class T>
-struct FileFormatContext
+class FileFormatContext
 {
   typedef typename T::FileNameType FileName;
   typedef bool (T::*BuildOperation)(void);
   typedef bool (T::*ExportOperation)(const FileName&);
 
-  bool hasBuild()  const { return bool(build_operation_ != nullptr);  }
+public:
+  FileFormatContext(FileName ext = FileName()
+    , BuildOperation opBuild = nullptr
+    , ExportOperation opExport = nullptr)
+    : format_ext_(ext)
+    , build_operation_(opBuild)
+    , export_operation_(opExport)
+  {}
 
-  bool hasExport() const { return bool(build_operation_ != nullptr);  }
+  bool isValid() const { return FileNameRoot::isItEmpty(format_ext_); }
+  bool hasBuild()  const { return bool(build_operation_ != nullptr); }
+  bool hasExport() const { return bool(build_operation_ != nullptr); }
 
+  operator FileName () const { return format_ext_; }
+  bool operator !() const { return !this->isValid(); }
   bool buildFrom(T& obj, const FileName& name) const
   {
-    if(!this->hasBuild())
-      return false; // you would check it before
-
-    return obj.readSource(name) ?
-          obj.*build_operation_() : false;
-
+    if (obj.readSource(name))
+      return (this->hasBuild()) ? obj.*build_operation_() : true;
+    else
+      return false;
   }
 
   bool exportTo(T& obj, const FileName& name) const
   {
     return (this->hasExport()) ?
-          obj.*export_operation_(name) : false;
+      obj.*export_operation_(name) : false;
   }
 
-  FileName annoteFormat(bool bExt = false) const
-  {
-    FileName res(format_name_);
-    if (bExt) {
-        res += " (*.";
-        res += format_ext_;
-        res += ");;";
-      }
-    return res;
-  }
-
-  FileName format_name_;
+private:
   FileName format_ext_;
   BuildOperation build_operation_;
   ExportOperation export_operation_;

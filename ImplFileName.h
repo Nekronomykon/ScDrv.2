@@ -13,17 +13,8 @@
 #include <QString>
 #include <QByteArray>
 
-template <class T
-  , class TName = std::string>
-class ImplFileName
+struct FileNameRoot
 {
-public:
-  typedef TName FileNameType;
-
-private:
-  FileNameType nameFile_;
-
-protected:
   template<class Str>
   inline static bool isItEmpty(const Str& s) { return s.empty(); }
   template<class Str>
@@ -37,6 +28,20 @@ protected:
     buffer = s.toLatin1();
     return buffer.data();
   }
+};
+
+template <class T
+  , class TName = std::string>
+class ImplFileName
+  : public FileNameRoot
+{
+public:
+  typedef TName FileNameType;
+
+private:
+  FileNameType nameFile_;
+
+protected:
 
 public:
   const FileNameType &FileName() const { return nameFile_; }

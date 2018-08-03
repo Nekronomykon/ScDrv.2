@@ -4,10 +4,18 @@
 
 #include "MoleculeAcquireFileXYZ.h"
 
-// static functions
+// static members
 QStringList FrameFile::recent_files;
 
+QMap<QString,FrameFile::FileContext> FrameFile::all_formats;
+
+// static functions
 FrameFile* FrameFile::New(QWidget*parent) {  return new FrameFile(parent); }
+
+void FrameFile::BuildFileContext()
+{
+  all_formats[tr("XMol XYtZ file")] = FrameFile::FileContext(tr("xyz"), &FrameFile::readContentXYZ);
+}
 
 QString FrameFile::GetFileInputContextString() { return tr("XYZ file (*.xyz);;All files (*.*)"); }
 
@@ -47,17 +55,6 @@ FrameFile::~FrameFile(){}
 
 bool FrameFile::readContentXYZ()
 {
-//    vtkSmartPointer<MoleculeAcquireFileXYZ> read
-//            = vtkSmartPointer<MoleculeAcquireFileXYZ>::New();
-
-//    QString str = this->getEditSource()->getDumpPath();
-//    QByteArray bytes = str.toLatin1();
-
-//    read->ResetFileName(bytes.data());
-//    read->SetOutput(a_molecule_);
-//    a_molecule_->Initialize();
-//    read->Update();
-//    return bool(a_molecule_->GetNumberOfAtoms() > 0);
     return  this->applyReaderType<MoleculeAcquireFileXYZ>();
 }
 

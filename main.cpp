@@ -1,6 +1,8 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
+#include <QThread>
+
 #include <QSurfaceFormat>
 
 #include <QVTKApplication.h>
@@ -17,7 +19,7 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
   QCommandLineParser parser;
-  parser.setApplicationDescription("Editor of molecular structure files");
+  parser.setApplicationDescription("Viewer / editor of molecular structure text files");
 
   parser.addHelpOption();
   parser.addVersionOption();
@@ -29,6 +31,8 @@ int main(int argc, char *argv[])
 
   parser.addPositionalArgument("file(s)", "The file(s) to open");
   parser.process(app);
+
+  FrameFile::BuildFileContext();
 
   bool bDoOpen = parser.isSet(auto_open);
 

@@ -10,7 +10,7 @@
 #include <QString>
 #include <QStringList>
 #include <QWidget>
-
+#include <QMap>
 #include <QTabWidget>
 
 #include <QToolButton>
@@ -26,6 +26,7 @@
 
 #include "FileFormatContext.h"
 #include "ImplFileName.h"
+
 
 class FrameFile
         : public QTabWidget
@@ -44,7 +45,7 @@ public:
     static QStringList getRecentFiles() { return recent_files; }
 
     static QString GetFileInputContextString();
-
+    static void BuildFileContext();
     static void SetupFileInputContext(const QString &);
     static void ClearFileInputContext();
 
@@ -71,7 +72,8 @@ public:
     CodeEditor* getEditSource() const {return edit_source_;}
 private:
     static QStringList recent_files;
-    static FileContext all_context[];
+    static QMap<QString, FrameFile::FileContext> all_formats;
+    static const size_t num_formats;
 
     FileContext format_current_;
 
