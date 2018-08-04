@@ -79,7 +79,7 @@ public:
 private:
     static QStringList recent_files;
     static QMap<FileContext,QString> all_formats;
-    static FileContext fmt_active;
+    static FileContext format_active;
     static const size_t num_formats;
 
     FileContext format_current_;

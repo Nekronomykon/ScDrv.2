@@ -10,7 +10,7 @@
 QStringList FrameFile::recent_files;
 
 QMap<FrameFile::FileContext, QString> FrameFile::all_formats;
-FrameFile::FileContext FrameFile::fmt_active;
+FrameFile::FileContext FrameFile::format_active;
 
 // static functions
 FrameFile* FrameFile::New(QWidget*parent) { return new FrameFile(parent); }
@@ -65,7 +65,7 @@ void FrameFile::SetupFileInputContext(const QString & key)
   {
     if(key.startsWith(it_fmt.key()))
       {
-        fmt_active = it_fmt.key();
+        format_active = it_fmt.key();
         break;
       }
   } while (++it_fmt != all_formats.end());
@@ -73,7 +73,7 @@ void FrameFile::SetupFileInputContext(const QString & key)
 
 void FrameFile::ClearFileInputContext()
 {
-  fmt_active = FileContext();
+  format_active = FileContext();
 }
 
 // this-driven functions
@@ -81,7 +81,7 @@ FrameFile::FrameFile(QWidget* parent)
   : QTabWidget(parent)
   //, extend_(new QToolButton(this))
   //, compress_(new QToolButton(this))
-  , format_current_(fmt_active)
+  , format_current_(format_active)
   , edit_source_(new CodeEditor(this))
   , view_molecule_(new QVTKMoleculeWidget(this))
 {
