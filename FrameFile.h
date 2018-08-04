@@ -11,7 +11,9 @@
 #include <QStringList>
 #include <QWidget>
 #include <QMap>
+
 #include <QTabWidget>
+#include "ImplFileName.h"
 
 #include <QToolButton>
 #include <vtkNew.h>
@@ -21,11 +23,12 @@
 
 #include "CodeEditor.h"
 #include "QVTKMoleculeWidget.h"
+// temporary view header to implement table views of atoms / bonds in Molecule
+#include <vtkQtTableView.h>
 
 #include "MoleculeAcquireFile.h"
 
 #include "FileFormatContext.h"
-#include "ImplFileName.h"
 
 
 class FrameFile
@@ -57,7 +60,7 @@ public:
         QString str = this->getEditSource()->getDumpPath();
         if(!str.isEmpty())
         {
-            vtkSmartPointer<T> reader(vtkSmartPointer<T>::New());
+            vtkSmartPointer<MoleculeAcquireFile> reader(vtkSmartPointer<T>::New());
             QByteArray bytes = str.toLatin1();
             reader->ResetFileName(bytes.data());
             reader->SetOutput(a_molecule_);
@@ -68,12 +71,15 @@ public:
     }
 
     bool readContentXYZ();
+    bool readContentWFN();
+    bool readContentCUBE();
     bool readContentNone();
 
     CodeEditor* getEditSource() const {return edit_source_;}
 private:
     static QStringList recent_files;
     static QMap<FileContext,QString> all_formats;
+    static FileContext fmt_active;
     static const size_t num_formats;
 
     FileContext format_current_;

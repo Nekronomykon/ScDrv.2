@@ -204,21 +204,23 @@ void FrameWorkspace::on_actionOpen__triggered()
     ;
 
   QString all_context = FrameFile::GetFileInputContextString();
-  QString the_context;
+  QString fmt_name;
   QString dir_name;
 
   QStringList all_paths =
-    // FrameFile::queryInputFiles(the_context);
+    // FrameFile::queryInputFiles(fmt_name);
     QFileDialog::getOpenFileNames(this
       , tr("Specify input files")
       , dir_name
       , all_context
-      , &the_context
+      , &fmt_name
       , options
     );
 
   if (all_paths.isEmpty())
     return;
+
+  FileInputContextSetup<FrameFile> context(fmt_name);
 
   for (const auto &one_path : all_paths)
   {

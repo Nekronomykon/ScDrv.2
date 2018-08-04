@@ -52,18 +52,18 @@ private:
   ExportOperation export_operation_;
 };
 
-//template<class T>
-//class FileInputContextSetup
-//{
-//public:
-//  explicit FileInputContextSetup(const QString& sid) {
-//    T::SetupFileInputContext(sid);
-//  }
-//
-//  ~FileInputContextSetup() {
-//    T::ClearFileInputContext();
-//  }
-//
-//};
+template<class T>
+class FileInputContextSetup
+{
+public:
+  explicit FileInputContextSetup(const QString& sid) {
+    T::SetupFileInputContext(sid);
+  }
+
+  ~FileInputContextSetup() {
+    T::ClearFileInputContext();
+  }
+
+};
 
 #endif // !__FileInput_Context_h__

@@ -3,19 +3,24 @@
 #include <QFile>
 
 #include "MoleculeAcquireFileXYZ.h"
+#include "MoleculeAcquireFileWFN.h"
+#include "MoleculeAcquireFileCUBE.h"
 
 // static members
 QStringList FrameFile::recent_files;
 
 QMap<FrameFile::FileContext, QString> FrameFile::all_formats;
+FrameFile::FileContext FrameFile::fmt_active;
 
 // static functions
 FrameFile* FrameFile::New(QWidget*parent) { return new FrameFile(parent); }
 
 void FrameFile::BuildFileContext()
 {
-  all_formats[FileContext("XMol XYZ files", &FrameFile::readContentXYZ)] = "xyz";
-  all_formats[FileContext("Text files", &FrameFile::readContentNone)]    = "txt";
+  all_formats[FileContext("XMol XYZ files",      &FrameFile::readContentXYZ )] =  "xyz";
+  all_formats[FileContext("Gaussian Cube files", &FrameFile::readContentCUBE)] =  "cube";
+  all_formats[FileContext("Wavefunction files",  &FrameFile::readContentWFN )] =  "wfn";
+  all_formats[FileContext("Text files",          &FrameFile::readContentNone)] =  "txt";
 }
 
 QString FrameFile::GetFileInputContextString()
@@ -23,19 +28,19 @@ QString FrameFile::GetFileInputContextString()
   QString res;
   QSet<QString> regx;
 
-  auto it_is_format = all_formats.begin();
+  auto it_fmt = all_formats.begin();
   do
   {
-    res += it_is_format.key();
+    res += it_fmt.key();
     QString mask(tr("*."));
-    mask += it_is_format.value();
+    mask += it_fmt.value();
 
     regx.insert(mask);
 
     res += " (";
     res += mask;
     res += ");;";
-  } while (++it_is_format != all_formats.end());
+  } while (++it_fmt != all_formats.end());
 
   if(!regx.isEmpty())
     {
@@ -53,10 +58,30 @@ QString FrameFile::GetFileInputContextString()
   return res;
 }
 
+void FrameFile::SetupFileInputContext(const QString & key)
+{
+  auto it_fmt = all_formats.begin();
+  do
+  {
+    if(key.startsWith(it_fmt.key()))
+      {
+        fmt_active = it_fmt.key();
+        break;
+      }
+  } while (++it_fmt != all_formats.end());
+}
+
+void FrameFile::ClearFileInputContext()
+{
+  fmt_active = FileContext();
+}
+
+// this-driven functions
 FrameFile::FrameFile(QWidget* parent)
   : QTabWidget(parent)
   //, extend_(new QToolButton(this))
   //, compress_(new QToolButton(this))
+  , format_current_(fmt_active)
   , edit_source_(new CodeEditor(this))
   , view_molecule_(new QVTKMoleculeWidget(this))
 {
@@ -88,6 +113,17 @@ bool FrameFile::readContentXYZ()
 {
   return  this->applyReaderType<MoleculeAcquireFileXYZ>();
 }
+
+bool FrameFile::readContentWFN()
+{
+  return  this->applyReaderType<MoleculeAcquireFileWFN>();
+}
+
+bool FrameFile::readContentCUBE()
+{
+  return  this->applyReaderType<MoleculeAcquireFileWFN>();
+}
+
 
 bool FrameFile::readSource(const QString& from)
 {
