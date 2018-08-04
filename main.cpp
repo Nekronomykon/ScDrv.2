@@ -24,21 +24,16 @@ int main(int argc, char *argv[])
   parser.addHelpOption();
   parser.addVersionOption();
 
-  QCommandLineOption auto_open(QStringList() << "a" << "auto-open",
-    QCoreApplication::translate("main", "Edit opened files; recurse opened directories")
-  );
-  parser.addOption(auto_open);
+  // adding other cmdline options above ^^^
 
   parser.addPositionalArgument("file(s)", "The file(s) to open");
   parser.process(app);
 
   FrameFile::BuildFileContext();
 
-  bool bDoOpen = parser.isSet(auto_open);
-
   FrameWorkspace mainWin;
   for (const auto &arg : parser.positionalArguments())
-    mainWin.addPathToWorkspace(arg, bDoOpen);
+    mainWin.addPathToWorkspace(arg);
 
   mainWin.show();
   return app.exec();

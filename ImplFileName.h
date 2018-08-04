@@ -36,24 +36,24 @@ class ImplFileName
   : public FileNameRoot
 {
 public:
-  typedef TName FileNameType;
+  typedef TName TypeFileName;
 
 private:
-  FileNameType nameFile_;
+  TypeFileName nameFile_;
 
 protected:
 
 public:
-  const FileNameType &FileName() const { return nameFile_; }
-  FileNameType &      FileName()       { return nameFile_; }
-  FileNameType     GetFileName() const { return nameFile_; }
+  const TypeFileName &FileName() const { return nameFile_; }
+  TypeFileName &      FileName()       { return nameFile_; }
+  TypeFileName     GetFileName() const { return nameFile_; }
 
   bool HasFileName() const
-  { 
-    return !isItEmpty(nameFile_); 
+  {
+    return !isItEmpty(nameFile_);
   }
 
-  FileNameType ResetFileName(FileNameType nameNew = FileNameType())
+  TypeFileName ResetFileName(TypeFileName nameNew = TypeFileName())
   {
     nameNew.swap(nameFile_);
     T* pT = static_cast<T*>(this);

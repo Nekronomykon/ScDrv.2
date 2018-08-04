@@ -68,11 +68,12 @@ public:
     }
 
     bool readContentXYZ();
+    bool readContentNone();
 
     CodeEditor* getEditSource() const {return edit_source_;}
 private:
     static QStringList recent_files;
-    static QMap<QString, FrameFile::FileContext> all_formats;
+    static QMap<FileContext,QString> all_formats;
     static const size_t num_formats;
 
     FileContext format_current_;

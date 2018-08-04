@@ -220,13 +220,9 @@ void FrameWorkspace::on_actionOpen__triggered()
   if (all_paths.isEmpty())
     return;
 
-  FileInputContextSetup<FrameFile> context(the_context);
-
   for (const auto &one_path : all_paths)
   {
     QFileInfo fi(one_path);
-    Child *pFrame = this->addFileToWorkspace(fi.canonicalFilePath()
-      , true); // ...and now open
-               //  pFrame;
+    this->addFileToWorkspace(fi.canonicalFilePath());
   }
 }

@@ -20,18 +20,29 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_">
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <widget class="QMenu" name="menuRecent_">
+     <property name="title">
+      <string>R&amp;ecent</string>
+     </property>
+     <addaction name="actionForget_"/>
+     <addaction name="actionForgetAll_"/>
+     <addaction name="separator"/>
+    </widget>
     <addaction name="actionNew_"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_"/>
+    <addaction name="actionReload_"/>
+    <addaction name="menuRecent_"/>
     <addaction name="separator"/>
     <addaction name="actionSave_"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
     <addaction name="actionExit_"/>
    </widget>
@@ -42,7 +53,36 @@
     <addaction name="actionAbout_"/>
     <addaction name="actionAboutQt_"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionUndo_"/>
+    <addaction name="actionRedo_"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut_"/>
+    <addaction name="actionCopy_"/>
+    <addaction name="actionPaste_"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_"/>
+    <addaction name="actionClearAll_"/>
+   </widget>
+   <widget class="QMenu" name="menuView_">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionFullScreen_"/>
+   </widget>
+   <widget class="QMenu" name="menuTools_">
+    <property name="title">
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="actionOptions_"/>
+   </widget>
    <addaction name="menuFile_"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView_"/>
+   <addaction name="menuTools_"/>
    <addaction name="menuHelp_"/>
   </widget>
   <widget class="QStatusBar" name="barStatus_"/>
@@ -101,6 +141,71 @@
   <action name="actionAboutQt_">
    <property name="text">
     <string>About &amp;Qt..</string>
+   </property>
+  </action>
+  <action name="actionUndo_">
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo_">
+   <property name="text">
+    <string>&amp;Redo</string>
+   </property>
+  </action>
+  <action name="actionCut_">
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+  </action>
+  <action name="actionCopy_">
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+  </action>
+  <action name="actionPaste_">
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+  </action>
+  <action name="actionClear_">
+   <property name="text">
+    <string>C&amp;lear</string>
+   </property>
+  </action>
+  <action name="actionClearAll_">
+   <property name="text">
+    <string>Cle&amp;ar all</string>
+   </property>
+  </action>
+  <action name="actionReload_">
+   <property name="text">
+    <string>&amp;Reload</string>
+   </property>
+  </action>
+  <action name="actionForget_">
+   <property name="text">
+    <string>&amp;Forget</string>
+   </property>
+  </action>
+  <action name="actionForgetAll_">
+   <property name="text">
+    <string>ForgetAll</string>
+   </property>
+  </action>
+  <action name="actionFullScreen_">
+   <property name="text">
+    <string>&amp;Full screen</string>
+   </property>
+  </action>
+  <action name="actionOptions_">
+   <property name="text">
+    <string>&amp;Options</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>S&amp;ave as..</string>
    </property>
   </action>
  </widget>

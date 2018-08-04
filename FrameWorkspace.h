@@ -14,12 +14,12 @@
 #include "ViewFilesystem.h"
 #include "FrameFile.h"
 
-#include "ui_FrameWkspace.h"
+#include "ui_FrameWorkspace.h"
 #include <QMainWindow>
 
 class FrameWorkspace
     : public QMainWindow
-    , private Ui_FrameWkspace
+    , private Ui_FrameWorkspace
 {
   Q_OBJECT
 public:
@@ -31,7 +31,7 @@ public:
   Child* getActiveChild() const;
 
   // general...
-  void addPathToWorkspace(const QString & /*arg */, bool /*bOpen*/);
+  void addPathToWorkspace(const QString & /*arg */, bool /*bOpen*/ = false);
   // and classified:
 
   //----------------------------------------------------------------------------------------
