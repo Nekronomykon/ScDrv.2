@@ -24,11 +24,11 @@ CodeEditor::CodeEditor(QWidget *parent)
 	fontSrc.setStyleHint(QFont::Monospace);
 	this->setFont(fontSrc);
 
-	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateSideBarDecoratorWidth(int)));
-	connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateSideBarDecorator(QRect, int)));
+	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateSideBarWidth(int)));
+	connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateSideBar(QRect, int)));
 	connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 
-	this->updateSideBarDecoratorWidth(0);
+	this->updateSideBarWidth(0);
 	this->highlightCurrentLine();
 }
 
@@ -59,7 +59,7 @@ int CodeEditor::SideBarWidth()
 
 //![slotUpdateExtraAreaWidth]
 
-void CodeEditor::updateSideBarDecoratorWidth(int /* newBlockCount */)
+void CodeEditor::updateSideBarWidth(int /* newBlockCount */)
 {
 	setViewportMargins(this->SideBarWidth(), 0, 0, 0);
 }
@@ -68,7 +68,7 @@ void CodeEditor::updateSideBarDecoratorWidth(int /* newBlockCount */)
 
 //![slotUpdateRequest]
 
-void CodeEditor::updateSideBarDecorator(const QRect &rect, int dy)
+void CodeEditor::updateSideBar(const QRect &rect, int dy)
 {
 	if (dy)
 		side_bar_->scroll(0, dy);
@@ -76,7 +76,7 @@ void CodeEditor::updateSideBarDecorator(const QRect &rect, int dy)
 		side_bar_->update(0, rect.y(), side_bar_->width(), rect.height());
 
 	if (rect.contains(this->viewport()->rect()))
-		this->updateSideBarDecoratorWidth(0);
+		this->updateSideBarWidth(0);
 }
 
 //![slotUpdateRequest]

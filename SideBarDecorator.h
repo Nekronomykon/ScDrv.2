@@ -1,6 +1,11 @@
 #ifndef __SideBar_Decorator_h__
 #define __SideBar_Decorator_h__
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 #include <QSize>
 #include <QPaintEvent>
 #include <QWidget>
@@ -21,7 +26,7 @@ protected:
   void paintEvent(QPaintEvent *event) override;
 
 private:
-  CodeEditor *host_;
+  CodeEditor *theHost_;
 };
 
 //![extraarea]

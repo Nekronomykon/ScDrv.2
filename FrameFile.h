@@ -21,7 +21,7 @@
 
 #include <vtkMolecule.h>
 
-#include "CodeEditor.h"
+#include "EditTextSource.h"
 #include "QVTKMoleculeWidget.h"
 // temporary view header to implement table views of atoms / bonds in Molecule
 #include <vtkQtTableView.h>
@@ -89,7 +89,7 @@ private:
     //QPointer <QToolButton> extend_;
     //QPointer <QToolButton> compress_;
 
-    QPointer<CodeEditor> edit_source_;
+    QPointer<EditTextSource> edit_source_;
     QPointer<QVTKMoleculeWidget> view_molecule_;
 };
 

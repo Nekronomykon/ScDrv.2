@@ -1,6 +1,24 @@
 #ifndef __QVTK_MoleculeWidget_h__
 #define __QVTK_MoleculeWidget_h__
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
+/*=========================================================================
+
+  Program:   Visualization Toolkit Local Fork Copy
+  Module:    QVTKMoleculeWidget.h
+Copyright (c) ScrewDriver te Blackheadborough
+All rights reserved.
+
+   This software is distributed WITHOUT ANY WARRANTY; without even
+   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+   PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+
 #include <QVTKOpenGLWidget.h>
 #include <QVTKOpenGLSimpleWidget.h>
 

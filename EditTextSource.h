@@ -1,17 +1,21 @@
-#ifndef EDITTEXTSOURCE_H
-#define EDITTEXTSOURCE_H
+#ifndef __Edit_TextSource_h__
+#define __Edit_TextSource_h__
 
-#include <QtCore/qglobal.h>
-#if QT_VERSION >= 0x050000
-#include <QtWidgets/QWidget>
-#else
-#include <QtGui/QWidget>
-#endif
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
+#include "CodeEditor.h"
+
+#include <QWidget>
 
 class EditTextSource
+    : public CodeEditor
 {
+  Q_OBJECT
 public:
-  EditTextSource();
+  EditTextSource(QWidget* /*parent */ = Q_NULLPTR);
 };
 
-#endif // EDITTEXTSOURCE_H
+#endif // !__Edit_TextSource_h__

@@ -1,6 +1,7 @@
 #include "EditTextSource.h"
 
-EditTextSource::EditTextSource()
+EditTextSource::EditTextSource(QWidget* parent)
+  : CodeEditor (parent)
 {
 
 }

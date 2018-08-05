@@ -82,7 +82,7 @@ FrameFile::FrameFile(QWidget* parent)
   //, extend_(new QToolButton(this))
   //, compress_(new QToolButton(this))
   , format_current_(format_active)
-  , edit_source_(new CodeEditor(this))
+  , edit_source_(new EditTextSource(this))
   , view_molecule_(new QVTKMoleculeWidget(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);

@@ -151,7 +151,8 @@ SOURCES += \
     TraitsAcquireAtoms.cpp \
     FrameWorkspace.cpp \
     ModelTextFiles.cpp \
-    ViewFilesystem.cpp
+    ViewFilesystem.cpp \
+    EditTextSource.cpp
 
 HEADERS += \
     EditWorkspace.h \
@@ -186,7 +187,8 @@ HEADERS += \
     FileFormatContext.h \
     FrameWorkspace.h \
     ModelTextFiles.h \
-    ViewFilesystem.h
+    ViewFilesystem.h \
+    EditTextSource.h
 
 FORMS += \
     FrameWorkspace.ui

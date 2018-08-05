@@ -23,7 +23,7 @@ protected:
 
 public:
   static MoleculeAcquireFile *New();
-  vtkTypeMacro(MoleculeAcquireFile, MoleculeAcquireBase);
+  vtkTypeMacro(MoleculeAcquireFile, MoleculeAcquireBase)
   void PrintSelf(std::ostream &os, vtkIndent indent) VTK_OVERRIDE;
 
 protected:

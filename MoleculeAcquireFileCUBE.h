@@ -3,7 +3,7 @@
   Program:   Visualization Toolkit
   Module:    MoleculeAcquireFileCUBE.h
 
-  Copyright (c) ScrewDriver de Blackheadborough
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -20,8 +20,8 @@
  * NOT YET FINISHED!
  *
  * @par Thanks:
- * ScrewDriver de Blackheadborough who is trying to rewrite this class
- * NB: It is preconverted from the original VTK CUBE file reader class 
+ * ScrewDriver te Blackheadborough who is trying to rewrite this class
+ * NB: It is preconverted from the original VTK CUBE file reader class
  * and yet not in its final executive form.
 */
 
@@ -39,7 +39,7 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileCUBE
 {
 public:
   static MoleculeAcquireFileCUBE *New();
-  vtkTypeMacro(MoleculeAcquireFileCUBE, MoleculeAcquireFile);
+  vtkTypeMacro(MoleculeAcquireFileCUBE, MoleculeAcquireFile)
   void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
 
   //@{

@@ -6,7 +6,7 @@
   Program:   Visualization Toolkit
   Module:    MoleculeAcquireBase.h
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
@@ -17,8 +17,7 @@
 =========================================================================*/
 /**
  * @class   MoleculeAcquireBase
- * @brief   Superclass for algorithms that operate on
- * vtkMolecules
+ * @brief   Superclass for algorithms that results in vtkMolecules
  *
  * MoleculeAcquireBase is a convenience class to make writing algorithms
  * easier. There are some assumptions and defaults made by this class you
@@ -50,7 +49,7 @@ protected:
   // typedef MolecularStructure Molecule;
 public:
   static MoleculeAcquireBase *New();
-  vtkTypeMacro(MoleculeAcquireBase, vtkAlgorithm);
+  vtkTypeMacro(MoleculeAcquireBase, vtkAlgorithm)
   void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
 
   vtkIdType GetNumberOfAtoms() const { return NumberOfAtoms_; }
