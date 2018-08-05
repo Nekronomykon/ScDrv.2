@@ -76,11 +76,16 @@ public:
     bool readContentNone();
 
     CodeEditor* getEditSource() const {return edit_source_;}
+protected:
+  enum Units
+  {
+    Bohrs, Angstroms, Picometers
+  };
+
 private:
     static QStringList recent_files;
     static QMap<FileContext,QString> all_formats;
     static FileContext format_active;
-    static const size_t num_formats;
 
     FileContext format_current_;
 

@@ -132,6 +132,9 @@
    <property name="text">
     <string>E&amp;xit</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
   </action>
   <action name="actionAbout_">
    <property name="text">
@@ -141,6 +144,9 @@
   <action name="actionAboutQt_">
    <property name="text">
     <string>About &amp;Qt..</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
    </property>
   </action>
   <action name="actionUndo_">
@@ -190,7 +196,7 @@
   </action>
   <action name="actionForgetAll_">
    <property name="text">
-    <string>ForgetAll</string>
+    <string>Forget all &amp;recent</string>
    </property>
   </action>
   <action name="actionFullScreen_">

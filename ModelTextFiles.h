@@ -8,6 +8,8 @@
 
 #include <QFileSystemModel>
 
+#include <QModelIndexList>
+
 class ModelTextFiles
   : public QFileSystemModel
 {
@@ -15,6 +17,8 @@ class ModelTextFiles
 public:
   explicit ModelTextFiles();
   ~ModelTextFiles() override;
+
+  int columnCount(const QModelIndex&) const override;
 };
 
 #endif // !__Model_TextFiles_h__
