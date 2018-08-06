@@ -151,8 +151,26 @@ SOURCES += \
     TraitsAcquireAtoms.cpp \
     FrameWorkspace.cpp \
     ModelTextFiles.cpp \
-    ViewFilesystem.cpp \
-    EditTextSource.cpp
+    EditTextSource.cpp \
+    CodeEditor.cpp \
+    EditTextSource.cpp \
+    EditWorkspace.cpp \
+    FileFormat.cpp \
+    FrameFile.cpp \
+    FrameWorkspace.cpp \
+    main.cpp \
+    ModelTextFiles.cpp \
+    MoleculeAcquireBase.cpp \
+    MoleculeAcquireFile.cpp \
+    MoleculeAcquireFileCUBE.cpp \
+    MoleculeAcquireFileQTAIM.cpp \
+    MoleculeAcquireFileWFN.cpp \
+    MoleculeAcquireFileXYZ.cpp \
+    QVTKMoleculeWidget.cpp \
+    ResetCursor.cpp \
+    SideBarDecorator.cpp \
+    TraitsAcquireAtoms.cpp \
+    BrowseFiles.cpp
 
 HEADERS += \
     EditWorkspace.h \
@@ -187,20 +205,44 @@ HEADERS += \
     FileFormatContext.h \
     FrameWorkspace.h \
     ModelTextFiles.h \
-    ViewFilesystem.h \
-    EditTextSource.h
+    EditTextSource.h \
+    CodeEditor.h \
+    EditTextSource.h \
+    EditWorkspace.h \
+    FileFormat.h \
+    FrameFile.h \
+    FrameWorkspace.h \
+    ImplFileName.h \
+    ModelTextFiles.h \
+    MoleculeAcquireBase.h \
+    MoleculeAcquireFile.h \
+    MoleculeAcquireFileCUBE.h \
+    MoleculeAcquireFileQTAIM.h \
+    MoleculeAcquireFileWFN.h \
+    MoleculeAcquireFileXYZ.h \
+    QVTKMoleculeWidget.h \
+    ResetCursor.h \
+    SideBarDecorator.h \
+    TraitsAcquireAtoms.h \
+    BrowseFiles.h
 
 FORMS += \
+    FrameWorkspace.ui \
     FrameWorkspace.ui
 
 RESOURCES += \
+    ScDrv.qrc \
     ScDrv.qrc \
     ScDrv.qrc
 
 DISTFILES += \
     CMakeLists.txt \
+    CMakeLists.txt \
+    CONTRIBUTORS.md \
+    README.md \
     CMakeLists.txt
 
 SUBDIRS += \
+    ScDrv.pro \
     ScDrv.pro
 

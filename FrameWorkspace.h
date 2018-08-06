@@ -11,7 +11,7 @@
 #include <QCloseEvent>
 
 #include "EditWorkspace.h"
-#include "ViewFilesystem.h"
+#include "BrowseFiles.h"
 #include "FrameFile.h"
 
 #include "ui_FrameWorkspace.h"
@@ -71,7 +71,7 @@ private:
   // data members:
 private:
   QPointer<EditWorkspace>  edit_workspace_;
-  QPointer<ViewFilesystem> view_files_;
+  QPointer<BrowseFiles> view_files_;
 
 private slots:
 };

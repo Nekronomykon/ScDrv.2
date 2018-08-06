@@ -1,20 +1,26 @@
-#include "ViewFilesystem.h"
+#include "BrowseFiles.h"
 
 #include "ModelTextFiles.h"
+
+#include <QItemSelectionModel>
 
 #include <QModelIndex>
 #include <QDir>
 
-ViewFilesystem::ViewFilesystem(QWidget* parent)
+BrowseFiles::BrowseFiles(QWidget* parent)
   : QTreeView(parent)
   , model_txt_(new ModelTextFiles())
 {
-  
+  QItemSelectionModel *pSel;
+
   QModelIndex idx = model_txt_->setRootPath(QDir::rootPath());
   this->setModel(model_txt_);
   //const QModelIndex rootIndex = model_txt_->index(QDir::cleanPath(""));
   //if (rootIndex.isValid())
   this->setRootIndex(idx);
+  // this->setRootIndex( model_txt_->setRootPath(QDir::currentPath()) );
+  // this->selectionMode
+
 
   this->setAnimated(false);
   this->setSortingEnabled(true);
@@ -22,6 +28,6 @@ ViewFilesystem::ViewFilesystem(QWidget* parent)
 }
 
 
-ViewFilesystem::~ViewFilesystem()
+BrowseFiles::~BrowseFiles()
 {
 }

@@ -12,13 +12,13 @@
 
 #include "ModelTextFiles.h"
 
-class ViewFilesystem
+class BrowseFiles
   : public QTreeView
 {
   Q_OBJECT
 public:
-  explicit ViewFilesystem(QWidget* /*parent*/ = nullptr);
-  ~ViewFilesystem() override;
+  explicit BrowseFiles(QWidget* /*parent*/ = nullptr);
+  ~BrowseFiles() override;
 
 private:
   QPointer<ModelTextFiles> model_txt_;

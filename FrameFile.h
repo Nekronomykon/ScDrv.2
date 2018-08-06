@@ -28,15 +28,17 @@
 
 #include "MoleculeAcquireFile.h"
 
-#include "FileFormatContext.h"
+#include "FileFormat.h"
 
+class FrameFile;
+typedef class FileFormatContext<FrameFile> FrameFileContext;
 
 class FrameFile
-        : public QTabWidget
-        , public ImplFileName<FrameFile, QString>
+    : public QTabWidget,
+      public ImplFileName<FrameFile, QString>
 {
     Q_OBJECT
-public:
+  public:
     FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
     ~FrameFile() override;
 
@@ -53,12 +55,12 @@ public:
     static void ClearFileInputContext();
 
     bool readSource(const QString &);
-    template<class T>
+    template <class T>
     bool applyReaderType()
     {
         // convert to const char*
         QString str = this->getEditSource()->getDumpPath();
-        if(!str.isEmpty())
+        if (!str.isEmpty())
         {
             vtkSmartPointer<MoleculeAcquireFile> reader(vtkSmartPointer<T>::New());
             QByteArray bytes = str.toLatin1();
@@ -75,16 +77,19 @@ public:
     bool readContentCUBE();
     bool readContentNone();
 
-    CodeEditor* getEditSource() const {return edit_source_;}
-protected:
-  enum Units
-  {
-    Bohrs, Angstroms, Picometers
-  };
+    CodeEditor *getEditSource() const { return edit_source_; }
 
-private:
+  protected:
+    enum Units
+    {
+        Bohrs,
+        Angstroms,
+        Picometers
+    };
+
+  private:
     static QStringList recent_files;
-    static QMap<FileContext,QString> all_formats;
+    static QMap<FileContext, QString> all_formats;
     static FileContext format_active;
 
     FileContext format_current_;

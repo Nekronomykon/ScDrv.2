@@ -20,12 +20,10 @@
 #include <vtkSphereSource.h>
 #include <vtkSmartPointer.h>
 
-#include "FileFormatContext.h"
-
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget* parent)
   : QMainWindow(parent)
-  , view_files_(new ViewFilesystem(this))
+  , view_files_(new BrowseFiles(this))
   , edit_workspace_(new EditWorkspace(this))
 {
   this->setupUi(this);
