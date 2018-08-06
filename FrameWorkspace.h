@@ -1,5 +1,5 @@
-#ifndef __Frame_Workspace_h__
-#define __Frame_Workspace_h__
+#ifndef Frame_Workspace_h
+#define Frame_Workspace_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include <QPointer>
+
 #include <QEvent>
 #include <QCloseEvent>
 
@@ -76,4 +77,4 @@ private:
 private slots:
 };
 
-#endif // !__Frame_Wkspace_h__
+#endif // !Frame_Workspace_h

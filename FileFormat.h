@@ -1,5 +1,5 @@
-#ifndef __FileInput_Context_h__
-#define __FileInput_Context_h__
+#ifndef FileFormat_h
+#define FileFormat_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -76,4 +76,4 @@ public:
 
 };
 
-#endif // !__FileInput_Context_h__
+#endif // !FileFormat_h

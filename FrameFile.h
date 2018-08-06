@@ -1,5 +1,5 @@
-#ifndef __Frame_File_h__
-#define __Frame_File_h__
+#ifndef Frame_File_h
+#define Frame_File_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -103,4 +103,4 @@ class FrameFile
     QPointer<QVTKMoleculeWidget> view_molecule_;
 };
 
-#endif // !__Frame_File_h__
+#endif // !Frame_File_h
