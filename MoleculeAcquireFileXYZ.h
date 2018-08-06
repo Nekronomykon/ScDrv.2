@@ -1,10 +1,5 @@
-#ifndef __MoleculeAcquireFileXYZ_h__
-#define __MoleculeAcquireFileXYZ_h__
-
-#ifdef _MSC_VER
-#pragma once
-#else  // !_MSC_VER
-#endif //  _MSC_VER
+#ifndef MoleculeAcquire_File_XYZ_h
+#define MoleculeAcquire_File_XYZ_h
 
 /*=========================================================================
 
@@ -36,6 +31,10 @@
  * ScrewDriver te Blackheadborough who developed and contributed this class
 */
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireFile.h"
@@ -71,4 +70,4 @@ private:
   void operator=(const MoleculeAcquireFileXYZ&) VTK_DELETE_FUNCTION;
 };
 
-#endif // !__MoleculeAcquireFileXYZ_h__
+#endif // !MoleculeAcquire_File_XYZ_h

@@ -1,5 +1,5 @@
-#ifndef __MoleculeAcquireBase_h__
-#define __MoleculeAcquireBase_h__
+#ifndef MoleculeAcquire_Base_h
+#define MoleculeAcquire_Base_h
 
 /*=========================================================================
 
@@ -147,4 +147,4 @@ private:
   vtkIdType NumberOfAtoms_;
 };
 
-#endif // !__MoleculeAcquireBase_h__
+#endif // !MoleculeAcquire_Base_h

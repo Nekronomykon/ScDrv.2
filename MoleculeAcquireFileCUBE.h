@@ -1,3 +1,6 @@
+#ifndef MoleculeAcquire_File_CUBE_h
+#define MoleculeAcquire_File_CUBE_h
+
 /*=========================================================================
 
   Program:   Visualization Toolkit
@@ -25,8 +28,10 @@
  * and yet not in its final executive form.
 */
 
-#ifndef __MoleculeAcquire_FileCUBE_h__
-#define __MoleculeAcquire_FileCUBE_h__
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireFile.h"
@@ -70,4 +75,4 @@ private:
   void operator=(const MoleculeAcquireFileCUBE &) VTK_DELETE_FUNCTION;
 };
 
-#endif
+#endif // !MoleculeAcquire_File_CUBE_h

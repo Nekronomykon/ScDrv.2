@@ -1,5 +1,5 @@
-#ifndef __MoleculeAcquire_FileQTAIM_h__
-#define __MoleculeAcquire_FileQTAIM_h__
+#ifndef MoleculeAcquire_FileQTAIM_h
+#define MoleculeAcquire_FileQTAIM_h
 
 /*=========================================================================
 
@@ -24,7 +24,7 @@
  * @par Thanks:
  * ScrewDriver de Blackheadborough who developed and contributed this class
  *
- * NB: It is preconverted from the MoleculeAcquireFileCUBE class 
+ * NB: It is preconverted from the MoleculeAcquireFileCUBE class
  * and yet not in its final executive form.
 */
 
@@ -41,14 +41,6 @@
 #include <complex>
 
 class vtkMolecule;
-
-template<class T
->
-class
-ImplReadStructureAIM
-{
-
-};
 
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
     : public MoleculeAcquireFile
@@ -104,4 +96,4 @@ private:
   vtkIdType CriticalPoints[NumberOfCPTypes];
 };
 
-#endif // !__MoleculeAcquire_FileQTAIM_h__
+#endif // !MoleculeAcquire_FileQTAIM_h

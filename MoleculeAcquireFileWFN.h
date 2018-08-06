@@ -1,5 +1,5 @@
-#ifndef MoleculeAcquireFileWFN_h
-#define MoleculeAcquireFileWFN_h
+#ifndef MoleculeAcquire_File_WFN_h
+#define MoleculeAcquire_File_WFN_h
 
 /*=========================================================================
 
@@ -25,7 +25,7 @@
  *
  * @par Thanks:
  * ScrewDriver de Blackheadborough who developed and contributed this class
- * NB: It is preconverted from the MoleculeAcquireFileXYZ class 
+ * NB: It is preconverted from the MoleculeAcquireFileXYZ class
  * and yet not in its final executive form.
 */
 
@@ -72,4 +72,4 @@ private:
   void operator=(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;
 };
 
-#endif
+#endif // !MoleculeAcquire_File_WFN_h

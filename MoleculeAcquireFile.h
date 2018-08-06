@@ -1,5 +1,5 @@
-#ifndef __MoleculeAcquire_File_h__
-#define __MoleculeAcquire_File_h__
+#ifndef MoleculeAcquire_File_h
+#define MoleculeAcquire_File_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -36,4 +36,4 @@ private:
 };
 
 
-#endif // !__MoleculeAcquire_File_h__
+#endif // !MoleculeAcquire_File_h
