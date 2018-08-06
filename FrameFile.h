@@ -25,6 +25,7 @@
 #include "QVTKMoleculeWidget.h"
 // temporary view header to implement table views of atoms / bonds in Molecule
 #include <vtkQtTableView.h>
+#include "ViewMoleculeAtomic.h"
 
 #include "MoleculeAcquireFile.h"
 
@@ -101,6 +102,7 @@ class FrameFile
 
     QPointer<EditTextSource> edit_source_;
     QPointer<QVTKMoleculeWidget> view_molecule_;
+    QPointer<ViewMoleculeAtomic> view_atomic_;
 };
 
 #endif // !Frame_File_h

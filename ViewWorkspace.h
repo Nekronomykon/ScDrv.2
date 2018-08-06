@@ -16,14 +16,14 @@
 #include "FrameFile.h"
 #include <QListWidgetItem>
 
-class EditWorkspace
+class ViewWorkspace
   : public QListWidget
 {
   typedef QListWidget _Base;
 
   Q_OBJECT
 public:
-  EditWorkspace(QWidget *parent = Q_NULLPTR);
+  ViewWorkspace(QWidget *parent = Q_NULLPTR);
 
   bool addFilePath(const QString & /* path */);
   void listDir(const QString& /*dir_path*/, bool /*bRecurse*/ = false);

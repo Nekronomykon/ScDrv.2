@@ -125,7 +125,6 @@ win32:before_build.commands = chcp 1251
 
 SOURCES += \
         main.cpp \
-    EditWorkspace.cpp \
     FrameFile.cpp \
     MoleculeAcquireBase.cpp \
     MoleculeAcquireFile.cpp \
@@ -136,7 +135,6 @@ SOURCES += \
     ResetCursor.cpp \
     TraitsAcquireAtoms.cpp \
     CodeEditor.cpp \
-    EditWorkspace.cpp \
     FrameFile.cpp \
     main.cpp \
     MoleculeAcquireBase.cpp \
@@ -154,7 +152,6 @@ SOURCES += \
     EditTextSource.cpp \
     CodeEditor.cpp \
     EditTextSource.cpp \
-    EditWorkspace.cpp \
     FileFormat.cpp \
     FrameFile.cpp \
     FrameWorkspace.cpp \
@@ -170,10 +167,13 @@ SOURCES += \
     ResetCursor.cpp \
     SideBarDecorator.cpp \
     TraitsAcquireAtoms.cpp \
-    BrowseFiles.cpp
+    BrowseFiles.cpp \
+    ViewWorkspace.cpp \
+    MolecularStructure.cpp \
+    ViewMoleculeAtomic.cpp \
+    ModelMoleculeAtomic.cpp
 
 HEADERS += \
-    EditWorkspace.h \
     FrameFile.h \
     ResetCursor.h \
     MoleculeAcquireBase.h \
@@ -189,7 +189,6 @@ HEADERS += \
     MoleculeAcquireFileCUBE.h \
     TraitsAcquireAtoms.h \
     CodeEditor.h \
-    EditWorkspace.h \
     FrameFile.h \
     ImplFileName.h \
     MoleculeAcquireBase.h \
@@ -208,7 +207,6 @@ HEADERS += \
     EditTextSource.h \
     CodeEditor.h \
     EditTextSource.h \
-    EditWorkspace.h \
     FileFormat.h \
     FrameFile.h \
     FrameWorkspace.h \
@@ -224,7 +222,11 @@ HEADERS += \
     ResetCursor.h \
     SideBarDecorator.h \
     TraitsAcquireAtoms.h \
-    BrowseFiles.h
+    BrowseFiles.h \
+    ViewWorkspace.h \
+    MolecularStructure.h \
+    ViewMoleculeAtomic.h \
+    ModelMoleculeAtomic.h
 
 FORMS += \
     FrameWorkspace.ui \

@@ -94,6 +94,7 @@ FrameFile::FrameFile(QWidget* parent)
   , format_current_(format_active)
   , edit_source_(new EditTextSource(this))
   , view_molecule_(new QVTKMoleculeWidget(this))
+  , view_atomic_(new ViewMoleculeAtomic(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);

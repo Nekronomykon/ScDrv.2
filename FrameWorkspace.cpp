@@ -24,7 +24,7 @@
 FrameWorkspace::FrameWorkspace(QWidget* parent)
   : QMainWindow(parent)
   , view_files_(new BrowseFiles(this))
-  , edit_workspace_(new EditWorkspace(this))
+  , edit_workspace_(new ViewWorkspace(this))
 {
   this->setupUi(this);
   //mdiArea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
