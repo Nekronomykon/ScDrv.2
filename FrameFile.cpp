@@ -54,7 +54,7 @@ QString FrameFile::GetFileInputContextString()
 
   if(!regx.isEmpty())
     {
-      res += "Registered types (";
+      res += "Known file types (";
       QString reg;
       for(const QString&  extn: regx)
       {
