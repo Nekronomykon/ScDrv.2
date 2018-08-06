@@ -14,7 +14,7 @@ template<class T>
 class FileFormatContext;
 
 template<class T>
-// static inline 
+// static inline
 bool operator <(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 template<class T>
@@ -63,14 +63,14 @@ private:
 };
 
 template<class T>
-class FileInputContextSetup
+class SetupDefaultFileContext
 {
 public:
-  explicit FileInputContextSetup(const QString& sid) {
+  explicit SetupDefaultFileContext(const QString& sid) {
     T::SetupFileInputContext(sid);
   }
 
-  ~FileInputContextSetup() {
+  ~SetupDefaultFileContext() {
     T::ClearFileInputContext();
   }
 

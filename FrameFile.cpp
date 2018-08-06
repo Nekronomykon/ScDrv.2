@@ -1,6 +1,10 @@
 #include "FrameFile.h"
 
 #include <QFile>
+#include <QSet>
+#include <QMap>
+
+#include <QStringList>
 
 #include "MoleculeAcquireFileXYZ.h"
 #include "MoleculeAcquireFileWFN.h"
@@ -11,7 +15,6 @@ static inline bool operator <(const FrameFileContext & f0, const FrameFileContex
 {
   return (f0.FormatName() < f1.FormatName());
 }
-
 
 // static members
 QStringList FrameFile::recent_files;

@@ -218,7 +218,7 @@ void FrameWorkspace::on_actionOpen__triggered()
   if (all_paths.isEmpty())
     return;
 
-  FileInputContextSetup<FrameFile> context(fmt_name);
+  SetupDefaultFileContext<FrameFile> context(fmt_name);
 
   for (const auto &one_path : all_paths)
   {
