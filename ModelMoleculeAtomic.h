@@ -1,6 +1,11 @@
 #ifndef Molecular_AtomicModel_h
 #define Molecular_AtomicModel_h
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 #include <QAbstractTableModel>
 #include <QVariant>
 
@@ -12,15 +17,16 @@ public:
   ModelMoleculeAtomic();
 
   int columnCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;
+
   int    rowCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;
-  QVariant data(const QModelIndex &
-    , int) const override;
-  QVariant headerData(int section
-    , Qt::Orientation orientation
-    , int role = Qt::DisplayRole) const override;
-    bool setData(const QModelIndex &index
-    , const QVariant &value
-    , int role = Qt::EditRole) override;
+
+  QVariant data(const QModelIndex & /*index*/, int /*role*/) const override;
+
+  QVariant headerData(int /*section*/, Qt::Orientation /*orientation*/
+    , int /*role*/ = Qt::DisplayRole) const override;
+  
+  bool setData(const QModelIndex &/*index*/, const QVariant &/*value*/
+    , int /*role*/ = Qt::EditRole) override;
 
 private:
   enum {

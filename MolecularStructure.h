@@ -1,6 +1,11 @@
 #ifndef Molecular_Structure_h
 #define Molecular_Structure_h
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 

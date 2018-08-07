@@ -1,6 +1,11 @@
 #ifndef MODELELEMENTS_H
 #define MODELELEMENTS_H
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 #include <vtkNew.h>
 #include <vtkPeriodicTable.h>
 

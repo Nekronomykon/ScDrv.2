@@ -1,12 +1,12 @@
 #include "ModelMoleculeAtomic.h"
 
 ModelMoleculeAtomic::ModelMoleculeAtomic()
-{
-}
+: QAbstractTableModel()
+{}
 
 int ModelMoleculeAtomic::columnCount(const QModelIndex & /*parent*/) const
 {
-  return (int)Column_Count;
+  return Column_Count;
 }
 
 int ModelMoleculeAtomic::rowCount(const QModelIndex & /*parent*/) const
@@ -75,3 +75,12 @@ bool ModelMoleculeAtomic::setData(const QModelIndex &index, const QVariant &valu
   return false;
   // stub... WUT?
 }
+
+ Qt::ItemFlags ModelMoleculeAtomic::flags(const QModelIndex &index) const
+ {
+         if (!index.isValid())
+          return Qt::ItemIsEnabled;
+
+      return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+
+ }
