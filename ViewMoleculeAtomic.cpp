@@ -8,6 +8,7 @@ ViewMoleculeAtomic::ViewMoleculeAtomic(QWidget* parent)
 {
   ModelMoleculeAtomic* pModel = new ModelMoleculeAtomic();
   this->setModel(pModel);
+  this->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 ViewMoleculeAtomic::~ViewMoleculeAtomic(){}

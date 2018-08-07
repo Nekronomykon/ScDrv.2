@@ -5,7 +5,7 @@
 #include <QVariant>
 
 class ModelMoleculeAtomic
-    : public QAbstractTableModel
+  : public QAbstractTableModel
 {
   Q_OBJECT
 public:
@@ -13,17 +13,24 @@ public:
 
   int columnCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;
   int    rowCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;
-  QVariant data(const QModelIndex &, int) const override;
+  QVariant data(const QModelIndex &
+    , int) const override;
+  QVariant headerData(int section
+    , Qt::Orientation orientation
+    , int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex &index
+    , const QVariant &value
+    , int role = Qt::EditRole) override;
 
 private:
   enum {
-      ColumnID = 0
-    , ColumnElement = 1
-    , ColumnType    = 2
-    , ColumnLabel   = 3
-    , ColumnX       = 4
-    , ColumnY       = 5
-    , ColumnZ       = 6
+    ColumnID = 0
+    , ColumnLabel = 1
+    , ColumnElement = 2
+    , ColumnType = 3
+    , ColumnX = 4
+    , ColumnY = 5
+    , ColumnZ = 6
     , Column_Count
   };
 };

@@ -27,10 +27,21 @@ FrameFile* FrameFile::New(QWidget*parent) { return new FrameFile(parent); }
 
 void FrameFile::BuildFileContext()
 {
-  all_formats[FileContext("XMol XYZ files",      &FrameFile::readContentXYZ )] =  "xyz";
-  all_formats[FileContext("Gaussian Cube files", &FrameFile::readContentCUBE)] =  "cube";
-  all_formats[FileContext("Wavefunction files",  &FrameFile::readContentWFN )] =  "wfn";
-  all_formats[FileContext("Text files",          &FrameFile::readContentNone)] =  "txt";
+  all_formats[FileContext("XMol XYZ files"
+    , &FrameFile::readContentXYZ
+  )] =  "xyz";
+  
+  all_formats[FileContext("Gaussian Cube files"
+    , &FrameFile::readContentCUBE
+  )] =  "cube";
+  
+  all_formats[FileContext("Wavefunction files"
+    , &FrameFile::readContentWFN
+  )] =  "wfn";
+  
+  all_formats[FileContext("Text files"
+    , &FrameFile::readContentNone
+  )] =  "txt";
 }
 
 QString FrameFile::GetFileInputContextString()
@@ -107,6 +118,7 @@ FrameFile::FrameFile(QWidget* parent)
 
   this->addTab(edit_source_, tr("Source"));
   this->addTab(view_molecule_, tr("Molecule"));
+  this->addTab(view_atomic_, tr("Atoms"));
 
   a_molecule_->Initialize();
 }
