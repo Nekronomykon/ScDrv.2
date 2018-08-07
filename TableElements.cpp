@@ -7,5 +7,7 @@ TableElements::TableElements(QWidget *parent)
 {
   ModelElements* pModel = new ModelElements();
   this->setModel(pModel);
+
+  this->setShowGrid(false);
 }
 
