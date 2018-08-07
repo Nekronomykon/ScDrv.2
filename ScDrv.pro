@@ -171,7 +171,9 @@ SOURCES += \
     ViewWorkspace.cpp \
     MolecularStructure.cpp \
     ViewMoleculeAtomic.cpp \
-    ModelMoleculeAtomic.cpp
+    ModelMoleculeAtomic.cpp \
+    PeriodicTable.cpp \
+    ModelElements.cpp
 
 HEADERS += \
     FrameFile.h \
@@ -226,7 +228,9 @@ HEADERS += \
     ViewWorkspace.h \
     MolecularStructure.h \
     ViewMoleculeAtomic.h \
-    ModelMoleculeAtomic.h
+    ModelMoleculeAtomic.h \
+    PeriodicTable.h \
+    ModelElements.h
 
 FORMS += \
     FrameWorkspace.ui \

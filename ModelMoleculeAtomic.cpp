@@ -70,7 +70,8 @@ QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientatio
   return res;
 }
 
-bool ModelMoleculeAtomic::setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
+bool ModelMoleculeAtomic::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+  return false;
   // stub... WUT?
 }
