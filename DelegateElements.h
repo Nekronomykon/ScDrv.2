@@ -15,6 +15,7 @@
 class DelegateElements
     : public QStyledItemDelegate
 {
+  Q_OBJECT
 public:
   explicit DelegateElements();
 
