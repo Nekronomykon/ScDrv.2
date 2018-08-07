@@ -23,7 +23,7 @@ public:
         const QStyleOptionViewItem &/* option */,
         const QModelIndex & /*index*/) const override;
 
-  void setEditorData(QWidget */*editor*/
+  void setEditorData(QWidget* /*editor*/
     , const QModelIndex &/*index*/) const override;
 
   void setModelData(QWidget* /*editor*/
