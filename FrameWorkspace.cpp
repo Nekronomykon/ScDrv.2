@@ -23,8 +23,8 @@
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget* parent)
   : QMainWindow(parent)
-  , view_files_(new BrowseFiles(this))
   , edit_workspace_(new ViewWorkspace(this))
+  , view_files_(new BrowseFiles(this))
 {
   this->setupUi(this);
   //mdiArea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -57,7 +57,8 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   // Set up action signals and slots
   connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
   connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
-
+  connect(edit_workspace_,&ViewWorkspace::currentTextChanged,
+            this, &FrameWorkspace::showPathContent);
 }
 
 FrameWorkspace::Child* FrameWorkspace::getActiveChild() const
@@ -166,8 +167,6 @@ FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, b
     //if ((pChild = (this->*toCall)(path)))
     //  pChild->show();
   }
-
-
   return pChild;
 }
 
@@ -225,4 +224,9 @@ void FrameWorkspace::on_actionOpen__triggered()
     QFileInfo fi(one_path);
     this->addFileToWorkspace(fi.canonicalFilePath());
   }
+}
+
+void FrameWorkspace::showPathContent(const QString&)
+{
+
 }

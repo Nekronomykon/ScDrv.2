@@ -60,6 +60,8 @@ public slots:
 protected slots:
   void on_actionOpen__triggered();
 
+  void showPathContent(const QString&);
+
 protected:
   void changeEvent(QEvent *e);
   void closeEvent(QCloseEvent *event);

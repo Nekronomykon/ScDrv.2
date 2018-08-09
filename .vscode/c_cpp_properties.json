@@ -28,7 +28,7 @@
                 "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtGui\\*",
                 "C:\\Qt/5.11.1\\msvc2017_64\\include\\QtWidgets\\*",
                 "C:\\Qt/5.11.1\\msvc2017_64\\include\\QtOpenGL\\*",
-                "C:/Qt/5.11.1/msvc2017_64/include/QtPrintSupport/*",
+                "C:\\Qt/5.11.1\\msvc2017_64\\include\\QtPrintSupport\\*",
                 "${workspaceFolder}\\*"
             ]
         }
