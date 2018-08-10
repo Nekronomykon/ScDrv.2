@@ -50,7 +50,7 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
   connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
   connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
-    this, &FrameWorkspace::showPathContent);
+    this, &FrameWorkspace::loadPathContentFrom);
 }
 void FrameWorkspace::setupDockingViews()
 {
@@ -229,7 +229,7 @@ void FrameWorkspace::on_actionOpen__triggered()
   }
 }
 
-void FrameWorkspace::showPathContent(const QString&)
+void FrameWorkspace::loadPathContentFrom(const QString& file_path)
 {
-
+  this->getActiveChild()->readCurrentFormatFrom(file_path);
 }

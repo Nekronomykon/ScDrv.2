@@ -152,7 +152,7 @@ bool FrameFile::readSource(const QString& from)
 {
   QFile file(from);
 
-  if (file.open(QIODevice::Text | QIODevice::ReadOnly))
+  if (!file.open(QIODevice::Text | QIODevice::ReadOnly))
     return false;
 
   edit_source_->load(&file);

@@ -43,7 +43,7 @@ public:
   bool buildFrom(T& obj, const TypeFileName& name) const
   {
     if (obj.readSource(name))
-      return (this->hasBuild()) ? obj.*build_operation_() : true;
+      return (this->hasBuild()) ? (obj.*build_operation_)() : true;
     else
       return false;
   }
@@ -54,7 +54,8 @@ public:
       obj.*export_operation_(name) : false;
   }
 
-  friend bool operator < <>(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+  friend bool operator < <>(const FileFormatContext<T> & f0
+    , const FileFormatContext<T> &f1);
 
 private:
   TypeFileName name_format_;

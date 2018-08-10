@@ -175,6 +175,8 @@ SOURCES += \
     ModelElements.cpp \
     DelegateElements.cpp \
     TableElements.cpp \
+    ViewFilesystem.cpp \
+    DelegateElements.cpp \
     ViewFilesystem.cpp
 
 HEADERS += \
@@ -234,6 +236,8 @@ HEADERS += \
     ModelElements.h \
     DelegateElements.h \
     TableElements.h \
+    ViewFilesystem.h \
+    DelegateElements.h \
     ViewFilesystem.h
 
 FORMS += \
