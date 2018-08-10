@@ -23,8 +23,8 @@
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget* parent)
   : QMainWindow(parent)
-  , edit_workspace_(new ViewWorkspace(this))
-  , view_files_(new BrowseFiles(this))
+  , edit_workspace_(new ViewWorkspace)
+  , view_files_(new ViewFilesystem)
 {
   this->setupUi(this);
   //mdiArea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -42,6 +42,18 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   //pSW->show();
 
 
+  this->setupDockingViews();
+  // reread
+  this->restoreSettings();
+
+  // Set up action signals and slots
+  connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
+  connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
+  connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
+    this, &FrameWorkspace::showPathContent);
+}
+void FrameWorkspace::setupDockingViews()
+{
   QDockWidget *pInit;
   QDockWidget* pNext;
   pInit = new QDockWidget(tr("Files"), this);
@@ -50,15 +62,6 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   pNext->setWidget(edit_workspace_);
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
   this->tabifyDockWidget(pInit, pNext);
-
-  // reread
-  this->restoreSettings();
-
-  // Set up action signals and slots
-  connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
-  connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
-  connect(edit_workspace_,&ViewWorkspace::currentTextChanged,
-            this, &FrameWorkspace::showPathContent);
 }
 
 FrameWorkspace::Child* FrameWorkspace::getActiveChild() const

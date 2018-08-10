@@ -12,7 +12,7 @@
 #include <QCloseEvent>
 
 #include "ViewWorkspace.h"
-#include "BrowseFiles.h"
+#include "ViewFilesystem.h"
 #include "FrameFile.h"
 
 #include "ui_FrameWorkspace.h"
@@ -70,11 +70,12 @@ protected:
 private:
   void restoreSettings();
   void storeSettings();
+  void setupDockingViews();
 
   // data members:
 private:
   QPointer<ViewWorkspace>  edit_workspace_;
-  QPointer<BrowseFiles> view_files_;
+  QPointer<ViewFilesystem> view_files_;
 
 private slots:
 };

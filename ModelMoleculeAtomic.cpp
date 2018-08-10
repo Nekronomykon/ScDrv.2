@@ -19,10 +19,12 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   return (role == Qt::DisplayRole) ? QVariant((float)1.25 + (mi.row() + mi.column()) / 3.5).toDouble() : QVariant();
 }
 
-QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant ModelMoleculeAtomic::headerData(int section
+                                         , Qt::Orientation orientation
+                                         , int role) const
 {
   if (orientation == Qt::Vertical || role != Qt::DisplayRole)
-    return QAbstractTableModel::headerData(section, orientation, role);
+    return QAbstractTableModel::headerData(section, orientation, role); // ???
   QVariant res;
   switch (section)
   {

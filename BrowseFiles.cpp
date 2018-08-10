@@ -14,6 +14,7 @@ BrowseFiles::BrowseFiles(QWidget* parent)
   QItemSelectionModel *pSel;
 
   QModelIndex idx = model_txt_->setRootPath(QDir::rootPath());
+  //QModelIndex idx = model_txt_->setRootPath(QDir::currentPath()); 
   this->setModel(model_txt_);
   //const QModelIndex rootIndex = model_txt_->index(QDir::cleanPath(""));
   //if (rootIndex.isValid())
@@ -21,6 +22,8 @@ BrowseFiles::BrowseFiles(QWidget* parent)
   // this->setRootIndex( model_txt_->setRootPath(QDir::currentPath()) );
   // this->selectionMode
 
+  this->clearSelection();
+  this->setSelectionMode(QAbstractItemView::SingleSelection);
 
   this->setAnimated(false);
   this->setSortingEnabled(true);
@@ -28,6 +31,4 @@ BrowseFiles::BrowseFiles(QWidget* parent)
 }
 
 
-BrowseFiles::~BrowseFiles()
-{
-}
+BrowseFiles::~BrowseFiles(){}

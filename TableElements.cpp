@@ -8,6 +8,8 @@ TableElements::TableElements(QWidget *parent)
   ModelElements* pModel = new ModelElements();
   this->setModel(pModel);
 
+  this->setSelectionMode(QAbstractItemView::SingleSelection);
+
   this->setShowGrid(false);
 }
 

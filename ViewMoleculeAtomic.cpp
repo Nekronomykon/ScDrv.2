@@ -11,6 +11,8 @@ ViewMoleculeAtomic::ViewMoleculeAtomic(QWidget* parent)
   ModelMoleculeAtomic* pModel = new ModelMoleculeAtomic();
   this->setModel(pModel);
   this->setSelectionBehavior(QAbstractItemView::SelectRows);
+  this->setItemDelegateForColumn(ModelMoleculeAtomic::ColumnElement
+                                 , delegate_Mendeleev_);
 }
 
 ViewMoleculeAtomic::~ViewMoleculeAtomic(){}

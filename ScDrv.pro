@@ -174,7 +174,8 @@ SOURCES += \
     ModelMoleculeAtomic.cpp \
     ModelElements.cpp \
     DelegateElements.cpp \
-    TableElements.cpp
+    TableElements.cpp \
+    ViewFilesystem.cpp
 
 HEADERS += \
     FrameFile.h \
@@ -232,7 +233,8 @@ HEADERS += \
     ModelMoleculeAtomic.h \
     ModelElements.h \
     DelegateElements.h \
-    TableElements.h
+    TableElements.h \
+    ViewFilesystem.h
 
 FORMS += \
     FrameWorkspace.ui \

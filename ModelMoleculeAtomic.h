@@ -16,6 +16,17 @@ class ModelMoleculeAtomic
 public:
   ModelMoleculeAtomic();
 
+  enum {
+    ColumnID = 0
+    , ColumnLabel = 1
+    , ColumnElement = 2
+    , ColumnType = 3
+    , ColumnX = 4
+    , ColumnY = 5
+    , ColumnZ = 6
+    , Column_Count
+  };
+
   int columnCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;
   
   int rowCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;
@@ -34,16 +45,6 @@ public:
      Qt::ItemFlags flags(const QModelIndex &index) const override;
 
 private:
-  enum {
-    ColumnID = 0
-    , ColumnLabel = 1
-    , ColumnElement = 2
-    , ColumnType = 3
-    , ColumnX = 4
-    , ColumnY = 5
-    , ColumnZ = 6
-    , Column_Count
-  };
 };
 
 #endif // Molecular_AtomicModel_h
