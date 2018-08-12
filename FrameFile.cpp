@@ -30,16 +30,16 @@ void FrameFile::BuildFileContext()
   all_formats[FileContext("XMol XYZ files"
     , &FrameFile::readContentXYZ
   )] =  "xyz";
-  
+
   all_formats[FileContext("Gaussian Cube files"
     , &FrameFile::readContentCUBE
   )] =  "cube";
-  
+
   all_formats[FileContext("Wavefunction files"
     , &FrameFile::readContentWFN
   )] =  "wfn";
-  
-  all_formats[FileContext("Text files"
+
+  all_formats[FileContext("Generic text files"
     , &FrameFile::readContentNone
   )] =  "txt";
 }
@@ -166,7 +166,7 @@ void FrameFile::InterpretFileName()
 
 void FrameFile::doClearAll()
 {
-  a_molecule_.Initialize();
+  structure_.Initialize();
 }
 
 void FrameFile::doReload()

@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include <QPointer>
+#include <QMap>
 
 #include <QEvent>
 #include <QCloseEvent>
@@ -77,6 +78,7 @@ private:
 
   // data members:
 private:
+  QPointer<ModelWorkspace> model_workspace_;
   QPointer<ViewWorkspace>  edit_workspace_;
   QPointer<ViewFilesystem> view_files_;
 

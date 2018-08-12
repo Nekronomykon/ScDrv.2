@@ -12,18 +12,26 @@
 
 #include <QVector>
 #include <QPair>
+#include <QMap>
+
 class ModelWorkspace
     : public QAbstractListModel
 {
   Q_OBJECT
 public:
+  typedef FrameFile Child;
+  typedef Child::TypeFileName FileName;
+  typedef Child::FileContext  FileFormat;
+  typedef QVector<QPair<FileName, FileFormat> > Workspace;
+
   ModelWorkspace();
   ~ModelWorkspace() override;
 
   int columnCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
 private:
-  QVector<
+  Workspace workspace_;
 };
 
 #endif // !Model_Workspace_h

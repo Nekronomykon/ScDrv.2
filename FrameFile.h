@@ -62,8 +62,8 @@ public:
   { return format_current_; }
 
   void readCurrentFormatFrom(const QString& from)
-  { 
-    format_current_.buildFrom(*this, from); 
+  {
+    format_current_.buildFrom(*this, from);
   }
   void doClearAll();
   void doReload();
@@ -82,11 +82,11 @@ public:
       QByteArray bytes = str.toLatin1();
       reader->ResetFileName(bytes.data());
 
-      a_molecule_.Initialize();
-      reader->SetOutput(static_cast<vtkMolecule*>(a_molecule_));
+      structure_.Initialize();
+      reader->SetOutput(static_cast<vtkMolecule*>(structure_));
       reader->Update();
     }
-    return bool(a_molecule_->GetNumberOfAtoms() > 0);
+    return bool(structure_.getMolecule()->GetNumberOfAtoms() > 0);
   }
 
   bool readContentXYZ();
@@ -113,7 +113,7 @@ private:
   FileContext format_current_;
 
   // vtkIdTypeArray positions_;
-  MolecularStructure a_molecule_;
+  MolecularStructure structure_;
 
   //QPointer <QToolButton> extend_;
   //QPointer <QToolButton> compress_;
