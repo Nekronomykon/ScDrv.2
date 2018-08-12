@@ -26,8 +26,11 @@ class FrameWorkspace
 public:
 
   typedef FrameFile Child;
+  typedef Child::TypeFileName FileName;
+  typedef Child::FileContext  FileFormat;
 
   explicit FrameWorkspace(QWidget* /*parent*/ = Q_NULLPTR);
+  ~FrameWorkspace() override;
 
   Child* getActiveChild() const;
 

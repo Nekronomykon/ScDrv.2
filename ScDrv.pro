@@ -177,7 +177,8 @@ SOURCES += \
     TableElements.cpp \
     ViewFilesystem.cpp \
     DelegateElements.cpp \
-    ViewFilesystem.cpp
+    ViewFilesystem.cpp \
+    ModelWorkspace.cpp
 
 HEADERS += \
     FrameFile.h \
@@ -238,7 +239,8 @@ HEADERS += \
     TableElements.h \
     ViewFilesystem.h \
     DelegateElements.h \
-    ViewFilesystem.h
+    ViewFilesystem.h \
+    ModelWorkspace.h
 
 FORMS += \
     FrameWorkspace.ui \

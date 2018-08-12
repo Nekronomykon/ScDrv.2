@@ -11,8 +11,9 @@
 ViewWorkspace::ViewWorkspace(QWidget *parent)
   : _Base(parent)
 {
-  QFileIconProvider provide;
-  this->setWindowIcon(provide.icon(QFileIconProvider::Folder));
+  this->setViewMode(QListView::ListMode);
+  ModelWorkspace *pModel = new ModelWorkspace();
+  this->setModel(pModel);
 }
 
 bool ViewWorkspace::addFilePath(const QString &path)

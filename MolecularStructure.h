@@ -17,6 +17,13 @@ public:
   explicit MolecularStructure();
   ~MolecularStructure();
 
+  void Initialize();
+
+  operator vtkMolecule* () const
+  {
+    return static_cast<vtkMolecule*>(the_molecule_);
+  }
+
 private:
   vtkNew<vtkMolecule> the_molecule_;
 };

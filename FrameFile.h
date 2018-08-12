@@ -30,6 +30,8 @@
 
 #include "MoleculeAcquireFile.h"
 
+#include "MolecularStructure.h"
+
 #include "FileFormat.h"
 
 class FrameFile;
@@ -63,15 +65,8 @@ public:
   { 
     format_current_.buildFrom(*this, from); 
   }
-
-  void doReload() 
-  {
-    format_current_.buildFrom(*this, this->GetFileNamePtr());
-  }
-  void doClearAll()
-  {
-
-  }
+  void doClearAll();
+  void doReload();
 
   bool readSource(const QString &);
 
@@ -86,8 +81,9 @@ public:
       vtkSmartPointer<MoleculeAcquireFile> reader(vtkSmartPointer<T>::New());
       QByteArray bytes = str.toLatin1();
       reader->ResetFileName(bytes.data());
-      reader->SetOutput(a_molecule_);
-      a_molecule_->Initialize();
+
+      a_molecule_.Initialize();
+      reader->SetOutput(static_cast<vtkMolecule*>(a_molecule_));
       reader->Update();
     }
     return bool(a_molecule_->GetNumberOfAtoms() > 0);
@@ -117,7 +113,7 @@ private:
   FileContext format_current_;
 
   // vtkIdTypeArray positions_;
-  vtkNew<vtkMolecule> a_molecule_;
+  MolecularStructure a_molecule_;
 
   //QPointer <QToolButton> extend_;
   //QPointer <QToolButton> compress_;

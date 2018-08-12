@@ -120,9 +120,8 @@ FrameFile::FrameFile(QWidget* parent)
   this->addTab(view_molecule_, tr("Molecule"));
   this->addTab(view_atomic_, tr("Atoms"));
 
-  a_molecule_->Initialize();
+  this->doClearAll();
 }
-
 
 FrameFile::~FrameFile() {}
 
@@ -163,4 +162,14 @@ bool FrameFile::readSource(const QString& from)
 void FrameFile::InterpretFileName()
 {
   this->setWindowTitle(this->GetFileName() + tr("[*]"));
+}
+
+void FrameFile::doClearAll()
+{
+  a_molecule_.Initialize();
+}
+
+void FrameFile::doReload()
+{
+  format_current_.buildFrom(*this, this->GetFileName());
 }

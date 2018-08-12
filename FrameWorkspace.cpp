@@ -52,6 +52,10 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
     this, &FrameWorkspace::loadPathContentFrom);
 }
+
+FrameWorkspace::~FrameWorkspace()
+{}
+
 void FrameWorkspace::setupDockingViews()
 {
   QDockWidget *pInit;
