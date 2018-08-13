@@ -20,7 +20,7 @@ public:
   void Initialize();
 
   vtkMolecule* getMolecule() const {return static_cast<vtkMolecule *>(molecule_);}
-  operator vtkMolecule *() const { return static_cast<vtkMolecule *>(molecule_); }
+  operator vtkMolecule *() const { return this->getMolecule(); }
   vtkMolecule *operator->() const { return this->getMolecule(); }
 
 //  const vtkMolecule* getMolecule() const {return static_cast<vtkMolecule *>(the_molecule_);}

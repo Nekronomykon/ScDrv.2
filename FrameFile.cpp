@@ -63,6 +63,7 @@ QString FrameFile::GetFileInputContextString()
     res += ");;";
   } while (++it_fmt != all_formats.end());
 
+  
   if(!regx.isEmpty())
     {
       res += "Known file types (";
