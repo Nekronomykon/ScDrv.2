@@ -69,6 +69,7 @@ public:
   void doReload();
 
   bool readSource(const QString &);
+  bool saveSource(const QString &) const;
 
   // Reader functionality
   template <class T>

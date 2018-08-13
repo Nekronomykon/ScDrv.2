@@ -12,13 +12,14 @@
 
 #include "FrameFile.h"
 
+// #include <QListView>
 #include <QListWidget>
 #include "ModelWorkspace.h"
 
 class ViewWorkspace
-  : public QListView
+  : public QListWidget
 {
-  typedef QListView _Base;
+  typedef QListWidget _Base;
 
   Q_OBJECT
 public:

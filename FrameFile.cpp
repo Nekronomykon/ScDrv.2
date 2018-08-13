@@ -6,6 +6,8 @@
 
 #include <QStringList>
 
+#include <QFile>
+
 #include "MoleculeAcquireFileXYZ.h"
 #include "MoleculeAcquireFileWFN.h"
 #include "MoleculeAcquireFileCUBE.h"
@@ -147,19 +149,6 @@ bool FrameFile::readContentCUBE()
   return  this->applyReaderType<MoleculeAcquireFileWFN>();
 }
 
-
-bool FrameFile::readSource(const QString& from)
-{
-  QFile file(from);
-
-  if (!file.open(QIODevice::Text | QIODevice::ReadOnly))
-    return false;
-
-  edit_source_->load(&file);
-  edit_source_->setReadOnly(true);
-  return true;
-}
-
 void FrameFile::InterpretFileName()
 {
   this->setWindowTitle(this->GetFileName() + tr("[*]"));
@@ -174,3 +163,24 @@ void FrameFile::doReload()
 {
   format_current_.buildFrom(*this, this->GetFileName());
 }
+
+bool FrameFile::readSource(const QString& from)
+{
+  QFile file(from);
+
+  if (!file.open(QIODevice::Text | QIODevice::ReadOnly))
+    return false;
+
+  edit_source_->load(&file);
+  edit_source_->setReadOnly(true);
+  return true;
+}
+
+bool FrameFile::saveSource(const QString &path_to) const
+{
+  edit_source_->dump();
+  if (QFile::exists(path_to))
+    QFile::remove(path_to);
+  return QFile::copy(edit_source_->getDumpPath(), path_to);
+}
+

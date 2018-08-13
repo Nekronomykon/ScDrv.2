@@ -12,22 +12,31 @@
 #include <QAbstractTableModel>
 
 class ModelElements
-    : public QAbstractTableModel
+  : public QAbstractTableModel
 {
   Q_OBJECT
 
-  enum {NumberOfElements = 118
-        , NumberOfPeriods = 8
-        , NumberOfGroups = 18
-        , NumberOfSpecialSeq = 2
-       };
+    enum {
+    NumberOfElements = 135
+    , NumberOfPeriods = 8
+    , NumberOfGroups = 18
+    , NumberOfSpecialSeq = 3 // Ln --- lantanides, Aq --- actinides, Sq --- superactinides
+    , LengthSpecialSec = 15
+  };
+
+  static const unsigned short NobleGases[NumberOfPeriods];
+  static const unsigned short InGroup[];
 public:
   ModelElements();
 
   int columnCount(const QModelIndex &/*parent*/ = QModelIndex()) const override
-  {return NumberOfGroups;}
+  {
+    return NumberOfGroups;
+  }
   int    rowCount(const QModelIndex &/*parent*/ = QModelIndex()) const override
-  {return NumberOfPeriods + NumberOfSpecialSeq;}
+  {
+    return NumberOfPeriods + NumberOfSpecialSeq;
+  }
   QVariant data(const QModelIndex & /*index*/, int /*role*/) const override;
 
 

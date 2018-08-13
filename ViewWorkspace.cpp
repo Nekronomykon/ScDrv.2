@@ -12,8 +12,8 @@ ViewWorkspace::ViewWorkspace(QWidget *parent)
   : _Base(parent)
 {
   this->setViewMode(QListView::ListMode);
-  ModelWorkspace *pModel = new ModelWorkspace();
-  this->setModel(pModel);
+  //ModelWorkspace *pModel = new ModelWorkspace();
+  //this->setModel(pModel);
 }
 
 bool ViewWorkspace::addFilePath(const QString &path)
