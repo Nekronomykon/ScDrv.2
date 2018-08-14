@@ -118,7 +118,8 @@ private:
 
   //QPointer <QToolButton> extend_;
   //QPointer <QToolButton> compress_;
-
+  QVector<QWidget*> view_current_;
+  // ..chosen from:
   QPointer<EditTextSource> edit_source_;
   QPointer<QVTKMoleculeWidget> view_molecule_;
   QPointer<ViewMoleculeAtomic> view_atomic_;

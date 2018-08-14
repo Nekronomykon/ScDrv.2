@@ -10,6 +10,7 @@
 #include <QWidget>
 
 #include "DelegateElements.h"
+#include "ModelMoleculeAtomic.h"
 
 #include <QTableView>
 

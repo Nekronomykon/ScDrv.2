@@ -1,8 +1,16 @@
 #include "ModelMoleculeAtomic.h"
 
-ModelMoleculeAtomic::ModelMoleculeAtomic()
-: QAbstractTableModel()
-{}
+ModelMoleculeAtomic::ModelMoleculeAtomic(vtkMolecule *pMol)
+    : QAbstractTableModel(), ptr_mol_(pMol)
+{
+}
+
+vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
+{
+  if (pNewMol != ptr_mol_)
+    std::swap(pNewMol, ptr_mol_);
+  return pNewMol;
+}
 
 int ModelMoleculeAtomic::columnCount(const QModelIndex & /*parent*/) const
 {
@@ -11,17 +19,30 @@ int ModelMoleculeAtomic::columnCount(const QModelIndex & /*parent*/) const
 
 int ModelMoleculeAtomic::rowCount(const QModelIndex & /*parent*/) const
 {
-  return 217; // just a stub here
+  return (!ptr_mol_) ? 0 : (int)ptr_mol_->GetNumberOfAtoms();
 }
 
 QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
 {
-  return (role == Qt::DisplayRole) ? QVariant((float)1.25 + (mi.row() + mi.column()) / 3.5).toDouble() : QVariant();
+  QVariant res;
+
+  if (role == Qt::DisplayRole)
+    {
+      assert(ptr_mol_);
+      vtkAtom atom = ptr_mol_->GetAtom(mi.row());
+      switch(mi.column())
+      {
+        case(ColumnX): { res = QVariant((atom.GetPosition())[0]); break;}
+        case(ColumnY): { res = QVariant((atom.GetPosition())[1]); break;}
+        case(ColumnZ): { res = QVariant((atom.GetPosition())[2]); break;}
+        default: break;
+      }
+    }
+
+  return res;
 }
 
-QVariant ModelMoleculeAtomic::headerData(int section
-                                         , Qt::Orientation orientation
-                                         , int role) const
+QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Vertical || role != Qt::DisplayRole)
     return QAbstractTableModel::headerData(section, orientation, role); // ???
@@ -78,11 +99,10 @@ bool ModelMoleculeAtomic::setData(const QModelIndex &index, const QVariant &valu
   // stub... WUT?
 }
 
- Qt::ItemFlags ModelMoleculeAtomic::flags(const QModelIndex &index) const
- {
-         if (!index.isValid())
-          return Qt::ItemIsEnabled;
+Qt::ItemFlags ModelMoleculeAtomic::flags(const QModelIndex &index) const
+{
+  if (!index.isValid())
+    return Qt::ItemIsEnabled;
 
-      return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
-
- }
+  return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+}
