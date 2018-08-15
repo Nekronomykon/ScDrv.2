@@ -41,7 +41,8 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   //pSW->setAttribute(Qt::WA_NativeWindow, false);
   //pSW->show();
 
-
+  this->setupActions();
+  this->setupToolBars();
   this->setupDockingViews();
   // reread
   this->restoreSettings();
@@ -55,6 +56,33 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
 
 FrameWorkspace::~FrameWorkspace()
 {}
+
+void FrameWorkspace::setupActions()
+{
+  actionNew_->setShortcuts(QKeySequence::New);
+  actionOpen_->setShortcuts(QKeySequence::Open);
+  actionSave_->setShortcuts(QKeySequence::Save);
+  actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
+  actionExit_->setShortcuts(QKeySequence::Quit);
+
+  actionCut_->setShortcuts(QKeySequence::Cut);
+  actionCopy_->setShortcuts(QKeySequence::Copy);
+  actionPaste_->setShortcuts(QKeySequence::Paste);
+  actionClear_->setShortcuts(QKeySequence::Delete);
+}
+
+void FrameWorkspace::setupToolBars()
+{
+  barTools_->addAction(actionNew_);
+  barTools_->addAction(actionOpen_);
+  barTools_->addAction(actionSave_);
+
+
+  QToolBar *editToolBar = addToolBar(tr("Edit"));
+  editToolBar->addAction(actionCut_);
+  editToolBar->addAction(actionCopy_);
+  editToolBar->addAction(actionPaste_);
+}
 
 void FrameWorkspace::setupDockingViews()
 {

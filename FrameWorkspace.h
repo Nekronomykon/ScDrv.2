@@ -20,8 +20,8 @@
 #include <QMainWindow>
 
 class FrameWorkspace
-    : public QMainWindow
-    , private Ui_FrameWorkspace
+  : public QMainWindow
+  , private Ui_FrameWorkspace
 {
   Q_OBJECT
 public:
@@ -74,6 +74,9 @@ protected:
 private:
   void restoreSettings();
   void storeSettings();
+
+  void setupActions();
+  void setupToolBars();
   void setupDockingViews();
 
   // data members:

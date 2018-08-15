@@ -8,6 +8,7 @@
 
 #include <vtkNew.h>
 #include <vtkPeriodicTable.h>
+#include <vtkType.h>
 
 #include <QAbstractTableModel>
 
@@ -22,10 +23,14 @@ class ModelElements
     , NumberOfGroups = 18
     , NumberOfSpecialSeq = 3 // Ln --- lantanides, Aq --- actinides, Sq --- superactinides
     , LengthSpecialSec = 15
+    , NumberOfTableRows = 11
+    , DummyElement = VTK_UNSIGNED_SHORT_MAX
   };
 
   static const unsigned short NobleGases[NumberOfPeriods];
   static const unsigned short InGroup[];
+  static const vtkIdType TableForm[];
+  static const vtkIdType NumTable;
 public:
   ModelElements();
 

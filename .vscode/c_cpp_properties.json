@@ -3,14 +3,14 @@
         {
             "name": "Linux",
             "includePath": [
-              "/home/serge/VTK/include/vtk-9.0/*",
-              "/home/serge/Qt/5.11.1/gcc_64/include/*",
-              "/home/serge/Qt/5.11.1/gcc_64/include/QtCore/*",
-              "/home/serge/Qt/5.11.1/gcc_64/include/QtGui/*",
-              "/home/serge/Qt/5.11.1/gcc_64/include/QtWidgets/*",
-              "/home/serge/Qt/5.11.1/gcc_64/include/QtOpenGL/*",
-              "/home/serge/Qt/5.11.1/gcc_64/include/QtPrintSupport/*",
-              "${workspaceFolder}/*"
+                "/home/serge/VTK/include/vtk-9.0/*",
+                "/home/serge/Qt/5.11.1/gcc_64/include/*",
+                "/home/serge/Qt/5.11.1/gcc_64/include/QtCore/*",
+                "/home/serge/Qt/5.11.1/gcc_64/include/QtGui/*",
+                "/home/serge/Qt/5.11.1/gcc_64/include/QtWidgets/*",
+                "/home/serge/Qt/5.11.1/gcc_64/include/QtOpenGL/*",
+                "/home/serge/Qt/5.11.1/gcc_64/include/QtPrintSupport/*",
+                "${workspaceFolder}/*"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
@@ -26,12 +26,13 @@
                 "C:\\Qt\\5.11.1\\msvc2017_64\\include\\*",
                 "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtCore\\*",
                 "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtGui\\*",
-                "C:\\Qt/5.11.1\\msvc2017_64\\include\\QtWidgets\\*",
-                "C:\\Qt/5.11.1\\msvc2017_64\\include\\QtOpenGL\\*",
-                "C:\\Qt/5.11.1\\msvc2017_64\\include\\QtPrintSupport\\*",
+                "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtWidgets\\*",
+                "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtOpenGL\\*",
+                "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtPrintSupport\\*",
                 "${workspaceFolder}\\*"
-            ]
+            ],
+            "intelliSenseMode": "msvc-x64"
         }
     ],
-    "version": 4
+    "version": 3
 }
