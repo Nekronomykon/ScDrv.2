@@ -57,18 +57,61 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
 FrameWorkspace::~FrameWorkspace()
 {}
 
+
 void FrameWorkspace::setupActions()
 {
+  const QIcon iconNew = QIcon::fromTheme("document-new", QIcon(":/images/New.png"));
+  actionNew_->setIcon(iconNew);
   actionNew_->setShortcuts(QKeySequence::New);
+
+  const QIcon iconOpen = QIcon::fromTheme("document-open", QIcon(":/images/Open.png"));
+  actionOpen_->setIcon(iconOpen);
   actionOpen_->setShortcuts(QKeySequence::Open);
+
+  const QIcon iconReload = QIcon::fromTheme("document-reload", QIcon(":/images/Reload.png"));
+  actionReload_->setIcon(iconReload);
+  actionOpen_->setShortcuts(QKeySequence::Open);
+
+  const QIcon iconSave = QIcon::fromTheme("document-save", QIcon(":/images/Save.png"));
+  actionSave_->setIcon(iconSave);
   actionSave_->setShortcuts(QKeySequence::Save);
+
+  const QIcon iconSaveAs = QIcon::fromTheme("document-save-as", QIcon(":/images/SaveAs.png"));
+  actionSaveAs_->setIcon(iconSaveAs);
   actionSaveAs_->setShortcuts(QKeySequence::SaveAs);
+
+  const QIcon iconExit = QIcon::fromTheme("application-exit", QIcon(":/images/Exit.png"));
+  actionExit_->setIcon(iconExit);
   actionExit_->setShortcuts(QKeySequence::Quit);
 
+  const QIcon iconUndo = QIcon::fromTheme("edit-undo", QIcon(":/images/Undo.png"));
+  actionUndo_->setIcon(iconUndo);
+  actionUndo_->setShortcuts(QKeySequence::Undo);
+
+  const QIcon iconRedo = QIcon::fromTheme("edit-redo", QIcon(":/images/Redo.png"));
+  actionRedo_->setIcon(iconRedo);
+  actionRedo_->setShortcuts(QKeySequence::Redo);
+
+  const QIcon iconCut = QIcon::fromTheme("edit-cut", QIcon(":/images/Cut.png"));
+  actionCut_->setIcon(iconCut);
   actionCut_->setShortcuts(QKeySequence::Cut);
+
+  const QIcon iconCopy = QIcon::fromTheme("edit-copy", QIcon(":/images/Copy.png"));
+  actionCopy_->setIcon(iconCopy);
   actionCopy_->setShortcuts(QKeySequence::Copy);
+
+  const QIcon iconPaste = QIcon::fromTheme("edit-paste", QIcon(":/images/Paste.png"));
+  actionPaste_->setIcon(iconPaste);
   actionPaste_->setShortcuts(QKeySequence::Paste);
+
+  const QIcon iconClear = QIcon::fromTheme("edit-clear", QIcon(":/images/Clear.png"));
+  actionClear_->setIcon(iconClear);
   actionClear_->setShortcuts(QKeySequence::Delete);
+
+  const QIcon iconClearAll = QIcon::fromTheme("edit-clear", QIcon(":/images/ClearAll.png"));
+  actionClearAll_->setIcon(iconClearAll);
+  actionClearAll_->setShortcuts(QKeySequence::DeleteCompleteLine);
+
 }
 
 void FrameWorkspace::setupToolBars()
@@ -259,6 +302,12 @@ void FrameWorkspace::on_actionOpen__triggered()
     QFileInfo fi(one_path);
     this->addFileToWorkspace(fi.canonicalFilePath());
   }
+}
+
+void FrameWorkspace::on_actionToggleLayout__triggered()
+{
+  QGuiApplication::setLayoutDirection( (this->layoutDirection() == Qt::LeftToRight)
+    ? Qt::RightToLeft : Qt::LeftToRight);
 }
 
 void FrameWorkspace::loadPathContentFrom(const QString& file_path)

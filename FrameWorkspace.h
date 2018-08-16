@@ -63,6 +63,7 @@ public slots:
   //
 protected slots:
   void on_actionOpen__triggered();
+  void on_actionToggleLayout__triggered();
 
   void loadPathContentFrom(const QString&);
 
