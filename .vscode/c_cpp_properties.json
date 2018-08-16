@@ -10,7 +10,7 @@
                 "/home/serge/Qt/5.11.1/gcc_64/include/QtWidgets/*",
                 "/home/serge/Qt/5.11.1/gcc_64/include/QtOpenGL/*",
                 "/home/serge/Qt/5.11.1/gcc_64/include/QtPrintSupport/*",
-                "${workspaceFolder}/*"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
@@ -29,10 +29,12 @@
                 "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtWidgets\\*",
                 "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtOpenGL\\*",
                 "C:\\Qt\\5.11.1\\msvc2017_64\\include\\QtPrintSupport\\*",
-                "${workspaceFolder}\\*"
+                "${workspaceFolder}\\**"
             ],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
             "intelliSenseMode": "msvc-x64"
         }
     ],
-    "version": 3
+    "version": 4
 }
