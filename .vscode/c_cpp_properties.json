@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "/home/serge/VTK/include/vtk-9.0/*",
-                "/home/serge/Qt/5.11.1/gcc_64/include/*",
+                "/home/serge/Qt/5.11.1/gcc_64/include/**",
                 "/home/serge/Qt/5.11.1/gcc_64/include/QtCore/*",
                 "/home/serge/Qt/5.11.1/gcc_64/include/QtGui/*",
                 "/home/serge/Qt/5.11.1/gcc_64/include/QtWidgets/*",

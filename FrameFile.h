@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include <QPointer>
+
 #include <QString>
 #include <QStringList>
 #include <QWidget>
@@ -38,8 +39,8 @@ class FrameFile;
 typedef class FileFormatContext<FrameFile> FrameFileContext;
 
 class FrameFile
-  : public QTabWidget,
-  public ImplFileName<FrameFile, QString>
+    : public QTabWidget,
+      public ImplFileName<FrameFile, QString>
 {
   Q_OBJECT
 public:
@@ -59,16 +60,27 @@ public:
   static void ClearFileInputContext();
   static FileContext FormatFromPath(const QString &);
 
-  template<class W>
-  int addViewWidget(QPointer<W> & ww, const QString& title)
+  template <class W>
+  int addViewWidget(QPointer<W> &ww, const QString &title)
   {
-    if (!ww) 
+    if (!ww)
       ww = new W(this);
+    view_current_.push_back(ww);
     return this->addTab(ww, title);
   }
 
+  void hideStructureViews()
+  {
+    while(this->count() > 1)
+    {
+      this->removeTab(1);
+    }
+    view_current_.resize(1);
+    view_current_[0] = edit_source_; // may be excessive, but...
+  }
 
-  FileContext getFormat() const {
+  FileContext getFormat() const
+  {
     return format_current_;
   }
 
@@ -84,7 +96,7 @@ public:
     return format_active;
   }
 
-  void readCurrentFormatFrom(const QString& from)
+  void readCurrentFormatFrom(const QString &from)
   {
     format_current_.buildFrom(*this, from);
   }
@@ -114,7 +126,7 @@ public:
       reader->ResetFileName(bytes.data());
 
       structure_.Initialize();
-      reader->SetOutput(static_cast<vtkMolecule*>(structure_));
+      reader->SetOutput(static_cast<vtkMolecule *>(structure_));
       reader->Update();
     }
     return bool(structure_.getMolecule()->GetNumberOfAtoms() > 0);
@@ -126,6 +138,7 @@ public:
   bool readContentNone();
 
   CodeEditor *getEditSource() const { return edit_source_; }
+  ViewMoleculeAtomic* getEditAtomic() const { return view_atomic_;}
 
 protected:
   enum Units
@@ -140,7 +153,6 @@ private:
   static QMap<FileContext, QString> all_formats;
   static FileContext format_active;
 
-
   FileContext format_current_;
 
   // vtkIdTypeArray positions_;
@@ -148,7 +160,7 @@ private:
 
   //QPointer <QToolButton> extend_;
   //QPointer <QToolButton> compress_;
-  QVector<QWidget*> view_current_;
+  QVector<QWidget *> view_current_;
   // ..chosen from:
   QPointer<EditTextSource> edit_source_;
   QPointer<QVTKMoleculeWidget> view_molecule_;

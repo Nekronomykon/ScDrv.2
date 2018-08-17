@@ -191,6 +191,7 @@ void FrameFile::InterpretFileName()
 
 void FrameFile::doClearAll()
 {
+  this->hideStructureViews();
   structure_.Initialize();
 }
 
