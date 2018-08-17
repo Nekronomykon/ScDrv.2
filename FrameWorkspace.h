@@ -47,7 +47,7 @@ public:
   //                           Returns : pointer to a corresponding FrameFile object,
   //                                   : if there is any
   //----------------------------------------------------------------------------------------
-  Child* addFileToWorkspace(const QString & /* path */, bool /* bOpen */ = false);
+  Child* addFileToWorkspace(const QString & /* path */, FileFormat /*fmt*/ = FileFormat());
   Child* addLinkToWorkspace(const QString & /* path */, bool /* bOpen */ = false);
 
   //----------------------------------------------------------------------------------------
@@ -70,6 +70,8 @@ protected slots:
 protected:
   void changeEvent(QEvent *e);
   void closeEvent(QCloseEvent *event);
+
+  Child* provideFileFrame(const QString&);
 
   // functions:
 private:

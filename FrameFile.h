@@ -55,11 +55,34 @@ public:
 
   static QString GetFileInputContextString();
   static void BuildFileContext();
-  static void SetupFileInputContext(const QString &);
+  static FileContext SetupFileInputContext(const QString &);
   static void ClearFileInputContext();
+  static FileContext FormatFromPath(const QString &);
 
-  FileContext getFormat()const
-  { return format_current_; }
+  template<class W>
+  int addViewWidget(QPointer<W> & ww, const QString& title)
+  {
+    if (!ww) 
+      ww = new W(this);
+    return this->addTab(ww, title);
+  }
+
+
+  FileContext getFormat() const {
+    return format_current_;
+  }
+
+  FileContext resetFormat(FileContext fmt)
+  {
+    if (!fmt.isCompatible(format_current_))
+      std::swap(fmt, format_current_);
+    return fmt;
+  }
+
+  static FileContext defaultFormat()
+  {
+    return format_active;
+  }
 
   void readCurrentFormatFrom(const QString& from)
   {
@@ -71,12 +94,19 @@ public:
   bool readSource(const QString &);
   bool saveSource(const QString &) const;
 
+  QString dumpSource() const
+  {
+    CodeEditor *pSrc = this->getEditSource();
+    pSrc->dump();
+    return pSrc->getDumpPath();
+  }
+
   // Reader functionality
   template <class T>
   bool applyReaderType()
   {
     // convert to const char*
-    QString str = this->getEditSource()->getDumpPath();
+    QString str = this->dumpSource();
     if (!str.isEmpty())
     {
       vtkSmartPointer<MoleculeAcquireFile> reader(vtkSmartPointer<T>::New());

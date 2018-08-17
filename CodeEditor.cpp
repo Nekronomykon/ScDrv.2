@@ -24,9 +24,9 @@ CodeEditor::CodeEditor(QWidget *parent)
 	fontSrc.setStyleHint(QFont::Monospace);
 	this->setFont(fontSrc);
 
-	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateSideBarWidth(int)));
+	connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateSideBarWidth);
 	connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateSideBar(QRect, int)));
-	connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+	connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
 
 	this->updateSideBarWidth(0);
 	this->highlightCurrentLine();
@@ -43,14 +43,20 @@ CodeEditor::~CodeEditor()
 
 int CodeEditor::SideBarWidth()
 {
+
 	int digits = 1;
-	int max = qMax(1, this->blockCount());
-	while (max >= 10) {
-		max /= 10;
+	int num = qMax(1, this->blockCount());
+	while (num >= 10) {
+		num /= 10;
 		++digits;
 	}
-
-	int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+  
+  if (digits < 5)
+    digits = 5;
+	
+  int space = this->fontMetrics().width(QLatin1Char('9')) * digits
+    + 2 * fontMetrics().height() + 4 // both sides paddings
+    ;
 
 	return space;
 }
@@ -132,13 +138,18 @@ void CodeEditor::SideBarDecoratorPaintEvent(QPaintEvent *event)
 	int bottom = top + (int)this->blockBoundingRect(block).height();
 	//![extraAreaPaintEvent_1]
 
+  int nH = this->fontMetrics().height() + 1;
 	//![extraAreaPaintEvent_2]
-	while (block.isValid() && top <= event->rect().bottom()) {
-		if (block.isVisible() && bottom >= event->rect().top()) {
+	while (block.isValid() && top <= event->rect().bottom())
+  {
+
+		if (block.isVisible() && bottom >= event->rect().top())
+    {
 			QString number = QString::number(blockNumber + 1);
 			painter.setPen(Qt::black);
-			painter.drawText(0, top, side_bar_->width(), fontMetrics().height(),
-				Qt::AlignRight, number);
+			painter.drawText(nH, top, side_bar_->width() - 2 * nH, nH - 1,
+				Qt::AlignRight // | Qt::AlignVCenter
+        , number);
 		}
 
 		block = block.next();
@@ -166,6 +177,7 @@ void CodeEditor::save(QIODevice* pIO)
 void CodeEditor::dump()
 {
 	this->save(&file_dump_);
+  file_dump_.flush();
 	file_dump_.seek(0L);
 }
 

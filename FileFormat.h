@@ -18,6 +18,15 @@ template<class T>
 bool operator <(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 template<class T>
+// static inline
+bool operator ==(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+
+template<class T>
+// static inline
+bool operator !=(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+
+
+template<class T>
 class FileFormatContext
 {
   typedef typename T::TypeFileName TypeFileName;
@@ -35,9 +44,10 @@ public:
 
   const TypeFileName& nameFormat() const { return name_format_; }
 
-  bool isValid() const { return FileNameRoot::isItEmpty(name_format_); }
+  bool isValid() const { return !FileNameRoot::isItEmpty(name_format_); }
   bool hasBuild()  const { return bool(build_operation_ != nullptr); }
   bool hasExport() const { return bool(build_operation_ != nullptr); }
+  bool isCompatible(const TypeFileName& text) { return text.startsWith(name_format_); }
   const TypeFileName& FormatName() const { return name_format_; }
 
   operator TypeFileName () const { return name_format_; }
@@ -61,6 +71,10 @@ public:
 
   friend bool operator < <>(const FileFormatContext<T> & f0
     , const FileFormatContext<T> &f1);
+  friend bool operator == <>(const FileFormatContext<T> & f0
+    , const FileFormatContext<T> &f1);
+  friend bool operator != <>(const FileFormatContext<T> & f0
+    , const FileFormatContext<T> &f1);
 
 private:
   TypeFileName name_format_;
@@ -71,15 +85,20 @@ private:
 template<class T>
 class SetupDefaultFileContext
 {
+  typedef FileFormatContext<T> FileContext;
 public:
-  explicit SetupDefaultFileContext(const QString& sid) {
-    T::SetupFileInputContext(sid);
-  }
+  explicit SetupDefaultFileContext(const QString& sid)
+    : context_current_(T::SetupFileInputContext(sid))
+  {  }
 
   ~SetupDefaultFileContext() {
     T::ClearFileInputContext();
   }
 
+  operator FileContext () const { return context_current_; }
+
+private:
+  FileContext context_current_;
 };
 
 #endif // !FileFormat_h

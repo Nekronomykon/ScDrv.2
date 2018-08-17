@@ -7,6 +7,7 @@
 #include <QStringList>
 
 #include <QFile>
+#include <QFileInfo>
 
 #include "MoleculeAcquireFileXYZ.h"
 #include "MoleculeAcquireFileWFN.h"
@@ -17,6 +18,17 @@ static inline bool operator <(const FrameFileContext & f0, const FrameFileContex
 {
   return (f0.FormatName() < f1.FormatName());
 }
+
+static inline bool operator !=(const FrameFileContext & f0, const FrameFileContext &f1)
+{
+  return (f0.FormatName() != f1.FormatName());
+}
+
+static inline bool operator ==(const FrameFileContext & f0, const FrameFileContext &f1)
+{
+  return (f0.FormatName() == f1.FormatName());
+}
+
 
 // static members
 QStringList FrameFile::recent_files;
@@ -31,19 +43,35 @@ void FrameFile::BuildFileContext()
 {
   all_formats[FileContext("XMol XYZ files"
     , &FrameFile::readContentXYZ
-  )] =  "xyz";
+  )] = "xyz";
 
   all_formats[FileContext("Gaussian Cube files"
     , &FrameFile::readContentCUBE
-  )] =  "cube";
+  )] = "cube";
 
   all_formats[FileContext("Wavefunction files"
     , &FrameFile::readContentWFN
-  )] =  "wfn";
+  )] = "wfn";
 
   all_formats[FileContext("Generic text files"
     , &FrameFile::readContentNone
-  )] =  "txt";
+    // , &FrameFile::saveSource
+  )] = "txt";
+}
+
+FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
+{
+  QFileInfo fi(path);
+  QString sx = fi.suffix();
+  auto it_fmt = all_formats.begin();
+
+  do
+  {
+    if (it_fmt.value() == sx)
+      return it_fmt.key();
+  } while (++it_fmt != all_formats.end());
+
+  return FileContext();
 }
 
 QString FrameFile::GetFileInputContextString()
@@ -54,6 +82,9 @@ QString FrameFile::GetFileInputContextString()
   auto it_fmt = all_formats.begin();
   do
   {
+    if (!it_fmt.key().hasBuild())
+      continue;
+
     res += it_fmt.key();
     QString mask(tr("*."));
     mask += it_fmt.value();
@@ -65,34 +96,36 @@ QString FrameFile::GetFileInputContextString()
     res += ");;";
   } while (++it_fmt != all_formats.end());
 
-  
-  if(!regx.isEmpty())
+
+  if (!regx.isEmpty())
+  {
+    res += "Known file types (";
+    QString reg;
+    for (const QString& extn : regx)
     {
-      res += "Known file types (";
-      QString reg;
-      for(const QString&  extn: regx)
-      {
-        reg += extn;
-        reg += " ";
-      }
-      res += reg.trimmed();
-      res += ");;";
+      reg += extn;
+      reg += " ";
     }
-    res += tr("All files (*.*)");
+    res += reg.trimmed();
+    res += ");;";
+  }
+  res += tr("All files (*.*)");
   return res;
 }
 
-void FrameFile::SetupFileInputContext(const QString & key)
+FrameFile::FileContext FrameFile::SetupFileInputContext(const QString & key)
 {
   auto it_fmt = all_formats.begin();
   do
   {
-    if(key.startsWith(it_fmt.key()))
-      {
-        format_active = it_fmt.key();
-        break;
-      }
+    if (key.startsWith(it_fmt.key()))
+    {
+      format_active = it_fmt.key();
+      return format_active;
+    }
   } while (++it_fmt != all_formats.end());
+
+  return FileContext();
 }
 
 void FrameFile::ClearFileInputContext()
@@ -106,9 +139,9 @@ FrameFile::FrameFile(QWidget* parent)
   //, extend_(new QToolButton(this))
   //, compress_(new QToolButton(this))
   , format_current_(format_active)
-  , edit_source_(new EditTextSource(this))
-  , view_molecule_(new QVTKMoleculeWidget(this))
-  , view_atomic_(new ViewMoleculeAtomic(this))
+  // , edit_source_(new EditTextSource(this))
+  // , view_molecule_(new QVTKMoleculeWidget(this))
+  // , view_atomic_(new ViewMoleculeAtomic(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);
@@ -119,9 +152,11 @@ FrameFile::FrameFile(QWidget* parent)
   //compress_->setText(tr("<<"));
   //this->setCornerWidget(compress_, Qt::BottomRightCorner);
 
-  this->addTab(edit_source_, tr("Source"));
-  this->addTab(view_molecule_, tr("Molecule"));
-  this->addTab(view_atomic_, tr("Atoms"));
+  this->addViewWidget(edit_source_, tr("Source"));
+
+  //this->addTab(edit_source_, tr("Source"));
+  //this->addTab(view_molecule_, tr("Molecule"));
+  //this->addTab(view_atomic_, tr("Atoms"));
 
   this->doClearAll();
 }

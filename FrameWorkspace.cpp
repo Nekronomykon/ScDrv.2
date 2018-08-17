@@ -170,6 +170,38 @@ void FrameWorkspace::closeEvent(QCloseEvent *event)
   //}
 }
 
+
+FrameWorkspace::Child* FrameWorkspace::provideFileFrame(const QString& name)
+{
+  Child* pRes = nullptr;
+  /*
+  QMdiSubWindow* pFound = mdiArea_->findMdiWindow(name);
+  if(!pFound)
+  {
+    pRes = Child::New(this);
+    pRes->resetFormatToDefault(); ???
+    pRes->readCurrentFormatFrom(name);
+    pFound = mdiArea_->addSubWindow(pRes, flags ???);
+  }
+  else
+    pRes = static_cast<Child*>(pFound->widget());
+  */
+  
+  // this is for SDI 
+  pRes = this->getActiveChild();
+
+  FileFormat fmt = pRes->getFormat();
+  if(!fmt.isValid())
+  { 
+    fmt = Child::defaultFormat();
+    if (!fmt) fmt = Child::FormatFromPath(name);
+    if (!fmt) return nullptr;
+    else 
+      pRes->resetFormat(fmt);
+  }
+  pRes->readCurrentFormatFrom(name);
+  return pRes;
+}
 //
 void FrameWorkspace::addPathToWorkspace(const QString &name, bool bAutoOpen)
 {
@@ -195,7 +227,7 @@ void FrameWorkspace::addPathToWorkspace(const QString &name, bool bAutoOpen)
   // assuming the path here to point to a regular file
   if (finfo.isFile())
   {
-    this->addFileToWorkspace(pathName, bAutoOpen);
+    this->addFileToWorkspace(pathName);
     return;
   }
 
@@ -232,19 +264,11 @@ FrameWorkspace::Child *FrameWorkspace::addLinkToWorkspace(const QString & /* pat
 //                           Returns : pointer to a corresponding FrameFile object,
 //                                   : if there is any
 //----------------------------------------------------------------------------------------
-FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, bool bOpen)
+FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, FileFormat fmt)
 {
   Child *pChild = nullptr;
 
-  bool bNew = edit_workspace_->addFilePath(path);
-  if (bOpen)
-  {
-    //FileFrameSource toCall = bNew ?
-    //  &FrameWorkspace::createFileFrame : &FrameWorkspace::provideFileFrame;
-
-    //if ((pChild = (this->*toCall)(path)))
-    //  pChild->show();
-  }
+  bool bNew = edit_workspace_->addFilePath(path, fmt);
   return pChild;
 }
 
@@ -300,7 +324,7 @@ void FrameWorkspace::on_actionOpen__triggered()
   for (const auto &one_path : all_paths)
   {
     QFileInfo fi(one_path);
-    this->addFileToWorkspace(fi.canonicalFilePath());
+    this->addFileToWorkspace(fi.canonicalFilePath(), context );
   }
 }
 
@@ -312,5 +336,12 @@ void FrameWorkspace::on_actionToggleLayout__triggered()
 
 void FrameWorkspace::loadPathContentFrom(const QString& file_path)
 {
-  this->getActiveChild()->readCurrentFormatFrom(file_path);
+  QList<QListWidgetItem*> list = edit_workspace_->findItems(file_path, Qt::MatchExactly);
+  assert(list.size() == 1);
+  QListWidgetItem* pItem = list.front();
+
+  SetupDefaultFileContext<FrameFile> context(pItem->data(Qt::UserRole).toString());
+
+  FrameFile* pFile = this->provideFileFrame(file_path);
+  // ->readCurrentFormatFrom(file_path);
 }

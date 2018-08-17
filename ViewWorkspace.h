@@ -20,12 +20,13 @@ class ViewWorkspace
   : public QListWidget
 {
   typedef QListWidget _Base;
+  typedef FrameFile::FileContext FileFormat;
 
   Q_OBJECT
 public:
   ViewWorkspace(QWidget *parent = Q_NULLPTR);
 
-  bool addFilePath(const QString & /* path */);
+  bool addFilePath(const QString & /* path */, FileFormat fmt = FileFormat());
   void listDir(const QString& /*dir_path*/, bool /*bRecurse*/ = false);
 
 private:

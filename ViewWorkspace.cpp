@@ -16,7 +16,7 @@ ViewWorkspace::ViewWorkspace(QWidget *parent)
   //this->setModel(pModel);
 }
 
-bool ViewWorkspace::addFilePath(const QString &path)
+bool ViewWorkspace::addFilePath(const QString &path, FileFormat fmt)
 {
   QListWidgetItem *pFileItem = nullptr;
   QFileInfo finfo(path);
@@ -34,6 +34,7 @@ bool ViewWorkspace::addFilePath(const QString &path)
       QFileIconProvider icons;
       QIcon ic(icons.icon(finfo));
       pFileItem = new QListWidgetItem(ic, s_query, this);
+      pFileItem->setData(Qt::UserRole, QVariant((QString)fmt));
       result = true;
     }
   else
