@@ -31,7 +31,7 @@ class FileFormatContext
 {
   typedef typename T::TypeFileName TypeFileName;
   typedef bool (T::*BuildOperation)(void);
-  typedef bool (T::*ExportOperation)(const TypeFileName&);
+  typedef bool (T::*ExportOperation)(const TypeFileName&) const;
 
 public:
   FileFormatContext(TypeFileName name = TypeFileName()
@@ -56,11 +56,20 @@ public:
   // applying callbacks:
   bool buildFrom(T& obj, const TypeFileName& name) const
   {
-    if (!obj.readSource(name))
+    obj.doClearAll();
+    if (!obj.readTextSource(name))
       return false;
-    obj.ResetFileName();
-    return (this->hasBuild()) 
-      ? (obj.*build_operation_)() : true;
+
+    obj.ResetFileName(name);
+    obj.getEditSource()->setReadOnly(false);
+    bool bRes = true;
+    if (this->hasBuild())
+    {
+      bool bBuilt = (obj.*build_operation_)();
+      if (bBuilt) obj.showStructureViews();
+      obj.getEditSource()->setReadOnly(bBuilt);
+    }
+    return bRes;
   }
 
   bool exportTo(T& obj, const TypeFileName& name) const

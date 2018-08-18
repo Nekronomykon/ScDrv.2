@@ -326,6 +326,11 @@ void FrameWorkspace::on_actionOpen__triggered()
     QFileInfo fi(one_path);
     this->addFileToWorkspace(fi.canonicalFilePath(), context );
   }
+  if (all_paths.size() == 1)
+  {
+    QFileInfo fi(all_paths.front());
+    this->loadPathContentFrom(fi.canonicalFilePath());
+  }
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()

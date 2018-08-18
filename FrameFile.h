@@ -69,44 +69,29 @@ public:
     return this->addTab(ww, title);
   }
 
-  void hideStructureViews()
-  {
-    while(this->count() > 1)
-    {
-      this->removeTab(1);
-    }
-    view_current_.resize(1);
-    view_current_[0] = edit_source_; // may be excessive, but...
-  }
+  void hideStructureViews();
+  void showStructureViews();
 
-  FileContext getFormat() const
-  {
-    return format_current_;
-  }
+  static FileContext defaultFormat() {return format_active;}
+  FileContext getFormat() const {return format_current_; }
 
-  FileContext resetFormat(FileContext fmt)
+  FileContext resetFormat(FileContext fmt = FileContext())
   {
     if (!fmt.isCompatible(format_current_))
       std::swap(fmt, format_current_);
     return fmt;
   }
 
-  static FileContext defaultFormat()
-  {
-    return format_active;
-  }
+  bool readCurrentFormatFrom(const QString &from)
+   { return format_current_.buildFrom(*this, from); }
 
-  void readCurrentFormatFrom(const QString &from)
-  {
-    format_current_.buildFrom(*this, from);
-  }
   void doClearAll();
   void doReload();
 
-  bool readSource(const QString &);
-  bool saveSource(const QString &) const;
+  bool readTextSource(const QString &);
+  bool saveTextSource(const QString &) const;
 
-  QString dumpSource() const
+  TypeFileName dumpSource() const
   {
     CodeEditor *pSrc = this->getEditSource();
     pSrc->dump();
@@ -118,7 +103,7 @@ public:
   bool applyReaderType()
   {
     // convert to const char*
-    QString str = this->dumpSource();
+    TypeFileName str = this->dumpSource();
     if (!str.isEmpty())
     {
       vtkSmartPointer<MoleculeAcquireFile> reader(vtkSmartPointer<T>::New());
@@ -139,6 +124,8 @@ public:
 
   CodeEditor *getEditSource() const { return edit_source_; }
   ViewMoleculeAtomic* getEditAtomic() const { return view_atomic_;}
+  QVTKMoleculeWidget* getViewStructure() const { return view_molecule_; }
+  vtkMolecule* getMolecule() const { return structure_.getMolecule(); }
 
 protected:
   enum Units

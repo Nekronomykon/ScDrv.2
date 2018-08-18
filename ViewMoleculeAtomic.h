@@ -13,10 +13,12 @@
 #include "ModelMoleculeAtomic.h"
 
 #include <QTableView>
+#include "ImplModelView.h"
 
 class ViewMoleculeAtomic
-    : public QTableView
+    : public ImplModelView<ViewMoleculeAtomic,QTableView,ModelMoleculeAtomic>
 {
+  typedef ImplModelView<ViewMoleculeAtomic,QTableView,ModelMoleculeAtomic> _Base;
   Q_OBJECT
 public:
   ViewMoleculeAtomic (QWidget* /*parent*/ = nullptr);

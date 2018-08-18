@@ -9,10 +9,14 @@
 #include <QTableView>
 
 #include <vtkPeriodicTable.h>
+#include "ModelElements.h"
+#include "ImplModelView.h"
 
 class TableElements
-    : public QTableView
+    : public ImplModelView<TableElements, QTableView, ModelElements>
 {
+  typedef ImplModelView<TableElements, QTableView, ModelElements> _Base;
+
   Q_OBJECT
 
 public:

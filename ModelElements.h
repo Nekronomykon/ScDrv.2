@@ -17,14 +17,15 @@ class ModelElements
 {
   Q_OBJECT
 
+
     enum {
     NumberOfElements = 135
     , NumberOfPeriods = 8
     , NumberOfGroups = 18
     , NumberOfSpecialSeq = 3 // Ln --- lantanides, Aq --- actinides, Sq --- superactinides
     , LengthSpecialSec = 15
-    , NumberOfTableRows = 11
-    , DummyElement = VTK_UNSIGNED_SHORT_MAX
+    , NumberOfTableRows = NumberOfPeriods + NumberOfSpecialSeq
+    //, DummyElement = VTK_UNSIGNED_SHORT_MAX
   };
 
   static const unsigned short NobleGases[NumberOfPeriods];
@@ -40,9 +41,10 @@ public:
   }
   int    rowCount(const QModelIndex &/*parent*/ = QModelIndex()) const override
   {
-    return NumberOfPeriods + NumberOfSpecialSeq;
+    return (NumTable + NumberOfGroups - 1) / NumberOfGroups;
   }
   QVariant data(const QModelIndex & /*index*/, int /*role*/) const override;
+
 
 
 private:

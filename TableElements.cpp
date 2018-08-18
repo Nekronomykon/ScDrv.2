@@ -1,15 +1,31 @@
 #include "TableElements.h"
 
-#include "ModelElements.h"
-
 TableElements::TableElements(QWidget *parent)
-  : QTableView(parent)
+  : _Base(parent)
 {
-  ModelElements* pModel = new ModelElements();
-  this->setModel(pModel);
-
   this->setSelectionMode(QAbstractItemView::SingleSelection);
-
   this->setShowGrid(false);
+  
+  QFont fontSrc("Courier", 9);
+  fontSrc.setStyleHint(QFont::Monospace);
+  fontSrc.setBold(true);
+  this->setFont(fontSrc);
+
+  QFontMetrics fm = this->fontMetrics();
+
+  int w1 = fm.width(QLatin1Char('9')) * 5;
+  int h1 = fm.height(); // * 3 / 2;
+
+  Model* pM = this->getViewModel();
+
+  for (int j = 0; j <= pM->columnCount(); 
+    this->setColumnWidth(j++, w1));
+
+  for (int j = 0; j <= pM->rowCount();
+    this->setRowHeight(j++, h1));
+
+  int kwidth = (pM->columnCount() + 1)* w1;
+  int kheight = (pM->rowCount() + 1) * h1;
+  this->setGeometry(0, 0, kwidth, kheight);
 }
 
