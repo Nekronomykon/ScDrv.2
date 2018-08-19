@@ -15,15 +15,15 @@ class FileFormatContext;
 
 template<class T>
 // static inline
-bool operator <(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+static bool operator <(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 template<class T>
 // static inline
-bool operator ==(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+static bool operator ==(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 template<class T>
 // static inline
-bool operator !=(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+static bool operator !=(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 
 template<class T>
@@ -56,6 +56,7 @@ public:
   // applying callbacks:
   bool buildFrom(T& obj, const TypeFileName& name) const
   {
+    QWidget *pView = obj.currentWidget();
     obj.doClearAll();
     if (!obj.readTextSource(name))
       return false;
@@ -69,6 +70,7 @@ public:
       if (bBuilt) obj.showStructureViews();
       obj.getEditSource()->setReadOnly(bBuilt);
     }
+    obj.setCurrentWidget(pView);
     return bRes;
   }
 

@@ -178,7 +178,36 @@ SOURCES += \
     ViewFilesystem.cpp \
     DelegateElements.cpp \
     ViewFilesystem.cpp \
-    ModelWorkspace.cpp
+    ModelWorkspace.cpp \
+    BondsetBuild.cpp \
+    BrowseFiles.cpp \
+    CheckComboBox.cpp \
+    CodeEditor.cpp \
+    DelegateElements.cpp \
+    EditTextSource.cpp \
+    FileFormat.cpp \
+    FrameFile.cpp \
+    FrameWorkspace.cpp \
+    main.cpp \
+    ModelElements.cpp \
+    ModelMoleculeAtomic.cpp \
+    ModelTextFiles.cpp \
+    ModelWorkspace.cpp \
+    MolecularStructure.cpp \
+    MoleculeAcquireBase.cpp \
+    MoleculeAcquireFile.cpp \
+    MoleculeAcquireFileCUBE.cpp \
+    MoleculeAcquireFileQTAIM.cpp \
+    MoleculeAcquireFileWFN.cpp \
+    MoleculeAcquireFileXYZ.cpp \
+    QVTKMoleculeWidget.cpp \
+    ResetCursor.cpp \
+    SideBarDecorator.cpp \
+    TableElements.cpp \
+    TraitsAcquireAtoms.cpp \
+    ViewFilesystem.cpp \
+    ViewMoleculeAtomic.cpp \
+    ViewWorkspace.cpp
 
 HEADERS += \
     FrameFile.h \
@@ -240,13 +269,45 @@ HEADERS += \
     ViewFilesystem.h \
     DelegateElements.h \
     ViewFilesystem.h \
-    ModelWorkspace.h
+    ModelWorkspace.h \
+    BondsetBuild.h \
+    BrowseFiles.h \
+    CheckComboBox.h \
+    CodeEditor.h \
+    DelegateElements.h \
+    EditTextSource.h \
+    FileFormat.h \
+    FrameFile.h \
+    FrameWorkspace.h \
+    ImplFileName.h \
+    ImplModelView.h \
+    ModelElements.h \
+    ModelMoleculeAtomic.h \
+    ModelTextFiles.h \
+    ModelWorkspace.h \
+    MolecularStructure.h \
+    MoleculeAcquireBase.h \
+    MoleculeAcquireFile.h \
+    MoleculeAcquireFileCUBE.h \
+    MoleculeAcquireFileQTAIM.h \
+    MoleculeAcquireFileWFN.h \
+    MoleculeAcquireFileXYZ.h \
+    QVTKMoleculeWidget.h \
+    ResetCursor.h \
+    SideBarDecorator.h \
+    TableElements.h \
+    TraitsAcquireAtoms.h \
+    ViewFilesystem.h \
+    ViewMoleculeAtomic.h \
+    ViewWorkspace.h
 
 FORMS += \
+    FrameWorkspace.ui \
     FrameWorkspace.ui \
     FrameWorkspace.ui
 
 RESOURCES += \
+    ScDrv.qrc \
     ScDrv.qrc \
     ScDrv.qrc \
     ScDrv.qrc
@@ -256,9 +317,12 @@ DISTFILES += \
     CMakeLists.txt \
     CONTRIBUTORS.md \
     README.md \
+    CMakeLists.txt \
+    README.md \
     CMakeLists.txt
 
 SUBDIRS += \
+    ScDrv.pro \
     ScDrv.pro \
     ScDrv.pro
 

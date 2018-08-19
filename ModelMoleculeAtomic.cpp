@@ -9,6 +9,7 @@ vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
 {
   if (pNewMol != ptr_mol_)
     std::swap(pNewMol, ptr_mol_);
+  // this->resetInternalData();
   return pNewMol;
 }
 
@@ -32,9 +33,10 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
       vtkAtom atom = ptr_mol_->GetAtom(mi.row());
       switch(mi.column())
       {
-        case(ColumnX): { res = QVariant((atom.GetPosition())[0]); break;}
-        case(ColumnY): { res = QVariant((atom.GetPosition())[1]); break;}
-        case(ColumnZ): { res = QVariant((atom.GetPosition())[2]); break;}
+      case(ColumnElement): {res.setValue(atom.GetAtomicNumber()); break; }
+        case(ColumnX):   { res.setValue((atom.GetPosition())[0]); break; }
+        case(ColumnY):   { res.setValue((atom.GetPosition())[1]); break; }
+        case(ColumnZ):   { res.setValue((atom.GetPosition())[2]); break; }
         default: break;
       }
     }

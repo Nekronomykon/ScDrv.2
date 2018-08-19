@@ -34,16 +34,16 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   this->SetRenderWindow(renderWindow);
 
   // Sphere
-  vtkSmartPointer<vtkSphereSource> sphereSource =
-      vtkSmartPointer<vtkSphereSource>::New();
-  sphereSource->SetThetaResolution(14);
-  sphereSource->SetPhiResolution(14);
-  sphereSource->Update();
-  vtkSmartPointer<vtkPolyDataMapper> sphereMapper =
-      vtkSmartPointer<vtkPolyDataMapper>::New();
-  sphereMapper->SetInputConnection(sphereSource->GetOutputPort());
-  Actor sphereActor = Actor::New();
-  sphereActor->SetMapper(sphereMapper);
+  //vtkSmartPointer<vtkSphreSource> sphereSource =
+  //    vtkSmartPointer<vtkSphereSource>::New();
+  //sphereSource->SetThetaResolution(14);
+  //sphereSource->SetPhiResolution(14);
+  //sphereSource->Update();
+  //vtkSmartPointer<vtkPolyDataMapper> sphereMapper =
+  //    vtkSmartPointer<vtkPolyDataMapper>::New();
+  //sphereMapper->SetInputConnection(sphereSource->GetOutputPort());
+  //Actor sphereActor = Actor::New();
+  //sphereActor->SetMapper(sphereMapper);
 
   // Molecule actor
   LODActor mol = LODActor::New();
@@ -56,7 +56,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   // renderer->SetBackground(colrs->GetColor3d("Gainsboro").GetData());
   renderer->SetBackground(colrs->GetColor3d("SlateGray").GetData());
 
-  renderer->AddActor(sphereActor);
+  // renderer->AddActor(sphereActor);
   renderer->AddActor(mol);
 
   // VTK/Qt wedded

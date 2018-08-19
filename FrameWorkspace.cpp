@@ -302,7 +302,7 @@ void FrameWorkspace::on_actionOpen__triggered()
     | QFileDialog::DontUseCustomDirectoryIcons // uniformity
     ;
 
-  QString all_context = FrameFile::GetFileInputContextString();
+  QString all_context = FrameFile::FileInputFilter();
   QString fmt_name;
   QString dir_name;
 

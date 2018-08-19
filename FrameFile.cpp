@@ -42,11 +42,11 @@ FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
 
 void FrameFile::BuildFileContext()
 {
-  all_formats[FileContext("XMol XYZ files", &FrameFile::readContentXYZ)] = "xyz";
+  all_formats[FileContext("XMol XYZ files", &FrameFile::interpretSourceXYZ)] = "xyz";
 
-  all_formats[FileContext("Gaussian Cube files", &FrameFile::readContentCUBE)] = "cube";
+  all_formats[FileContext("Gaussian Cube files", &FrameFile::interpretSourceCUBE)] = "cube";
 
-  all_formats[FileContext("Wavefunction files", &FrameFile::readContentWFN)] = "wfn";
+  all_formats[FileContext("Wavefunction files", &FrameFile::interpretSourceWFN)] = "wfn";
 
   all_formats[FileContext("Generic text files", nullptr, &FrameFile::saveTextSource)] = "txt";
 }
@@ -57,7 +57,6 @@ FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
   QString sx = fi.suffix();
   FileContext res;
 
-
   // gathering all appropriate formats:
   QList<FileContext> all_fmts;
   auto it_fmt = all_formats.begin();
@@ -67,18 +66,25 @@ FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
       all_fmts.push_back(it_fmt.key());
   } while (++it_fmt != all_formats.end());
 
-
   if (all_fmts.size() == 1)
     res = all_fmts.front();
   // else if (all_fmts.empty())  all_fmts.copy(all_formats);
   else
   {
-
   }
   return res;
 }
 
-QString FrameFile::GetFileInputContextString()
+template <class W>
+int FrameFile::addViewWidget(QPointer<W> &ww, const QString &title)
+{
+  if (!ww)
+    ww = new W(this);
+  view_current_.push_back(ww);
+  return this->addTab(ww, title);
+}
+
+QString FrameFile::FileInputFilter()
 {
   QString res;
   QSet<QString> regx;
@@ -86,8 +92,8 @@ QString FrameFile::GetFileInputContextString()
   auto it_fmt = all_formats.begin();
   do
   {
-    if (!it_fmt.key().hasBuild())
-      continue;
+    //if (!it_fmt.key().hasBuild())
+    //  continue;
 
     res += it_fmt.key();
     QString mask(tr("*."));
@@ -138,14 +144,10 @@ void FrameFile::ClearFileInputContext()
 
 // this-driven functions
 FrameFile::FrameFile(QWidget *parent)
-  : QTabWidget(parent)
-  //, extend_(new QToolButton(this))
-  //, compress_(new QToolButton(this))
-  ,
-  format_current_(format_active)
-  // , edit_source_(new EditTextSource(this))
-  // , view_molecule_(new QVTKMoleculeWidget(this))
-  // , view_atomic_(new ViewMoleculeAtomic(this))
+    : QTabWidget(parent), format_current_(format_active)
+    , bonds_build_(BuildBonds::New())
+//, extend_(new QToolButton(this))
+//, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);
@@ -157,33 +159,56 @@ FrameFile::FrameFile(QWidget *parent)
   //this->setCornerWidget(compress_, Qt::BottomRightCorner);
 
   this->addViewWidget(edit_source_, tr("Source"));
-
-  //this->addTab(edit_source_, tr("Source"));
-  //this->addTab(view_molecule_, tr("Molecule"));
-  //this->addTab(view_atomic_, tr("Atoms"));
-
   this->doClearAll();
 }
 
 FrameFile::~FrameFile() {}
 
-bool FrameFile::readContentNone()
+FrameFile::FileContext FrameFile::resetFormat(FileContext fmt)
+{
+  if (!fmt.isCompatible(format_current_))
+    std::swap(fmt, format_current_);
+  return fmt;
+}
+
+bool FrameFile::readCurrentFormatFrom(const QString &from)
+{ return format_current_.buildFrom(*this, from); }
+
+bool FrameFile::interpretNone()
 {
   edit_source_->setReadOnly(false);
   return true;
 }
 
-bool FrameFile::readContentXYZ()
+template <class T>
+bool FrameFile::applyReaderType()
+{
+  // convert to const char*
+  TypeFileName str = this->dumpSource();
+  if (!str.isEmpty())
+  {
+    vtkSmartPointer<T> reader(vtkSmartPointer<T>::New());
+    reader->SetOutput(structure_.Initialize());
+    QByteArray bytes = str.toLatin1();
+    reader->ResetFileName(bytes.data());
+
+    reader->Update();
+    structure_.UpdateBonds();
+  }
+  return bool(structure_.getMolecule()->GetNumberOfAtoms() > 0);
+}
+
+bool FrameFile::interpretSourceXYZ()
 {
   return this->applyReaderType<MoleculeAcquireFileXYZ>();
 }
 
-bool FrameFile::readContentWFN()
+bool FrameFile::interpretSourceWFN()
 {
   return this->applyReaderType<MoleculeAcquireFileWFN>();
 }
 
-bool FrameFile::readContentCUBE()
+bool FrameFile::interpretSourceCUBE()
 {
   return this->applyReaderType<MoleculeAcquireFileWFN>();
 }
@@ -217,12 +242,12 @@ void FrameFile::showStructureViews()
   this->addViewWidget(view_atomic_, tr("Atoms"));
   view_atomic_->getViewModel()->resetMolecule(this->getMolecule());
   this->addViewWidget(view_molecule_, tr("Structure"));
+  view_molecule_->ShowMolecule(this->getMolecule());
 }
-
 
 void FrameFile::doReload()
 {
-  format_current_.buildFrom(*this, this->GetFileName());
+  this->readCurrentFormatFrom(this->GetFileName());
 }
 
 bool FrameFile::readTextSource(const QString &from)
@@ -243,4 +268,11 @@ bool FrameFile::saveTextSource(const QString &path_to) const
   if (QFile::exists(path_to))
     QFile::remove(path_to);
   return QFile::copy(edit_source_->getDumpPath(), path_to);
+}
+
+ImplFileName::TypeFileName FrameFile::dumpSource() const
+{
+  CodeEditor *pSrc = this->getEditSource();
+  pSrc->dump();
+  return pSrc->getDumpPath();
 }

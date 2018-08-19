@@ -33,6 +33,8 @@
 
 #include "MolecularStructure.h"
 
+#include "BondsetBuild.h"
+
 #include "FileFormat.h"
 
 class FrameFile;
@@ -48,42 +50,30 @@ public:
   ~FrameFile() override;
 
   typedef FileFormatContext<FrameFile> FileContext;
+  typedef vtkSmartPointer<BondsetBuild> BuildBonds;
 
   void InterpretFileName();
 
-  static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR);
+  static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
+
   static QStringList getRecentFiles() { return recent_files; }
 
-  static QString GetFileInputContextString();
+  static QString FileInputFilter();
   static void BuildFileContext();
   static FileContext SetupFileInputContext(const QString &);
   static void ClearFileInputContext();
   static FileContext FormatFromPath(const QString &);
 
   template <class W>
-  int addViewWidget(QPointer<W> &ww, const QString &title)
-  {
-    if (!ww)
-      ww = new W(this);
-    view_current_.push_back(ww);
-    return this->addTab(ww, title);
-  }
-
+  int addViewWidget(QPointer<W> & /*ww*/, const QString & /*title*/);
   void hideStructureViews();
   void showStructureViews();
 
   static FileContext defaultFormat() {return format_active;}
   FileContext getFormat() const {return format_current_; }
+  FileContext resetFormat(FileContext /*fmt*/ = FileContext());
 
-  FileContext resetFormat(FileContext fmt = FileContext())
-  {
-    if (!fmt.isCompatible(format_current_))
-      std::swap(fmt, format_current_);
-    return fmt;
-  }
-
-  bool readCurrentFormatFrom(const QString &from)
-   { return format_current_.buildFrom(*this, from); }
+  bool readCurrentFormatFrom(const QString &from);
 
   void doClearAll();
   void doReload();
@@ -91,49 +81,24 @@ public:
   bool readTextSource(const QString &);
   bool saveTextSource(const QString &) const;
 
-  TypeFileName dumpSource() const
-  {
-    CodeEditor *pSrc = this->getEditSource();
-    pSrc->dump();
-    return pSrc->getDumpPath();
-  }
+  TypeFileName dumpSource() const;
 
   // Reader functionality
-  template <class T>
-  bool applyReaderType()
-  {
-    // convert to const char*
-    TypeFileName str = this->dumpSource();
-    if (!str.isEmpty())
-    {
-      vtkSmartPointer<MoleculeAcquireFile> reader(vtkSmartPointer<T>::New());
-      QByteArray bytes = str.toLatin1();
-      reader->ResetFileName(bytes.data());
+  bool interpretNone();
+  bool interpretSourceXYZ();
+  bool interpretSourceWFN();
+  bool interpretSourceCUBE();
 
-      structure_.Initialize();
-      reader->SetOutput(static_cast<vtkMolecule *>(structure_));
-      reader->Update();
-    }
-    return bool(structure_.getMolecule()->GetNumberOfAtoms() > 0);
-  }
+// facets
+  vtkMolecule* getMolecule() const { return structure_.getMolecule(); }
 
-  bool readContentXYZ();
-  bool readContentWFN();
-  bool readContentCUBE();
-  bool readContentNone();
-
+  // views
   CodeEditor *getEditSource() const { return edit_source_; }
   ViewMoleculeAtomic* getEditAtomic() const { return view_atomic_;}
   QVTKMoleculeWidget* getViewStructure() const { return view_molecule_; }
-  vtkMolecule* getMolecule() const { return structure_.getMolecule(); }
 
 protected:
-  enum Units
-  {
-    Bohrs,
-    Angstroms,
-    Picometers
-  };
+  template <class T>  bool applyReaderType();
 
 private:
   static QStringList recent_files;
@@ -144,6 +109,8 @@ private:
 
   // vtkIdTypeArray positions_;
   MolecularStructure structure_;
+
+  BuildBonds bonds_build_;
 
   //QPointer <QToolButton> extend_;
   //QPointer <QToolButton> compress_;

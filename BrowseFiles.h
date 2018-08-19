@@ -1,5 +1,5 @@
-#ifndef __Browse_Filesystem_h__
-#define __Browse_Filesystem_h__
+#ifndef Browse_Filesystem_h
+#define Browse_Filesystem_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -24,4 +24,4 @@ private:
   QPointer<ModelTextFiles> model_txt_;
 };
 
-#endif // !__Browse_Filesystem_h__
+#endif // !Browse_Filesystem_h
