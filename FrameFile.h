@@ -46,14 +46,10 @@ class FrameFile
 {
   Q_OBJECT
 public:
-<<<<<<< HEAD
-  explicit FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
-=======
   typedef ImplFileName<FrameFile, QString> _FileName;
   typedef _FileName::TypeFileName TypeFileName;
 
   FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
->>>>>>> 408f3f67b046d14127baa339fac4d7965af0977b
   ~FrameFile() override;
 
   typedef FileFormatContext<FrameFile> FileContext;
