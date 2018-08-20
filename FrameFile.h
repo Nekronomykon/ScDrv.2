@@ -49,7 +49,7 @@ public:
   typedef ImplFileName<FrameFile, QString> _FileName;
   typedef _FileName::TypeFileName TypeFileName;
 
-  FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
+  explicit FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
   ~FrameFile() override;
 
   typedef FileFormatContext<FrameFile> FileContext;
