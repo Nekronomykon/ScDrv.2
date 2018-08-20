@@ -10,8 +10,8 @@
 
   Program:   Visualization Toolkit Local Fork Copy
   Module:    QVTKMoleculeWidget.h
-Copyright (c) ScrewDriver te Blackheadborough
-All rights reserved.
+  Copyright (c) ScrewDriver te Blackheadborough
+  All rights reserved.
 
    This software is distributed WITHOUT ANY WARRANTY; without even
    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -27,6 +27,8 @@ All rights reserved.
 
 #include <vtkMolecule.h>
 #include <vtkMoleculeMapper.h>
+
+#include "QVTKMoleculeMapStyle.h"
 
 class QVTKMoleculeWidget
     : public QVTKOpenGLWidget
@@ -46,6 +48,12 @@ private:
 
 private:
   MolMapper mol_mapper_;
+  QVTKMoleculeMapStyle mol_style_;
+
+  static const QVTKMoleculeMapStyle style_VdW;
+  static const QVTKMoleculeMapStyle style_BnS;
+  static const QVTKMoleculeMapStyle style_Fast;
+  static const QVTKMoleculeMapStyle style_Sticks;
 };
 
 #endif // !__QVTK_MoleculeWidget_h__

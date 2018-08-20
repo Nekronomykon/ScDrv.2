@@ -54,11 +54,11 @@ QVariant ModelElements::data(const QModelIndex &index, int role) const
         res.setValue(tr(elements_->GetSymbol(idElem)));
       }
       else if (idElem == -2)
-        res.setValue(tr(":[L]:"));
+        res.setValue(tr("[L]"));
       else if (idElem == -3)
-        res.setValue(tr(":[A]:"));
+        res.setValue(tr("[A]"));
       else if (idElem == -4)
-        res.setValue(tr(":[S]:"));
+        res.setValue(tr("[S]"));
     }
   }
   return res;

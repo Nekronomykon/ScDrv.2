@@ -10,6 +10,7 @@
 #include <vtkPeriodicTable.h>
 #include <vtkType.h>
 
+#include "Elements.h"
 #include <QAbstractTableModel>
 
 class ModelElements

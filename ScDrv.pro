@@ -152,7 +152,6 @@ SOURCES += \
     EditTextSource.cpp \
     CodeEditor.cpp \
     EditTextSource.cpp \
-    FileFormat.cpp \
     FrameFile.cpp \
     FrameWorkspace.cpp \
     main.cpp \
@@ -207,7 +206,10 @@ SOURCES += \
     TraitsAcquireAtoms.cpp \
     ViewFilesystem.cpp \
     ViewMoleculeAtomic.cpp \
-    ViewWorkspace.cpp
+    ViewWorkspace.cpp \
+    ElementData.cpp \
+    Elements.cpp \
+    QVTKMoleculeMapStyle.cpp
 
 HEADERS += \
     FrameFile.h \
@@ -299,7 +301,10 @@ HEADERS += \
     TraitsAcquireAtoms.h \
     ViewFilesystem.h \
     ViewMoleculeAtomic.h \
-    ViewWorkspace.h
+    ViewWorkspace.h \
+    ElementData.h \
+    Elements.h \
+    QVTKMoleculeMapStyle.h
 
 FORMS += \
     FrameWorkspace.ui \

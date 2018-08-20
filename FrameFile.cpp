@@ -15,21 +15,7 @@
 #include "MoleculeAcquireFileWFN.h"
 #include "MoleculeAcquireFileCUBE.h"
 
-// template<>
-static inline bool operator<(const FrameFileContext &f0, const FrameFileContext &f1)
-{
-  return (f0.FormatName() < f1.FormatName());
-}
-
-static inline bool operator!=(const FrameFileContext &f0, const FrameFileContext &f1)
-{
-  return (f0.FormatName() != f1.FormatName());
-}
-
-static inline bool operator==(const FrameFileContext &f0, const FrameFileContext &f1)
-{
-  return (f0.FormatName() == f1.FormatName());
-}
+#include "FileFormat.h"
 
 // static members
 QStringList FrameFile::recent_files;

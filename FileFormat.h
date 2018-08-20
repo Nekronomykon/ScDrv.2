@@ -43,19 +43,62 @@ public:
     , export_operation_(opExport)
   {}
 
-  const TypeFileName& nameFormat() const;
+  operator TypeFileName () const
+  {
+    return name_format_;
+  }
 
-  bool isValid() const { return !FileNameRoot::isItEmpty(name_format_); }
-  bool hasBuild()  const { return bool(build_operation_ != nullptr); }
-  bool hasExport() const { return bool(build_operation_ != nullptr); }
-  bool isCompatible(const TypeFileName& text) { return text.startsWith(name_format_); }
-  const TypeFileName& FormatName() const { return name_format_; }
+  const TypeFileName& Name() const
+  {
+    return name_format_;
+  }
 
-  operator TypeFileName () const { return name_format_; }
-  bool operator !() const { return !this->isValid(); }
+  bool isValid() const
+  {
+    return !FileNameRoot::isItEmpty(name_format_);
+  }
+
+  bool hasBuild()  const
+  {
+    return bool(build_operation_ != nullptr);
+  }
+
+  bool hasExport() const
+  {
+    return bool(build_operation_ != nullptr);
+  }
+
+  bool isCompatible(const TypeFileName& text)
+  {
+    return text.startsWith(name_format_);
+  }
+
+  bool operator !() const
+  {
+    return !(this->isValid());
+  }
 
   // applying callbacks:
-  bool buildFrom(T& obj, const TypeFileName& name) const;
+  bool buildFrom(T& obj, const TypeFileName& name) const
+  {
+    QWidget *pView = obj.currentWidget();
+    obj.doClearAll();
+    if (!obj.readTextSource(name))
+      return false;
+
+    obj.ResetFileName(name);
+    obj.getEditSource()->setReadOnly(false);
+    bool bRes = true;
+    if (this->hasBuild())
+    {
+      bool bBuilt = (obj.*build_operation_)();
+      if (bBuilt) obj.showStructureViews();
+      obj.getEditSource()->setReadOnly(bBuilt);
+    }
+    obj.setCurrentWidget(pView);
+    return bRes;
+  }
+
 
   bool exportTo(T& obj, const TypeFileName& name) const
   {
@@ -94,5 +137,25 @@ public:
 private:
   FileContext context_current_;
 };
+
+// Globals
+
+template<class T>
+static inline bool operator <(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1)
+{
+  return (f0.name_format_ < f1.name_format_);
+}
+
+template<class T>
+static inline bool operator ==(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1)
+{
+  return (f0.name_format_ == f1.name_format_);
+}
+
+template<class T>
+static inline bool operator !=(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1)
+{
+  return (f0.name_format_ != f1.name_format_);
+}
 
 #endif // !FileFormat_h
