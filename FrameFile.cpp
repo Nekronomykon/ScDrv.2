@@ -195,7 +195,7 @@ bool FrameFile::applyReaderType()
     reader->Update();
     structure_.UpdateBonds();
   }
-  return bool(structure_.getMolecule()->GetNumberOfAtoms() > 0);
+  return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
 
 bool FrameFile::interpretSourceXYZ()
@@ -270,7 +270,7 @@ bool FrameFile::saveTextSource(const QString &path_to) const
   return QFile::copy(edit_source_->getDumpPath(), path_to);
 }
 
-ImplFileName::TypeFileName FrameFile::dumpSource() const
+FrameFile::TypeFileName FrameFile::dumpSource() const
 {
   CodeEditor *pSrc = this->getEditSource();
   pSrc->dump();

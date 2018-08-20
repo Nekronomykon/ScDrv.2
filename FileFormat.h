@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include <QString>
+#include <QWidget>
 
 #include "ImplFileName.h"
 

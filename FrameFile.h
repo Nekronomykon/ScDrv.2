@@ -46,6 +46,9 @@ class FrameFile
 {
   Q_OBJECT
 public:
+  typedef ImplFileName<FrameFile, QString> _FileName;
+  typedef _FileName::TypeFileName TypeFileName;
+
   FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
   ~FrameFile() override;
 
