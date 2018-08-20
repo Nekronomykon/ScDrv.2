@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include <QString>
+#include <QWidget>
 
 #include "ImplFileName.h"
 
@@ -15,15 +16,15 @@ class FileFormatContext;
 
 template<class T>
 // static inline
-static bool operator <(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+static inline bool operator <(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 template<class T>
 // static inline
-static bool operator ==(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+static inline bool operator ==(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 template<class T>
 // static inline
-static bool operator !=(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
+static inline bool operator !=(const FileFormatContext<T> & f0, const FileFormatContext<T> &f1);
 
 
 template<class T>
@@ -34,7 +35,7 @@ class FileFormatContext
   typedef bool (T::*ExportOperation)(const TypeFileName&) const;
 
 public:
-  FileFormatContext(TypeFileName name = TypeFileName()
+  explicit FileFormatContext(TypeFileName name = TypeFileName()
     , BuildOperation opBuild = nullptr
     , ExportOperation opExport = nullptr)
     : name_format_(name)
@@ -42,7 +43,7 @@ public:
     , export_operation_(opExport)
   {}
 
-  const TypeFileName& nameFormat() const { return name_format_; }
+  const TypeFileName& nameFormat() const;
 
   bool isValid() const { return !FileNameRoot::isItEmpty(name_format_); }
   bool hasBuild()  const { return bool(build_operation_ != nullptr); }
@@ -54,25 +55,7 @@ public:
   bool operator !() const { return !this->isValid(); }
 
   // applying callbacks:
-  bool buildFrom(T& obj, const TypeFileName& name) const
-  {
-    QWidget *pView = obj.currentWidget();
-    obj.doClearAll();
-    if (!obj.readTextSource(name))
-      return false;
-
-    obj.ResetFileName(name);
-    obj.getEditSource()->setReadOnly(false);
-    bool bRes = true;
-    if (this->hasBuild())
-    {
-      bool bBuilt = (obj.*build_operation_)();
-      if (bBuilt) obj.showStructureViews();
-      obj.getEditSource()->setReadOnly(bBuilt);
-    }
-    obj.setCurrentWidget(pView);
-    return bRes;
-  }
+  bool buildFrom(T& obj, const TypeFileName& name) const;
 
   bool exportTo(T& obj, const TypeFileName& name) const
   {

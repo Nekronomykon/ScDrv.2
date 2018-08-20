@@ -213,6 +213,20 @@ bool FrameFile::interpretSourceCUBE()
   return this->applyReaderType<MoleculeAcquireFileWFN>();
 }
 
+// data facets
+vtkMolecule *FrameFile::getMolecule() const
+{ return structure_.getMolecule(); }
+
+// data views
+CodeEditor *FrameFile::getEditSource() const
+{ return edit_source_; }
+
+ViewMoleculeAtomic *FrameFile::getEditAtomic() const
+{ return view_atomic_;}
+
+QVTKMoleculeWidget *FrameFile::getViewStructure() const
+{ return view_molecule_; }
+
 void FrameFile::InterpretFileName()
 {
   this->setWindowTitle(this->GetFileName() + tr("[*]"));

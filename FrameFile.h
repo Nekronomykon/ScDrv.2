@@ -46,7 +46,7 @@ class FrameFile
 {
   Q_OBJECT
 public:
-  FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
+  explicit FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
   ~FrameFile() override;
 
   typedef FileFormatContext<FrameFile> FileContext;
@@ -90,12 +90,12 @@ public:
   bool interpretSourceCUBE();
 
 // facets
-  vtkMolecule* getMolecule() const { return structure_.getMolecule(); }
+  vtkMolecule* getMolecule() const;
 
   // views
-  CodeEditor *getEditSource() const { return edit_source_; }
-  ViewMoleculeAtomic* getEditAtomic() const { return view_atomic_;}
-  QVTKMoleculeWidget* getViewStructure() const { return view_molecule_; }
+  CodeEditor *getEditSource() const;
+  ViewMoleculeAtomic* getEditAtomic() const;
+  QVTKMoleculeWidget* getViewStructure() const;
 
 protected:
   template <class T>  bool applyReaderType();

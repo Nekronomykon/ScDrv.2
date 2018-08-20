@@ -40,12 +40,6 @@ public:
 
   vtkIdType UpdateBonds();
 
-  //  const vtkMolecule* getMolecule() const {return static_cast<vtkMolecule *>(the_molecule_);}
-  //  operator const vtkMolecule *() const { return static_cast<const vtkMolecule *>(the_molecule_); }
-  //  const vtkMolecule *operator->() const { this->getMolecule(); }
-
-
-
   vtkStdString GetTitle() const;
   vtkStdString ResetTitle(vtkStdString title = vtkStdString());
 
