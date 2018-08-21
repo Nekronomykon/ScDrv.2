@@ -239,10 +239,10 @@ void FrameFile::hideStructureViews()
 
 void FrameFile::showStructureViews()
 {
-  this->addViewWidget(view_atomic_, tr("Atoms"));
-  view_atomic_->getViewModel()->resetMolecule(this->getMolecule());
   this->addViewWidget(view_molecule_, tr("Structure"));
   view_molecule_->ShowMolecule(this->getMolecule());
+  this->addViewWidget(view_atomic_, tr("Atoms"));
+  view_atomic_->getViewModel()->resetMolecule(this->getMolecule());
 }
 
 void FrameFile::doReload()
