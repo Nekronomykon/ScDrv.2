@@ -8,7 +8,6 @@
 
 #include <QTableView>
 
-#include <vtkPeriodicTable.h>
 #include "ModelElements.h"
 #include "ImplModelView.h"
 

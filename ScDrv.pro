@@ -209,7 +209,8 @@ SOURCES += \
     ViewWorkspace.cpp \
     ElementData.cpp \
     Elements.cpp \
-    QVTKMoleculeMapStyle.cpp
+    QVTKMoleculeMapStyle.cpp \
+    ElementDataParser.cpp
 
 HEADERS += \
     FrameFile.h \
@@ -304,7 +305,9 @@ HEADERS += \
     ViewWorkspace.h \
     ElementData.h \
     Elements.h \
-    QVTKMoleculeMapStyle.h
+    QVTKMoleculeMapStyle.h \
+    ElementDataParser.h \
+    ElementDataInternal.h
 
 FORMS += \
     FrameWorkspace.ui \

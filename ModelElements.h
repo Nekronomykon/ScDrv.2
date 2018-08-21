@@ -7,7 +7,6 @@
 #endif //  _MSC_VER
 
 #include <vtkNew.h>
-#include <vtkPeriodicTable.h>
 #include <vtkType.h>
 
 #include "Elements.h"
@@ -49,7 +48,7 @@ public:
   Qt::ItemFlags flags(const QModelIndex & /*index*/) const override;
 
 private:
-  vtkNew<vtkPeriodicTable> elements_;
+  vtkNew<PeriodicElements> elements_;
 
 };
 
