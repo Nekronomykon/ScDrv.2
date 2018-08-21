@@ -230,7 +230,7 @@ void PeriodicElements::GetDefaultRGBTuple(unsigned short atomicNum,
 vtkColor3f PeriodicElements::GetDefaultRGBTuple(unsigned short atomicNum)
 {
   vtkColor3f result;
-  this->DataOfElements->GetDefaultColors()->GetTypedTuple(atomicNum,
-                                                           result.GetData());
+  this->DataOfElements->GetDefaultColors()->GetTypedTuple(atomicNum
+                                                          , result.GetData());
   return result;
 }
