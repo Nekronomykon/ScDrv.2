@@ -28,11 +28,11 @@ FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
 
 void FrameFile::BuildFileContext()
 {
-  all_formats[FileContext("XMol XYZ files", &FrameFile::interpretSourceXYZ)] = "xyz";
+  all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
 
-  all_formats[FileContext("Gaussian Cube files", &FrameFile::interpretSourceCUBE)] = "cube";
+  all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";
 
-  all_formats[FileContext("Wavefunction files", &FrameFile::interpretSourceWFN)] = "wfn";
+  all_formats[FileContext("Wavefunction files", &FrameFile::acquireAsWFN)] = "wfn";
 
   all_formats[FileContext("Generic text files", nullptr, &FrameFile::saveTextSource)] = "txt";
 }
@@ -167,7 +167,7 @@ bool FrameFile::interpretNone()
 }
 
 template <class T>
-bool FrameFile::applyReaderType()
+bool FrameFile::acquireUsing()
 {
   // convert to const char*
   TypeFileName str = this->dumpSource();
@@ -184,19 +184,19 @@ bool FrameFile::applyReaderType()
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-bool FrameFile::interpretSourceXYZ()
+bool FrameFile::acquireAsXYZ()
 {
-  return this->applyReaderType<MoleculeAcquireFileXYZ>();
+  return this->acquireUsing<MoleculeAcquireFileXYZ>();
 }
 
-bool FrameFile::interpretSourceWFN()
+bool FrameFile::acquireAsWFN()
 {
-  return this->applyReaderType<MoleculeAcquireFileWFN>();
+  return this->acquireUsing<MoleculeAcquireFileWFN>();
 }
 
-bool FrameFile::interpretSourceCUBE()
+bool FrameFile::acquireAsCUBE()
 {
-  return this->applyReaderType<MoleculeAcquireFileWFN>();
+  return this->acquireUsing<MoleculeAcquireFileWFN>();
 }
 
 // data facets

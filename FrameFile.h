@@ -88,9 +88,9 @@ public:
 
   // Reader functionality
   bool interpretNone();
-  bool interpretSourceXYZ();
-  bool interpretSourceWFN();
-  bool interpretSourceCUBE();
+  bool acquireAsXYZ();
+  bool acquireAsWFN();
+  bool acquireAsCUBE();
 
 // facets
   vtkMolecule* getMolecule() const;
@@ -101,7 +101,7 @@ public:
   QVTKMoleculeWidget* getViewStructure() const;
 
 protected:
-  template <class T>  bool applyReaderType();
+  template <class T>  bool acquireUsing();
 
 private:
   static QStringList recent_files;
