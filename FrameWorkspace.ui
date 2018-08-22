@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_">
@@ -71,9 +71,25 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <widget class="QMenu" name="menuMolecule_">
+     <property name="title">
+      <string>&amp;Molecule</string>
+     </property>
+     <addaction name="actionRenderFast_"/>
+     <addaction name="separator"/>
+     <addaction name="actionRenderSticks_"/>
+     <addaction name="actionRenderBallStick_"/>
+     <addaction name="actionRenderSpaceFill_"/>
+     <addaction name="separator"/>
+     <addaction name="actionRenderToggleBonds_"/>
+     <addaction name="actionRenderLabelsAtom_"/>
+     <addaction name="actionRenderLabelsBond_"/>
+    </widget>
     <addaction name="actionFullScreen_"/>
     <addaction name="separator"/>
     <addaction name="actionToggleLayout_"/>
+    <addaction name="separator"/>
+    <addaction name="menuMolecule_"/>
    </widget>
    <widget class="QMenu" name="menuTools_">
     <property name="title">
@@ -225,6 +241,44 @@
   <action name="actionToggleLayout_">
    <property name="text">
     <string>Togg&amp;le layout</string>
+   </property>
+  </action>
+  <action name="actionRenderFast_">
+   <property name="text">
+    <string>Render &amp;fast</string>
+   </property>
+  </action>
+  <action name="actionRenderSticks_">
+   <property name="text">
+    <string>&amp;Sticks</string>
+   </property>
+  </action>
+  <action name="actionRenderSpaceFill_">
+   <property name="text">
+    <string>S&amp;pace fill</string>
+   </property>
+  </action>
+  <action name="actionRenderBallStick_">
+   <property name="text">
+    <string>&amp;Ball-stick</string>
+   </property>
+  </action>
+  <action name="actionRenderToggleBonds_">
+   <property name="text">
+    <string>Toggle bonds</string>
+   </property>
+   <property name="statusTip">
+    <string>Toggle the bond display in the molecule</string>
+   </property>
+  </action>
+  <action name="actionRenderLabelsAtom_">
+   <property name="text">
+    <string>Atom labels</string>
+   </property>
+  </action>
+  <action name="actionRenderLabelsBond_">
+   <property name="text">
+    <string>Bond labels</string>
    </property>
   </action>
  </widget>

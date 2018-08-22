@@ -25,6 +25,7 @@ class FrameWorkspace
 {
   Q_OBJECT
 public:
+  enum { MaxRecentFiles = 9 };
 
   typedef FrameFile Child;
   typedef Child::TypeFileName FileName;
@@ -32,6 +33,8 @@ public:
 
   explicit FrameWorkspace(QWidget* /*parent*/ = Q_NULLPTR);
   ~FrameWorkspace() override;
+
+  static int hasRecentFiles();
 
   Child* getActiveChild() const;
 
@@ -68,8 +71,8 @@ protected slots:
   void loadPathContentFrom(const QString&);
 
 protected:
-  void changeEvent(QEvent *e);
-  void closeEvent(QCloseEvent *event);
+  void changeEvent(QEvent *e) override;
+  void closeEvent(QCloseEvent *event) override;
 
   Child* provideFileFrame(const QString&);
 
@@ -82,8 +85,18 @@ private:
   void setupToolBars();
   void setupDockingViews();
 
+  void initRecentActions();
+
   // data members:
+private slots:
+
+  void openRecentFile();
+  void updateRecentFilesMenu();
+
 private:
+
+  QAction *recentFileActs[MaxRecentFiles];
+
   QPointer<ModelWorkspace> model_workspace_;
   QPointer<ViewWorkspace>  edit_workspace_;
   QPointer<ViewFilesystem> view_files_;

@@ -7,6 +7,7 @@
 #include <QVector>
 
 #include <QStringList>
+#include <QMessageBox>
 
 #include <QFile>
 #include <QFileInfo>
@@ -29,11 +30,8 @@ FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
 void FrameFile::BuildFileContext()
 {
   all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
-
   all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";
-
   all_formats[FileContext("Wavefunction files", &FrameFile::acquireAsWFN)] = "wfn";
-
   all_formats[FileContext("Generic text files", nullptr, &FrameFile::saveTextSource)] = "txt";
 }
 
@@ -57,8 +55,36 @@ FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
   // else if (all_fmts.empty())  all_fmts.copy(all_formats);
   else
   {
+      QMessageBox::warning(nullptr,tr("Ambiguous names")
+                           , tr("More than one file format could be held in following file:\n%1\nUser intervention is required").arg(path)
+                           , QMessageBox::Ok | QMessageBox::Ignore
+                           );
   }
   return res;
+}
+
+QStringList FrameFile::readRecentFiles(QSettings &settings)
+{
+  QStringList result;
+  const int count = settings.beginReadArray(keyRecentFiles());
+  for (int i = 0; i < count; ++i) {
+      settings.setArrayIndex(i);
+      result.append(settings.value(keyFile()).toString());
+    }
+  settings.endArray();
+  return result;
+}
+
+int FrameFile::writeRecentFiles(const QStringList &files, QSettings &settings)
+{
+  const int count = files.size();
+  settings.beginWriteArray(keyRecentFiles());
+  for (int i = 0; i < count; ++i) {
+      settings.setArrayIndex(i);
+      settings.setValue(keyFile(), files.at(i));
+    }
+  settings.endArray();
+  return count;
 }
 
 template <class W>
@@ -77,9 +103,9 @@ QString FrameFile::FileInputFilter()
 
   auto it_fmt = all_formats.begin();
   do
-  {
-    //if (!it_fmt.key().hasBuild())
-    //  continue;
+    {
+      //if (!it_fmt.key().hasBuild())
+      //  continue;
 
     res += it_fmt.key();
     QString mask(tr("*."));

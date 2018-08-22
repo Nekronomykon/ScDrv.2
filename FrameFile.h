@@ -12,6 +12,7 @@
 #include <QStringList>
 #include <QWidget>
 #include <QMap>
+#include <QSettings>
 
 #include <QTabWidget>
 #include "ImplFileName.h"
@@ -55,17 +56,37 @@ public:
   typedef FileFormatContext<FrameFile> FileContext;
   typedef vtkSmartPointer<BondsetBuild> BuildBonds;
 
-  void InterpretFileName();
-
+  // static methods:
   static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
 
   static QStringList getRecentFiles() { return recent_files; }
+  static void resetRecentFiles(QStringList l = QStringList())
+  { std::swap(recent_files,l); }
 
   static QString FileInputFilter();
   static void BuildFileContext();
   static FileContext SetupFileInputContext(const QString &);
   static void ClearFileInputContext();
   static FileContext FormatFromPath(const QString &);
+
+  static inline QString keyRecentFiles() { return QStringLiteral("RecentFiles"); }
+  static inline QString keyFile() { return QStringLiteral("File"); }
+  static inline void storeRecentFiles(QSettings& s)
+  {
+    writeRecentFiles(getRecentFiles(),s);
+  }
+  static inline void loadRecentFiles(QSettings& s)
+  {
+    resetRecentFiles(readRecentFiles(s));
+  }
+
+  static QStringList readRecentFiles(QSettings &settings);
+
+  static int writeRecentFiles(const QStringList &files, QSettings &settings);
+
+  // thiscall methods
+
+  void InterpretFileName(); // inherited from _FileName
 
   template <class W>
   int addViewWidget(QPointer<W> & /*ww*/, const QString & /*title*/);
