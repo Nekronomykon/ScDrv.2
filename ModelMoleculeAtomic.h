@@ -47,6 +47,7 @@ public:
 
 private:
   vtkMolecule *ptr_mol_;
+  vtkIdType numberOfAtoms_;
 };
 
 #endif // Molecular_AtomicModel_h

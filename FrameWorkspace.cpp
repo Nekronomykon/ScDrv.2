@@ -27,19 +27,6 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
   , view_files_(new ViewFilesystem)
 {
   this->setupUi(this);
-  //mdiArea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  //mdiArea_->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  //mdiArea_->setViewMode(QMdiArea::TabbedView);
-  //mdiArea_->setTabShape(QTabWidget::Rounded);
-  //mdiArea_->setDocumentMode(true);
-  //mdiArea_->setTabsMovable(true);
-  //mdiArea_->setTabsClosable(true);
-
-  //// adding a new empty file window:
-  //Child* pChild = Child::New(this);
-  //QMdiSubWindow* pSW = mdiArea_->addSubWindow(pChild);
-  //pSW->setAttribute(Qt::WA_NativeWindow, false);
-  //pSW->show();
 
   this->setupActions();
   this->setupToolBars();
@@ -353,19 +340,19 @@ void FrameWorkspace::storeSettings()
 //
 void FrameWorkspace::on_actionOpen__triggered()
 {
-  QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
+  QFileDialog::Options options = QFileDialog::DontUseNativeDialog // portability
       | QFileDialog::ReadOnly                    // read-only is also to read
       | QFileDialog::DontUseCustomDirectoryIcons // uniformity
       ;
 
   QString all_context = FrameFile::FileInputFilter();
   QString fmt_name;
-  QString dir_name;
+  QString dir_name = QDir::currentPath();
 
   QStringList all_paths =
       // FrameFile::queryInputFiles(fmt_name);
       QFileDialog::getOpenFileNames(this
-                                    , tr("Specify input files")
+                                    , tr("Input files")
                                     , dir_name
                                     , all_context
                                     , &fmt_name
@@ -404,5 +391,4 @@ void FrameWorkspace::loadPathContentFrom(const QString& file_path)
   SetupDefaultFileContext<FrameFile> context(pItem->data(Qt::UserRole).toString());
 
   FrameFile* pFile = this->provideFileFrame(file_path);
-  // ->readCurrentFormatFrom(file_path);
 }

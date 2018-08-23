@@ -1,16 +1,32 @@
 #include "ModelMoleculeAtomic.h"
 
+#include <QGuiApplication>
 #include <QStringLiteral>
 
+#include <QPalette>
+
 ModelMoleculeAtomic::ModelMoleculeAtomic(vtkMolecule *pMol)
-  : QAbstractTableModel(), ptr_mol_(pMol)
+    : QAbstractTableModel(), ptr_mol_(pMol)
+    , numberOfAtoms_(!pMol ? 0 : pMol->GetNumberOfAtoms())
 {}
 
 vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
 {
-  if (pNewMol != ptr_mol_)
+  // int nWas = rowCount();
+  if (pNewMol != ptr_mol_) // reassign if ptr changed
     std::swap(pNewMol, ptr_mol_);
-  // this->resetInternalData();
+  vtkIdType nNow = !ptr_mol_ ? 0 : ptr_mol_->GetNumberOfAtoms();
+  if(nNow > numberOfAtoms_)
+  {
+    beginInsertRows(QModelIndex(),numberOfAtoms_,nNow - 1);
+    endInsertRows();
+  }
+  if(nNow < numberOfAtoms_)
+  {
+    beginRemoveRows(QModelIndex(),nNow,numberOfAtoms_ - 1);
+    endRemoveRows();
+  }
+  numberOfAtoms_ = nNow;
   return pNewMol;
 }
 
@@ -21,7 +37,7 @@ int ModelMoleculeAtomic::columnCount(const QModelIndex & /*parent*/) const
 
 int ModelMoleculeAtomic::rowCount(const QModelIndex & /*parent*/) const
 {
-  return (!ptr_mol_) ? 0 : (int)ptr_mol_->GetNumberOfAtoms();
+  return numberOfAtoms_;
 }
 
 QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
@@ -31,22 +47,46 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
     return QVariant();
   if (!ptr_mol_ || mi.row() >= ptr_mol_->GetNumberOfAtoms())
     return QVariant();
-  if (role != Qt::DisplayRole)
-    return QVariant();
-
-  QVariant res;
-  assert(ptr_mol_);
-  vtkAtom atom = ptr_mol_->GetAtom(mi.row());
-  switch (mi.column())
+  if (role == Qt::DisplayRole)
   {
-  case(ColumnElement): {res.setValue(atom.GetAtomicNumber()); break; }
-  case(ColumnX): { res.setValue((atom.GetPosition())[0]); break; }
-  case(ColumnY): { res.setValue((atom.GetPosition())[1]); break; }
-  case(ColumnZ): { res.setValue((atom.GetPosition())[2]); break; }
-  default: break;
-  }
 
-  return res;
+    QVariant res;
+    assert(ptr_mol_);
+    vtkAtom atom = ptr_mol_->GetAtom(mi.row());
+    switch (mi.column())
+    {
+    case (ColumnElement):
+    {
+      res.setValue(atom.GetAtomicNumber());
+      break;
+    }
+    case (ColumnX):
+    {
+      res.setValue((atom.GetPosition())[0]);
+      break;
+    }
+    case (ColumnY):
+    {
+      res.setValue((atom.GetPosition())[1]);
+      break;
+    }
+    case (ColumnZ):
+    {
+      res.setValue((atom.GetPosition())[2]);
+      break;
+    }
+    default:
+      break;
+    }
+
+    return res;
+  }
+  else if (role == Qt::BackgroundRole)
+  {
+    return (mi.column()+1) % 2 ? qApp->palette().base() : qApp->palette().alternateBase();
+  }
+  else
+    return QVariant();
 }
 
 QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientation, int role) const
@@ -95,7 +135,7 @@ QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientatio
   }
   default:
   {
-    res.setValue(tr("Comment"));
+    // res.setValue(tr("Comment"));
     break;
   }
   }
@@ -104,8 +144,10 @@ QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientatio
 
 bool ModelMoleculeAtomic::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-  return false;
-  // stub... WUT?
+  if (role == Qt::EditRole)
+  {
+  }
+  return true;
 }
 
 Qt::ItemFlags ModelMoleculeAtomic::flags(const QModelIndex &index) const

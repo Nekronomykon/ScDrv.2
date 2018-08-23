@@ -210,7 +210,8 @@ SOURCES += \
     ElementData.cpp \
     Elements.cpp \
     QVTKMoleculeMapStyle.cpp \
-    ElementDataParser.cpp
+    ElementDataParser.cpp \
+    ModelMolecularBondset.cpp
 
 HEADERS += \
     FrameFile.h \
@@ -307,7 +308,8 @@ HEADERS += \
     Elements.h \
     QVTKMoleculeMapStyle.h \
     ElementDataParser.h \
-    ElementDataInternal.h
+    ElementDataInternal.h \
+    ModelMolecularBondset.h
 
 FORMS += \
     FrameWorkspace.ui \
