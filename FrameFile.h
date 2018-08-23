@@ -60,8 +60,8 @@ public:
   static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
 
   static QStringList getRecentFiles() { return recent_files; }
-  static void resetRecentFiles(QStringList l = QStringList())
-  { std::swap(recent_files,l); }
+  static QStringList &recentFiles() { return recent_files; }
+  static void resetRecentFiles(QStringList /*rclf*/ = QStringList());
 
   static QString FileInputFilter();
   static void BuildFileContext();
@@ -71,18 +71,14 @@ public:
 
   static inline QString keyRecentFiles() { return QStringLiteral("RecentFiles"); }
   static inline QString keyFile() { return QStringLiteral("File"); }
-  static inline void storeRecentFiles(QSettings& s)
-  {
-    writeRecentFiles(getRecentFiles(),s);
-  }
-  static inline void loadRecentFiles(QSettings& s)
-  {
-    resetRecentFiles(readRecentFiles(s));
-  }
+  static inline void storeRecentFiles(QSettings &s);
+  static inline void loadRecentFiles(QSettings &s);
 
   static QStringList readRecentFiles(QSettings &settings);
 
   static int writeRecentFiles(const QStringList &files, QSettings &settings);
+
+  static inline void addToRecent(const QString &one);
 
   // thiscall methods
 
@@ -93,8 +89,8 @@ public:
   void hideStructureViews();
   void showStructureViews();
 
-  static FileContext defaultFormat() {return format_active;}
-  FileContext getFormat() const {return format_current_; }
+  static FileContext defaultFormat() { return format_active; }
+  FileContext getFormat() const { return format_current_; }
   FileContext resetFormat(FileContext /*fmt*/ = FileContext());
 
   bool readCurrentFormatFrom(const QString &from);
@@ -113,16 +109,25 @@ public:
   bool acquireAsWFN();
   bool acquireAsCUBE();
 
-// facets
-  vtkMolecule* getMolecule() const;
+  // facets
+  vtkMolecule *getMolecule() const;
 
   // views
   CodeEditor *getEditSource() const;
-  ViewMoleculeAtomic* getEditAtomic() const;
-  QVTKMoleculeWidget* getViewStructure() const;
+  ViewMoleculeAtomic *getEditAtomic() const;
+  QVTKMoleculeWidget *getViewStructure() const;
 
 protected:
-  template <class T>  bool acquireUsing();
+  template <class A>
+  static bool acquireStructureUsing(A *pA, MolecularStructure &str)
+  {
+    assert(pA);
+    pA->SetOutput(str.getMolecule());
+    pA->Update();
+    return bool(str->GetNumberOfAtoms() > 0);
+  }
+  template <class T>
+  bool acquireUsing();
 
 private:
   static QStringList recent_files;

@@ -112,7 +112,7 @@ void FrameWorkspace::setupActions()
   actionPaste_->setIcon(iconPaste);
   actionPaste_->setShortcuts(QKeySequence::Paste);
 
-  const QIcon iconClear = QIcon::fromTheme("edit-clear", QIcon(":/images/Clear.png"));
+  const QIcon iconClear = QIcon::fromTheme("edit-delete", QIcon(":/images/Clear.png"));
   actionClear_->setIcon(iconClear);
   actionClear_->setShortcuts(QKeySequence::Delete);
 
@@ -120,6 +120,17 @@ void FrameWorkspace::setupActions()
   actionClearAll_->setIcon(iconClearAll);
   actionClearAll_->setShortcuts(QKeySequence::DeleteCompleteLine);
 
+  const QIcon iconMolVdW(":/images/MolVDW.png");
+  actionMolSpace_->setIcon(iconMolVdW);
+
+  const QIcon iconMolBalls(":/images/MolBalls.png");
+  actionMolBalls_->setIcon(iconMolBalls);
+
+  const QIcon iconMolFast(":/images/MolFast.png");
+  actionMolFast_->setIcon(iconMolFast);
+
+  const QIcon iconMolStick(":/images/MolStick.png");
+  actionMolStick_->setIcon(iconMolStick);
 }
 
 void FrameWorkspace::setupToolBars()
@@ -129,13 +140,23 @@ void FrameWorkspace::setupToolBars()
   barTools_->addAction(actionSave_);
 
 
-  QToolBar *editToolBar = addToolBar(tr("Edit"));
+  QToolBar *editToolBar = this->addToolBar(tr("Edit"));
   editToolBar->addAction(actionUndo_);
   editToolBar->addAction(actionRedo_);
   editToolBar->addSeparator();
   editToolBar->addAction(actionCut_);
   editToolBar->addAction(actionCopy_);
   editToolBar->addAction(actionPaste_);
+  editToolBar->addSeparator();
+  editToolBar->addAction(actionClear_);
+  editToolBar->addAction(actionClearAll_);
+
+  QToolBar *tbMol = this->addToolBar(tr("Molecule"));
+  tbMol->addAction(actionMolFast_);
+  tbMol->addSeparator();
+  tbMol->addAction(actionMolStick_);
+  tbMol->addAction(actionMolBalls_);
+  tbMol->addAction(actionMolSpace_);
 }
 
 void FrameWorkspace::setupDockingViews()
@@ -166,6 +187,9 @@ void FrameWorkspace::openRecentFile()
 {}
 
 void FrameWorkspace::updateRecentFilesMenu()
+{}
+
+void FrameWorkspace::updateUI()
 {}
 
 FrameWorkspace::Child* FrameWorkspace::getActiveChild() const

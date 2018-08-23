@@ -1,9 +1,10 @@
 #include "ModelMoleculeAtomic.h"
 
+#include <QStringLiteral>
+
 ModelMoleculeAtomic::ModelMoleculeAtomic(vtkMolecule *pMol)
-    : QAbstractTableModel(), ptr_mol_(pMol)
-{
-}
+  : QAbstractTableModel(), ptr_mol_(pMol)
+{}
 
 vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
 {
@@ -25,29 +26,36 @@ int ModelMoleculeAtomic::rowCount(const QModelIndex & /*parent*/) const
 
 QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
 {
+
+  if (!mi.isValid())
+    return QVariant();
+  if (!ptr_mol_ || mi.row() >= ptr_mol_->GetNumberOfAtoms())
+    return QVariant();
+  if (role != Qt::DisplayRole)
+    return QVariant();
+
   QVariant res;
+  assert(ptr_mol_);
+  vtkAtom atom = ptr_mol_->GetAtom(mi.row());
+  switch (mi.column())
+  {
+  case(ColumnElement): {res.setValue(atom.GetAtomicNumber()); break; }
+  case(ColumnX): { res.setValue((atom.GetPosition())[0]); break; }
+  case(ColumnY): { res.setValue((atom.GetPosition())[1]); break; }
+  case(ColumnZ): { res.setValue((atom.GetPosition())[2]); break; }
+  default: break;
+  }
+}
 
-  if (role == Qt::DisplayRole)
-    {
-      assert(ptr_mol_);
-      vtkAtom atom = ptr_mol_->GetAtom(mi.row());
-      switch(mi.column())
-      {
-      case(ColumnElement): {res.setValue(atom.GetAtomicNumber()); break; }
-        case(ColumnX):   { res.setValue((atom.GetPosition())[0]); break; }
-        case(ColumnY):   { res.setValue((atom.GetPosition())[1]); break; }
-        case(ColumnZ):   { res.setValue((atom.GetPosition())[2]); break; }
-        default: break;
-      }
-    }
-
-  return res;
+return res;
 }
 
 QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (orientation == Qt::Vertical || role != Qt::DisplayRole)
-    return QAbstractTableModel::headerData(section, orientation, role); // ???
+  if (role != Qt::DisplayRole)
+    return QVariant();
+  if (orientation == Qt::Vertical)
+    return QStringLiteral("Atom %1").arg(section);
   QVariant res;
   switch (section)
   {

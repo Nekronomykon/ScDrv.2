@@ -87,6 +87,8 @@ private:
 
   void initRecentActions();
 
+  void updateUI();
+
   // data members:
 private slots:
 

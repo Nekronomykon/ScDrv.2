@@ -27,6 +27,11 @@ FrameFile::FileContext FrameFile::format_active;
 // static functions
 FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
 
+void FrameFile::resetRecentFiles(QStringList rclf)
+{
+  std::swap(recent_files, rclf);
+}
+
 void FrameFile::BuildFileContext()
 {
   all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
@@ -63,6 +68,16 @@ FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
   return res;
 }
 
+void FrameFile::storeRecentFiles(QSettings &s)
+{
+  writeRecentFiles(getRecentFiles(), s);
+}
+
+void FrameFile::loadRecentFiles(QSettings &s)
+{
+  resetRecentFiles(readRecentFiles(s));
+}
+
 QStringList FrameFile::readRecentFiles(QSettings &settings)
 {
   QStringList result;
@@ -85,6 +100,13 @@ int FrameFile::writeRecentFiles(const QStringList &files, QSettings &settings)
     }
   settings.endArray();
   return count;
+}
+
+void FrameFile::addToRecent(const QString &one)
+{
+  auto& recent_list = recentFiles();
+  recent_list.removeAll(one);
+  recent_list.push_front(one);
 }
 
 template <class W>
