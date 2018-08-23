@@ -71,7 +71,11 @@ public:
 
   static inline QString keyRecentFiles() { return QStringLiteral("RecentFiles"); }
   static inline QString keyFile() { return QStringLiteral("File"); }
-  static inline void storeRecentFiles(QSettings &s);
+  static inline void storeRecentFiles(QSettings &s)
+  {
+    writeRecentFiles(getRecentFiles(), s);
+  }
+
   static inline void loadRecentFiles(QSettings &s);
 
   static QStringList readRecentFiles(QSettings &settings);

@@ -45,9 +45,8 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   case(ColumnZ): { res.setValue((atom.GetPosition())[2]); break; }
   default: break;
   }
-}
 
-return res;
+  return res;
 }
 
 QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientation, int role) const

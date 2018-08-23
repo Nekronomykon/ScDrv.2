@@ -68,10 +68,6 @@ FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
   return res;
 }
 
-void FrameFile::storeRecentFiles(QSettings &s)
-{
-  writeRecentFiles(getRecentFiles(), s);
-}
 
 void FrameFile::loadRecentFiles(QSettings &s)
 {
