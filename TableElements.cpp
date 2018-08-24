@@ -6,7 +6,7 @@ TableElements::TableElements(QWidget *parent)
   this->setSelectionMode(QAbstractItemView::SingleSelection);
   this->setShowGrid(false);
   
-  QFont fontSrc("Courier", 9);
+  QFont fontSrc("Courier", 10);
   fontSrc.setStyleHint(QFont::Monospace);
   fontSrc.setBold(true);
   this->setFont(fontSrc);
@@ -18,6 +18,7 @@ TableElements::TableElements(QWidget *parent)
 
   Model* pM = this->getViewModel();
 
+  /// ???
   for (int j = 0; j <= pM->columnCount(); 
     this->setColumnWidth(j++, w1));
 
@@ -25,7 +26,7 @@ TableElements::TableElements(QWidget *parent)
     this->setRowHeight(j++, h1));
 
   int kwidth = (pM->columnCount() + 1)* w1;
-  int kheight = (pM->rowCount() + 1) * h1;
+  int kheight = (pM->rowCount() + 3) * h1;
   this->setGeometry(0, 0, kwidth, kheight);
 }
 
