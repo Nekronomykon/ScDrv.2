@@ -46,7 +46,7 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
 private:
-  vtkMolecule *ptr_mol_;
+  vtkMolecule *ptr_mol_; // ??? MolecularStructure* ptr_structure_;
   vtkIdType numberOfAtoms_;
 };
 

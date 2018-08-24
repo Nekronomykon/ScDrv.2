@@ -19,14 +19,15 @@ vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
   if(nNow > numberOfAtoms_)
   {
     beginInsertRows(QModelIndex(),numberOfAtoms_,nNow - 1);
+    numberOfAtoms_ = nNow;
     endInsertRows();
   }
   if(nNow < numberOfAtoms_)
   {
     beginRemoveRows(QModelIndex(),nNow,numberOfAtoms_ - 1);
+    numberOfAtoms_ = nNow;
     endRemoveRows();
   }
-  numberOfAtoms_ = nNow;
   return pNewMol;
 }
 
@@ -83,7 +84,7 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   }
   else if (role == Qt::BackgroundRole)
   {
-    return (mi.column()+1) % 2 ? qApp->palette().base() : qApp->palette().alternateBase();
+    return (mi.row()+1) % 2 ? qApp->palette().base() : qApp->palette().alternateBase();
   }
   else
     return QVariant();

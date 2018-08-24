@@ -1,5 +1,8 @@
 #include "ModelElements.h"
 
+#include <QPalette>
+#include <QGuiApplication>
+
 const unsigned short ModelElements::NobleGases[] = {2, 10, 18, 36, 54, 86, 118, NumberOfElements + 1};
 // He   Ne   Ar   Kr   Xe   Rn   Og    <finish>
 
@@ -36,19 +39,19 @@ const vtkIdType ModelElements::TableForm[] =
 const vtkIdType ModelElements::NumTable = sizeof(ModelElements::TableForm) / sizeof(ModelElements::TableForm[0]);
 
 ModelElements::ModelElements()
-{
-}
+{}
 
 QVariant ModelElements::data(const QModelIndex &index, int role) const
 {
-  QVariant res;
   // cast index.row() and index.column() into the idElement in the Table;
+  vtkIdType ofs = index.row() * NumberOfGroups + index.column();
+  if (ofs > NumTable)
+    return QVariant();
+    vtkIdType idElem = TableForm[ofs];
   if (role == Qt::DisplayRole)
   {
-    vtkIdType ofs = index.row() * NumberOfGroups + index.column();
-    if (ofs < NumTable)
+    QVariant res;
     {
-      vtkIdType idElem = TableForm[ofs];
       if (idElem >= 0)
       {
         res.setValue(tr(elements_->GetSymbol(idElem)));
@@ -60,15 +63,29 @@ QVariant ModelElements::data(const QModelIndex &index, int role) const
       else if (idElem == -4)
         res.setValue(tr("[S]"));
     }
+    return res;
   }
-  return res;
-}
+  else if (role == Qt::BackgroundRole)
+  {
+    return (idElem < 0 || index.row() > NumberOfPeriods)
+      ? qApp->palette().base() : qApp->palette().alternateBase();
+  }
+  else if (role == Qt::TextAlignmentRole)
+  {
+    return QVariant(Qt::AlignCenter);
+  }
+  else if (role == Qt::SizeHintRole)
+  {
+    QFont font();
+  }
+  else return QVariant();
+ }
 
 Qt::ItemFlags ModelElements::flags(const QModelIndex &index) const
 {
-  Qt::ItemFlags res(Qt::NoItemFlags);
+  Qt::ItemFlags res(QAbstractTableModel::flags(index));
   vtkIdType idItem = index.row() * NumberOfGroups + index.column();
-  if (TableForm[idItem])
-    res |= (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+  if (TableForm[idItem] >= 0)
+    res |=  (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
   return res;
 }
