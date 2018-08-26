@@ -11,16 +11,20 @@
 
 #include <vtkType.h>
 #include <vtkStdString.h>
+#include <vtkMolecule.h>
 
 #include "BondsetBuild.h"
 
-#include <vtkMolecule.h>
+#include <deque>
+
+typedef std::pair<vtkIdType,vtkIdType> IncidenceIndex;
+typedef std::deque<IncidenceIndex> PathSequence;
 
 class MolecularStructure
 {
   typedef vtkSmartPointer<BondsetBuild> BuildBonds;
-  typedef vtkNew<vtkMolecule> A_Molecule;
-public:
+  typedef vtkSmartPointer<vtkMolecule> Molecule;
+ public:
   enum Units
   {
     Bohrs,
@@ -45,7 +49,7 @@ public:
 
 private:
   vtkStdString title_;
-  A_Molecule molecule_;
+  Molecule molecule_;
   BuildBonds bonds_build_;
 };
 

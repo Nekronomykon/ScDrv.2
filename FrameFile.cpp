@@ -27,9 +27,9 @@ FrameFile::FileContext FrameFile::format_active;
 // static functions
 FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
 
-void FrameFile::resetRecentFiles(QStringList rclf)
+void FrameFile::resetRecentFiles(QStringList again_recent)
 {
-  std::swap(recent_files, rclf);
+  std::swap(recent_files, again_recent);
 }
 
 void FrameFile::BuildFileContext()
@@ -40,7 +40,7 @@ void FrameFile::BuildFileContext()
   all_formats[FileContext("Generic text files", nullptr, &FrameFile::saveTextSource)] = "txt";
 }
 
-FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
+FrameFile::FileContext FrameFile::castFormatFromPath(const QString &path)
 {
   QFileInfo fi(path);
   QString sx = fi.suffix();
@@ -57,13 +57,13 @@ FrameFile::FileContext FrameFile::FormatFromPath(const QString &path)
 
   if (all_fmts.size() == 1)
     res = all_fmts.front();
-  // else if (all_fmts.empty())  all_fmts.copy(all_formats);
-  else
+  // if (all_fmts.empty())  all_fmts.copy(all_formats);
+  if (!res)
   {
-      QMessageBox::warning(nullptr,tr("Ambiguous names")
-                           , tr("More than one file format could be held in following file:\n%1\nUser intervention is required").arg(path)
-                           , QMessageBox::Ok | QMessageBox::Ignore
-                           );
+    QMessageBox::warning(nullptr, tr("Ambiguous names")
+      , tr("More than one file format could be held in following file:\n%1\nUser intervention is required").arg(path)
+      , QMessageBox::Ok | QMessageBox::Ignore
+    );
   }
   return res;
 }
@@ -79,9 +79,9 @@ QStringList FrameFile::readRecentFiles(QSettings &settings)
   QStringList result;
   const int count = settings.beginReadArray(keyRecentFiles());
   for (int i = 0; i < count; ++i) {
-      settings.setArrayIndex(i);
-      result.append(settings.value(keyFile()).toString());
-    }
+    settings.setArrayIndex(i);
+    result.append(settings.value(keyFile()).toString());
+  }
   settings.endArray();
   return result;
 }
@@ -91,9 +91,9 @@ int FrameFile::writeRecentFiles(const QStringList &files, QSettings &settings)
   const int count = files.size();
   settings.beginWriteArray(keyRecentFiles());
   for (int i = 0; i < count; ++i) {
-      settings.setArrayIndex(i);
-      settings.setValue(keyFile(), files.at(i));
-    }
+    settings.setArrayIndex(i);
+    settings.setValue(keyFile(), files.at(i));
+  }
   settings.endArray();
   return count;
 }
@@ -102,7 +102,7 @@ void FrameFile::addToRecent(const QString &one)
 {
   auto& recent_list = recentFiles();
   recent_list.removeAll(one);
-  recent_list.push_front(one);
+  recent_list.prepend(one);
 }
 
 template <class W>
@@ -121,9 +121,9 @@ QString FrameFile::FileInputFilter()
 
   auto it_fmt = all_formats.begin();
   do
-    {
-      //if (!it_fmt.key().hasBuild())
-      //  continue;
+  {
+    //if (!it_fmt.key().hasBuild())
+    //  continue;
 
     res += it_fmt.key();
     QString mask(tr("*."));
@@ -174,10 +174,10 @@ void FrameFile::ClearFileInputContext()
 
 // this-driven functions
 FrameFile::FrameFile(QWidget *parent)
-    : QTabWidget(parent), format_current_(format_active)
-    , bonds_build_(BuildBonds::New())
-//, extend_(new QToolButton(this))
-//, compress_(new QToolButton(this))
+  : QTabWidget(parent), format_current_(format_active)
+  , bonds_build_(BuildBonds::New())
+  //, extend_(new QToolButton(this))
+  //, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);
@@ -202,7 +202,9 @@ FrameFile::FileContext FrameFile::resetFormat(FileContext fmt)
 }
 
 bool FrameFile::readCurrentFormatFrom(const QString &from)
-{ return format_current_.buildFrom(*this, from); }
+{
+  return format_current_.buildFrom(*this, from);
+}
 
 bool FrameFile::interpretNone()
 {
@@ -245,17 +247,25 @@ bool FrameFile::acquireAsCUBE()
 
 // data facets
 vtkMolecule *FrameFile::getMolecule() const
-{ return structure_.getMolecule(); }
+{
+  return structure_.getMolecule();
+}
 
 // data views
-CodeEditor *FrameFile::getEditSource() const
-{ return edit_source_; }
+EditTextSource *FrameFile::getEditSource() const
+{
+  return edit_source_;
+}
 
 ViewMoleculeAtomic *FrameFile::getEditAtomic() const
-{ return view_atomic_;}
+{
+  return view_atomic_;
+}
 
 QVTKMoleculeWidget *FrameFile::getViewStructure() const
-{ return view_molecule_; }
+{
+  return view_molecule_;
+}
 
 void FrameFile::InterpretFileName()
 {
@@ -264,10 +274,11 @@ void FrameFile::InterpretFileName()
 
 void FrameFile::doClearAll()
 {
-  this->hideStructureViews();
-  edit_source_->setReadOnly(false);
-  this->resetFormat();
   structure_.Initialize();
+  this->hideStructureViews();
+  this->resetFormat();
+  edit_source_->setPlainText(tr(""));
+  edit_source_->setReadOnly(false);
 }
 
 void FrameFile::hideStructureViews()
@@ -291,7 +302,8 @@ void FrameFile::showStructureViews()
 
 void FrameFile::doReload()
 {
-  this->readCurrentFormatFrom(this->GetFileName());
+  if (this->HasFileName())
+    this->readCurrentFormatFrom(this->GetFileName());
 }
 
 bool FrameFile::readTextSource(const QString &from)
@@ -316,7 +328,7 @@ bool FrameFile::saveTextSource(const QString &path_to) const
 
 FrameFile::TypeFileName FrameFile::dumpSource() const
 {
-  CodeEditor *pSrc = this->getEditSource();
+  EditTextSource *pSrc = this->getEditSource();
   pSrc->dump();
   return pSrc->getDumpPath();
 }

@@ -16,7 +16,7 @@ class ModelMoleculeAtomic
 {
   Q_OBJECT
 public:
-  ModelMoleculeAtomic(vtkMolecule * /*pMol*/ = nullptr);
+  explicit ModelMoleculeAtomic(vtkMolecule * /*pMol*/ = nullptr);
 
   vtkMolecule *getMolecule() const { return ptr_mol_; }
   vtkMolecule *resetMolecule(vtkMolecule * /*pNewMol*/ = nullptr);
@@ -26,7 +26,7 @@ public:
     ColumnID = 0,
     ColumnLabel = 1,
     ColumnElement = 2,
-    ColumnType = 3,
+    ColumnNumber = 3,
     ColumnX = 4,
     ColumnY = 5,
     ColumnZ = 6,

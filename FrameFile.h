@@ -67,7 +67,7 @@ public:
   static void BuildFileContext();
   static FileContext SetupFileInputContext(const QString &);
   static void ClearFileInputContext();
-  static FileContext FormatFromPath(const QString &);
+  static FileContext castFormatFromPath(const QString &);
 
   static inline QString keyRecentFiles() { return QStringLiteral("RecentFiles"); }
   static inline QString keyFile() { return QStringLiteral("File"); }
@@ -117,7 +117,7 @@ public:
   vtkMolecule *getMolecule() const;
 
   // views
-  CodeEditor *getEditSource() const;
+  EditTextSource *getEditSource() const;
   ViewMoleculeAtomic *getEditAtomic() const;
   QVTKMoleculeWidget *getViewStructure() const;
 

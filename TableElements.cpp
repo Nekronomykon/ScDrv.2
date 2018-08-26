@@ -6,14 +6,14 @@ TableElements::TableElements(QWidget *parent)
   this->setSelectionMode(QAbstractItemView::SingleSelection);
   this->setShowGrid(false);
   
-  QFont fontSrc("Courier", 10);
-  fontSrc.setStyleHint(QFont::Monospace);
-  fontSrc.setBold(true);
-  this->setFont(fontSrc);
+  //QFont fontSrc("Courier", 10);
+  //fontSrc.setStyleHint(QFont::Monospace);
+  //fontSrc.setBold(true);
+  //this->setFont(fontSrc);
 
   QFontMetrics fm = this->fontMetrics();
 
-  int w1 = fm.width(QLatin1Char('9')) * 5;
+  int w1 = fm.width(QLatin1Char('9')) * 4;
   int h1 = fm.height(); // * 3 / 2;
 
   Model* pM = this->getViewModel();

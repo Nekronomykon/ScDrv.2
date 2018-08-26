@@ -8,14 +8,29 @@
 
 #include "CodeEditor.h"
 
+#include <QTemporaryFile>
 #include <QWidget>
+
+/*
+EditTextSource --- editor class; owner and proxy for the temporarily persistent text file.
+*/
 
 class EditTextSource
     : public CodeEditor
 {
   Q_OBJECT
 public:
-  EditTextSource(QWidget* /*parent */ = Q_NULLPTR);
+  explicit EditTextSource(QWidget* /*parent */ = Q_NULLPTR);
+  ~EditTextSource() override;
+
+  //
+  void dump();
+  QString getDumpPath() const;
+
+
+private:
+  QTemporaryFile file_dump_;
+
 };
 
 #endif // !__Edit_TextSource_h__

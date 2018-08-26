@@ -61,6 +61,11 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
       res.setValue(atom.GetAtomicNumber());
       break;
     }
+    case (ColumnNumber):
+    {
+      res.setValue(atom.GetAtomicNumber());
+      break;
+    }
     case (ColumnX):
     {
       res.setValue((atom.GetPosition())[0]);
@@ -109,9 +114,9 @@ QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientatio
     res.setValue(tr("Element"));
     break;
   }
-  case (ColumnType):
+  case (ColumnNumber):
   {
-    res.setValue(tr("Atom type"));
+    res.setValue(tr("Number"));
     break;
   }
   case (ColumnLabel):

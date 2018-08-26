@@ -15,11 +15,7 @@
 CodeEditor::CodeEditor(QWidget *parent)
 	: QPlainTextEdit(parent)
 	, side_bar_(new SideBarDecorator(this))
-	, file_dump_(tr("./SqD-XXXXXX.sq-drv"))
 {
-	file_dump_.setAutoRemove(true);
-	file_dump_.open();
-
 	QFont fontSrc("Courier", 10);
 	fontSrc.setStyleHint(QFont::Monospace);
 	this->setFont(fontSrc);
@@ -34,7 +30,6 @@ CodeEditor::CodeEditor(QWidget *parent)
 
 CodeEditor::~CodeEditor()
 {
-	file_dump_.close();
 }
 
 //![constructor]
@@ -174,14 +169,3 @@ void CodeEditor::save(QIODevice* pIO)
 	out << this->toPlainText();
 }
 
-void CodeEditor::dump()
-{
-	this->save(&file_dump_);
-  file_dump_.flush();
-	file_dump_.seek(0L);
-}
-
-QString CodeEditor::getDumpPath() const
-{
-	return QFileInfo(file_dump_.fileName()).canonicalFilePath();
-}

@@ -36,6 +36,9 @@ public:
 
   static int hasRecentFiles();
 
+  void openAllFiles(const QStringList&);
+  void loadFileContents(const QString&);
+
   Child* getActiveChild() const;
 
   // general...
@@ -65,6 +68,7 @@ public:
 public slots:
   //
 protected slots:
+  void on_actionNew__triggered();
   void on_actionOpen__triggered();
   void on_actionToggleLayout__triggered();
 

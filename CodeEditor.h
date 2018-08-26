@@ -1,5 +1,5 @@
-#ifndef __Code_Editor_h__
-#define __Code_Editor_h__
+#ifndef Code_Editor_h
+#define Code_Editor_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -11,7 +11,6 @@
 #include <QResizeEvent>
 #include <QPaintEvent>
 #include <QPlainTextEdit>
-#include <QTemporaryFile>
 #include <QIODevice>
 
 class SideBarDecorator;
@@ -23,31 +22,25 @@ class CodeEditor : public QPlainTextEdit
     Q_OBJECT
 
 public:
-    explicit CodeEditor(QWidget* /*parent*/ = 0);
+    explicit CodeEditor(QWidget* /*parent*/ = nullptr);
     ~CodeEditor () override;
 
-    void SideBarDecoratorPaintEvent(QPaintEvent *event);
+    void SideBarDecoratorPaintEvent(QPaintEvent *);
     int SideBarWidth();
 
     void load(QIODevice* /*pIO*/);
     void save(QIODevice* /*pIO*/);
 
-    void dump();
-
-    QString getDumpPath() const;
-
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void updateSideBarWidth(int newBlockCount);
+    void updateSideBarWidth(int /*newBlockCount*/);
     void highlightCurrentLine();
     void updateSideBar(const QRect &, int);
 
 private:
     QPointer<SideBarDecorator> side_bar_;
-
-    QTemporaryFile file_dump_;
 };
 
-#endif // !__Code_Editor_h__
+#endif // !Code_Editor_h

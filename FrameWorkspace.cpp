@@ -21,10 +21,8 @@
 #include <vtkSmartPointer.h>
 
 // Constructor
-FrameWorkspace::FrameWorkspace(QWidget* parent)
-  : QMainWindow(parent)
-  , edit_workspace_(new ViewWorkspace)
-  , view_files_(new ViewFilesystem)
+FrameWorkspace::FrameWorkspace(QWidget *parent)
+  : QMainWindow(parent), edit_workspace_(new ViewWorkspace), view_files_(new ViewFilesystem)
 {
   this->setupUi(this);
 
@@ -44,14 +42,37 @@ FrameWorkspace::FrameWorkspace(QWidget* parent)
 FrameWorkspace::~FrameWorkspace()
 {}
 
+void FrameWorkspace::openAllFiles(const QStringList&all)
+{
+  if(all.empty()) return;
+  for (QString str_one : all)
+    {
+      QFileInfo fi(str_one);
+      this->addFileToWorkspace(fi.canonicalFilePath());
+    }
+  this->loadFileContents(all.front());
+}
+
+void FrameWorkspace::loadFileContents(const QString& from)
+{
+  // the complete full path is assumed here in `from'
+  FileFormat fmt = FrameFile::castFormatFromPath(from);
+  if(fmt.hasBuild())
+    {
+      FrameFile * pOpen = this->getActiveChild();
+      pOpen->resetFormat(fmt);
+      pOpen->readCurrentFormatFrom(from);
+      this->addFileToWorkspace(from,fmt);
+    }
+}
+
 int FrameWorkspace::hasRecentFiles()
 {
   QSettings settings;
   int count = settings.beginReadArray(FrameFile::keyRecentFiles());
   settings.endArray();
-  return (count >= 0) ?  count : 0;
+  return (count >= 0) ? count : 0;
 }
-
 
 void FrameWorkspace::setupActions()
 {
@@ -126,7 +147,6 @@ void FrameWorkspace::setupToolBars()
   barTools_->addAction(actionOpen_);
   barTools_->addAction(actionSave_);
 
-
   QToolBar *editToolBar = this->addToolBar(tr("Edit"));
   editToolBar->addAction(actionUndo_);
   editToolBar->addAction(actionRedo_);
@@ -149,7 +169,7 @@ void FrameWorkspace::setupToolBars()
 void FrameWorkspace::setupDockingViews()
 {
   QDockWidget *pInit;
-  QDockWidget* pNext;
+  QDockWidget *pNext;
   pInit = new QDockWidget(tr("Files"), this);
   pInit->setWidget(view_files_);
   pNext = new QDockWidget(tr("Workspace"), this);
@@ -160,26 +180,30 @@ void FrameWorkspace::setupDockingViews()
 
 void FrameWorkspace::initRecentActions()
 {
-  connect(menuRecent_, &QMenu::aboutToShow
-          , this, &FrameWorkspace::updateRecentFilesMenu);
+  connect(menuRecent_, &QMenu::aboutToShow, this, &FrameWorkspace::updateRecentFilesMenu);
 
   for (int i = 0; i < MaxRecentFiles; ++i)
     {
-      recentFileActs[i] = menuRecent_->addAction(QString(),this,&FrameWorkspace::openRecentFile);
+      recentFileActs[i] = menuRecent_->addAction(QString(), this, &FrameWorkspace::openRecentFile);
       recentFileActs[i]->setVisible(false);
     }
 }
 
 void FrameWorkspace::openRecentFile()
-{}
+{
+  if (const QAction *action = qobject_cast<const QAction *>(sender()))
+    this->loadFileContents(action->data().toString());
+}
 
 void FrameWorkspace::updateRecentFilesMenu()
-{}
+{
+}
 
 void FrameWorkspace::updateUI()
-{}
+{
+}
 
-FrameWorkspace::Child* FrameWorkspace::getActiveChild() const
+FrameWorkspace::Child *FrameWorkspace::getActiveChild() const
 {
   return this->viewMoleculeFile_;
 }
@@ -211,10 +235,9 @@ void FrameWorkspace::closeEvent(QCloseEvent *event)
   //}
 }
 
-
-FrameWorkspace::Child* FrameWorkspace::provideFileFrame(const QString& name)
+FrameWorkspace::Child *FrameWorkspace::provideFileFrame(const QString &name)
 {
-  Child* pRes = nullptr;
+  Child *pRes = nullptr;
   /*
   QMdiSubWindow* pFound = mdiArea_->findMdiWindow(name);
   if(!pFound)
@@ -232,11 +255,13 @@ FrameWorkspace::Child* FrameWorkspace::provideFileFrame(const QString& name)
   pRes = this->getActiveChild();
 
   FileFormat fmt = pRes->getFormat();
-  if(!fmt.isValid())
+  if (!fmt.isValid())
     {
       fmt = Child::defaultFormat();
-      if (!fmt) fmt = Child::FormatFromPath(name);
-      if (!fmt) return nullptr;
+      if (!fmt)
+        fmt = Child::castFormatFromPath(name);
+      if (!fmt)
+        return nullptr;
       else
         pRes->resetFormat(fmt);
     }
@@ -337,10 +362,29 @@ void FrameWorkspace::storeSettings()
   settings.setValue("Geometry", this->saveGeometry());
 }
 
-//
+void FrameWorkspace::loadPathContentFrom(const QString &file_path)
+{
+  QList<QListWidgetItem *> list = edit_workspace_->findItems(file_path, Qt::MatchExactly);
+  assert(list.size() == 1);
+  QListWidgetItem *pItem = list.front();
+
+  SetupDefaultFileContext<FrameFile> context(pItem->data(Qt::UserRole).toString());
+
+  FrameFile *pFile = this->provideFileFrame(file_path);
+}
+
+// Auto-assigned event handlers:
+
+void FrameWorkspace::on_actionNew__triggered()
+{
+  FrameFile * pOpen = this->getActiveChild();
+  pOpen->doClearAll();
+  pOpen->ResetFileName();
+}
+
 void FrameWorkspace::on_actionOpen__triggered()
 {
-  QFileDialog::Options options = QFileDialog::DontUseNativeDialog // portability
+  QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
       | QFileDialog::ReadOnly                    // read-only is also to read
       | QFileDialog::DontUseCustomDirectoryIcons // uniformity
       ;
@@ -351,13 +395,7 @@ void FrameWorkspace::on_actionOpen__triggered()
 
   QStringList all_paths =
       // FrameFile::queryInputFiles(fmt_name);
-      QFileDialog::getOpenFileNames(this
-                                    , tr("Input files")
-                                    , dir_name
-                                    , all_context
-                                    , &fmt_name
-                                    , options
-                                    );
+      QFileDialog::getOpenFileNames(this, tr("Input files"), dir_name, all_context, &fmt_name, options);
 
   if (all_paths.isEmpty())
     return;
@@ -367,28 +405,19 @@ void FrameWorkspace::on_actionOpen__triggered()
   for (const auto &one_path : all_paths)
     {
       QFileInfo fi(one_path);
-      this->addFileToWorkspace(fi.canonicalFilePath(), context );
+      this->addFileToWorkspace(fi.canonicalFilePath(), context);
     }
-  if (all_paths.size() == 1)
-    {
-      QFileInfo fi(all_paths.front());
-      this->loadPathContentFrom(fi.canonicalFilePath());
-    }
+  // if (all_paths.size() == 1)
+  //   {
+  QFileInfo fi(all_paths.front());
+  this->loadPathContentFrom(fi.canonicalFilePath());
+  //  }
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()
 {
-  QGuiApplication::setLayoutDirection( (this->layoutDirection() == Qt::LeftToRight)
-                                       ? Qt::RightToLeft : Qt::LeftToRight);
+  QGuiApplication::setLayoutDirection((this->layoutDirection() == Qt::LeftToRight)
+                                      ? Qt::RightToLeft
+                                      : Qt::LeftToRight);
 }
 
-void FrameWorkspace::loadPathContentFrom(const QString& file_path)
-{
-  QList<QListWidgetItem*> list = edit_workspace_->findItems(file_path, Qt::MatchExactly);
-  assert(list.size() == 1);
-  QListWidgetItem* pItem = list.front();
-
-  SetupDefaultFileContext<FrameFile> context(pItem->data(Qt::UserRole).toString());
-
-  FrameFile* pFile = this->provideFileFrame(file_path);
-}

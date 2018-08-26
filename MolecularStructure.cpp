@@ -1,7 +1,7 @@
 #include "MolecularStructure.h"
 
 MolecularStructure::MolecularStructure()
-  : molecule_()
+  : molecule_(Molecule::New())
   , bonds_build_(BuildBonds::New())
 {}
 
