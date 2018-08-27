@@ -24,6 +24,7 @@ class MolecularStructure
 {
   typedef vtkSmartPointer<BondsetBuild> BuildBonds;
   typedef vtkSmartPointer<vtkMolecule> Molecule;
+  typedef vtkNew<vtkMolecule> NewMolecule;
  public:
   enum Units
   {

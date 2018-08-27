@@ -89,7 +89,8 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   }
   else if (role == Qt::BackgroundRole)
   {
-    return (mi.row()+1) % 2 ? qApp->palette().base() : qApp->palette().alternateBase();
+    return (mi.row()+1) % 2 ?
+    qApp->palette().base() : qApp->palette().alternateBase();
   }
   else
     return QVariant();

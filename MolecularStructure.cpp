@@ -24,7 +24,7 @@ vtkIdType MolecularStructure::UpdateBonds()
 {
   bonds_build_->RemoveAllInputs();
   bonds_build_->SetInputData(molecule_);
-  A_Molecule mol_bound;
+  NewMolecule mol_bound;
   bonds_build_->SetOutput(mol_bound);
   bonds_build_->Update();
   molecule_->DeepCopy(mol_bound);
