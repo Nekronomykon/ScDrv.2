@@ -26,15 +26,15 @@ struct QVTKMoleculeMapStyle
 
   // Why don't we rely upon the default behaviour?
   //
-  //bool operator ==(const QVTKMoleculeMapperStyle& v) const
-  //{
-  //  return bool( (styleAtomRadius_ == v.styleAtomRadius_)
-  //    && (radAtomsScale_ == v.radAtomsScale_)
-  //    && (styleBondColor_ == v.styleBondColor_)
-  //    && (bRenderMulti_ == v.bRenderMulti_)
-  //    && (radBonds_ == v.radBonds_)
-  //    );
-  //}
+  bool operator ==(const QVTKMoleculeMapStyle& v) const
+  {
+    return bool( (styleAtomRadius_ == v.styleAtomRadius_)
+      && (radAtomsScale_ == v.radAtomsScale_)
+      && (styleBondColor_ == v.styleBondColor_)
+      && (bRenderMulti_ == v.bRenderMulti_)
+      && (radBonds_ == v.radBonds_)
+      );
+  }
 };
 
 #endif // VTKMOLMAPPERSTYLE_H

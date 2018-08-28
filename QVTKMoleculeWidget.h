@@ -1,5 +1,5 @@
-#ifndef __QVTK_MoleculeWidget_h__
-#define __QVTK_MoleculeWidget_h__
+#ifndef QVTK_MoleculeWidget_h
+#define QVTK_MoleculeWidget_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -40,6 +40,13 @@ public:
 
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
+  bool resetStyle(const QVTKMoleculeMapStyle& /*style*/);
+  void doRender();
+
+  bool moleculeInBallsSticks() const;
+  bool moleculeInSpaceFill() const;
+  bool moleculeInFastRender() const;
+  bool moleculeInSticks() const;
 
 private:
   typedef vtkSmartPointer<vtkActor> Actor;
@@ -56,4 +63,4 @@ private:
   static const QVTKMoleculeMapStyle style_Sticks;
 };
 
-#endif // !__QVTK_MoleculeWidget_h__
+#endif // !QVTK_MoleculeWidget_h

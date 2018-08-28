@@ -78,6 +78,28 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
   }
 
   // render scene:
+  this->doRender();
+}
+
+bool QVTKMoleculeWidget::resetStyle(const QVTKMoleculeMapStyle &style)
+{
+  if(style == mol_style_)
+    return false;
+  mol_style_ = style;
+  this->doRender();
+  return true;
+}
+
+void QVTKMoleculeWidget::doRender()
+{
   mol_style_.SetupMoleculeMapper(mol_mapper_);
   this->GetRenderWindow()->Render();
 }
+
+bool QVTKMoleculeWidget::moleculeInBallsSticks() const {return bool (mol_style_ == style_BnS);}
+
+bool QVTKMoleculeWidget::moleculeInSpaceFill() const   {return bool (mol_style_ == style_VdW);}
+
+bool QVTKMoleculeWidget::moleculeInFastRender() const  {return bool (mol_style_ == style_Fast);}
+
+bool QVTKMoleculeWidget::moleculeInSticks() const {return bool (mol_style_ == style_Sticks);}
