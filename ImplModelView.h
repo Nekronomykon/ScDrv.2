@@ -8,6 +8,10 @@
 
 #include <QWidget>
 
+#include <QTreeView>
+#include <QListView>
+#include <QTableView>
+
 template <class T, class TBase, class TModel>
 class ImplModelView
     : public TBase

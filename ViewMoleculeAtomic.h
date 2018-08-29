@@ -21,7 +21,7 @@ class ViewMoleculeAtomic
   typedef ImplModelView<ViewMoleculeAtomic,QTableView,ModelMoleculeAtomic> _Base;
   Q_OBJECT
 public:
-  ViewMoleculeAtomic (QWidget* /*parent*/ = nullptr);
+  explicit ViewMoleculeAtomic (QWidget* /*parent*/ = nullptr);
   ~ViewMoleculeAtomic () override;
 
 private:
