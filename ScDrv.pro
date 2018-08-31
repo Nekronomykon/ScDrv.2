@@ -125,80 +125,31 @@ win32:before_build.commands = chcp 1251
 
 SOURCES += \
         main.cpp \
-    FrameFile.cpp \
-    MoleculeAcquireBase.cpp \
-    MoleculeAcquireFile.cpp \
-    MoleculeAcquireFileWFN.cpp \
-    MoleculeAcquireFileXYZ.cpp \
-    MoleculeAcquireFileQTAIM.cpp \
-    MoleculeAcquireFileCUBE.cpp \
-    ResetCursor.cpp \
-    TraitsAcquireAtoms.cpp \
-    CodeEditor.cpp \
-    FrameFile.cpp \
-    main.cpp \
-    MoleculeAcquireBase.cpp \
-    MoleculeAcquireFile.cpp \
-    MoleculeAcquireFileCUBE.cpp \
-    MoleculeAcquireFileQTAIM.cpp \
-    MoleculeAcquireFileWFN.cpp \
-    MoleculeAcquireFileXYZ.cpp \
-    QVTKMoleculeWidget.cpp \
-    ResetCursor.cpp \
-    SideBarDecorator.cpp \
-    TraitsAcquireAtoms.cpp \
-    FrameWorkspace.cpp \
-    ModelTextFiles.cpp \
-    EditTextSource.cpp \
-    CodeEditor.cpp \
-    EditTextSource.cpp \
-    FrameFile.cpp \
-    FrameWorkspace.cpp \
-    main.cpp \
-    ModelTextFiles.cpp \
-    MoleculeAcquireBase.cpp \
-    MoleculeAcquireFile.cpp \
-    MoleculeAcquireFileCUBE.cpp \
-    MoleculeAcquireFileQTAIM.cpp \
-    MoleculeAcquireFileWFN.cpp \
-    MoleculeAcquireFileXYZ.cpp \
-    QVTKMoleculeWidget.cpp \
-    ResetCursor.cpp \
-    SideBarDecorator.cpp \
-    TraitsAcquireAtoms.cpp \
-    BrowseFiles.cpp \
-    ViewWorkspace.cpp \
-    MolecularStructure.cpp \
-    ViewMoleculeAtomic.cpp \
-    ModelMoleculeAtomic.cpp \
-    ModelElements.cpp \
-    DelegateElements.cpp \
-    TableElements.cpp \
-    ViewFilesystem.cpp \
-    DelegateElements.cpp \
-    ViewFilesystem.cpp \
-    ModelWorkspace.cpp \
     BondsetBuild.cpp \
     BrowseFiles.cpp \
     CheckComboBox.cpp \
     CodeEditor.cpp \
     DelegateElements.cpp \
     EditTextSource.cpp \
+    ElementData.cpp \
+    ElementDataParser.cpp \
+    Elements.cpp \
     FileFormat.cpp \
     FrameFile.cpp \
     FrameWorkspace.cpp \
-    main.cpp \
     ModelElements.cpp \
     ModelMoleculeAtomic.cpp \
+    ModelMolecularBondset.cpp
     ModelTextFiles.cpp \
     ModelWorkspace.cpp \
     MolecularStructure.cpp \
     MoleculeAcquireBase.cpp \
     MoleculeAcquireFile.cpp \
-    MoleculeAcquireFileCUBE.cpp \
-    MoleculeAcquireFileQTAIM.cpp \
     MoleculeAcquireFileWFN.cpp \
     MoleculeAcquireFileXYZ.cpp \
+    MoleculeAcquireFileQTAIM.cpp \
+    MoleculeAcquireFileCUBE.cpp \
+    QVTKMoleculeMapStyle.cpp \
     QVTKMoleculeWidget.cpp \
     ResetCursor.cpp \
     SideBarDecorator.cpp \
@@ -206,79 +157,19 @@ SOURCES += \
     TraitsAcquireAtoms.cpp \
     ViewFilesystem.cpp \
     ViewMoleculeAtomic.cpp \
-    ViewWorkspace.cpp \
-    ElementData.cpp \
-    Elements.cpp \
-    QVTKMoleculeMapStyle.cpp \
-    ElementDataParser.cpp \
-    ModelMolecularBondset.cpp
+    ViewMoleculeBonds.cpp \
+    ViewWorkspace.cpp
 
 HEADERS += \
-    FrameFile.h \
-    ResetCursor.h \
-    MoleculeAcquireBase.h \
-    MoleculeAcquireFile.h \
-    MoleculeAcquireFileWFN.h \
-    MoleculeAcquireFileXYZ.h \
-    ImplFileName.h \
-    MoleculeAcquireBase.h \
-    MoleculeAcquireFile.h \
-    MoleculeAcquireFileWFN.h \
-    MoleculeAcquireFileXYZ.h \
-    MoleculeAcquireFileQTAIM.h \
-    MoleculeAcquireFileCUBE.h \
-    TraitsAcquireAtoms.h \
-    CodeEditor.h \
-    FrameFile.h \
-    ImplFileName.h \
-    MoleculeAcquireBase.h \
-    MoleculeAcquireFile.h \
-    MoleculeAcquireFileCUBE.h \
-    MoleculeAcquireFileQTAIM.h \
-    MoleculeAcquireFileWFN.h \
-    MoleculeAcquireFileXYZ.h \
-    QVTKMoleculeWidget.h \
-    ResetCursor.h \
-    SideBarDecorator.h \
-    TraitsAcquireAtoms.h \
-    FileFormatContext.h \
-    FrameWorkspace.h \
-    ModelTextFiles.h \
-    EditTextSource.h \
-    CodeEditor.h \
-    EditTextSource.h \
-    FileFormat.h \
-    FrameFile.h \
-    FrameWorkspace.h \
-    ImplFileName.h \
-    ModelTextFiles.h \
-    MoleculeAcquireBase.h \
-    MoleculeAcquireFile.h \
-    MoleculeAcquireFileCUBE.h \
-    MoleculeAcquireFileQTAIM.h \
-    MoleculeAcquireFileWFN.h \
-    MoleculeAcquireFileXYZ.h \
-    QVTKMoleculeWidget.h \
-    ResetCursor.h \
-    SideBarDecorator.h \
-    TraitsAcquireAtoms.h \
-    BrowseFiles.h \
-    ViewWorkspace.h \
-    MolecularStructure.h \
-    ViewMoleculeAtomic.h \
-    ModelMoleculeAtomic.h \
-    ModelElements.h \
-    DelegateElements.h \
-    TableElements.h \
-    ViewFilesystem.h \
-    DelegateElements.h \
-    ViewFilesystem.h \
-    ModelWorkspace.h \
     BondsetBuild.h \
     BrowseFiles.h \
     CheckComboBox.h \
     CodeEditor.h \
     DelegateElements.h \
+    Elements.h \
+    ElementData.h \
+    ElementDataParser.h \
+    ElementDataInternal.h \
     EditTextSource.h \
     FileFormat.h \
     FrameFile.h \
@@ -287,15 +178,17 @@ HEADERS += \
     ImplModelView.h \
     ModelElements.h \
     ModelMoleculeAtomic.h \
+    ModelMolecularBondset.h \
     ModelTextFiles.h \
     ModelWorkspace.h \
     MolecularStructure.h \
     MoleculeAcquireBase.h \
     MoleculeAcquireFile.h \
-    MoleculeAcquireFileCUBE.h \
-    MoleculeAcquireFileQTAIM.h \
     MoleculeAcquireFileWFN.h \
     MoleculeAcquireFileXYZ.h \
+    MoleculeAcquireFileQTAIM.h \
+    MoleculeAcquireFileCUBE.h \
+    QVTKMoleculeMapStyle.h \
     QVTKMoleculeWidget.h \
     ResetCursor.h \
     SideBarDecorator.h \
@@ -303,36 +196,20 @@ HEADERS += \
     TraitsAcquireAtoms.h \
     ViewFilesystem.h \
     ViewMoleculeAtomic.h \
-    ViewWorkspace.h \
-    ElementData.h \
-    Elements.h \
-    QVTKMoleculeMapStyle.h \
-    ElementDataParser.h \
-    ElementDataInternal.h \
-    ModelMolecularBondset.h
+    ViewMoleculeBonds.h \
+    ViewWorkspace.h
 
 FORMS += \
-    FrameWorkspace.ui \
-    FrameWorkspace.ui \
     FrameWorkspace.ui
 
 RESOURCES += \
-    ScDrv.qrc \
-    ScDrv.qrc \
-    ScDrv.qrc \
     ScDrv.qrc
 
 DISTFILES += \
     CMakeLists.txt \
-    CMakeLists.txt \
     CONTRIBUTORS.md \
-    README.md \
-    CMakeLists.txt \
-    README.md \
-    CMakeLists.txt
+    README.md
 
 SUBDIRS += \
-    ScDrv.pro \
-    ScDrv.pro \
     ScDrv.pro
 

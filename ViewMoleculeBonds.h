@@ -11,12 +11,12 @@
 #include "ModelMoleculeBondset.h"
 
 class ViewMoleculeBonds
-: public ImplModelView<ViewMoleculeBonds,QTableView,ModelMolecularBondset>
+    : public ImplModelView<ViewMoleculeBonds, QTableView, ModelMolecularBondset>
 {
-  typedef ImplModelView<ViewMoleculeBonds,QTableView,ModelMolecularBondset> _Base;
+  typedef ImplModelView<ViewMoleculeBonds, QTableView, ModelMolecularBondset> _Base;
   Q_OBJECT
-  public:
-  explicit ViewMoleculeBonds(QWidget* /*parent*/ = nullptr);
+public:
+  explicit ViewMoleculeBonds(QWidget * /*parent*/ = nullptr);
   ~ViewMoleculeBonds() override;
 };
 
