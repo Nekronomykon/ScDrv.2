@@ -13,5 +13,4 @@ SymmetryComboBox::SymmetryComboBox(QWidget *parent)
           << QString("K")   << QString("Kh"); // two spheric...
   this->addItems(all_sym);
   this->setCurrentIndex(0);
-
 }
