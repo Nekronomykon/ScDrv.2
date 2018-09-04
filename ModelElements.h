@@ -34,6 +34,7 @@ class ModelElements
   static const vtkIdType NumTable;
 public:
   explicit ModelElements();
+  ~ModelElements()override;
 
   int columnCount(const QModelIndex &/*parent*/ = QModelIndex()) const override
   {

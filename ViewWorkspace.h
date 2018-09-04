@@ -24,7 +24,7 @@ class ViewWorkspace
 
   Q_OBJECT
 public:
-  ViewWorkspace(QWidget *parent = Q_NULLPTR);
+  explicit ViewWorkspace(QWidget *parent = Q_NULLPTR);
 
   bool addFilePath(const QString & /* path */, FileFormat fmt = FileFormat());
   void listDir(const QString& /*dir_path*/, bool /*bRecurse*/ = false);

@@ -35,7 +35,7 @@ class QVTKMoleculeWidget
 {
   Q_OBJECT
 public:
-  QVTKMoleculeWidget(QWidget * /*parent*/ = Q_NULLPTR);
+  explicit QVTKMoleculeWidget(QWidget * /*parent*/ = Q_NULLPTR);
   ~QVTKMoleculeWidget() override;
 
 public:

@@ -27,7 +27,7 @@ public:
   void PrintSelf(std::ostream &os, vtkIndent indent) VTK_OVERRIDE;
 
 protected:
-  MoleculeAcquireFile();
+  explicit MoleculeAcquireFile();
   ~MoleculeAcquireFile() VTK_OVERRIDE;
 
 private:

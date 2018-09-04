@@ -17,6 +17,7 @@ class ModelMoleculeAtomic
   Q_OBJECT
 public:
   explicit ModelMoleculeAtomic(vtkMolecule * /*pMol*/ = nullptr);
+  ~ModelMoleculeAtomic() override;
 
   vtkMolecule *getMolecule() const { return ptr_mol_; }
   vtkMolecule *resetMolecule(vtkMolecule * /*pNewMol*/ = nullptr);

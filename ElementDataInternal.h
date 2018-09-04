@@ -126,8 +126,8 @@ static const char *Symbols[119] = {
   "Uuq",
   "Uup",
   "Uuh",
-  "Uus",
-  "Uuo"
+  "Ts",
+  "Og"
 };
 
 static const char *LowerSymbols[119] = {
@@ -248,8 +248,8 @@ static const char *LowerSymbols[119] = {
   "uuq",
   "uup",
   "uuh",
-  "uus",
-  "uuo"
+  "ts",
+  "og"
 };
 
 static const char *Names[119] = {
@@ -370,8 +370,8 @@ static const char *Names[119] = {
   "Ununquadium",
   "Ununpentium",
   "Ununhexium",
-  "Ununseptium",
-  "Ununoctium"
+  "Tenessine",
+  "Oganesson"
 };
 
 static const char *LowerNames[119] = {
@@ -492,8 +492,8 @@ static const char *LowerNames[119] = {
   "ununquadium",
   "ununpentium",
   "ununhexium",
-  "ununseptium",
-  "ununoctium"
+  "tenessine",
+  "oganesson"
 };
 
 static const char *PeriodicTableBlocks[119] = {

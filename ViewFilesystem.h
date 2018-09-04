@@ -19,7 +19,7 @@ class ViewFilesystem
 {
   Q_OBJECT
 public:
-  ViewFilesystem(QWidget* parent = Q_NULLPTR);
+  explicit ViewFilesystem(QWidget* parent = Q_NULLPTR);
   ~ViewFilesystem() override;
 
 private:

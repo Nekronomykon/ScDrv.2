@@ -20,7 +20,7 @@ class ImplModelView
 public:
   typedef TBase Base;
   typedef TModel Model;
-  ImplModelView(QWidget *parent = nullptr)
+  explicit ImplModelView(QWidget *parent = nullptr)
       : TBase(parent), ptrModel_(new Model)
   {
     assert(ptrModel_);

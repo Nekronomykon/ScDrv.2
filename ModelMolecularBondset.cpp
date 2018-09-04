@@ -6,6 +6,8 @@ ModelMolecularBondset::ModelMolecularBondset(vtkMolecule* pMol)
   , numberOfBonds_(pMol ? pMol->GetNumberOfBonds() : 0)
 {}
 
+ModelMolecularBondset::~ModelMolecularBondset(){}
+
 vtkMolecule *ModelMolecularBondset::resetMolecule(vtkMolecule *pNewMol)
 {
   if (pNewMol != ptr_mol_) // reassign if ptr changed

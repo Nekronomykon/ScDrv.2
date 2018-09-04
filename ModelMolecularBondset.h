@@ -17,6 +17,7 @@ class ModelMolecularBondset
   Q_OBJECT
 public:
   explicit ModelMolecularBondset(vtkMolecule * /*pMol*/ = nullptr);
+  ~ModelMolecularBondset() override;
 
   vtkMolecule *getMolecule() const { return ptr_mol_; }
   vtkMolecule *resetMolecule(vtkMolecule * /*pNewMol*/ = nullptr);

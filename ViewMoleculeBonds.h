@@ -8,7 +8,7 @@
 
 #include <QWidget>
 #include "ImplModelView.h"
-#include "ModelMoleculeBondset.h"
+#include "ModelMolecularBondset.h"
 
 class ViewMoleculeBonds
     : public ImplModelView<ViewMoleculeBonds, QTableView, ModelMolecularBondset>

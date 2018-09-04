@@ -77,7 +77,7 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ ElementDataParser
   //@}
 
 protected:
-  ElementDataParser();
+  explicit ElementDataParser();
   ~ElementDataParser() override;
 
   void StartElement(const char *name, const char **attr) override;

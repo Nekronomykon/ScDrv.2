@@ -24,7 +24,7 @@ public:
   typedef Child::FileContext  FileFormat;
   typedef QVector<QPair<FileName, FileFormat> > Workspace;
 
-  ModelWorkspace();
+  explicit ModelWorkspace();
   ~ModelWorkspace() override;
 
   int columnCount(const QModelIndex &/*parent*/ = QModelIndex()) const override;

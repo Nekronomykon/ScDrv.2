@@ -10,6 +10,8 @@ ModelMoleculeAtomic::ModelMoleculeAtomic(vtkMolecule *pMol)
     , numberOfAtoms_(!pMol ? 0 : pMol->GetNumberOfAtoms())
 {}
 
+ModelMoleculeAtomic::~ModelMoleculeAtomic(){}
+
 vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
 {
   if (pNewMol != ptr_mol_) // reassign if ptr changed
