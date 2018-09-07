@@ -63,6 +63,11 @@ QVariant ModelMolecularBondset::headerData(int section, Qt::Orientation orientat
     res.setValue(tr("To atom"));
     break;
   }
+  case (ColumnLength):
+  {
+    res.setValue(tr("Bond length"));
+    break;
+  }
   defaut:
     break;
   }
