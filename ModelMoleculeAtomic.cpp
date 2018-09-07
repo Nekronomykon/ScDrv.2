@@ -3,6 +3,8 @@
 #include <QGuiApplication>
 #include <QStringLiteral>
 
+#include <vtkAtom.h>
+
 #include <QPalette>
 
 ModelMoleculeAtomic::ModelMoleculeAtomic(vtkMolecule *pMol)
@@ -44,14 +46,12 @@ int ModelMoleculeAtomic::rowCount(const QModelIndex & /*parent*/) const
 
 QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
 {
-
   if (!mi.isValid())
     return QVariant();
   if (!ptr_mol_ || mi.row() >= ptr_mol_->GetNumberOfAtoms())
     return QVariant();
   if (role == Qt::DisplayRole)
   {
-
     QVariant res;
     assert(ptr_mol_);
     vtkAtom atom = ptr_mol_->GetAtom(mi.row());
@@ -90,7 +90,7 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   }
   else if (role == Qt::BackgroundRole)
   {
-    return (mi.row()+1) % 2 ?
+    return (mi.row() + 1) % 2 ?
     qApp->palette().base() : qApp->palette().alternateBase();
   }
   else
@@ -102,7 +102,7 @@ QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientatio
   if (role != Qt::DisplayRole)
     return QVariant();
   if (orientation == Qt::Vertical)
-    return QStringLiteral("Atom %1").arg(section);
+    return QStringLiteral("Atom %1").arg(section + 1);
   QVariant res;
   switch (section)
   {

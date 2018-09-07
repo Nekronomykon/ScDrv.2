@@ -298,6 +298,8 @@ void FrameFile::showStructureViews()
   view_molecule_->ShowMolecule(this->getMolecule());
   this->addViewWidget(view_atomic_, tr("Atoms"));
   view_atomic_->getViewModel()->resetMolecule(this->getMolecule());
+  this->addViewWidget(view_bonds_, tr("Bonds"));
+  view_bonds_->getViewModel()->resetMolecule(this->getMolecule());
 }
 
 void FrameFile::doReload()

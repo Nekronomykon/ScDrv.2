@@ -7,9 +7,12 @@
 #endif //  _MSC_VER
 
 #include <vtkMolecule.h>
+#include <vtkType.h>
+
+#include <QModelIndex>
+#include <QVariant>
 
 #include <QAbstractTableModel>
-#include <QVariant>
 
 class ModelMoleculeAtomic
     : public QAbstractTableModel

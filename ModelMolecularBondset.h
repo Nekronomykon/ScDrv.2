@@ -6,10 +6,13 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-#include <QAbstractTableModel>
-
 #include <vtkMolecule.h>
 #include <vtkType.h>
+
+#include <QModelIndex>
+#include <QVariant>
+
+#include <QAbstractTableModel>
 
 class ModelMolecularBondset
     : public QAbstractTableModel
