@@ -139,7 +139,7 @@ SOURCES += \
     FrameWorkspace.cpp \
     ModelElements.cpp \
     ModelMoleculeAtomic.cpp \
-    ModelMolecularBondset.cpp
+    ModelMolecularBondset.cpp \
     ModelTextFiles.cpp \
     ModelWorkspace.cpp \
     MolecularStructure.cpp \
