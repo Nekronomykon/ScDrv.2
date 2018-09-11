@@ -22,8 +22,7 @@
 =========================================================================*/
 /**
  * @class   ElementData
- * @brief   Contains chemical data from the Blue
- * Obelisk Data Repository
+ * @brief   Contains chemical data from the Blue Obelisk Data Repository
  *
  *
  * The Blue Obelisk Data Repository is a free, open repository of

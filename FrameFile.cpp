@@ -50,21 +50,21 @@ FrameFile::FileContext FrameFile::castFormatFromPath(const QString &path)
   QList<FileContext> all_fmts;
   auto it_fmt = all_formats.begin();
   do
-  {
-    if (it_fmt.value() == sx) // (it_fmt.value().indexOf(sx) != -1) or whatever else similar...
-      all_fmts.push_back(it_fmt.key());
-  } while (++it_fmt != all_formats.end());
+    {
+      if (it_fmt.value() == sx) // (it_fmt.value().indexOf(sx) != -1) or whatever else similar...
+        all_fmts.push_back(it_fmt.key());
+    } while (++it_fmt != all_formats.end());
 
   if (all_fmts.size() == 1)
     res = all_fmts.front();
   // if (all_fmts.empty())  all_fmts.copy(all_formats);
   if (!res)
-  {
-    QMessageBox::warning(nullptr, tr("Ambiguous names")
-      , tr("More than one file format could be held in following file:\n%1\nUser intervention is required").arg(path)
-      , QMessageBox::Ok | QMessageBox::Ignore
-    );
-  }
+    {
+      QMessageBox::warning(nullptr, tr("Ambiguous names")
+                           , tr("More than one file format could be held in following file:\n%1\nUser intervention is required").arg(path)
+                           , QMessageBox::Ok | QMessageBox::Ignore
+                           );
+    }
   return res;
 }
 
@@ -79,9 +79,9 @@ QStringList FrameFile::readRecentFiles(QSettings &settings)
   QStringList result;
   const int count = settings.beginReadArray(keyRecentFiles());
   for (int i = 0; i < count; ++i) {
-    settings.setArrayIndex(i);
-    result.append(settings.value(keyFile()).toString());
-  }
+      settings.setArrayIndex(i);
+      result.append(settings.value(keyFile()).toString());
+    }
   settings.endArray();
   return result;
 }
@@ -91,9 +91,9 @@ int FrameFile::writeRecentFiles(const QStringList &files, QSettings &settings)
   const int count = files.size();
   settings.beginWriteArray(keyRecentFiles());
   for (int i = 0; i < count; ++i) {
-    settings.setArrayIndex(i);
-    settings.setValue(keyFile(), files.at(i));
-  }
+      settings.setArrayIndex(i);
+      settings.setValue(keyFile(), files.at(i));
+    }
   settings.endArray();
   return count;
 }
@@ -121,33 +121,33 @@ QString FrameFile::FileInputFilter()
 
   auto it_fmt = all_formats.begin();
   do
-  {
-    //if (!it_fmt.key().hasBuild())
-    //  continue;
+    {
+      //if (!it_fmt.key().hasBuild())
+      //  continue;
 
-    res += it_fmt.key();
-    QString mask(tr("*."));
-    mask += it_fmt.value();
+      res += it_fmt.key();
+      QString mask(tr("*."));
+      mask += it_fmt.value();
 
-    regx.insert(mask);
+      regx.insert(mask);
 
-    res += " (";
-    res += mask;
-    res += ");;";
-  } while (++it_fmt != all_formats.end());
+      res += " (";
+      res += mask;
+      res += ");;";
+    } while (++it_fmt != all_formats.end());
 
   if (!regx.isEmpty())
-  {
-    res += "Known file types (";
-    QString reg;
-    for (const QString &extn : regx)
     {
-      reg += extn;
-      reg += " ";
+      res += "Known file types (";
+      QString reg;
+      for (const QString &extn : regx)
+        {
+          reg += extn;
+          reg += " ";
+        }
+      res += reg.trimmed();
+      res += ");;";
     }
-    res += reg.trimmed();
-    res += ");;";
-  }
   res += tr("All files (*.*)");
   return res;
 }
@@ -156,13 +156,13 @@ FrameFile::FileContext FrameFile::SetupFileInputContext(const QString &key)
 {
   auto it_fmt = all_formats.begin();
   do
-  {
-    if (key.startsWith(it_fmt.key()))
     {
-      format_active = it_fmt.key();
-      return format_active;
-    }
-  } while (++it_fmt != all_formats.end());
+      if (key.startsWith(it_fmt.key()))
+        {
+          format_active = it_fmt.key();
+          return format_active;
+        }
+    } while (++it_fmt != all_formats.end());
 
   return FileContext();
 }
@@ -218,15 +218,15 @@ bool FrameFile::acquireUsing()
   // convert to const char*
   TypeFileName str = this->dumpSource();
   if (!str.isEmpty())
-  {
-    vtkSmartPointer<T> reader(vtkSmartPointer<T>::New());
-    reader->SetOutput(structure_.Initialize());
-    QByteArray bytes = str.toLatin1();
-    reader->ResetFileName(bytes.data());
+    {
+      vtkSmartPointer<T> reader(vtkSmartPointer<T>::New());
+      reader->SetOutput(structure_.Initialize());
+      QByteArray bytes = str.toLatin1();
+      reader->ResetFileName(bytes.data());
 
-    reader->Update();
-    structure_.UpdateBonds();
-  }
+      reader->Update();
+      structure_.UpdateBonds();
+    }
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
 
@@ -256,15 +256,28 @@ EditTextSource *FrameFile::getEditSource() const
 {
   return edit_source_;
 }
-
-ViewMoleculeAtomic *FrameFile::getEditAtomic() const
+EditTextSource *FrameFile::setEditSource()
 {
-  return view_atomic_;
+  auto* pOne = this->getEditSource();
+  if(pOne) this->setCurrentWidget(pOne);
+  return pOne;
 }
 
 QVTKMoleculeWidget *FrameFile::getViewStructure() const
 {
-  return view_molecule_;
+  return view_current_.contains(view_molecule_) ? view_molecule_ : nullptr;
+}
+
+QVTKMoleculeWidget *FrameFile::setViewStructure()
+{
+  auto* pOne = this->getViewStructure();
+  if(pOne) this->setCurrentWidget(pOne);
+  return pOne;
+}
+
+ViewMoleculeAtomic *FrameFile::getEditAtomic() const
+{
+  return view_atomic_;
 }
 
 void FrameFile::InterpretFileName()
@@ -285,9 +298,9 @@ void FrameFile::hideStructureViews()
 {
   this->setCurrentWidget(edit_source_);
   while (this->count() > 1)
-  {
-    this->removeTab(1);
-  }
+    {
+      this->removeTab(1);
+    }
   view_current_.resize(1);
   view_current_[0] = edit_source_; // may be excessive, but...
 }

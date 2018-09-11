@@ -56,6 +56,7 @@ public:
 
   typedef FileFormatContext<FrameFile> FileContext;
   typedef vtkSmartPointer<BondsetBuild> BuildBonds;
+  typedef QVTKMoleculeWidget ViewMolecule;
 
   // static methods:
   static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
@@ -119,8 +120,11 @@ public:
 
   // views
   EditTextSource *getEditSource() const;
-  ViewMoleculeAtomic *getEditAtomic() const;
+  EditTextSource *setEditSource();
   QVTKMoleculeWidget *getViewStructure() const;
+  QVTKMoleculeWidget *setViewStructure();
+  ViewMoleculeAtomic *getEditAtomic() const;
+  ViewMoleculeAtomic *setEditAtomic();
 
 protected:
   template <class A>

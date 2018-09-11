@@ -42,6 +42,11 @@ const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_Fast =
     {true, vtkMoleculeMapper::UnitRadius, 0.375f, true, false, vtkMoleculeMapper::SingleColor, 0.1f};
 // [3] -> fast internal
 
+QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFast() { return style_Fast; }
+QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFill() { return style_VdW; }
+QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS; }
+QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
+
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
     : QVTKOpenGLWidget(parent), mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
 {
@@ -83,7 +88,7 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
 
 bool QVTKMoleculeWidget::resetStyle(const QVTKMoleculeMapStyle &style)
 {
-  if(style == mol_style_)
+  if (style == mol_style_)
     return false;
   mol_style_ = style;
   this->doRender();
@@ -96,10 +101,10 @@ void QVTKMoleculeWidget::doRender()
   this->GetRenderWindow()->Render();
 }
 
-bool QVTKMoleculeWidget::moleculeInBallsSticks() const {return bool (mol_style_ == style_BnS);}
+bool QVTKMoleculeWidget::moleculeInBallsSticks() const { return bool(mol_style_ == style_BnS); }
 
-bool QVTKMoleculeWidget::moleculeInSpaceFill() const   {return bool (mol_style_ == style_VdW);}
+bool QVTKMoleculeWidget::moleculeInSpaceFill() const { return bool(mol_style_ == style_VdW); }
 
-bool QVTKMoleculeWidget::moleculeInFastRender() const  {return bool (mol_style_ == style_Fast);}
+bool QVTKMoleculeWidget::moleculeInFastRender() const { return bool(mol_style_ == style_Fast); }
 
-bool QVTKMoleculeWidget::moleculeInSticks() const {return bool (mol_style_ == style_Sticks);}
+bool QVTKMoleculeWidget::moleculeInSticks() const { return bool(mol_style_ == style_Sticks); }

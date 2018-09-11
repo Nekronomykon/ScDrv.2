@@ -68,7 +68,7 @@ QVariant ModelMolecularBondset::headerData(int section, Qt::Orientation orientat
     res.setValue(tr("Bond length"));
     break;
   }
-  defaut:
+  default:
     break;
   }
   return res;
@@ -94,15 +94,20 @@ QVariant ModelMolecularBondset::data(const QModelIndex &mi, int role) const
 {
   if (!mi.isValid())
     return QVariant();
-  if (!ptr_mol_ || mi.row() >= ptr_mol_->GetNumberOfAtoms())
+  if (!ptr_mol_ || mi.row() >= ptr_mol_->GetNumberOfBonds())
     return QVariant();
   if (role == Qt::DisplayRole)
   {
     QVariant res;
-    assert(ptr_mol_);
-    vtkBond atom = ptr_mol_->GetBond(mi.row());
+    vtkBond bond = ptr_mol_->GetBond(mi.row());
     switch (mi.column())
     {
+    case(ColumnFrom):
+      res.setValue(tr("[%1]").arg(bond.GetBeginAtomId()));
+      break;
+    case(ColumnTo):
+      res.setValue(tr("[%1]").arg(bond.GetEndAtomId()));
+      break;
     default:
       break;
     }

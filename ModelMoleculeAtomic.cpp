@@ -4,6 +4,7 @@
 #include <QStringLiteral>
 
 #include <vtkAtom.h>
+#include "ElementData.h"
 
 #include <QPalette>
 
@@ -53,7 +54,7 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   if (role == Qt::DisplayRole)
   {
     QVariant res;
-    assert(ptr_mol_);
+    vtkNew<ElementData> elem;
     vtkAtom atom = ptr_mol_->GetAtom(mi.row());
     switch (mi.column())
     {

@@ -71,6 +71,11 @@ protected slots:
   void on_actionNew__triggered();
   void on_actionOpen__triggered();
   void on_actionToggleLayout__triggered();
+  //
+  void on_actionMolFast__triggered();
+  void on_actionMolBalls__triggered();
+  void on_actionMolStick__triggered();
+  void on_actionMolSpace__triggered();
 
   void loadPathContentFrom(const QString&);
 

@@ -30,5 +30,5 @@ void DelegateElements::updateEditorGeometry(QWidget *editor
   , const QStyleOptionViewItem &option
   , const QModelIndex &index) const
 {
-
+  TableElements* pTable = static_cast<TableElements*>(editor);
 }

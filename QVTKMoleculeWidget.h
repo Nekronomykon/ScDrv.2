@@ -38,9 +38,16 @@ public:
   explicit QVTKMoleculeWidget(QWidget * /*parent*/ = Q_NULLPTR);
   ~QVTKMoleculeWidget() override;
 
+  typedef QVTKMoleculeMapStyle MolStyle;
+
+  static MolStyle styleFast();
+  static MolStyle styleFill();
+  static MolStyle styleBall();
+  static MolStyle styleBond();
+
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
-  bool resetStyle(const QVTKMoleculeMapStyle& /*style*/);
+  bool resetStyle(const QVTKMoleculeMapStyle & /*style*/);
   void doRender();
 
   bool moleculeInBallsSticks() const;
@@ -55,12 +62,12 @@ private:
 
 private:
   MolMapper mol_mapper_;
-  QVTKMoleculeMapStyle mol_style_;
+  MolStyle mol_style_;
 
-  static const QVTKMoleculeMapStyle style_VdW;
-  static const QVTKMoleculeMapStyle style_BnS;
-  static const QVTKMoleculeMapStyle style_Fast;
-  static const QVTKMoleculeMapStyle style_Sticks;
+  static const MolStyle style_VdW;
+  static const MolStyle style_BnS;
+  static const MolStyle style_Fast;
+  static const MolStyle style_Sticks;
 };
 
 #endif // !QVTK_MoleculeWidget_h
