@@ -4,7 +4,7 @@
 #include <QStringLiteral>
 
 #include <vtkAtom.h>
-#include "ElementData.h"
+#include "Elements.h"
 
 #include <QPalette>
 
@@ -54,13 +54,13 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   if (role == Qt::DisplayRole)
   {
     QVariant res;
-    vtkNew<ElementData> elem;
+    vtkNew<PeriodicElements> elem;
     vtkAtom atom = ptr_mol_->GetAtom(mi.row());
     switch (mi.column())
     {
     case (ColumnElement):
     {
-      res.setValue(atom.GetAtomicNumber());
+      res.setValue(QString(elem->GetSymbol( atom.GetAtomicNumber() ) ) );
       break;
     }
     case (ColumnNumber):
@@ -103,13 +103,13 @@ QVariant ModelMoleculeAtomic::headerData(int section, Qt::Orientation orientatio
   if (role != Qt::DisplayRole)
     return QVariant();
   if (orientation == Qt::Vertical)
-    return QStringLiteral("Atom %1").arg(section + 1);
+    return QStringLiteral("[%1]").arg(section);
   QVariant res;
   switch (section)
   {
   case (ColumnID):
   {
-    res.setValue(tr("ID"));
+    res.setValue(tr("Atom ID"));
     break;
   }
   case (ColumnElement):
