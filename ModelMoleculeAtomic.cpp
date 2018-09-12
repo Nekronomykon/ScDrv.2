@@ -9,7 +9,8 @@
 #include <QPalette>
 
 ModelMoleculeAtomic::ModelMoleculeAtomic(vtkMolecule *pMol)
-    : QAbstractTableModel(), ptr_mol_(pMol)
+    : QAbstractTableModel()
+    , ptr_mol_(pMol)
     , numberOfAtoms_(!pMol ? 0 : pMol->GetNumberOfAtoms())
 {}
 
@@ -22,15 +23,15 @@ vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
   vtkIdType nNow = !ptr_mol_ ? 0 : ptr_mol_->GetNumberOfAtoms();
   if(nNow > numberOfAtoms_)
   {
-    beginInsertRows(QModelIndex(),numberOfAtoms_,nNow - 1);
+    this->beginInsertRows(QModelIndex(),numberOfAtoms_,nNow - 1);
     numberOfAtoms_ = nNow;
-    endInsertRows();
+    this->endInsertRows();
   }
   if(nNow < numberOfAtoms_)
   {
-    beginRemoveRows(QModelIndex(),nNow,numberOfAtoms_ - 1);
+    this->beginRemoveRows(QModelIndex(),nNow,numberOfAtoms_ - 1);
     numberOfAtoms_ = nNow;
-    endRemoveRows();
+    this->endRemoveRows();
   }
   return pNewMol;
 }

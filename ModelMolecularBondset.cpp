@@ -8,7 +8,9 @@
 #include <QPalette>
 
 ModelMolecularBondset::ModelMolecularBondset(vtkMolecule *pMol)
-    : QAbstractTableModel(), ptr_mol_(pMol), numberOfBonds_(pMol ? pMol->GetNumberOfBonds() : 0)
+    : QAbstractTableModel()
+    , ptr_mol_(pMol)
+    , numberOfBonds_(pMol ? pMol->GetNumberOfBonds() : 0)
 {
 }
 
@@ -21,15 +23,15 @@ vtkMolecule *ModelMolecularBondset::resetMolecule(vtkMolecule *pNewMol)
   vtkIdType nNow = !ptr_mol_ ? 0 : ptr_mol_->GetNumberOfBonds();
   if (nNow > numberOfBonds_)
   {
-    beginInsertRows(QModelIndex(), numberOfBonds_, nNow - 1);
+    this->beginInsertRows(QModelIndex(), numberOfBonds_, nNow - 1);
     numberOfBonds_ = nNow;
-    endInsertRows();
+    this->endInsertRows();
   }
   if (nNow < numberOfBonds_)
   {
-    beginRemoveRows(QModelIndex(), nNow, numberOfBonds_ - 1);
+    this->beginRemoveRows(QModelIndex(), nNow, numberOfBonds_ - 1);
     numberOfBonds_ = nNow;
-    endRemoveRows();
+    this->endRemoveRows();
   }
   return pNewMol;
 }
