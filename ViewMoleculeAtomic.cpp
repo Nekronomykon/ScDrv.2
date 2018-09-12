@@ -2,15 +2,18 @@
 
 #include "ModelMoleculeAtomic.h"
 #include <QAbstractTableModel>
-#include "DelegateElements.h"
 
-ViewMoleculeAtomic::ViewMoleculeAtomic(QWidget* parent)
-  : _Base(parent)
-  , delegate_Mendeleev_(new DelegateElements())
+#include "DelegateElementTable.h"
+#include "DelegateElementSpin.h"
+
+ViewMoleculeAtomic::ViewMoleculeAtomic(QWidget *parent)
+    : _Base(parent)
+    , delegate_Mendeleev_(new DelegateElementTable())
+    , delegate_ScrollElements_(new DelegateElementSpin())
 {
   this->setSelectionBehavior(QAbstractItemView::SelectRows);
-  this->setItemDelegateForColumn(ModelMoleculeAtomic::ColumnElement
-                                 , delegate_Mendeleev_);
+  this->setItemDelegateForColumn(ModelMoleculeAtomic::ColumnElement, delegate_Mendeleev_);
+  this->setItemDelegateForColumn(ModelMoleculeAtomic::ColumnNumber, delegate_ScrollElements_);
 }
 
-ViewMoleculeAtomic::~ViewMoleculeAtomic(){}
+ViewMoleculeAtomic::~ViewMoleculeAtomic() {}

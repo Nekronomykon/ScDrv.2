@@ -9,7 +9,9 @@
 #include <QPointer>
 #include <QWidget>
 
-#include "DelegateElements.h"
+#include "DelegateElementTable.h"
+#include "DelegateElementSpin.h"
+
 #include "ModelMoleculeAtomic.h"
 
 #include <QTableView>
@@ -25,7 +27,8 @@ public:
   ~ViewMoleculeAtomic () override;
 
 private:
-  QPointer<DelegateElements> delegate_Mendeleev_;
+  QPointer<DelegateElementTable> delegate_Mendeleev_;
+  QPointer<DelegateElementSpin> delegate_ScrollElements_;
 };
 
 #endif // ViewMolecule_Atomic_h

@@ -129,7 +129,6 @@ SOURCES += \
     BrowseFiles.cpp \
     CheckComboBox.cpp \
     CodeEditor.cpp \
-    DelegateElements.cpp \
     EditTextSource.cpp \
     ElementData.cpp \
     ElementDataParser.cpp \
@@ -158,14 +157,15 @@ SOURCES += \
     ViewFilesystem.cpp \
     ViewMoleculeAtomic.cpp \
     ViewMoleculeBonds.cpp \
-    ViewWorkspace.cpp
+    ViewWorkspace.cpp \
+    DelegateElementSpin.cpp \
+    DelegateElementTable.cpp
 
 HEADERS += \
     BondsetBuild.h \
     BrowseFiles.h \
     CheckComboBox.h \
     CodeEditor.h \
-    DelegateElements.h \
     Elements.h \
     ElementData.h \
     ElementDataParser.h \
@@ -197,7 +197,9 @@ HEADERS += \
     ViewFilesystem.h \
     ViewMoleculeAtomic.h \
     ViewMoleculeBonds.h \
-    ViewWorkspace.h
+    ViewWorkspace.h \
+    DelegateElementSpin.h \
+    DelegateElementTable.h
 
 FORMS += \
     FrameWorkspace.ui

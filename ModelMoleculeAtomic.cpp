@@ -20,6 +20,7 @@ vtkMolecule *ModelMoleculeAtomic::resetMolecule(vtkMolecule *pNewMol)
 {
   if (pNewMol != ptr_mol_) // reassign if ptr changed
     std::swap(pNewMol, ptr_mol_);
+    
   vtkIdType nNow = !ptr_mol_ ? 0 : ptr_mol_->GetNumberOfAtoms();
   if(nNow > numberOfAtoms_)
   {

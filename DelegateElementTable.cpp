@@ -1,12 +1,12 @@
-#include "DelegateElements.h"
+#include "DelegateElementTable.h"
 
 #include "TableElements.h"
 
-DelegateElements::DelegateElements()
+DelegateElementTable::DelegateElementTable()
   : QStyledItemDelegate()
 {}
 
-QWidget* DelegateElements::createEditor(QWidget *parent
+QWidget* DelegateElementTable::createEditor(QWidget *parent
   , const QStyleOptionViewItem &/* option */
   , const QModelIndex &/* index */) const
         {
@@ -15,18 +15,18 @@ QWidget* DelegateElements::createEditor(QWidget *parent
           return pTable;
         }
 
-void DelegateElements::setEditorData(QWidget *editor, const QModelIndex &index) const
+void DelegateElementTable::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 
 }
 
-void DelegateElements::setModelData(QWidget *editor, QAbstractItemModel *model,
+void DelegateElementTable::setModelData(QWidget *editor, QAbstractItemModel *model,
   const QModelIndex &index) const
 {
 
 }
 
-void DelegateElements::updateEditorGeometry(QWidget *editor
+void DelegateElementTable::updateEditorGeometry(QWidget *editor
   , const QStyleOptionViewItem &option
   , const QModelIndex &index) const
 {

@@ -12,12 +12,12 @@
 
 #include <QStyledItemDelegate>
 
-class DelegateElements
+class DelegateElementTable
     : public QStyledItemDelegate
 {
   Q_OBJECT
 public:
-  explicit DelegateElements();
+  explicit DelegateElementTable();
 
   QWidget* createEditor(QWidget* /*parent*/,
         const QStyleOptionViewItem &/* option */,
