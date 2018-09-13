@@ -1,5 +1,7 @@
 #include "DelegateElementSpin.h"
 
+#include "Elements.h"
+
 #include <QSpinBox>
 
 DelegateElementSpin::DelegateElementSpin(QObject* parent)
@@ -13,13 +15,13 @@ QWidget* DelegateElementSpin::createEditor(QWidget *parent,
     QSpinBox *editor = new QSpinBox(parent);
     editor->setFrame(false);
     editor->setMinimum(0);
-    editor->setMaximum(100);
+    editor->setMaximum(PeriodicElements::NumberOfElements());
 
     return editor;
 }
 
-void DelegateElementSpin::setEditorData(QWidget *editor,
-                                    const QModelIndex &index) const
+void DelegateElementSpin::setEditorData(QWidget *editor
+,   const QModelIndex &index) const
 {
     int value = index.model()->data(index, Qt::EditRole).toInt();
     QSpinBox *spinBox = static_cast<QSpinBox*>(editor);

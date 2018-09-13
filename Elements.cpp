@@ -58,38 +58,38 @@ void PeriodicElements::PrintSelf(ostream& os, vtkIndent indent)
   this->Superclass::PrintSelf(os,indent);
 
   os << indent << "DataOfElements:\n";
-  this->DataOfElements->PrintSelf(os, indent.GetNextIndent());
+  DataOfElements->PrintSelf(os, indent.GetNextIndent());
 }
 
 
 //----------------------------------------------------------------------------
-unsigned short PeriodicElements::GetNumberOfElements()
+unsigned short PeriodicElements::NumberOfElements()
 {
-  return this->DataOfElements->GetNumberOfElements();
+  return DataOfElements->GetNumberOfElements();
 }
 
 //----------------------------------------------------------------------------
 const char * PeriodicElements::GetSymbol(unsigned short atomicNum)
 {
-  if (atomicNum > this->GetNumberOfElements())
+  if (atomicNum > NumberOfElements())
   {
     vtkWarningMacro("Atomic number out of range ! Using 0 instead of " << atomicNum);
     atomicNum = 0;
   }
 
-  return this->DataOfElements->GetSymbols()->GetValue(atomicNum).c_str();
+  return DataOfElements->GetSymbols()->GetValue(atomicNum).c_str();
 }
 
 //----------------------------------------------------------------------------
 const char * PeriodicElements::GetElementName(unsigned short atomicNum)
 {
-  if (atomicNum > this->GetNumberOfElements())
+  if (atomicNum > this->NumberOfElements())
   {
     vtkWarningMacro("Atomic number out of range ! Using 0 instead of " << atomicNum);
     atomicNum = 0;
   }
 
-  return this->DataOfElements->GetNames()->GetValue(atomicNum).c_str();
+  return DataOfElements->GetNames()->GetValue(atomicNum).c_str();
 }
 
 //----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ unsigned short PeriodicElements::GetAtomicNumber(const char *str)
   // works, return the integer
   int atoi_num = atoi(str);
   if (atoi_num > 0 &&
-      atoi_num <= static_cast<int>(this->GetNumberOfElements()))
+      atoi_num <= static_cast<int>(NumberOfElements()))
   {
     return static_cast<unsigned short>(atoi_num);
   }
@@ -129,7 +129,7 @@ unsigned short PeriodicElements::GetAtomicNumber(const char *str)
   // Cache pointers:
   vtkStringArray *lnames = this->DataOfElements->GetLowerNames();
   vtkStringArray *lsymbols = this->DataOfElements->GetLowerSymbols();
-  const unsigned short numElements = this->GetNumberOfElements();
+  const unsigned short numElements = NumberOfElements();
 
   // Compare with other lowercase strings
   for (unsigned short ind = 0; ind <= numElements; ++ind)
@@ -171,32 +171,32 @@ unsigned short PeriodicElements::GetAtomicNumber(const char *str)
 //----------------------------------------------------------------------------
 float PeriodicElements::GetCovalentRadius(unsigned short atomicNum)
 {
-  if (atomicNum > this->GetNumberOfElements())
+  if (atomicNum > NumberOfElements())
   {
     vtkWarningMacro("Atomic number out of range ! Using 0 instead of " << atomicNum);
     atomicNum = 0;
   }
 
-  return this->DataOfElements->GetCovalentRadii()->GetValue(atomicNum);
+  return DataOfElements->GetCovalentRadii()->GetValue(atomicNum);
 }
 
 //----------------------------------------------------------------------------
 float PeriodicElements::GetVDWRadius(unsigned short atomicNum)
 {
-  if (atomicNum > this->GetNumberOfElements())
+  if (atomicNum > NumberOfElements())
   {
     vtkWarningMacro("Atomic number out of range ! Using 0 instead of " << atomicNum);
     atomicNum = 0;
   }
 
-  return this->DataOfElements->GetVDWRadii()->GetValue(atomicNum);
+  return DataOfElements->GetVDWRadii()->GetValue(atomicNum);
 }
 
 //----------------------------------------------------------------------------
 float PeriodicElements::GetMaxVDWRadius()
 {
   float maxRadius = 0;
-  for(unsigned short i = 0; i < this->GetNumberOfElements(); i++)
+  for(unsigned short i = 0; i < NumberOfElements(); i++)
   {
     maxRadius = std::max(maxRadius, this->GetVDWRadius(i));
   }
@@ -206,8 +206,8 @@ float PeriodicElements::GetMaxVDWRadius()
 //----------------------------------------------------------------------------
 void PeriodicElements::GetDefaultLUT(vtkLookupTable *lut)
 {
-  const unsigned short numColors = this->GetNumberOfElements() + 1;
-  vtkFloatArray *colors = this->DataOfElements->GetDefaultColors();
+  const unsigned short numColors = NumberOfElements() + 1;
+  vtkFloatArray *colors = DataOfElements->GetDefaultColors();
   lut->SetNumberOfColors(numColors);
   lut->SetIndexedLookup(true);
   float rgb[3];
@@ -223,14 +223,14 @@ void PeriodicElements::GetDefaultLUT(vtkLookupTable *lut)
 void PeriodicElements::GetDefaultRGBTuple(unsigned short atomicNum,
  float rgb[3])
 {
-  this->DataOfElements->GetDefaultColors()->GetTypedTuple(atomicNum, rgb);
+  DataOfElements->GetDefaultColors()->GetTypedTuple(atomicNum, rgb);
 }
 
 //----------------------------------------------------------------------------
 vtkColor3f PeriodicElements::GetDefaultRGBTuple(unsigned short atomicNum)
 {
   vtkColor3f result;
-  this->DataOfElements->GetDefaultColors()->GetTypedTuple(atomicNum
+  DataOfElements->GetDefaultColors()->GetTypedTuple(atomicNum
                                                           , result.GetData());
   return result;
 }

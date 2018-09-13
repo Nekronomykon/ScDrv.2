@@ -159,7 +159,8 @@ SOURCES += \
     ViewMoleculeBonds.cpp \
     ViewWorkspace.cpp \
     DelegateElementSpin.cpp \
-    DelegateElementTable.cpp
+    DelegateElementTable.cpp \
+    TableAtomTypes.cpp
 
 HEADERS += \
     BondsetBuild.h \
@@ -199,7 +200,8 @@ HEADERS += \
     ViewMoleculeBonds.h \
     ViewWorkspace.h \
     DelegateElementSpin.h \
-    DelegateElementTable.h
+    DelegateElementTable.h \
+    TableAtomTypes.h
 
 FORMS += \
     FrameWorkspace.ui

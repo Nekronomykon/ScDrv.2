@@ -61,7 +61,7 @@ public:
   /**
    * Returns the number of elements in the periodic table.
    */
-  unsigned short GetNumberOfElements();
+  static unsigned short NumberOfElements();
 
   /**
    * Given an atomic number, returns the symbol associated with the

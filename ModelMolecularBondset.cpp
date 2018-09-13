@@ -51,10 +51,15 @@ QVariant ModelMolecularBondset::headerData(int section, Qt::Orientation orientat
   if (role != Qt::DisplayRole)
     return QVariant();
   if (orientation == Qt::Vertical)
-    return QStringLiteral("Bond %1").arg(section + 1);
+    return QStringLiteral("[%1]").arg(section);
   QVariant res;
   switch (section)
   {
+  case (ColumnID):
+  {
+    res.setValue(tr("Bond ID"));
+    break;
+  }
   case (ColumnFrom):
   {
     res.setValue(tr("From atom"));
@@ -105,10 +110,10 @@ QVariant ModelMolecularBondset::data(const QModelIndex &mi, int role) const
     switch (mi.column())
     {
     case(ColumnFrom):
-      res.setValue(tr("[%1]").arg(bond.GetBeginAtomId()));
+      res.setValue(bond.GetBeginAtomId());
       break;
     case(ColumnTo):
-      res.setValue(tr("[%1]").arg(bond.GetEndAtomId()));
+      res.setValue(bond.GetEndAtomId());
       break;
     default:
       break;
