@@ -5,13 +5,15 @@
 
 #include <QSurfaceFormat>
 
+#include "QVTKMoleculeWidget.h" // to specify Surface Format, as below
+
 #include <QVTKApplication.h>
 
 #include "FrameWorkspace.h"
 
 int main(int argc, char *argv[])
 {
-  QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
+  QSurfaceFormat::setDefaultFormat(QVTKMoleculeWidget::defaultFormat());
   QVTKApplication app(argc, argv);
   // app.setAttribute(Qt::AA_NativeWindows, false);
   QCoreApplication::setApplicationName("ScrewDriver");
