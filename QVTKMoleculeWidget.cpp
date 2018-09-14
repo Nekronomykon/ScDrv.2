@@ -14,6 +14,7 @@
 
 #include <vtkRenderer.h>
 
+#include <vtkOpenGLActor.h>
 #include <vtkOpenGLRenderer.h>
 #include <vtkOpenGLMoleculeMapper.h>
 
@@ -22,7 +23,7 @@
 #include <vtkPolyDataMapper.h>
 
 typedef vtkSmartPointer<vtkLODActor> LODActor;
-
+typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
 typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> OpenGLMolMapper;
 
@@ -48,18 +49,19 @@ QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS;
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-    : QVTKOpenGLWidget(parent), mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
+    : BaseWidget(parent), mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
 {
   // this->setAttribute(Qt::WA_NativeWindow, false);
   vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
   this->SetRenderWindow(renderWindow);
 
   // Molecule actor
-  LODActor mol = LODActor::New();
+  Actor mol(OpenGLActor::New());
   mol->SetMapper(mol_mapper_.Get());
 
   // VTK Renderer
   Renderer renderer(OpenGLRenderer::New());
+  renderer->SetUseFXAA(true); // antaliasing is now On
 
   vtkNew<vtkNamedColors> colrs;
   // renderer->SetBackground(colrs->GetColor3d("Gainsboro").GetData());

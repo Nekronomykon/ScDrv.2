@@ -21,6 +21,7 @@
 
 #include <QVTKOpenGLWidget.h>
 #include <QVTKOpenGLSimpleWidget.h>
+#include <QVTKOpenGLNativeWidget.h>
 
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
@@ -35,6 +36,7 @@ class QVTKMoleculeWidget
 {
   Q_OBJECT
 public:
+  typedef QVTKOpenGLWidget BaseWidget;
   explicit QVTKMoleculeWidget(QWidget * /*parent*/ = Q_NULLPTR);
   ~QVTKMoleculeWidget() override;
 
