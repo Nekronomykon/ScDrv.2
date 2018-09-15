@@ -36,9 +36,9 @@
         <file>images/Next.png</file>
         <file>images/Options.png</file>
         <file>images/Prev.png</file>
-        <file>images/EditSrc.png</file>
+        <file>images/SrcCast.png</file>
         <file>images/OpenDir.png</file>
-        <file>images/Edit.png</file>
+        <file>images/SrcEdit.png</file>
         <file>images/SaveCopy.png</file>
     </qresource>
 </RCC>

@@ -15,6 +15,8 @@
 
 #include "BondsetBuild.h"
 
+#include "GraphPath.h"
+
 #include <deque>
 
 typedef std::pair<vtkIdType,vtkIdType> IncidenceIndex;

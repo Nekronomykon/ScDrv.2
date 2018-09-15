@@ -95,6 +95,9 @@
     <property name="title">
      <string>&amp;Tools</string>
     </property>
+    <addaction name="actionSourceEdit_"/>
+    <addaction name="actionSourceCast_"/>
+    <addaction name="separator"/>
     <addaction name="actionOptions_"/>
    </widget>
    <widget class="QMenu" name="menuWindows_">
@@ -279,6 +282,16 @@
   <action name="actionRenderLabelsBond_">
    <property name="text">
     <string>Bond labels</string>
+   </property>
+  </action>
+  <action name="actionSourceEdit_">
+   <property name="text">
+    <string>&amp;Edit source..</string>
+   </property>
+  </action>
+  <action name="actionSourceCast_">
+   <property name="text">
+    <string>&amp;Interpret..</string>
    </property>
   </action>
  </widget>

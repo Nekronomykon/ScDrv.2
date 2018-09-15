@@ -130,6 +130,12 @@ void FrameWorkspace::setupActions()
   actionClearAll_->setIcon(iconClearAll);
   actionClearAll_->setShortcuts(QKeySequence::DeleteCompleteLine);
 
+  const QIcon iconSrcEdit = QIcon::fromTheme("edit-source", QIcon(":/images/SrcEdit.png"));
+  actionSourceEdit_->setIcon(iconSrcEdit);
+
+  const QIcon iconSrcCast = QIcon::fromTheme("edit-compile", QIcon(":/images/SrcCast.png"));
+  actionSourceCast_->setIcon(iconSrcCast);
+
   const QIcon iconMolVdW(":/images/MolVDW.png");
   actionMolSpace_->setIcon(iconMolVdW);
 
@@ -160,9 +166,11 @@ void FrameWorkspace::setupToolBars()
   editToolBar->addAction(actionClear_);
   editToolBar->addAction(actionClearAll_);
 
-  QToolBar *tbMol = this->addToolBar(tr("Molecule"));
-  tbMol->addAction(actionMolFast_);
+  QToolBar *tbMol = this->addToolBar(tr("Molecular"));
+  tbMol->addAction(actionSourceEdit_);
+  tbMol->addAction(actionSourceCast_);
   tbMol->addSeparator();
+  tbMol->addAction(actionMolFast_);
   tbMol->addAction(actionMolStick_);
   tbMol->addAction(actionMolBalls_);
   tbMol->addAction(actionMolSpace_);
