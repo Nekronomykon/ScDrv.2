@@ -2,3 +2,6 @@
 
 GraphPath::GraphPath()
 {}
+
+GraphPath::~GraphPath()
+{}

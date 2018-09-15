@@ -8,6 +8,7 @@
 
 #include <vtkType.h>
 #include <vtkMolecule.h>
+#include <vtkIdTypeArray.h>
 
 // template<class TGraph>
 class GraphPath
