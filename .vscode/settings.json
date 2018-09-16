@@ -1,9 +1,4 @@
 {
   "C_Cpp.intelliSenseEngineFallback": "Enabled",
-  "files.associations": {
-    "array": "cpp",
-    "string_view": "cpp",
-    "complex": "cpp",
-    "qcommandlineparser": "cpp"
-  }
+  "C_Cpp.dimInactiveRegions": true
 }

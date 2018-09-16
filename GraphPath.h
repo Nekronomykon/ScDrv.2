@@ -15,6 +15,7 @@ class GraphPath
 {
 public:
   explicit GraphPath();
+  ~GraphPath()override;
 
 private:
   vtkIdTypeArray vertices_;

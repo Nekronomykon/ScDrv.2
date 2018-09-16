@@ -1,3 +1,6 @@
+#ifndef Bondset_Build_h
+#define Bondset_Build_h
+
 /*=========================================================================
 
   Program:   Visualization Toolkit Local Copy
@@ -11,9 +14,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef Bondset_Build_h
-#define Bondset_Build_h
 
 #ifdef _MSC_VER
 #pragma once
