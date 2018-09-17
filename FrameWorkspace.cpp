@@ -395,6 +395,7 @@ void FrameWorkspace::on_actionNew__triggered()
   FrameFile *pOpen = this->getActiveChild();
   pOpen->doClearAll();
   pOpen->ResetFileName();
+  this->updateUI();
 }
 
 void FrameWorkspace::on_actionOpen__triggered()
@@ -418,50 +419,53 @@ void FrameWorkspace::on_actionOpen__triggered()
   SetupDefaultFileContext<FrameFile> context(fmt_name);
 
   for (const auto &one_path : all_paths)
-    {
-      QFileInfo fi(one_path);
-      this->addFileToWorkspace(fi.canonicalFilePath(), context);
-    }
+  {
+    QFileInfo fi(one_path);
+    this->addFileToWorkspace(fi.canonicalFilePath(), context);
+  }
+
   QFileInfo fi(all_paths.front());
   this->loadPathContentFrom(fi.canonicalFilePath());
+  this->updateUI();
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()
 {
   QGuiApplication::setLayoutDirection((this->layoutDirection() == Qt::LeftToRight)
-                                      ? Qt::RightToLeft
-                                      : Qt::LeftToRight);
+                                          ? Qt::RightToLeft
+                                          : Qt::LeftToRight);
+  this->updateUI();
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView  = pOpen->setViewStructure();
-  if(pMolView)
-    pMolView->resetStyle(FrameFile::ViewMolecule::styleBond());
+  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
+  assert(pMolView);
+  pMolView ->resetStyle(FrameFile::ViewMolecule::styleFast());
   this->updateUI();
 }
 void FrameWorkspace::on_actionMolBalls__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  if(pMolView)
-    pMolView->resetStyle(FrameFile::ViewMolecule::styleBond());
+  assert(pMolView);
+  pMolView->resetStyle(FrameFile::ViewMolecule::styleBall());
   this->updateUI();
 }
 void FrameWorkspace::on_actionMolStick__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  if(pMolView)
-    pMolView->resetStyle(FrameFile::ViewMolecule::styleBond());
+  assert(pMolView);
+  pMolView->resetStyle(FrameFile::ViewMolecule::styleBond());
   this->updateUI();
 }
 void FrameWorkspace::on_actionMolSpace__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  if(pMolView)
-    pMolView->resetStyle(FrameFile::ViewMolecule::styleBond());
+  assert(pMolView);
+  pMolView->resetStyle(FrameFile::ViewMolecule::styleFill());
   this->updateUI();
 }
