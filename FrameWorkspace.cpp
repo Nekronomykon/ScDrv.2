@@ -419,22 +419,19 @@ void FrameWorkspace::on_actionOpen__triggered()
   SetupDefaultFileContext<FrameFile> context(fmt_name);
 
   for (const auto &one_path : all_paths)
-  {
-    QFileInfo fi(one_path);
-    this->addFileToWorkspace(fi.canonicalFilePath(), context);
-  }
-
+    {
+      QFileInfo fi(one_path);
+      this->addFileToWorkspace(fi.canonicalFilePath(), context);
+    }
   QFileInfo fi(all_paths.front());
   this->loadPathContentFrom(fi.canonicalFilePath());
-  this->updateUI();
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()
 {
   QGuiApplication::setLayoutDirection((this->layoutDirection() == Qt::LeftToRight)
-                                          ? Qt::RightToLeft
-                                          : Qt::LeftToRight);
-  this->updateUI();
+                                      ? Qt::RightToLeft
+                                      : Qt::LeftToRight);
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()
