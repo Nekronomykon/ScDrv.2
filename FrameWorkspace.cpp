@@ -432,6 +432,7 @@ void FrameWorkspace::on_actionToggleLayout__triggered()
   QGuiApplication::setLayoutDirection((this->layoutDirection() == Qt::LeftToRight)
                                       ? Qt::RightToLeft
                                       : Qt::LeftToRight);
+  this->updateUI();
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()
