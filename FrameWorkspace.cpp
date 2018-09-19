@@ -449,7 +449,7 @@ void FrameWorkspace::on_actionSourceCast__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::EditSource *pEditSrc = pOpen->setEditSource();
   pEditSrc->setReadOnly(true);
-  pEditSrc->dumpSource();
+  pEditSrc->dump();
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()
