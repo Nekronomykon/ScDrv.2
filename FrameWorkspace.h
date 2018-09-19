@@ -70,7 +70,11 @@ public slots:
 protected slots:
   void on_actionNew__triggered();
   void on_actionOpen__triggered();
+  //
   void on_actionToggleLayout__triggered();
+  //
+  void on_actionSourceEdit__triggered();
+  void on_actionSourceCast__triggered();
   //
   void on_actionMolFast__triggered();
   void on_actionMolBalls__triggered();

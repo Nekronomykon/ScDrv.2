@@ -56,6 +56,8 @@ public:
 
   typedef FileFormatContext<FrameFile> FileContext;
   typedef vtkSmartPointer<BondsetBuild> BuildBonds;
+  //
+  typedef EditTextSource EditSource;
   typedef QVTKMoleculeWidget ViewMolecule;
 
   // static methods:
@@ -154,7 +156,7 @@ private:
   //QPointer <QToolButton> compress_;
   QVector<QWidget *> view_current_;
   // ..chosen from:
-  QPointer<EditTextSource> edit_source_;
+  QPointer<EditSource> edit_source_;
   QPointer<QVTKMoleculeWidget> view_molecule_;
   QPointer<ViewMoleculeAtomic> view_atomic_;
   QPointer<ViewMoleculeBonds> view_bonds_;
