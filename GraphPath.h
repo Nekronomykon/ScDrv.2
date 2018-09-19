@@ -15,11 +15,11 @@ class GraphPath
 {
 public:
   explicit GraphPath();
-  ~GraphPath()override;
+  ~GraphPath(); // override;
 
 private:
-  vtkIdTypeArray vertices_;
-  vtkIdTypeArray egdes_;
+  vtkNew<vtkIdTypeArray> vertices_;
+  vtkNew<vtkIdTypeArray> egdes_;
 };
 
 #endif // !Graph_Path_h
