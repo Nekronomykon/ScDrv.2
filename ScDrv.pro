@@ -160,7 +160,8 @@ SOURCES += \
     ViewWorkspace.cpp \
     DelegateElementSpin.cpp \
     DelegateElementTable.cpp \
-    TableAtomTypes.cpp
+    TableAtomTypes.cpp \
+    FrameFile.cpp
 
 HEADERS += \
     BondsetBuild.h \

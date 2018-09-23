@@ -450,6 +450,8 @@ void FrameWorkspace::on_actionSourceCast__triggered()
   FrameFile::EditSource *pEditSrc = pOpen->setEditSource();
   pEditSrc->setReadOnly(true);
   pEditSrc->dump();
+
+  // now we should invoke the current format context to interpret 
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()
