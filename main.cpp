@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 
   QCommandLineParser parser;
   parser.setApplicationDescription("Viewer / editor of molecular structure text files");
-
   parser.addHelpOption();
   parser.addVersionOption();
 
