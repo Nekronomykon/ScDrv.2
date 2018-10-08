@@ -3,7 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "/home/serge/VTK/include/vtk-9.0/*",
+                "/home/serge/VTK/include/vtk-8.2/*",
                 "/home/serge/Qt/5.11.2/gcc_64/include/*",
                 "/home/serge/Qt/5.11.2/gcc_64/include/QtCore/*",
                 "/home/serge/Qt/5.11.2/gcc_64/include/QtGui/*",
@@ -21,7 +21,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Serge\\VTK\\include\\vtk-9.0\\*",
+                "C:\\Serge\\VTK\\include\\vtk-8.2\\*",
                 "C:\\Qt\\5.11.2\\msvc2017_64\\include\\*",
                 "C:\\Qt\\5.11.2\\msvc2017_64\\include\\QtCore\\*",
                 "C:\\Qt\\5.11.2\\msvc2017_64\\include\\QtGui\\*",

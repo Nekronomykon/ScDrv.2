@@ -20,7 +20,6 @@
 =========================================================================*/
 
 #include <QVTKOpenGLWidget.h>
-#include <QVTKOpenGLSimpleWidget.h>
 #include <QVTKOpenGLNativeWidget.h>
 
 #include <vtkNew.h>
