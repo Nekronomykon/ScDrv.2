@@ -29,8 +29,7 @@ Program:   Visualization Toolkit Local Copy
 #include <fstream>
 #include <sstream>
 
-#include "TraitsAcquireAtoms.h"
-
+using namespace std;
 
   //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileOUT);
@@ -81,7 +80,10 @@ int MoleculeAcquireFileOUT::RequestInformation(vtkInformation *vtkNotUsed(reques
   }
   do
   {
-    if (!str_line.compare(30, 21, "CARTESIAN COORDINATES"))
+    if (str_line.size() < 50)
+      continue;
+    int nCmp = str_line.compare(29, 21, "CARTESIAN COORDINATES");
+    if (!nCmp)
     {
       if (!std::getline(file_in, str_line)) // read next line 
       {
@@ -91,7 +93,9 @@ int MoleculeAcquireFileOUT::RequestInformation(vtkInformation *vtkNotUsed(reques
       assert(str_line.empty()); // sure it is empty
       this->ResetPos(file_in.tellg());
       // init scan results:
-      natoms = MeasureStringGroup(file_in);
+      natoms = Traits::MeasureStringGroup(file_in);
+      assert(natoms > 0);
+      this->SetNumberOfAtoms(natoms);
       break;
     }
   } while (std::getline(file_in, str_line));
@@ -124,7 +128,7 @@ int MoleculeAcquireFileOUT::RequestData(vtkInformation *vtkNotUsed(request)
     vtkErrorMacro(<< "MoleculeAcquireFileOUT error opening file: " << this->FileName());
     return 0;
   }
-  if(!this->Scroll(file_in))
+  if (!this->Scroll(file_in))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileOUT error repositioning in file: " << this->FileName());
     return 0;

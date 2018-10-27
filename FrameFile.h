@@ -114,6 +114,7 @@ public:
   // Reader functionality
   bool interpretNone();
   // formatted for molecules:
+  bool acquireAsARC();
   bool acquireAsOUT();
   bool acquireAsXYZ();
   bool acquireAsWFN();

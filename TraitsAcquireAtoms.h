@@ -28,12 +28,18 @@ struct TraitsBase
   {
     std::string str_line;
     if (!in || !std::getline(in, str_line)) return 0;
-
+    if (str_line.empty())
+    {
+      do
+      {
+        if(!std::getline(in, str_line)) return 0;
+      } while (str_line.empty());
+    }
     size_t nRes = 0;
     do {
-      if (str_line.empty()) break;
       ++nRes;
-    } while (std::getline(in, str_line));
+      if (!std::getline(in, str_line)) return 0;
+    } while (!str_line.empty());
     return nRes;
   }
 };
@@ -78,7 +84,7 @@ struct TraitsSymbolicXYZ : TraitsBase
 
 /*********************************************************************************
   MOPAC XYZ part format:
-  (CHAR)SYMBOL X Y Z
+  NUM# SYMBOL X Y Z
 **********************************************************************************/
 
 template<class T>

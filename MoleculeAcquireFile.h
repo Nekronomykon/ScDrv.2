@@ -33,7 +33,7 @@ public:
   //
   void ResetPos(FileInputPos pos) { posRead_ = pos; }
   FileInputPos GetPos(FileInputPos pos) const { return posRead_; }
-  auto& Scroll(std::ifstream& is) const { return is.seekg(posRead_); }
+  auto& Scroll(std::ifstream& is) const { return is.seekg(posRead_,SEEK_SET); }
 
 protected:
   explicit MoleculeAcquireFile();
