@@ -113,6 +113,8 @@ public:
 
   // Reader functionality
   bool interpretNone();
+  // formatted for molecules:
+  bool acquireAsOUT();
   bool acquireAsXYZ();
   bool acquireAsWFN();
   bool acquireAsCUBE();

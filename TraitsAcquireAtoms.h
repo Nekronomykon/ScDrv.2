@@ -77,6 +77,43 @@ struct TraitsSymbolicXYZ : TraitsBase
 
 
 /*********************************************************************************
+  MOPAC XYZ part format:
+  (CHAR)SYMBOL X Y Z
+**********************************************************************************/
+
+template<class T>
+struct TraitsNSymbolicXYZ : TraitsBase
+{
+  template<typename Molecule>
+  static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
+  {
+    assert(nAtoms > 0);
+
+    vtkNew<vtkPeriodicTable> ptrTable;
+    std::string str_line;
+
+    assert(mol);
+    mol->Initialize();
+    for (int i = 0; i < nAtoms; i++)
+    {
+      if (!std::getline(in, str_line) || str_line.empty())
+        return ++i;
+
+      std::istringstream ssinp(str_line);
+
+      std::string atomType;
+      float x, y, z;
+      if (!(ssinp >> atomType >> atomType >> x >> y >> z))
+        return -(++i);
+      mol->AppendAtom(ptrTable->GetAtomicNumber(atomType.c_str()), x, y, z);
+      // mol->LabelAtom(i, atomType);
+    }
+    return 0;
+  }
+};
+
+
+/*********************************************************************************
   CUBE XYZ format:
   (UNSIGNED INT)ATOM_NUM X Y Z
 **********************************************************************************/

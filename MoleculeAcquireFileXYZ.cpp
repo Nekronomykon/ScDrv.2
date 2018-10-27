@@ -108,6 +108,7 @@ int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
   vtkInformationVector *outVector)
 {
   vtkInformation* outInfo = outVector->GetInformationObject(0);
+
   vtkMolecule *output = vtkMolecule::SafeDownCast(vtkDataObject::GetData(outVector));
 
   if (!output)
@@ -148,7 +149,7 @@ int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
     return 0;
   }
   std::string title;
-  std::getline(file_in, title);  // second title line
+  std::getline(file_in, title);  // second line is a title
 
   // construct vtkMolecule
   int nResult = AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
@@ -159,7 +160,7 @@ int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
         << " from " << this->FileName()
         << " Premature EOF while reading molecule."
       );
-    if (nResult > 0)
+    if (nResult < 0)
       vtkErrorMacro(<< "MoleculeAcquireFileXYZ error parsing atom #" << -nResult
         << " from " << this->FileName()
         << " Premature EOF while reading molecule."

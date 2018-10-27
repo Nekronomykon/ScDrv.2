@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include "MoleculeAcquireFileOUT.h"
 #include "MoleculeAcquireFileXYZ.h"
 #include "MoleculeAcquireFileWFN.h"
 #include "MoleculeAcquireFileCUBE.h"
@@ -34,6 +35,7 @@ void FrameFile::resetRecentFiles(QStringList again_recent)
 
 void FrameFile::BuildFileContext()
 {
+  all_formats[FileContext("MOPAC output files", &FrameFile::acquireAsOUT)] = "out";
   all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
   all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";
   all_formats[FileContext("Wavefunction files", &FrameFile::acquireAsWFN)] = "wfn";
@@ -60,8 +62,8 @@ FrameFile::FileContext FrameFile::castFormatFromPath(const QString &path)
   // if (all_fmts.empty())  all_fmts.copy(all_formats);
   if (!res)
     {
-      QMessageBox::warning(nullptr, tr("Ambiguous names")
-                           , tr("More than one file format could be held in following file:\n%1\nUser intervention is required").arg(path)
+      QMessageBox::warning(nullptr, tr("Ambiguous")
+                           , tr("More than one file format could be attributed to the following file:\n%1\nUser intervention is required").arg(path)
                            , QMessageBox::Ok | QMessageBox::Ignore
                            );
     }
@@ -228,6 +230,11 @@ bool FrameFile::acquireUsing()
       structure_.UpdateBonds();
     }
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
+}
+
+bool FrameFile::acquireAsOUT()
+{
+  return this->acquireUsing<MoleculeAcquireFileOUT>();
 }
 
 bool FrameFile::acquireAsXYZ()

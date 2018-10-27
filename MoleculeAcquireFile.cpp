@@ -21,6 +21,7 @@ vtkStandardNewMacro(MoleculeAcquireFile);
 
 //----------------------------------------------------------------------------
 MoleculeAcquireFile::MoleculeAcquireFile()
+  : posRead_(0L)
 {
   this->SetNumberOfInputPorts(0);
 }
@@ -34,5 +35,6 @@ void MoleculeAcquireFile::PrintSelf(ostream &os, vtkIndent indent)
   this->Superclass::PrintSelf(os, indent);
 
   os << indent << "FileName"
-    << (this->HasFileName() ? this->GetFileName() : "(null)") << std::endl;
+    << (this->HasFileName() ? this->GetFileName() : "(null)") << "@Pos: " << (unsigned long) posRead_
+    << std::endl;
 }

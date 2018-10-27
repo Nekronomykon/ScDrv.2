@@ -7,6 +7,8 @@
 #endif //  _MSC_VER
 
 #include <ostream>
+#include <istream>
+#include <fstream>
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireBase.h"
@@ -20,11 +22,18 @@ class MoleculeAcquireFile
 {
 protected:
   typedef MoleculeAcquireBase::Molecule Molecule;
+  typedef std::ifstream FileInput;
+  typedef FileInput::pos_type FileInputPos;
 
 public:
   static MoleculeAcquireFile *New();
   vtkTypeMacro(MoleculeAcquireFile, MoleculeAcquireBase)
   void PrintSelf(std::ostream &os, vtkIndent indent) VTK_OVERRIDE;
+
+  //
+  void ResetPos(FileInputPos pos) { posRead_ = pos; }
+  FileInputPos GetPos(FileInputPos pos) const { return posRead_; }
+  auto& Scroll(std::ifstream& is) const { return is.seekg(posRead_); }
 
 protected:
   explicit MoleculeAcquireFile();
@@ -33,6 +42,10 @@ protected:
 private:
   MoleculeAcquireFile(const MoleculeAcquireFile &) VTK_DELETE_FUNCTION;
   void operator=(const MoleculeAcquireFile &) VTK_DELETE_FUNCTION;
+
+  // members:
+private:
+  FileInputPos posRead_;
 };
 
 
