@@ -35,7 +35,7 @@ using namespace std;
 vtkStandardNewMacro(MoleculeAcquireFileARC);
 
 MoleculeAcquireFileARC::MoleculeAcquireFileARC()
-  : MoleculeAcquireBase()
+  : MoleculeAcquireFile()
 {
 }
 

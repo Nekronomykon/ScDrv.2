@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include "MoleculeAcquireFileARC.h"
 #include "MoleculeAcquireFileOUT.h"
 #include "MoleculeAcquireFileXYZ.h"
 #include "MoleculeAcquireFileWFN.h"
@@ -35,7 +36,7 @@ void FrameFile::resetRecentFiles(QStringList again_recent)
 
 void FrameFile::BuildFileContext()
 {
-  all_formats[FileContext("MOPAC output files", &FrameFile::acquireAsARC)] = "out";
+  all_formats[FileContext("MOPAC run archive files", &FrameFile::acquireUsing<MoleculeAcquireFileARC>) ] = "arc";
   all_formats[FileContext("MOPAC output files", &FrameFile::acquireAsOUT)] = "out";
   all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
   all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";
@@ -237,7 +238,7 @@ bool FrameFile::acquireAsARC() { return this->acquireUsing<MoleculeAcquireFileOU
 bool FrameFile::acquireAsOUT() { return this->acquireUsing<MoleculeAcquireFileOUT>(); }
 bool FrameFile::acquireAsXYZ() {  return this->acquireUsing<MoleculeAcquireFileXYZ>(); }
 bool FrameFile::acquireAsWFN() {  return this->acquireUsing<MoleculeAcquireFileWFN>(); }
-bool FrameFile::acquireAsCUBE(){  return this->acquireUsing<MoleculeAcquireFileWFN>();}
+bool FrameFile::acquireAsCUBE(){  return this->acquireUsing<MoleculeAcquireFileCUBE>();}
 
 // data facets
 vtkMolecule *FrameFile::getMolecule() const
