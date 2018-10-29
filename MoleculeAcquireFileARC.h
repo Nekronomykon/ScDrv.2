@@ -36,17 +36,17 @@
 #include "MoleculeAcquireFile.h"
 
 class MoleculeAcquireFileARC
-  : public MoleculeAcquireFile
-//  , public SomeTraitsClass...
+    : public MoleculeAcquireFile,
+      public TraitsSymXYZPadded<MoleculeAcquireFileARC>
 {
 protected:
   typedef MoleculeAcquireFile::Molecule Molecule;
+  typedef TraitsSymXYZPadded<MoleculeAcquireFileARC> Traits;
 
 public:
   static MoleculeAcquireFileARC *New();
   vtkTypeMacro(MoleculeAcquireFileARC, MoleculeAcquireFile);
-  void PrintSelf(ostream& os, vtkIndent indent) VTK_OVERRIDE;
-
+  void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
 
 protected:
   MoleculeAcquireFileARC();
@@ -54,15 +54,14 @@ protected:
 
 public:
   int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+                         vtkInformationVector *) VTK_OVERRIDE;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+                  vtkInformationVector *) VTK_OVERRIDE;
 
 private:
-  MoleculeAcquireFileARC(const MoleculeAcquireFileARC&) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileARC&) VTK_DELETE_FUNCTION;
-
+  MoleculeAcquireFileARC(const MoleculeAcquireFileARC &) VTK_DELETE_FUNCTION;
+  void operator=(const MoleculeAcquireFileARC &) VTK_DELETE_FUNCTION;
 };
 
 #endif // !MoleculeAcquire_FileARC_h

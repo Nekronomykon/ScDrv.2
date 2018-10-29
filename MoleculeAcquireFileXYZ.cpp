@@ -92,15 +92,9 @@ int MoleculeAcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(reques
     return 0;
   }
 
-  for (int i = 0; i < natoms; i++)
-  {
-    if (!std::getline(file_in, str_line))
-    {
-      vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom string #" << ++i << " in " << this->FileName());
-      return 0;
-    }
-  }
-  return 1;
+  int nStrings = Traits::MeasureStringGroup(file_in);
+
+  return (nStrings >= natoms) ? 1 : 0;
 }
 
 int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,

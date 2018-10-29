@@ -24,36 +24,39 @@
 struct TraitsBase
 {
   static const double AngstromInBohr;
-  static size_t MeasureStringGroup(std::istream& in)
+  static size_t MeasureStringGroup(std::istream &in)
   {
     std::string str_line;
-    if (!in || !std::getline(in, str_line)) return 0;
+    if (!in || !std::getline(in, str_line))
+      return 0;
     if (str_line.empty())
     {
       do
       {
-        if(!std::getline(in, str_line)) return 0;
+        if (!std::getline(in, str_line))
+          return 0;
       } while (str_line.empty());
     }
     size_t nRes = 0;
-    do {
+    do
+    {
       ++nRes;
-      if (!std::getline(in, str_line)) return 0;
+      if (!std::getline(in, str_line))
+        return 0;
     } while (!str_line.empty());
     return nRes;
   }
 };
-
 
 /*********************************************************************************
   XMol XYZ format:
   (CHAR)SYMBOL X Y Z
 **********************************************************************************/
 
-template<class T>
+template <class T>
 struct TraitsSymbolicXYZ : TraitsBase
 {
-  template<typename Molecule>
+  template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
     assert(nAtoms > 0);
@@ -81,16 +84,15 @@ struct TraitsSymbolicXYZ : TraitsBase
   }
 };
 
-
 /*********************************************************************************
   MOPAC XYZ part format:
   NUM# SYMBOL X Y Z
 **********************************************************************************/
 
-template<class T>
+template <class T>
 struct TraitsNSymbolicXYZ : TraitsBase
 {
-  template<typename Molecule>
+  template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
     assert(nAtoms > 0);
@@ -118,16 +120,53 @@ struct TraitsNSymbolicXYZ : TraitsBase
   }
 };
 
+/*********************************************************************************
+  MOPAC +1 padded XYZ part format:
+  NUM# SYMBOL X pad Y pad Z pad
+**********************************************************************************/
+
+template <class T>
+struct TraitsSymXYZPadded : TraitsBase
+{
+  template <typename Molecule>
+  static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
+  {
+    assert(nAtoms > 0);
+
+    vtkNew<vtkPeriodicTable> ptrTable;
+    std::string str_line;
+    std::string pad;
+
+    assert(mol);
+    mol->Initialize();
+    for (int i = 0; i < nAtoms; i++)
+    {
+      if (!std::getline(in, str_line) || str_line.empty())
+        return ++i;
+
+      std::istringstream ssinp(str_line);
+
+      std::string atomType;
+      std::string pad;
+      float x, y, z;
+      if (!(ssinp >> atomType >> x >> pad >> y >> pad >> z))
+        return -(++i);
+      mol->AppendAtom(ptrTable->GetAtomicNumber(atomType.c_str()), x, y, z);
+      // mol->LabelAtom(i, atomType);
+    }
+    return 0;
+  }
+};
 
 /*********************************************************************************
   CUBE XYZ format:
   (UNSIGNED INT)ATOM_NUM X Y Z
 **********************************************************************************/
 
-template<class T>
+template <class T>
 struct TraitsNumericXYZ : TraitsBase
 {
-  template<typename Molecule>
+  template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
     assert(nAtoms > 0);
@@ -157,10 +196,10 @@ struct TraitsNumericXYZ : TraitsBase
   GAMESS XYZ format:
   (CHAR)LABEL[10] (REAL)ATOM_NUM X Y Z
 **********************************************************************************/
-template<class T>
+template <class T>
 struct TraitsLabelNumberXYZ : TraitsBase
 {
-  template<typename Molecule>
+  template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
     assert(nAtoms > 0);
@@ -188,11 +227,10 @@ struct TraitsLabelNumberXYZ : TraitsBase
   }
 };
 
-
-template<class T>
+template <class T>
 struct TraitsCentreWFN : TraitsBase
 {
-  template<typename Molecule>
+  template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
     assert(mol);
@@ -213,14 +251,17 @@ struct TraitsCentreWFN : TraitsBase
       unsigned short int atomType;
       float x, y, z;
       if (!(ssinp >> label >> skip // <number> -> n_skip?
-        >> skip                // "(CENTRE"
-        >> skip                // "<number>)"
-        >> x >> y >> z >> skip // "CHARGE"
-        >> c_skip              // '='
-        >> atomType))
+            >> skip                // "(CENTRE"
+            >> skip                // "<number>)"
+            >> x >> y >> z >> skip // "CHARGE"
+            >> c_skip              // '='
+            >> atomType))
         return -(++i);
 
-      mol->AppendAtom(atomType, x, y, z);
+      mol->AppendAtom(atomType,
+                      x * AngstromInBohr,
+                      y * AngstromInBohr,
+                      z * AngstromInBohr);
       // mol->LabelAtom(i, label);
     }
     return 0;

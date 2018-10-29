@@ -49,6 +49,7 @@ class MoleculeAcquireFileXYZ
 {
 protected:
   typedef MoleculeAcquireFile::Molecule Molecule;
+  typedef TraitsSymbolicXYZ<MoleculeAcquireFileXYZ> Traits;
 
 public:
   static MoleculeAcquireFileXYZ *New();

@@ -14,6 +14,8 @@
 #include "MoleculeAcquireBase.h"
 #include "ImplFileName.h"
 
+#include "TraitsAcquireAtoms.h"
+
 #include <vtkStdString.h>
 
 class MoleculeAcquireFile
@@ -31,9 +33,9 @@ public:
   void PrintSelf(std::ostream &os, vtkIndent indent) VTK_OVERRIDE;
 
   //
-  void ResetPos(FileInputPos pos) { posRead_ = pos; }
-  FileInputPos GetPos(FileInputPos pos) const { return posRead_; }
-  auto& Scroll(std::ifstream& is) const { return is.seekg(posRead_,SEEK_SET); }
+  // void ResetPos(FileInputPos pos) { posRead_ = pos; }
+  // FileInputPos GetPos(FileInputPos pos) const { return posRead_; }
+  // std::ifstream& Scroll(std::ifstream& is) const { return is.seekg(posRead_,SEEK_SET); }
 
 protected:
   explicit MoleculeAcquireFile();
