@@ -146,7 +146,7 @@ int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
   std::getline(file_in, title);  // second line is a title
 
   // construct vtkMolecule
-  int nResult = AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
+  int nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
   if (nResult)
   {
     if (nResult > 0)

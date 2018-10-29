@@ -116,6 +116,43 @@ int MoleculeAcquireFileARC::RequestData(vtkInformation *,
     return 0;
   }
 
+  std::string str_line;
+  if (!std::getline(file_in, str_line))
+  {
+    vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->FileName());
+    return 0;
+  }
+  do
+  {
+    if (!file_in)
+    {
+      vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->FileName());
+      return 0;
+    }
+    if (str_line.find("FINAL GEOMETRY OBTAINED") != std::string::npos)
+      break;
+  } while (std::getline(file_in, str_line));
+
+  std::getline(file_in, str_line);
+  std::getline(file_in, str_line);
+  std::getline(file_in, str_line);
+
+  // construct vtkMolecule
+  int nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
+  if (nResult)
+  {
+    if (nResult > 0)
+      vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom #" << nResult
+        << " from " << this->FileName()
+        << " Premature EOF while reading molecule."
+      );
+    if (nResult < 0)
+      vtkErrorMacro(<< "MoleculeAcquireFileXYZ error parsing atom #" << -nResult
+        << " from " << this->FileName()
+        << " Premature EOF while reading molecule."
+      );
+    return 0;
+  }
   return 1;
 }
 

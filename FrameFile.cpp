@@ -234,7 +234,7 @@ bool FrameFile::acquireUsing()
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-bool FrameFile::acquireAsARC() { return this->acquireUsing<MoleculeAcquireFileOUT>(); }
+bool FrameFile::acquireAsARC() { return this->acquireUsing<MoleculeAcquireFileARC>(); }
 bool FrameFile::acquireAsOUT() { return this->acquireUsing<MoleculeAcquireFileOUT>(); }
 bool FrameFile::acquireAsXYZ() {  return this->acquireUsing<MoleculeAcquireFileXYZ>(); }
 bool FrameFile::acquireAsWFN() {  return this->acquireUsing<MoleculeAcquireFileWFN>(); }

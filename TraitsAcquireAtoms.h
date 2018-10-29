@@ -17,6 +17,48 @@
 #include <string>
 
 #include <cassert>
+
+#include <algorithm> 
+#include <cctype>
+#include <locale>
+
+// trim from start (in place)
+static inline void ltrim(std::string &s) {
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+    return !std::isspace(ch);
+  }));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+  s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+    return !std::isspace(ch);
+  }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::string &s) {
+  ltrim(s);
+  rtrim(s);
+}
+
+// trim from start (copying)
+static inline std::string ltrim_copy(std::string s) {
+  ltrim(s);
+  return s;
+}
+
+// trim from end (copying)
+static inline std::string rtrim_copy(std::string s) {
+  rtrim(s);
+  return s;
+}
+
+// trim from both ends (copying)
+static inline std::string trim_copy(std::string s) {
+  trim(s);
+  return s;
+}
 /*********************************************************************************
   Traits specs:
 **********************************************************************************/
@@ -24,28 +66,7 @@
 struct TraitsBase
 {
   static const double AngstromInBohr;
-  static size_t MeasureStringGroup(std::istream &in)
-  {
-    std::string str_line;
-    if (!in || !std::getline(in, str_line))
-      return 0;
-    if (str_line.empty())
-    {
-      do
-      {
-        if (!std::getline(in, str_line))
-          return 0;
-      } while (str_line.empty());
-    }
-    size_t nRes = 0;
-    do
-    {
-      ++nRes;
-      if (!std::getline(in, str_line))
-        return 0;
-    } while (!str_line.empty());
-    return nRes;
-  }
+  static size_t MeasureStringGroup(std::istream &in);
 };
 
 /*********************************************************************************
@@ -68,10 +89,13 @@ struct TraitsSymbolicXYZ : TraitsBase
     mol->Initialize();
     for (int i = 0; i < nAtoms; i++)
     {
-      if (!std::getline(in, str_line) || str_line.empty())
+      if (!std::getline(in, str_line))
+        return -(++i);
+      rtrim(str_line);
+      if (str_line.empty())
         return ++i;
 
-      std::istringstream ssinp(str_line);
+        std::istringstream ssinp(str_line);
 
       std::string atomType;
       float x, y, z;
@@ -251,17 +275,17 @@ struct TraitsCentreWFN : TraitsBase
       unsigned short int atomType;
       float x, y, z;
       if (!(ssinp >> label >> skip // <number> -> n_skip?
-            >> skip                // "(CENTRE"
-            >> skip                // "<number>)"
-            >> x >> y >> z >> skip // "CHARGE"
-            >> c_skip              // '='
-            >> atomType))
+        >> skip                // "(CENTRE"
+        >> skip                // "<number>)"
+        >> x >> y >> z >> skip // "CHARGE"
+        >> c_skip              // '='
+        >> atomType))
         return -(++i);
 
       mol->AppendAtom(atomType,
-                      x * AngstromInBohr,
-                      y * AngstromInBohr,
-                      z * AngstromInBohr);
+        x * AngstromInBohr,
+        y * AngstromInBohr,
+        z * AngstromInBohr);
       // mol->LabelAtom(i, label);
     }
     return 0;
