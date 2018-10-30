@@ -66,6 +66,7 @@ static inline std::string trim_copy(std::string s) {
 struct TraitsBase
 {
   static const double AngstromInBohr;
+  static std::string ScrollEmptyStrings(std::istream &in);
   static size_t MeasureStringGroup(std::istream &in);
 };
 

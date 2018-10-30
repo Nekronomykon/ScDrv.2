@@ -36,7 +36,7 @@ vtkStandardNewMacro(MoleculeAcquireFileOUT);
 
 //----------------------------------------------------------------------------
 MoleculeAcquireFileOUT::MoleculeAcquireFileOUT()
-    : MoleculeAcquireFile()
+  : MoleculeAcquireFile()
 {
 }
 
@@ -53,8 +53,8 @@ void MoleculeAcquireFileOUT::PrintSelf(ostream &os, vtkIndent indent)
 
 //----------------------------------------------------------------------------
 int MoleculeAcquireFileOUT::RequestInformation(vtkInformation *vtkNotUsed(request),
-                                               vtkInformationVector **vtkNotUsed(inputVector),
-                                               vtkInformationVector *outputVector)
+  vtkInformationVector **vtkNotUsed(inputVector),
+  vtkInformationVector *outputVector)
 {
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
 
@@ -80,17 +80,16 @@ int MoleculeAcquireFileOUT::RequestInformation(vtkInformation *vtkNotUsed(reques
   }
   do
   {
-    if (str_line.size() < 50)
+    if (str_line.size() < 50
+      || str_line.compare(29, 21, "CARTESIAN COORDINATES"))
       continue;
-    int nCmp = str_line.compare(29, 21, "CARTESIAN COORDINATES");
-    if (!nCmp)
-    {
-      // init scan results:
-      natoms = Traits::MeasureStringGroup(file_in);
-      assert(natoms > 0);
-      this->SetNumberOfAtoms(natoms);
-      break;
-    }
+
+    // init scan results:
+    natoms = Traits::MeasureStringGroup(file_in);
+    assert(natoms > 0);
+    this->SetNumberOfAtoms(natoms);
+    break;
+
   } while (std::getline(file_in, str_line));
 
   return natoms;
@@ -98,8 +97,8 @@ int MoleculeAcquireFileOUT::RequestInformation(vtkInformation *vtkNotUsed(reques
 
 //----------------------------------------------------------------------------
 int MoleculeAcquireFileOUT::RequestData(vtkInformation *vtkNotUsed(request),
-                                        vtkInformationVector **vtkNotUsed(inputVector),
-                                        vtkInformationVector *outVector)
+  vtkInformationVector **vtkNotUsed(inputVector),
+  vtkInformationVector *outVector)
 {
   vtkInformation *outInfo = outVector->GetInformationObject(0);
 
@@ -153,12 +152,12 @@ int MoleculeAcquireFileOUT::RequestData(vtkInformation *vtkNotUsed(request),
       {
         if (nResult > 0)
           vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom #" << nResult
-                        << " from " << this->FileName()
-                        << " Premature EOF while reading molecule.");
+            << " from " << this->FileName()
+            << " Premature EOF while reading molecule.");
         if (nResult > 0)
           vtkErrorMacro(<< "MoleculeAcquireFileXYZ error parsing atom #" << -nResult
-                        << " from " << this->FileName()
-                        << " Premature EOF while reading molecule.");
+            << " from " << this->FileName()
+            << " Premature EOF while reading molecule.");
         return 0;
       }
       break;
