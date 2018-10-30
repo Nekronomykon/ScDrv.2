@@ -37,11 +37,12 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
   connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
           this, &FrameWorkspace::loadPathContentFrom);
+
+  this->updateUi();
 }
 
 FrameWorkspace::~FrameWorkspace()
-{
-}
+{}
 
 void FrameWorkspace::openAllFiles(const QStringList &all)
 {
@@ -209,13 +210,17 @@ void FrameWorkspace::updateRecentFilesMenu()
 {
 }
 
-void FrameWorkspace::updateUI()
+void FrameWorkspace::updateUi()
 {
   Child *pActive = this->getActiveChild();
   actionSave_->setEnabled(pActive && pActive->HasFileName());
   actionReload_->setEnabled(pActive && pActive->HasFileName()
                             // && pActive->isModified()
   );
+  actionMolBalls_->setEnabled(pActive && pActive->getViewStructure());
+  actionMolSpace_->setEnabled(pActive && pActive->getViewStructure());
+  actionMolFast_->setEnabled(pActive && pActive->getViewStructure());
+  actionMolStick_->setEnabled(pActive && pActive->getViewStructure());
 }
 
 FrameWorkspace::Child *FrameWorkspace::getActiveChild() const
@@ -252,34 +257,13 @@ void FrameWorkspace::closeEvent(QCloseEvent *event)
 
 FrameWorkspace::Child *FrameWorkspace::provideFileFrame(const QString &name)
 {
-  Child *pRes = nullptr;
-  /*
-  QMdiSubWindow* pFound = mdiArea_->findMdiWindow(name);
-  if(!pFound)
-  {
-    pRes = Child::New(this);
-    pRes->resetFormatToDefault(); ???
-    pRes->readCurrentFormatFrom(name);
-    pFound = mdiArea_->addSubWindow(pRes, flags ???);
-  }
+  Child *pRes = this->getActiveChild();
+
+  FileFormat fmt = Child::castFormatFromPath(name);
+  if (!fmt)
+    return nullptr;
   else
-    pRes = static_cast<Child*>(pFound->widget());
-  */
-
-  // this is for SDI
-  pRes = this->getActiveChild();
-
-  FileFormat fmt = pRes->getFormat();
-  if (!fmt.isValid())
-  {
-    fmt = Child::defaultFormat();
-    if (!fmt)
-      fmt = Child::castFormatFromPath(name);
-    if (!fmt)
-      return nullptr;
-    else
-      pRes->resetFormat(fmt);
-  }
+    pRes->resetFormat(fmt);
   pRes->readCurrentFormatFrom(name);
   return pRes;
 }
@@ -311,8 +295,6 @@ void FrameWorkspace::addPathToWorkspace(const QString &name, bool bAutoOpen)
     this->addFileToWorkspace(pathName);
     return;
   }
-
-  // what is this 'name' here?
 }
 
 //
@@ -348,6 +330,9 @@ FrameWorkspace::Child *FrameWorkspace::addLinkToWorkspace(const QString & /* pat
 FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, FileFormat fmt)
 {
   Child *pChild = nullptr;
+
+  if (!fmt)
+    fmt = Child::castFormatFromPath(path);
 
   bool bNew = edit_workspace_->addFilePath(path, fmt);
   return pChild;
@@ -386,6 +371,7 @@ void FrameWorkspace::loadPathContentFrom(const QString &file_path)
   SetupDefaultFileContext<FrameFile> context(pItem->data(Qt::UserRole).toString());
 
   FrameFile *pFile = this->provideFileFrame(file_path);
+  this->updateUi();
 }
 
 // Auto-assigned event handlers:
@@ -395,7 +381,7 @@ void FrameWorkspace::on_actionNew__triggered()
   FrameFile *pOpen = this->getActiveChild();
   pOpen->doClearAll();
   pOpen->ResetFileName();
-  this->updateUI();
+  this->updateUi();
 }
 
 void FrameWorkspace::on_actionOpen__triggered()
@@ -416,17 +402,15 @@ void FrameWorkspace::on_actionOpen__triggered()
   if (all_paths.isEmpty())
     return;
 
-  SetupDefaultFileContext<FrameFile> context(fmt_name);
-
   for (const auto &one_path : all_paths)
   {
     QFileInfo fi(one_path);
-    this->addFileToWorkspace(fi.canonicalFilePath(), context);
+    this->addFileToWorkspace(fi.canonicalFilePath());
   }
-  // this->openFile(all_paths.front()); // ???
+
   QFileInfo fi(all_paths.front());
   this->loadPathContentFrom(fi.canonicalFilePath());
-  this->updateUI();
+  this->updateUi();
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()
@@ -434,7 +418,7 @@ void FrameWorkspace::on_actionToggleLayout__triggered()
   QGuiApplication::setLayoutDirection((this->layoutDirection() == Qt::LeftToRight)
                                           ? Qt::RightToLeft
                                           : Qt::LeftToRight);
-  this->updateUI();
+  this->updateUi();
 }
 
 void FrameWorkspace::on_actionSourceEdit__triggered()
@@ -460,7 +444,7 @@ void FrameWorkspace::on_actionMolFast__triggered()
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
   pMolView->resetStyle(FrameFile::ViewMolecule::styleFast());
-  this->updateUI();
+  this->updateUi();
 }
 void FrameWorkspace::on_actionMolBalls__triggered()
 {
@@ -468,7 +452,7 @@ void FrameWorkspace::on_actionMolBalls__triggered()
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
   pMolView->resetStyle(FrameFile::ViewMolecule::styleBall());
-  this->updateUI();
+  this->updateUi();
 }
 void FrameWorkspace::on_actionMolStick__triggered()
 {
@@ -476,7 +460,7 @@ void FrameWorkspace::on_actionMolStick__triggered()
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
   pMolView->resetStyle(FrameFile::ViewMolecule::styleBond());
-  this->updateUI();
+  this->updateUi();
 }
 void FrameWorkspace::on_actionMolSpace__triggered()
 {
@@ -484,5 +468,5 @@ void FrameWorkspace::on_actionMolSpace__triggered()
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
   pMolView->resetStyle(FrameFile::ViewMolecule::styleFill());
-  this->updateUI();
+  this->updateUi();
 }

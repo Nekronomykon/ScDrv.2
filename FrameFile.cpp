@@ -36,7 +36,7 @@ void FrameFile::resetRecentFiles(QStringList again_recent)
 
 void FrameFile::BuildFileContext()
 {
-  all_formats[FileContext("MOPAC run archive files", &FrameFile::acquireUsing<MoleculeAcquireFileARC>) ] = "arc";
+  all_formats[FileContext("MOPAC run archive files", &FrameFile::acquireAsARC) ] = "arc";
   all_formats[FileContext("MOPAC output files", &FrameFile::acquireAsOUT)] = "out";
   all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
   all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";

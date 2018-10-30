@@ -100,7 +100,7 @@ private:
 
   void initRecentActions();
 
-  void updateUI();
+  void updateUi();
 
   // data members:
 private slots:
