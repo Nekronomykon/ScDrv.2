@@ -20,26 +20,29 @@
 #include <QMainWindow>
 
 class FrameWorkspace
-  : public QMainWindow
-  , private Ui_FrameWorkspace
+    : public QMainWindow,
+      private Ui_FrameWorkspace
 {
   Q_OBJECT
 public:
-  enum { MaxRecentFiles = 9 };
+  enum
+  {
+    MaxRecentFiles = 9
+  };
 
   typedef FrameFile Child;
   typedef Child::TypeFileName FileName;
-  typedef Child::FileContext  FileFormat;
+  typedef Child::FileContext FileFormat;
 
-  explicit FrameWorkspace(QWidget* /*parent*/ = Q_NULLPTR);
+  explicit FrameWorkspace(QWidget * /*parent*/ = Q_NULLPTR);
   ~FrameWorkspace() override;
 
   static int hasRecentFiles();
 
-  void openAllFiles(const QStringList&);
-  void loadFileContents(const QString&);
+  void openAllFiles(const QStringList &);
+  void loadFileContents(const QString &);
 
-  Child* getActiveChild() const;
+  Child *getActiveChild() const;
 
   // general...
   void addPathToWorkspace(const QString & /*arg */, bool /*bOpen*/ = false);
@@ -53,8 +56,8 @@ public:
   //                           Returns : pointer to a corresponding FrameFile object,
   //                                   : if there is any
   //----------------------------------------------------------------------------------------
-  Child* addFileToWorkspace(const QString & /* path */, FileFormat /*fmt*/ = FileFormat());
-  Child* addLinkToWorkspace(const QString & /* path */, bool /* bOpen */ = false);
+  Child *addFileToWorkspace(const QString & /* path */, FileFormat /*fmt*/ = FileFormat());
+  Child *addLinkToWorkspace(const QString & /* path */, bool /* bOpen */ = false);
 
   //----------------------------------------------------------------------------------------
   // addDirToWorkspace(path, to_recurse) : adds all files in the dir pointed by 'path'
@@ -63,13 +66,16 @@ public:
   //                                     : the fully qualified (absolute) path to a dir
   //                             Returns : (none)
   //----------------------------------------------------------------------------------------
-  void   addDirToWorkspace(const QString & /*dir*/, bool /* bRecurse */ = false);
+  void addDirToWorkspace(const QString & /*dir*/, bool /* bRecurse */ = false);
 
 public slots:
   //
 protected slots:
   void on_actionNew__triggered();
   void on_actionOpen__triggered();
+  //
+  void on_actionExportScene__triggered();
+  void on_actionExportCoords__triggered();
   //
   void on_actionToggleLayout__triggered();
   //
@@ -81,13 +87,13 @@ protected slots:
   void on_actionMolStick__triggered();
   void on_actionMolSpace__triggered();
 
-  void loadPathContentFrom(const QString&);
+  void loadPathContentFrom(const QString &);
 
 protected:
   void changeEvent(QEvent *e) override;
   void closeEvent(QCloseEvent *event) override;
 
-  Child* provideFileFrame(const QString&);
+  Child *provideFileFrame(const QString &);
 
   // functions:
 private:
@@ -109,11 +115,10 @@ private slots:
   void updateRecentFilesMenu();
 
 private:
-
   QAction *recentFileActs[MaxRecentFiles];
 
   QPointer<ModelWorkspace> model_workspace_;
-  QPointer<ViewWorkspace>  edit_workspace_;
+  QPointer<ViewWorkspace> edit_workspace_;
   QPointer<ViewFilesystem> view_files_;
 
 private slots:

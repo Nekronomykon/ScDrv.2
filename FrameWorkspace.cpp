@@ -42,7 +42,8 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
 }
 
 FrameWorkspace::~FrameWorkspace()
-{}
+{
+}
 
 void FrameWorkspace::openAllFiles(const QStringList &all)
 {
@@ -213,14 +214,22 @@ void FrameWorkspace::updateRecentFilesMenu()
 void FrameWorkspace::updateUi()
 {
   Child *pActive = this->getActiveChild();
-  actionSave_->setEnabled(pActive && pActive->HasFileName());
-  actionReload_->setEnabled(pActive && pActive->HasFileName()
+  bool bHasChild(pActive != nullptr);
+
+  bool bHasPath(bHasChild && pActive->HasFileName());
+  actionSave_->setEnabled(bHasPath);
+  actionReload_->setEnabled(bHasPath
                             // && pActive->isModified()
   );
-  actionMolBalls_->setEnabled(pActive && pActive->getViewStructure());
-  actionMolSpace_->setEnabled(pActive && pActive->getViewStructure());
-  actionMolFast_->setEnabled(pActive && pActive->getViewStructure());
-  actionMolStick_->setEnabled(pActive && pActive->getViewStructure());
+  bool bHasGraph(bHasChild && pActive->getViewStructure() != nullptr);
+  actionMolBalls_->setEnabled(bHasGraph);
+  actionMolSpace_->setEnabled(bHasGraph);
+  actionMolFast_->setEnabled(bHasGraph);
+  actionMolStick_->setEnabled(bHasGraph);
+
+  actionMolBonds_->setEnabled(bHasGraph);
+  actionLabelAtoms_->setEnabled(bHasGraph);
+  actionLabelBonds_->setEnabled(bHasGraph);
 }
 
 FrameWorkspace::Child *FrameWorkspace::getActiveChild() const
@@ -469,4 +478,17 @@ void FrameWorkspace::on_actionMolSpace__triggered()
   assert(pMolView);
   pMolView->resetStyle(FrameFile::ViewMolecule::styleFill());
   this->updateUi();
+}
+
+void FrameWorkspace::on_actionExportScene__triggered()
+{
+  FrameFile *pOpen = this->getActiveChild();
+  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
+  assert(pMolView);
+
+  /// pMolView-> ExportToPNG();
+}
+
+void FrameWorkspace::on_actionExportCoords__triggered()
+{
 }

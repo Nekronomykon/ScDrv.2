@@ -29,10 +29,18 @@
     </property>
     <widget class="QMenu" name="menuRecent_">
      <property name="title">
-      <string>R&amp;ecent</string>
+      <string>R&amp;ecent..</string>
      </property>
      <addaction name="actionForget_"/>
      <addaction name="actionForgetAll_"/>
+     <addaction name="separator"/>
+    </widget>
+    <widget class="QMenu" name="menuExport_">
+     <property name="title">
+      <string>&amp;Export..</string>
+     </property>
+     <addaction name="actionExportScene_"/>
+     <addaction name="actionExportCoords_"/>
      <addaction name="separator"/>
     </widget>
     <addaction name="actionNew_"/>
@@ -43,6 +51,7 @@
     <addaction name="separator"/>
     <addaction name="actionSave_"/>
     <addaction name="actionSaveAs_"/>
+    <addaction name="menuExport_"/>
     <addaction name="separator"/>
     <addaction name="actionExit_"/>
    </widget>
@@ -83,7 +92,7 @@
      <addaction name="separator"/>
      <addaction name="actionMolBonds_"/>
      <addaction name="actionLabelAtoms_"/>
-     <addaction name="actionRenderLabelsBond_"/>
+     <addaction name="actionLabelBonds_"/>
     </widget>
     <addaction name="actionFullScreen_"/>
     <addaction name="separator"/>
@@ -290,7 +299,7 @@
     <string>Atom labels</string>
    </property>
   </action>
-  <action name="actionRenderLabelsBond_">
+  <action name="actionLabelBonds_">
    <property name="text">
     <string>Bond labels</string>
    </property>
@@ -323,6 +332,16 @@
   <action name="actionPageSetup_">
    <property name="text">
     <string>&amp;Page..</string>
+   </property>
+  </action>
+  <action name="actionExportScene_">
+   <property name="text">
+    <string>&amp;Scene..</string>
+   </property>
+  </action>
+  <action name="actionExportCoords_">
+   <property name="text">
+    <string>&amp;Coordnates..</string>
    </property>
   </action>
  </widget>
