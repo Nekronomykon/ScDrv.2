@@ -511,7 +511,10 @@ void FrameWorkspace::on_actionExportScene__triggered()
     if (!save_file.endsWith(ext))
       save_file += ext;
 
-    QMessageBox::information(this, tr("[:|:|:|:]"), save_file);
+    // QMessageBox::information(this, tr("[:|:|:|:]"), save_file);
+
+// Here comes saving... 
+// TODO: Rethink saving and format casting here...
 
     vtkNew<vtkPNGWriter> write_image;
     write_image->SetCompressionLevel(9);
