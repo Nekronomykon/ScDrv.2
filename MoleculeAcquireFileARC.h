@@ -46,7 +46,7 @@ protected:
 public:
   static MoleculeAcquireFileARC *New();
   vtkTypeMacro(MoleculeAcquireFileARC, MoleculeAcquireFile);
-  void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
 protected:
   MoleculeAcquireFileARC();
@@ -54,10 +54,10 @@ protected:
 
 public:
   int RequestInformation(vtkInformation *, vtkInformationVector **,
-                         vtkInformationVector *) VTK_OVERRIDE;
+                         vtkInformationVector *) override;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
-                  vtkInformationVector *) VTK_OVERRIDE;
+                  vtkInformationVector *) override;
 
 private:
   MoleculeAcquireFileARC(const MoleculeAcquireFileARC &) VTK_DELETE_FUNCTION;

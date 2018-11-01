@@ -48,24 +48,24 @@ class MoleculeAcquireFileWFN
 public:
   static MoleculeAcquireFileWFN *New();
   vtkTypeMacro(MoleculeAcquireFileWFN, MoleculeAcquireFileQTAIM);
-  void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) VTK_OVERRIDE;
+  void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
   //@{
   /**
    * Get/Set the output (vtkMolecule) that the reader will fill
    */
   vtkMolecule *GetOutput();
-  void SetOutput(vtkMolecule *) VTK_OVERRIDE;
+  void SetOutput(vtkMolecule *) override;
   //@}
 
 protected:
   MoleculeAcquireFileWFN();
-  ~MoleculeAcquireFileWFN() VTK_OVERRIDE;
+  ~MoleculeAcquireFileWFN() override;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+    vtkInformationVector *) override;
   int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+    vtkInformationVector *) override;
 
 private:
   MoleculeAcquireFileWFN(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;

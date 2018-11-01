@@ -20,9 +20,12 @@
 #include <vtkSphereSource.h>
 #include <vtkSmartPointer.h>
 
+#include <vtkWindowToImageFilter.h>
+#include <vtkPNGWriter.h>
+
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget *parent)
-    : QMainWindow(parent), edit_workspace_(new ViewWorkspace), view_files_(new ViewFilesystem)
+  : QMainWindow(parent), edit_workspace_(new ViewWorkspace), view_files_(new ViewFilesystem)
 {
   this->setupUi(this);
 
@@ -36,7 +39,7 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
   connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
   connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
-          this, &FrameWorkspace::loadPathContentFrom);
+    this, &FrameWorkspace::loadPathContentFrom);
 
   this->updateUi();
 }
@@ -219,7 +222,7 @@ void FrameWorkspace::updateUi()
   bool bHasPath(bHasChild && pActive->HasFileName());
   actionSave_->setEnabled(bHasPath);
   actionReload_->setEnabled(bHasPath
-                            // && pActive->isModified()
+    // && pActive->isModified()
   );
   bool bHasGraph(bHasChild && pActive->getViewStructure() != nullptr);
   actionMolBalls_->setEnabled(bHasGraph);
@@ -396,17 +399,17 @@ void FrameWorkspace::on_actionNew__triggered()
 void FrameWorkspace::on_actionOpen__triggered()
 {
   QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
-                                 | QFileDialog::ReadOnly                    // read-only is also to read
-                                 | QFileDialog::DontUseCustomDirectoryIcons // uniformity
-      ;
+    | QFileDialog::ReadOnly                    // read-only is also to read
+    | QFileDialog::DontUseCustomDirectoryIcons // uniformity
+    ;
 
   QString all_context = FrameFile::FileInputFilter();
   QString fmt_name;
   QString dir_name = QDir::currentPath();
 
   QStringList all_paths =
-      // FrameFile::queryInputFiles(fmt_name);
-      QFileDialog::getOpenFileNames(this, tr("Input files"), dir_name, all_context, &fmt_name, options);
+    // FrameFile::queryInputFiles(fmt_name);
+    QFileDialog::getOpenFileNames(this, tr("Input files"), dir_name, all_context, &fmt_name, options);
 
   if (all_paths.isEmpty())
     return;
@@ -425,8 +428,8 @@ void FrameWorkspace::on_actionOpen__triggered()
 void FrameWorkspace::on_actionToggleLayout__triggered()
 {
   QGuiApplication::setLayoutDirection((this->layoutDirection() == Qt::LeftToRight)
-                                          ? Qt::RightToLeft
-                                          : Qt::LeftToRight);
+    ? Qt::RightToLeft
+    : Qt::LeftToRight);
   this->updateUi();
 }
 
@@ -485,8 +488,41 @@ void FrameWorkspace::on_actionExportScene__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-
   /// pMolView-> ExportToPNG();
+
+  QString open_file = pOpen->GetFileName(); // could be empty
+  QFileInfo fi(open_file);
+
+  QFileDialog::Options opts = QFileDialog::DontUseNativeDialog
+    | QFileDialog::DontUseCustomDirectoryIcons
+    ;
+  QString str_fmt;
+  QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]")
+    , fi.completeBaseName()
+    , tr("PNG image file (*.png);;All files (*.*)") // temporary constant
+    , &str_fmt
+    , opts
+  );
+
+  if (!save_file.isEmpty())
+  {
+    // Temporary; kind of file extension mangling
+    QString ext(tr(".png"));
+    if (!save_file.endsWith(ext))
+      save_file += ext;
+
+    QMessageBox::information(this, tr("[:|:|:|:]"), save_file);
+
+    vtkNew<vtkPNGWriter> write_image;
+    write_image->SetCompressionLevel(9);
+    {
+      vtkNew<vtkWindowToImageFilter> filter;
+      filter->SetInput(pMolView->GetRenderWindow());
+      write_image->SetInputConnection(filter->GetOutputPort());
+    }
+    write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
+    write_image->Write();
+  }
 }
 
 void FrameWorkspace::on_actionExportCoords__triggered()

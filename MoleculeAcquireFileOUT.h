@@ -50,7 +50,7 @@ protected:
 public:
   static MoleculeAcquireFileOUT *New();
   vtkTypeMacro(MoleculeAcquireFileOUT, MoleculeAcquireFile);
-  void PrintSelf(ostream& os, vtkIndent indent) VTK_OVERRIDE;
+  void PrintSelf(ostream& os, vtkIndent indent) override;
 
 
 protected:
@@ -60,10 +60,10 @@ protected:
   typedef TraitsNSymbolicXYZ<MoleculeAcquireFileOUT> Traits;
 
   int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+    vtkInformationVector *) override;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+    vtkInformationVector *) override;
 
 private:
   MoleculeAcquireFileOUT(const MoleculeAcquireFileOUT&) VTK_DELETE_FUNCTION;

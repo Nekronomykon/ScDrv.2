@@ -50,7 +50,7 @@ protected:
 public:
   static MoleculeAcquireBase *New();
   vtkTypeMacro(MoleculeAcquireBase, vtkAlgorithm)
-  void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
   vtkIdType GetNumberOfAtoms() const { return NumberOfAtoms_; }
   virtual vtkIdType SetNumberOfAtoms(vtkIdType nnew)
@@ -77,7 +77,7 @@ public:
    */
   int ProcessRequest(vtkInformation *,
     vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+    vtkInformationVector *) override;
 
   // this method is not recommended for use, but lots of old style filters
   // use it
@@ -112,7 +112,7 @@ public:
 
 protected:
   MoleculeAcquireBase();
-  ~MoleculeAcquireBase() VTK_OVERRIDE;
+  ~MoleculeAcquireBase() override;
 
   // convenience method
   virtual int RequestInformation(vtkInformation *request,
@@ -136,8 +136,8 @@ protected:
     vtkInformationVector *);
 
   // see algorithm for more info
-  int FillOutputPortInformation(int port, vtkInformation *info) VTK_OVERRIDE;
-  int FillInputPortInformation(int port, vtkInformation *info) VTK_OVERRIDE;
+  int FillOutputPortInformation(int port, vtkInformation *info) override;
+  int FillInputPortInformation(int port, vtkInformation *info) override;
 
 private:
   MoleculeAcquireBase(const MoleculeAcquireBase &) VTK_DELETE_FUNCTION;

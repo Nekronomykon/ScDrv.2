@@ -30,7 +30,7 @@ protected:
 public:
   static MoleculeAcquireFile *New();
   vtkTypeMacro(MoleculeAcquireFile, MoleculeAcquireBase)
-  void PrintSelf(std::ostream &os, vtkIndent indent) VTK_OVERRIDE;
+  void PrintSelf(std::ostream &os, vtkIndent indent) override;
 
   //
   // void ResetPos(FileInputPos pos) { posRead_ = pos; }
@@ -39,7 +39,7 @@ public:
 
 protected:
   explicit MoleculeAcquireFile();
-  ~MoleculeAcquireFile() VTK_OVERRIDE;
+  ~MoleculeAcquireFile() override;
 
 private:
   MoleculeAcquireFile(const MoleculeAcquireFile &) VTK_DELETE_FUNCTION;

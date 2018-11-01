@@ -54,17 +54,17 @@ protected:
 public:
   static MoleculeAcquireFileXYZ *New();
   vtkTypeMacro(MoleculeAcquireFileXYZ, MoleculeAcquireFile);
-  void PrintSelf(ostream& os, vtkIndent indent) VTK_OVERRIDE;
+  void PrintSelf(ostream& os, vtkIndent indent) override;
 
 
 protected:
   MoleculeAcquireFileXYZ();
-  ~MoleculeAcquireFileXYZ() VTK_OVERRIDE;
+  ~MoleculeAcquireFileXYZ() override;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+    vtkInformationVector *) override;
   int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) VTK_OVERRIDE;
+    vtkInformationVector *) override;
 
 private:
   MoleculeAcquireFileXYZ(const MoleculeAcquireFileXYZ&) VTK_DELETE_FUNCTION;

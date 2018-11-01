@@ -48,7 +48,7 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
 public:
   static MoleculeAcquireFileQTAIM *New();
   vtkTypeMacro(MoleculeAcquireFileQTAIM,MoleculeAcquireFile);
-  void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
   vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
   virtual vtkIdType SetNumberOfOrbitals(vtkIdType nnew)
@@ -85,7 +85,7 @@ protected:
   typedef std::complex<short> CriticalPointType;
 
   MoleculeAcquireFileQTAIM();
-  ~MoleculeAcquireFileQTAIM() VTK_OVERRIDE;
+  ~MoleculeAcquireFileQTAIM() override;
 
 private:
   MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) VTK_DELETE_FUNCTION;

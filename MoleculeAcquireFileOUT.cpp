@@ -70,7 +70,6 @@ int MoleculeAcquireFileOUT::RequestInformation(vtkInformation *vtkNotUsed(reques
   }
 
   int natoms = 0;
-  bool read_str;
   std::string str_line;
 
   if (!std::getline(file_in, str_line))
@@ -126,7 +125,6 @@ int MoleculeAcquireFileOUT::RequestData(vtkInformation *vtkNotUsed(request),
 
   int natoms = 0;
   int nResult = -1;
-  bool read_str;
 
   if (!std::getline(file_in, str_line))
   {

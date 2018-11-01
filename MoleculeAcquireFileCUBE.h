@@ -45,14 +45,14 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileCUBE
 public:
   static MoleculeAcquireFileCUBE *New();
   vtkTypeMacro(MoleculeAcquireFileCUBE, MoleculeAcquireFile)
-  void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
   //@{
   /**
    * Get/Set the output (vtkMolecule) that the reader will fill
    */
   vtkMolecule *GetOutput();
-  void SetOutput(vtkMolecule *) VTK_OVERRIDE;
+  void SetOutput(vtkMolecule *) override;
   //@}
 
   /**
@@ -62,13 +62,13 @@ public:
 
 protected:
   MoleculeAcquireFileCUBE();
-  ~MoleculeAcquireFileCUBE() VTK_OVERRIDE;
+  ~MoleculeAcquireFileCUBE() override;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
-                  vtkInformationVector *) VTK_OVERRIDE;
+                  vtkInformationVector *) override;
   int RequestInformation(vtkInformation *, vtkInformationVector **,
-                         vtkInformationVector *) VTK_OVERRIDE;
-  int FillOutputPortInformation(int, vtkInformation *) VTK_OVERRIDE;
+                         vtkInformationVector *) override;
+  int FillOutputPortInformation(int, vtkInformation *) override;
 
 private:
   MoleculeAcquireFileCUBE(const MoleculeAcquireFileCUBE &) VTK_DELETE_FUNCTION;

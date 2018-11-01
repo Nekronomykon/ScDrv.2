@@ -42,18 +42,6 @@ MoleculeAcquireFileXYZ::MoleculeAcquireFileXYZ()
 MoleculeAcquireFileXYZ::~MoleculeAcquireFileXYZ()
 {}
 
-//----------------------------------------------------------------------------
-//vtkMolecule *MoleculeAcquireFileXYZ::GetOutput()
-//{
-//  return vtkMolecule::SafeDownCast(this->GetOutputDataObject(0));
-//}
-
-//----------------------------------------------------------------------------
-//void MoleculeAcquireFileXYZ::SetOutput(vtkMolecule *output)
-//{
-//  this->GetExecutive()->SetOutputData(0, output);
-//}
-
 int MoleculeAcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request)
   , vtkInformationVector **vtkNotUsed(inputVector)
   , vtkInformationVector *outputVector)
