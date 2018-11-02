@@ -71,7 +71,7 @@ public:
   static void BuildFileContext();
   static FileContext SetupFileInputContext(const QString &);
   static void ClearFileInputContext();
-  static FileContext castFormatFromPath(const QString &);
+  static FileContext CastInputPathFormat(const QString &);
 
   static inline QString keyRecentFiles() { return QStringLiteral("RecentFiles"); }
   static inline QString keyFile() { return QStringLiteral("File"); }
@@ -106,8 +106,8 @@ public:
   void doClearAll();
   void doReload();
 
-  bool readTextSource(const QString &);
-  bool saveTextSource(const QString &) const;
+  bool readTextSource(const TypeFileName &);
+  bool saveTextSource(const TypeFileName &) const;
 
   TypeFileName dumpSource() const;
 
@@ -119,6 +119,9 @@ public:
   bool acquireAsXYZ();
   bool acquireAsWFN();
   bool acquireAsCUBE();
+
+  // Writer functionality
+  bool writeSceneAsPNG(const TypeFileName&);
 
   // facets
   vtkMolecule *getMolecule() const;

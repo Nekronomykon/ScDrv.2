@@ -20,9 +20,6 @@
 #include <vtkSphereSource.h>
 #include <vtkSmartPointer.h>
 
-#include <vtkWindowToImageFilter.h>
-#include <vtkPNGWriter.h>
-
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget *parent)
   : QMainWindow(parent), edit_workspace_(new ViewWorkspace), view_files_(new ViewFilesystem)
@@ -44,9 +41,7 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   this->updateUi();
 }
 
-FrameWorkspace::~FrameWorkspace()
-{
-}
+FrameWorkspace::~FrameWorkspace(){}
 
 void FrameWorkspace::openAllFiles(const QStringList &all)
 {
@@ -63,7 +58,7 @@ void FrameWorkspace::openAllFiles(const QStringList &all)
 void FrameWorkspace::loadFileContents(const QString &from)
 {
   // the complete full path is assumed here in `from'
-  FileFormat fmt = FrameFile::castFormatFromPath(from);
+  FileFormat fmt = FrameFile::CastInputPathFormat(from);
   if (fmt.hasBuild())
   {
     FrameFile *pOpen = this->getActiveChild();
@@ -271,7 +266,7 @@ FrameWorkspace::Child *FrameWorkspace::provideFileFrame(const QString &name)
 {
   Child *pRes = this->getActiveChild();
 
-  FileFormat fmt = Child::castFormatFromPath(name);
+  FileFormat fmt = Child::CastInputPathFormat(name);
   if (!fmt)
     return nullptr;
   else
@@ -344,7 +339,7 @@ FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, F
   Child *pChild = nullptr;
 
   if (!fmt)
-    fmt = Child::castFormatFromPath(path);
+    fmt = Child::CastInputPathFormat(path);
 
   bool bNew = edit_workspace_->addFilePath(path, fmt);
   return pChild;
@@ -486,8 +481,6 @@ void FrameWorkspace::on_actionMolSpace__triggered()
 void FrameWorkspace::on_actionExportScene__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  assert(pMolView);
   /// pMolView-> ExportToPNG();
 
   QString open_file = pOpen->GetFileName(); // could be empty
@@ -505,27 +498,8 @@ void FrameWorkspace::on_actionExportScene__triggered()
   );
 
   if (!save_file.isEmpty())
-  {
-    // Temporary; kind of file extension mangling
-    QString ext(tr(".png"));
-    if (!save_file.endsWith(ext))
-      save_file += ext;
-
-    // QMessageBox::information(this, tr("[:|:|:|:]"), save_file);
-
-// Here comes saving... 
-// TODO: Rethink saving and format casting here...
-
-    vtkNew<vtkPNGWriter> write_image;
-    write_image->SetCompressionLevel(9);
-    {
-      vtkNew<vtkWindowToImageFilter> filter;
-      filter->SetInput(pMolView->GetRenderWindow());
-      write_image->SetInputConnection(filter->GetOutputPort());
-    }
-    write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
-    write_image->Write();
-  }
+    // pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file);
+    pOpen->writeSceneAsPNG(save_file);
 }
 
 void FrameWorkspace::on_actionExportCoords__triggered()
