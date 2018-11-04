@@ -498,7 +498,8 @@ void FrameWorkspace::on_actionExportScene__triggered()
   );
 
   if (!save_file.isEmpty())
-    // pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file);
+    // && pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file)
+    // pOpen->formattedOutput(save_file);
     pOpen->writeSceneAsPNG(save_file);
 }
 

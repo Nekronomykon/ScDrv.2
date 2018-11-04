@@ -80,6 +80,12 @@ int MoleculeAcquireFileWFN::RequestInformation(
   }
   title = str_line;
 
+  if (!std::getline(file_in, str_line))
+  {
+    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading sizes string: " << this->FileName());
+    return 0;
+  }
+
   int nAtoms = 0;
   int nOrbs = 0;
   int nPrims = 0;
@@ -107,10 +113,10 @@ int MoleculeAcquireFileWFN::RequestInformation(
 
   assert(!this->GetNumberOfAtoms()); // assured that it is read first
   this->SetNumberOfAtoms(nAtoms);
-  assert(this->GetNumberOfPrimitives());
+  assert(!this->GetNumberOfPrimitives());
   this->SetNumberOfPrimitives(nPrims);
   assert(!this->GetNumberOfOrbitals());
-  this->SetNumberOfOrbitals(nPrims);
+  this->SetNumberOfOrbitals(nOrbs);
 
   for (int i = 0; i < nAtoms; i++)
   {
