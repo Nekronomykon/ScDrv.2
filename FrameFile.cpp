@@ -14,7 +14,13 @@
 
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
+
+#include <vtkImageWriter.h>
+
 #include <vtkPNGWriter.h>
+#include <vtkJPEGWriter.h>
+#include <vtkBMPWriter.h>
+#include <vtkPostScriptWriter.h>
 
 #include "MoleculeAcquireFileARC.h"
 #include "MoleculeAcquireFileOUT.h"
@@ -23,6 +29,12 @@
 #include "MoleculeAcquireFileCUBE.h"
 
 #include "FileFormat.h"
+
+typedef vtkSmartPointer<vtkImageWriter>       ImgWrite;
+typedef vtkSmartPointer<vtkPNGWriter>         ImgWritePNG;
+typedef vtkSmartPointer<vtkJPEGWriter>        ImgWriteJPEG;
+typedef vtkSmartPointer<vtkBMPWriter>         ImgWriteBMP;
+typedef vtkSmartPointer<vtkPostScriptWriter>  ImgWritePS;
 
 // static members
 QStringList FrameFile::recent_files;
@@ -247,40 +259,6 @@ bool FrameFile::acquireAsWFN() { return this->acquireUsing<MoleculeAcquireFileWF
 bool FrameFile::acquireAsCUBE() { return this->acquireUsing<MoleculeAcquireFileCUBE>(); }
 
 
-// writer functions
-bool FrameFile::writeSceneAsPNG(const TypeFileName &save_path)
-{
-  FrameFile::ViewMolecule *pMolView = this->setViewStructure();
-  assert(pMolView);
-  assert(pMolView == view_molecule_);
-
-  if (pMolView != view_molecule_)
-    return false;
-
-  // Temporary; kind of file extension mangling
-  QString save_file(save_path);
-  QString ext(tr(".png"));
-  if (!save_file.endsWith(ext))
-    save_file += ext;
-
-  // QMessageBox::information(this, tr("[:|:|:|:]"), save_file);
-
-// Here comes saving... 
-// TODO: Rethink saving and format casting here...
-
-  vtkNew<vtkPNGWriter> write_image;
-  write_image->SetCompressionLevel(9);
-  {
-    vtkNew<vtkWindowToImageFilter> filter;
-    filter->SetInput(pMolView->GetRenderWindow());
-    write_image->SetInputConnection(filter->GetOutputPort());
-  }
-  write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
-  write_image->Write();
-
-
-  return true;
-}
 
 // data facets
 vtkMolecule *FrameFile::getMolecule() const
@@ -316,6 +294,14 @@ ViewMoleculeAtomic *FrameFile::getEditAtomic() const
 {
   return view_atomic_;
 }
+
+ViewMoleculeAtomic *FrameFile::setEditAtomic()
+{
+  auto* pOne = this->getEditAtomic();
+  if (pOne) this->setCurrentWidget(pOne);
+  return pOne;
+}
+
 
 void FrameFile::InterpretFileName()
 {
@@ -383,4 +369,132 @@ FrameFile::TypeFileName FrameFile::dumpSource() const
   EditTextSource *pSrc = this->getEditSource();
   pSrc->dump();
   return pSrc->getDumpPath();
+}
+
+// image writer functions
+bool FrameFile::writeSceneAsPNG(const TypeFileName &save_path)
+{
+  FrameFile::ViewMolecule *pMolView = this->setViewStructure();
+  assert(pMolView);
+  assert(pMolView == view_molecule_);
+
+  if (pMolView != view_molecule_)
+    return false;
+
+  // Temporary; kind of file extension mangling
+  QString save_file(save_path);
+  QString ext(tr(".png"));
+  if (!save_file.endsWith(ext))
+    save_file += ext;
+
+// Here comes saving... 
+// TODO: Rethink saving and format casting here...
+
+  ImgWritePNG write_image(ImgWritePNG::New());
+  write_image->SetCompressionLevel(9);
+  {
+    vtkNew<vtkWindowToImageFilter> filter;
+    filter->SetInput(pMolView->GetRenderWindow());
+    write_image->SetInputConnection(filter->GetOutputPort());
+  }
+  write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
+  write_image->Write();
+
+
+  return true;
+}
+
+bool FrameFile::writeSceneAsJPEG(const TypeFileName &save_path)
+{
+  FrameFile::ViewMolecule *pMolView = this->setViewStructure();
+  assert(pMolView);
+  assert(pMolView == view_molecule_);
+
+  if (pMolView != view_molecule_)
+    return false;
+
+  // Temporary; kind of file extension mangling
+  QString save_file(save_path);
+  QString ext(tr(".jpg"));
+  if (!save_file.endsWith(ext))
+    save_file += ext;
+
+  // Here comes saving... 
+// TODO: Rethink saving and format casting here...
+
+  ImgWriteJPEG write_image(ImgWriteJPEG::New());
+  write_image->ProgressiveOn();
+  write_image->SetQuality(75);
+  {
+    vtkNew<vtkWindowToImageFilter> filter;
+    filter->SetInput(pMolView->GetRenderWindow());
+    write_image->SetInputConnection(filter->GetOutputPort());
+  }
+  write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
+  write_image->Write();
+
+
+  return true;
+}
+
+bool FrameFile::writeSceneAsBitmap(const TypeFileName &save_path)
+{
+  FrameFile::ViewMolecule *pMolView = this->setViewStructure();
+  assert(pMolView);
+  assert(pMolView == view_molecule_);
+
+  if (pMolView != view_molecule_)
+    return false;
+
+  // Temporary; kind of file extension mangling
+  QString save_file(save_path);
+  QString ext(tr(".bmp"));
+  if (!save_file.endsWith(ext))
+    save_file += ext;
+
+  // Here comes saving... 
+// TODO: Rethink saving and format casting here...
+
+  ImgWriteBMP write_image(ImgWriteBMP::New());
+  {
+    vtkNew<vtkWindowToImageFilter> filter;
+    filter->SetInput(pMolView->GetRenderWindow());
+    write_image->SetInputConnection(filter->GetOutputPort());
+  }
+  write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
+  write_image->Write();
+
+
+  return true;
+}
+
+bool FrameFile::writeSceneAsPostScript(const TypeFileName &save_path)
+{
+  FrameFile::ViewMolecule *pMolView = this->setViewStructure();
+  assert(pMolView);
+  assert(pMolView == view_molecule_);
+
+  if (pMolView != view_molecule_)
+    return false;
+
+  // Temporary; kind of file extension mangling
+  QString save_file(save_path);
+  QString ext(tr(".ps"));
+  if (!save_file.endsWith(ext))
+    save_file += ext;
+
+  // Here comes saving... 
+// TODO: Rethink saving and format casting here...
+
+  ImgWritePS write_image(ImgWritePS::New());
+  {
+    vtkNew<vtkWindowToImageFilter> filter;
+    filter->SetInput(pMolView->GetRenderWindow());
+    write_image->SetInputConnection(filter->GetOutputPort());
+  }
+  write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
+  write_image->Write();
+
+
+  return true;
 }

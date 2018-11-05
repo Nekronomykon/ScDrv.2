@@ -18,9 +18,11 @@
 #include "GraphPath.h"
 
 #include <deque>
+#include <list>
 
 typedef std::pair<vtkIdType,vtkIdType> IncidenceIndex;
 typedef std::deque<IncidenceIndex> PathSequence;
+typedef std::list<PathSequence> PathPool;
 
 class MolecularStructure
 {
@@ -54,6 +56,9 @@ private:
   vtkStdString title_;
   Molecule molecule_;
   BuildBonds bonds_build_;
+
+  //
+  PathPool paths_;
 };
 
 #endif // Molecular_Structure_h

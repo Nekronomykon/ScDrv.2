@@ -34,7 +34,8 @@ class FileFormatContext
   typedef bool (T::*ExportOperation)(const TypeFileName &) const;
 
 public:
-  explicit FileFormatContext(TypeFileName name = TypeFileName(), BuildOperation opBuild = nullptr, ExportOperation opExport = nullptr)
+  explicit FileFormatContext(TypeFileName name = TypeFileName()
+    , BuildOperation opBuild = nullptr, ExportOperation opExport = nullptr)
       : name_format_(name), build_operation_(opBuild), export_operation_(opExport)
   {
   }

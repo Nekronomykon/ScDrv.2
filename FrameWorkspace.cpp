@@ -41,7 +41,7 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   this->updateUi();
 }
 
-FrameWorkspace::~FrameWorkspace(){}
+FrameWorkspace::~FrameWorkspace() {}
 
 void FrameWorkspace::openAllFiles(const QStringList &all)
 {
@@ -492,15 +492,28 @@ void FrameWorkspace::on_actionExportScene__triggered()
   QString str_fmt;
   QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]")
     , fi.completeBaseName()
-    , tr("PNG image file (*.png);;All files (*.*)") // temporary constant
+    , tr("PostScript file (*.eps);;PNG image file (*.png);;JPEG inage file (*.jpg);;Bitmap (*.bmp);;All files (*.*)") // temporarily constant
     , &str_fmt
     , opts
   );
 
   if (!save_file.isEmpty())
+  {
     // && pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file)
     // pOpen->formattedOutput(save_file);
-    pOpen->writeSceneAsPNG(save_file);
+    // pOpen->writeSceneAsPNG(save_file); // it does work:
+    if (save_file.endsWith(".png") || str_fmt.endsWith("(*.png)"))
+      pOpen->writeSceneAsPNG(save_file);
+    else if (save_file.endsWith(".jpg") || str_fmt.endsWith("(*.jpg)"))
+      pOpen->writeSceneAsJPEG(save_file);
+    else if (save_file.endsWith(".bmp") || str_fmt.endsWith("(*.bmp)"))
+      pOpen->writeSceneAsBitmap(save_file);
+    else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
+      pOpen->writeSceneAsPostScript(save_file);
+    else QMessageBox::information(this,
+      tr("Unknown format"), tr("Show me the easy way from here to PDF, please!"),
+      QMessageBox::Close);
+  }
 }
 
 void FrameWorkspace::on_actionExportCoords__triggered()

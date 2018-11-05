@@ -49,7 +49,8 @@ QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS;
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-    : BaseWidget(parent), mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
+    : BaseWidget(parent), renderer_(OpenGLRenderer::New()), nameBgColor_("Gainsboro")
+  , mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
 {
   // this->setAttribute(Qt::WA_NativeWindow, false);
   vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
@@ -60,18 +61,16 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   mol->SetMapper(mol_mapper_.Get());
 
   // VTK Renderer
-  Renderer renderer(OpenGLRenderer::New());
-  renderer->SetUseFXAA(true); // antaliasing is now On
+  renderer_->SetUseFXAA(true); // antaliasing is now On
 
   vtkNew<vtkNamedColors> colrs;
-  // renderer->SetBackground(colrs->GetColor3d("Gainsboro").GetData());
-  renderer->SetBackground(colrs->GetColor3d("SlateGray").GetData());
+  bgColor_ = colrs->GetColor3d(nameBgColor_);
 
   // renderer->AddActor(sphereActor);
-  renderer->AddActor(mol);
+  renderer_->AddActor(mol);
 
   // VTK/Qt wedded
-  this->GetRenderWindow()->AddRenderer(renderer);
+  this->GetRenderWindow()->AddRenderer(renderer_);
 }
 
 QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
@@ -99,6 +98,7 @@ bool QVTKMoleculeWidget::resetStyle(const QVTKMoleculeMapStyle &style)
 
 void QVTKMoleculeWidget::doRender()
 {
+  renderer_->SetBackground(bgColor_.GetData());
   mol_style_.SetupMoleculeMapper(mol_mapper_);
   this->GetRenderWindow()->Render();
 }

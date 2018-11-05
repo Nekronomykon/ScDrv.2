@@ -122,6 +122,9 @@ public:
 
   // Writer functionality
   bool writeSceneAsPNG(const TypeFileName&);
+  bool writeSceneAsJPEG(const TypeFileName&);
+  bool writeSceneAsBitmap(const TypeFileName&);
+  bool writeSceneAsPostScript(const TypeFileName&);
 
   // facets
   vtkMolecule *getMolecule() const;

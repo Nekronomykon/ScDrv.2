@@ -25,6 +25,8 @@
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
+#include <vtkColor.h>
+#include <vtkStdString.h>
 #include <vtkMolecule.h>
 #include <vtkMoleculeMapper.h>
 
@@ -62,6 +64,9 @@ private:
   typedef vtkSmartPointer<vtkRenderer> Renderer;
 
 private:
+  Renderer renderer_;
+  vtkStdString nameBgColor_;
+  vtkColor3d bgColor_;
   MolMapper mol_mapper_;
   MolStyle mol_style_;
 
