@@ -479,7 +479,7 @@ bool FrameFile::writeSceneAsPostScript(const TypeFileName &save_path)
 
   // Temporary; kind of file extension mangling
   QString save_file(save_path);
-  QString ext(tr(".ps"));
+  QString ext(tr(".eps"));
   if (!save_file.endsWith(ext))
     save_file += ext;
 
