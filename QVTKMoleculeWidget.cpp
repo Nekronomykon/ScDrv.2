@@ -22,25 +22,29 @@
 
 #include <vtkPolyDataMapper.h>
 
+#include <vtkInteractorStyleRubberBandPick.h>
+
 typedef vtkSmartPointer<vtkLODActor> LODActor;
 typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
 typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> OpenGLMolMapper;
 
+typedef vtkSmartPointer<vtkInteractorStyleRubberBandPick> IntStyleRbrBndPick;
+
 const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_Sticks =
-    {true, vtkMoleculeMapper::UnitRadius, 0.15f, true, false, vtkMoleculeMapper::DiscreteByAtom, 0.15f};
+{ true, vtkMoleculeMapper::UnitRadius, 0.15f, true, false, vtkMoleculeMapper::DiscreteByAtom, 0.15f };
 // [0] -> sticks
 
 const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_BnS =
-    {true, vtkMoleculeMapper::VDWRadius, 0.25f, true, false, vtkMoleculeMapper::DiscreteByAtom, 0.125f};
+{ true, vtkMoleculeMapper::VDWRadius, 0.25f, true, false, vtkMoleculeMapper::DiscreteByAtom, 0.125f };
 // [1] -> balls and sticks
 
 const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_VdW =
-    {true, vtkMoleculeMapper::VDWRadius, 1.0f, false, false, 0, 0};
+{ true, vtkMoleculeMapper::VDWRadius, 1.0f, false, false, 0, 0 };
 // [2] -> van der Waals
 
 const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_Fast =
-    {true, vtkMoleculeMapper::UnitRadius, 0.375f, true, false, vtkMoleculeMapper::SingleColor, 0.1f};
+{ true, vtkMoleculeMapper::UnitRadius, 0.375f, true, false, vtkMoleculeMapper::SingleColor, 0.1f };
 // [3] -> fast internal
 
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFast() { return style_Fast; }
@@ -49,7 +53,7 @@ QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS;
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-    : BaseWidget(parent), renderer_(OpenGLRenderer::New()), nameBgColor_("Gainsboro")
+  : BaseWidget(parent), renderer_(OpenGLRenderer::New()), nameBgColor_("Gainsboro")
   , mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
 {
   // this->setAttribute(Qt::WA_NativeWindow, false);
@@ -71,6 +75,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   // VTK/Qt wedded
   this->GetRenderWindow()->AddRenderer(renderer_);
+  this->GetInteractor()->SetInteractorStyle(IntStyleRbrBndPick::New());
 }
 
 QVTKMoleculeWidget::~QVTKMoleculeWidget() {}

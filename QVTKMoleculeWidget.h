@@ -30,6 +30,8 @@
 #include <vtkMolecule.h>
 #include <vtkMoleculeMapper.h>
 
+#include "CommandPickSubstructure.h"
+
 #include "QVTKMoleculeMapStyle.h"
 
 class QVTKMoleculeWidget
