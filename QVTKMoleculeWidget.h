@@ -30,9 +30,12 @@
 #include <vtkMolecule.h>
 #include <vtkMoleculeMapper.h>
 
+#include <vtkInteractorStyle.h>
+
 #include "CommandPickFragment.h"
 
 #include "QVTKMoleculeMapStyle.h"
+
 
 class QVTKMoleculeWidget
     : public QVTKOpenGLWidget
@@ -44,6 +47,7 @@ public:
   ~QVTKMoleculeWidget() override;
 
   typedef QVTKMoleculeMapStyle MolStyle;
+  typedef vtkSmartPointer<vtkInteractorStyle> InteractorStyle;
 
   static MolStyle styleFast();
   static MolStyle styleFill();
@@ -71,6 +75,9 @@ private:
   vtkColor3d bgColor_;
   MolMapper mol_mapper_;
   MolStyle mol_style_;
+
+  InteractorStyle styleInteractor_;
+  vtkNew<CommandPickFragment> cmdPickFragment_;
 
   static const MolStyle style_VdW;
   static const MolStyle style_BnS;

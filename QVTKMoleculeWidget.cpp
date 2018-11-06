@@ -55,6 +55,7 @@ QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Stic
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   : BaseWidget(parent), renderer_(OpenGLRenderer::New()), nameBgColor_("Gainsboro")
   , mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
+  , styleInteractor_(IntStyleRbrBndPick::New())
 {
   // this->setAttribute(Qt::WA_NativeWindow, false);
   vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
@@ -75,7 +76,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   // VTK/Qt wedded
   this->GetRenderWindow()->AddRenderer(renderer_);
-  this->GetInteractor()->SetInteractorStyle(IntStyleRbrBndPick::New());
+  this->GetInteractor()->SetInteractorStyle(styleInteractor_);
 }
 
 QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
