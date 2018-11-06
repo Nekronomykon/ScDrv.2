@@ -30,7 +30,7 @@
 #include <vtkMolecule.h>
 #include <vtkMoleculeMapper.h>
 
-#include "CommandPickSubstructure.h"
+#include "CommandPickFragment.h"
 
 #include "QVTKMoleculeMapStyle.h"
 

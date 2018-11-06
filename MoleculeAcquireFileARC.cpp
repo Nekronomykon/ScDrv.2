@@ -38,6 +38,13 @@ MoleculeAcquireFileARC::MoleculeAcquireFileARC() : MoleculeAcquireFile() {}
 
 MoleculeAcquireFileARC::~MoleculeAcquireFileARC() {}
 
+//----------------------------------------------------------------------------
+void MoleculeAcquireFileARC::PrintSelf(ostream& os, vtkIndent indent)
+{
+  this->Superclass::PrintSelf(os, indent);
+}
+
+
 int MoleculeAcquireFileARC::RequestInformation(vtkInformation *vtkNotUsed(request),
                                                vtkInformationVector **vtkNotUsed(inputVector),
                                                vtkInformationVector *outputVector)
@@ -156,8 +163,3 @@ int MoleculeAcquireFileARC::RequestData(vtkInformation *,
   return 1;
 }
 
-//----------------------------------------------------------------------------
-void MoleculeAcquireFileARC::PrintSelf(ostream& os, vtkIndent indent)
-{
-  this->Superclass::PrintSelf(os, indent);
-}
