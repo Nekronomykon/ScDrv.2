@@ -76,7 +76,12 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   // VTK/Qt wedded
   this->GetRenderWindow()->AddRenderer(renderer_);
-  this->GetInteractor()->SetInteractorStyle(styleInteractor_);
+
+  vtkRenderWindowInteractor* pIren = this->GetInteractor();
+  assert(pIren);
+  pIren->SetInteractorStyle(styleInteractor_);
+
+  pIren->AddObserver(vtkCommand::EndPickEvent, cmdPickFragment_);
 }
 
 QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
