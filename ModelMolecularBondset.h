@@ -30,8 +30,8 @@ public:
     ColumnID = 0,
     ColumnFrom = 1,
     ColumnTo = 2,
-    ColumnType = 3,
-    ColumnLength = 4,
+    ColumnLength = 3,
+    ColumnType = 4,
     Column_Count
   };
 

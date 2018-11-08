@@ -8,9 +8,7 @@
 #include <QPalette>
 
 ModelMolecularBondset::ModelMolecularBondset(vtkMolecule *pMol)
-    : QAbstractTableModel()
-    , ptr_mol_(pMol)
-    , numberOfBonds_(pMol ? pMol->GetNumberOfBonds() : 0)
+    : QAbstractTableModel(), ptr_mol_(pMol), numberOfBonds_(pMol ? pMol->GetNumberOfBonds() : 0)
 {
 }
 
@@ -109,12 +107,21 @@ QVariant ModelMolecularBondset::data(const QModelIndex &mi, int role) const
     vtkBond bond = ptr_mol_->GetBond(mi.row());
     switch (mi.column())
     {
-    case(ColumnFrom):
+    case (ColumnFrom):
+    {
       res.setValue(bond.GetBeginAtomId());
       break;
-    case(ColumnTo):
+    }
+    case (ColumnTo):
+    {
       res.setValue(bond.GetEndAtomId());
       break;
+    }
+    case (ColumnLength):
+    {
+      res.setValue(bond.GetLength());
+      break;
+    }
     default:
       break;
     }
