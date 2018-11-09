@@ -1,5 +1,5 @@
-#ifndef __Model_TextFiles_h__
-#define __Model_TextFiles_h__
+#ifndef Model_Files_h
+#define Model_Files_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -8,17 +8,15 @@
 
 #include <QFileSystemModel>
 
-#include <QModelIndexList>
-
-class ModelTextFiles
+class ModelFiles
   : public QFileSystemModel
 {
   Q_OBJECT
 public:
-  explicit ModelTextFiles();
-  ~ModelTextFiles() override;
+  explicit ModelFiles();
+  ~ModelFiles() override;
 
   int columnCount(const QModelIndex&) const override;
 };
 
-#endif // !__Model_TextFiles_h__
+#endif // !Model_Files_h

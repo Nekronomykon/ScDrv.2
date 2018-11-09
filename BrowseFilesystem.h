@@ -10,18 +10,12 @@
 #include <QPointer>
 #include <QTreeView>
 
-#include "ModelFiles.h"
-
-class BrowseFiles
-  : public QTreeView
+class BrowseFilesystem :
+  public QTreeView
 {
-  Q_OBJECT
 public:
-  explicit BrowseFiles(QWidget* /*parent*/ = nullptr);
-  ~BrowseFiles() override;
-
-private:
-  QPointer<ModelFiles> model_txt_;
+  BrowseFilesystem(QWidget* /*parent*/ = nullptr);
+  ~BrowseFilesystem() override = default;
 };
 
 #endif // !Browse_Filesystem_h
