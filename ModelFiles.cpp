@@ -11,5 +11,5 @@ ModelFiles::~ModelFiles()
 
 int ModelFiles::columnCount(const QModelIndex&)const
 {
-  return 1; // Only full-path file name
+  return 1; // only file name
 }

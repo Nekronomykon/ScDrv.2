@@ -16,7 +16,7 @@ TableElements::TableElements(QWidget *parent)
   int w1 = fm.width(QLatin1Char('9')) * 4;
   int h1 = fm.height(); // * 3 / 2;
 
-  Model* pM = this->getViewModel();
+  Model* pM = this->GetViewModel();
 
   /// ???
   for (int j = 0; j <= pM->columnCount(); 

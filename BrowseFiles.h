@@ -1,5 +1,5 @@
-#ifndef Browse_Filesystem_h
-#define Browse_Filesystem_h
+#ifndef Browse_Files_h
+#define Browse_Files_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -8,20 +8,24 @@
 
 #include <QWidget>
 #include <QPointer>
-#include <QTreeView>
+#include <QListView> 
 
+#include "ImplModelView.h"
 #include "ModelFiles.h"
 
 class BrowseFiles
-  : public QTreeView
+  : public ImplModelView<BrowseFiles, QListView, ModelFiles>
 {
+  typedef  ImplModelView<BrowseFiles, QListView, ModelFiles> _Base;
+
   Q_OBJECT
 public:
   explicit BrowseFiles(QWidget* /*parent*/ = nullptr);
-  ~BrowseFiles() override;
+  ~BrowseFiles() override = default;
+
+public slots:
 
 private:
-  QPointer<ModelFiles> model_txt_;
 };
 
-#endif // !Browse_Filesystem_h
+#endif // !Browse_Files_h

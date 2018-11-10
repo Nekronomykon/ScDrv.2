@@ -9,22 +9,25 @@
 #include <QWidget>
 #include <QPointer>
 #include <QSplitter>
-#include <QListWidget> // temporary
 
 #include "BrowseFiles.h"
+#include "BrowseFilesystem.h"
 
+#include <QModelIndex>
 
 class ViewFilesystem
     : public QSplitter
 {
   Q_OBJECT
 public:
-  explicit ViewFilesystem(QWidget* parent = Q_NULLPTR);
-  ~ViewFilesystem() override;
+  explicit ViewFilesystem(QWidget* /*parent*/ = nullptr);
+  ~ViewFilesystem() override = default;
 
+public slots:
+  void listDirectoryIndex(const QModelIndex& /*idx*/);
 private:
-  QPointer<QListWidget> list_files_; // should see and select only regular files in current dir
-  QPointer<BrowseFiles> browse_dir_; // should see and select only dirs to make it current
+  QPointer<BrowseFilesystem> browse_dir_; // should see and select only dirs to make it current
+  QPointer<BrowseFiles> list_files_; // should see and select only regular files in current dir
 };
 
 #endif // !View_Filesystem_h

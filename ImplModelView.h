@@ -24,9 +24,13 @@ public:
       : TBase(parent), ptrModel_(new Model)
   {
     assert(ptrModel_);
+    T*pT = static_cast<T*>(this);
+    pT->SetupModel(pT->GetViewModel());
     this->setModel(ptrModel_);
   }
-  Model* getViewModel() const {return ptrModel_;}
+  Model* GetViewModel() const {return ptrModel_;}
+
+  void SetupModel(Model*){}
 
 private:
   Model *ptrModel_;
