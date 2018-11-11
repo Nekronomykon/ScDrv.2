@@ -52,7 +52,7 @@ public:
   typedef _FileName::TypeFileName TypeFileName;
 
   explicit FrameFile(QWidget * /*parent*/ = Q_NULLPTR);
-  ~FrameFile() override;
+  ~FrameFile() override = default;
 
   typedef FileFormatContext<FrameFile> FileContext;
   typedef vtkSmartPointer<BondsetBuild> BuildBonds;
@@ -63,8 +63,8 @@ public:
   // static methods:
   static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
 
-  static QStringList getRecentFiles() { return recent_files; }
-  static QStringList &recentFiles() { return recent_files; }
+  static QStringList getRecentFiles();
+  static QStringList &recentFiles();
   static void resetRecentFiles(QStringList /*rclf*/ = QStringList());
 
   static QString FileInputFilter();
@@ -73,12 +73,9 @@ public:
   static void ClearFileInputContext();
   static FileContext CastInputPathFormat(const QString &);
 
-  static inline QString keyRecentFiles() { return QStringLiteral("RecentFiles"); }
-  static inline QString keyFile() { return QStringLiteral("File"); }
-  static inline void storeRecentFiles(QSettings &s)
-  {
-    writeRecentFiles(getRecentFiles(), s);
-  }
+  static QString keyRecentFiles();
+  static QString keyFile();
+  static void storeRecentFiles(QSettings &s);
 
   static inline void loadRecentFiles(QSettings &s);
 
@@ -97,8 +94,8 @@ public:
   void hideStructureViews();
   void showStructureViews();
 
-  static FileContext defaultFormat() { return format_active; }
-  FileContext getFormat() const { return format_current_; }
+  static FileContext defaultFormat();
+  FileContext getFormat() const;
   FileContext resetFormat(FileContext /*fmt*/ = FileContext());
 
   bool readCurrentFormatFrom(const QString &from);

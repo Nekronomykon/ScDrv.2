@@ -26,11 +26,15 @@ public:
     assert(ptrModel_);
     T*pT = static_cast<T*>(this);
     pT->SetupModel(pT->GetViewModel());
-    this->setModel(ptrModel_);
+    // this->setModel(ptrModel_);
   }
   Model* GetViewModel() const {return ptrModel_;}
 
-  void SetupModel(Model*){}
+  void SetupModel(Model*pM)
+  {
+    T*pT = static_cast<T*>(this);
+    pT->setModel(pM);
+  }
 
 private:
   Model *ptrModel_;

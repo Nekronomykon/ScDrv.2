@@ -45,6 +45,10 @@ FrameFile::FileContext FrameFile::format_active;
 // static functions
 FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
 
+inline QStringList FrameFile::getRecentFiles() { return recent_files; }
+
+inline QStringList & FrameFile::recentFiles() { return recent_files; }
+
 void FrameFile::resetRecentFiles(QStringList again_recent)
 {
   std::swap(recent_files, again_recent);
@@ -90,6 +94,12 @@ FrameFile::FileContext FrameFile::CastInputPathFormat(const QString &path)
   return res;
 }
 
+QString FrameFile::keyRecentFiles() { return QStringLiteral("RecentFiles"); }
+QString FrameFile::keyFile() { return QStringLiteral("File"); }
+void FrameFile::storeRecentFiles(QSettings & s)
+{
+  writeRecentFiles(getRecentFiles(), s);
+}
 
 void FrameFile::loadRecentFiles(QSettings &s)
 {
@@ -204,17 +214,12 @@ FrameFile::FrameFile(QWidget *parent)
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);
   this->setTabShape(QTabWidget::Rounded);
-
-  //extend_->setText(tr(">>"));
-  //this->setCornerWidget(extend_, Qt::BottomLeftCorner);
-  //compress_->setText(tr("<<"));
-  //this->setCornerWidget(compress_, Qt::BottomRightCorner);
+  this->tabBar()->setAutoHide(true);
 
   this->addViewWidget(edit_source_, tr("Source"));
+
   this->doClearAll();
 }
-
-FrameFile::~FrameFile() {}
 
 FrameFile::FileContext FrameFile::resetFormat(FileContext fmt)
 {
@@ -337,6 +342,10 @@ void FrameFile::showStructureViews()
   this->addViewWidget(view_bonds_, tr("Bonds"));
   view_bonds_->GetViewModel()->resetMolecule(this->getMolecule());
 }
+
+FrameFile::FileContext FrameFile::defaultFormat() { return format_active; }
+
+FrameFile::FileContext FrameFile::getFormat() const { return format_current_; }
 
 void FrameFile::doReload()
 {

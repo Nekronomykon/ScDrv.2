@@ -186,6 +186,7 @@ void FrameWorkspace::setupDockingViews()
   pNext->setWidget(edit_workspace_);
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
   this->tabifyDockWidget(pInit, pNext);
+  pInit->show();
 }
 
 void FrameWorkspace::initRecentActions()
