@@ -53,7 +53,7 @@ QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS;
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-  : BaseWidget(parent), renderer_(OpenGLRenderer::New()), nameBgColor_("Gainsboro")
+  : BaseWidget(parent), renderer_(OpenGLRenderer::New()), nameBgColor_("SlateGray")
   , mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
   , styleInteractor_(IntStyleRbrBndPick::New())
 {
