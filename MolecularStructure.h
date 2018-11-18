@@ -9,6 +9,7 @@
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
+#include <vtkIdTypeArray.h>
 #include <vtkType.h>
 #include <vtkStdString.h>
 #include <vtkMolecule.h>
@@ -23,6 +24,7 @@
 typedef std::pair<vtkIdType,vtkIdType> IncidenceIndex;
 typedef std::deque<IncidenceIndex> PathSequence;
 typedef std::list<PathSequence> PathPool;
+typedef vtkSmartPointer<vtkIdTypeArray> IndexArray;
 
 class MolecularStructure
 {
@@ -53,10 +55,12 @@ class MolecularStructure
   vtkStdString ResetTitle(vtkStdString title = vtkStdString());
 
 private:
+  BuildBonds bonds_build_;
+  // data
   vtkStdString title_;
   Molecule molecule_;
-  BuildBonds bonds_build_;
-
+  IndexArray idxSelectedAtoms_;
+  IndexArray idxSelectedBonds_;
   //
   PathPool paths_;
 };

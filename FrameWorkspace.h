@@ -12,9 +12,13 @@
 #include <QEvent>
 #include <QCloseEvent>
 
+#include <QProgressBar>
+
 #include "ViewWorkspace.h"
 #include "ViewFilesystem.h"
 #include "FrameFile.h"
+
+#include "ComboBoxColors.h"
 
 #include "ui_FrameWorkspace.h"
 #include <QMainWindow>
@@ -120,6 +124,10 @@ private:
   QPointer<ModelWorkspace> model_workspace_;
   QPointer<ViewWorkspace> edit_workspace_;
   QPointer<ViewFilesystem> view_files_;
+
+  QPointer<QProgressBar> progress_;
+
+  QPointer<ComboBoxColors> colors_back_;
 
 private slots:
 };

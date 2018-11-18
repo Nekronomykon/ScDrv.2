@@ -3,6 +3,8 @@
 MolecularStructure::MolecularStructure()
   : molecule_(Molecule::New())
   , bonds_build_(BuildBonds::New())
+  , idxSelectedAtoms_(IndexArray::New())
+  , idxSelectedBonds_(IndexArray::New())
 {}
 
 MolecularStructure::~MolecularStructure()
@@ -10,6 +12,8 @@ MolecularStructure::~MolecularStructure()
 
 vtkMolecule* MolecularStructure::Initialize()
 {
+  idxSelectedAtoms_->Initialize();
+  idxSelectedBonds_->Initialize();
   molecule_->Initialize();
   return molecule_;
 }
