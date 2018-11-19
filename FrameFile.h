@@ -146,6 +146,9 @@ protected:
   template <class T>
   bool acquireUsing();
 
+  template<class Reader>
+  void ReadAdditionalInformation(Reader*){}
+
 private:
   static QStringList recent_files;
   static QMap<FileContext, QString> all_formats;

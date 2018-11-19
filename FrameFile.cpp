@@ -180,7 +180,8 @@ QString FrameFile::FileInputFilter()
     res += reg.trimmed();
     res += ");;";
   }
-  res += tr("All files (*.*)");
+  // If format is not uniquely detected, treat is as plain text
+  res += tr("All files (*.*)"); 
   return res;
 }
 
@@ -253,6 +254,7 @@ bool FrameFile::acquireUsing()
 
     reader->Update();
     structure_.UpdateBonds();
+    this->ReadAdditionalInformation(reader.Get());
   }
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
