@@ -62,7 +62,11 @@ QStringList FrameFile::GetBackgroundColorNames()
   for (size_t j = 0; j < nNames; ++j)
   {
     vtkStdString a_name(col_names->GetValue(j));
-    names << QString(tr(a_name.c_str()));
+    if (a_name.empty())
+      continue;
+    QString sName(tr(a_name.c_str()));
+    if (!sName.isEmpty())
+      names << sName;
   }
 
   return names;
