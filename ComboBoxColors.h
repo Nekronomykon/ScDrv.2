@@ -14,9 +14,6 @@ public:
   ComboBoxColors(QWidget* /*parent*/ = nullptr);
 
 private:
-  void loadColorNames();
-
-  static vtkNew<vtkNamedColors> namedColors;
 };
 
 #endif // !ComboBox_NamedColors_h

@@ -22,7 +22,9 @@
 
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget *parent)
-    : QMainWindow(parent), edit_workspace_(new ViewWorkspace), view_files_(new ViewFilesystem), progress_(new QProgressBar)
+  : QMainWindow(parent), edit_workspace_(new ViewWorkspace)
+  , view_files_(new ViewFilesystem), progress_(new QProgressBar)
+  , colors_back_(new ComboBoxColors)
 {
   this->setupUi(this);
 
@@ -36,7 +38,9 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
   connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
   connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
-          this, &FrameWorkspace::loadPathContentFrom);
+    this, &FrameWorkspace::loadPathContentFrom);
+  connect(colors_back_, &ComboBoxColors::currentTextChanged
+    , this, &FrameWorkspace::setSceneBackground);
 
   // progress_->setWidth(200);
   // this->statusBar()->insertWidget(1, progress_, 1);
@@ -169,14 +173,22 @@ void FrameWorkspace::setupToolBars()
   editToolBar->addAction(actionClear_);
   editToolBar->addAction(actionClearAll_);
 
-  QToolBar *tbMol = this->addToolBar(tr("Molecular"));
-  tbMol->addAction(actionSourceEdit_);
-  tbMol->addAction(actionSourceCast_);
-  tbMol->addSeparator();
+  QToolBar *tbSrc = this->addToolBar(tr("Source"));
+  tbSrc->addAction(actionSourceEdit_);
+  tbSrc->addAction(actionSourceCast_);
+  tbSrc->addSeparator();
+
+  QToolBar *tbBg = this->addToolBar(tr("Background"));
+  tbBg->addWidget(colors_back_);
+  tbBg->addSeparator();
+  // here color QLineEdit controls could also be added
+
+  QToolBar *tbMol = this->addToolBar(tr("Molecule"));
   tbMol->addAction(actionMolFast_);
   tbMol->addAction(actionMolStick_);
   tbMol->addAction(actionMolBalls_);
   tbMol->addAction(actionMolSpace_);
+  tbSrc->addSeparator();
 }
 
 void FrameWorkspace::setupDockingViews()
@@ -221,12 +233,22 @@ void FrameWorkspace::updateUi()
   bool bHasPath(bHasChild && pActive->HasFileName());
   actionSave_->setEnabled(bHasPath);
   actionReload_->setEnabled(bHasPath
-                            // && pActive->isModified()
+    // && pActive->isModified()
   );
-  bool bHasGraph(bHasChild && pActive->getViewStructure() != nullptr);
+
+  FrameFile::ViewMolecule* pV = !pActive ? nullptr : pActive->getViewStructure();
+  bool bHasGraph(bHasChild && pV != nullptr);
+
+  actionMolBalls_->setChecked(bHasGraph ? pV->moleculeInBallsSticks() : false);
   actionMolBalls_->setEnabled(bHasGraph);
+  
+  actionMolSpace_->setChecked(bHasGraph ? pV->moleculeInSpaceFill() : false);
   actionMolSpace_->setEnabled(bHasGraph);
+
+  actionMolFast_->setChecked(bHasGraph ? pV->moleculeInFastRender() : false);
   actionMolFast_->setEnabled(bHasGraph);
+
+  actionMolStick_->setChecked(bHasGraph ? pV->moleculeInSticks() : false);
   actionMolStick_->setEnabled(bHasGraph);
 
   actionMolBonds_->setEnabled(bHasGraph);
@@ -373,6 +395,8 @@ void FrameWorkspace::storeSettings()
   settings.setValue("Geometry", this->saveGeometry());
 }
 
+// Slots
+
 void FrameWorkspace::loadPathContentFrom(const QString &file_path)
 {
   QList<QListWidgetItem *> list = edit_workspace_->findItems(file_path, Qt::MatchExactly);
@@ -383,6 +407,20 @@ void FrameWorkspace::loadPathContentFrom(const QString &file_path)
 
   FrameFile *pFile = this->provideFileFrame(file_path);
   this->updateUi();
+}
+
+void FrameWorkspace::setSceneBackground(const QString &name_col)
+{
+  vtkStdString name_bytes(name_col.toLatin1().data());
+  FrameFile::ViewMolecule::ResetDefaultBackgroundColorName(name_bytes);
+  FrameFile *pOpen = this->getActiveChild();
+  if (pOpen)
+  {
+    FrameFile::ViewMolecule* pV = pOpen->setViewStructure();
+    if (pV)
+      pV->ResetBackgroundColorName(name_bytes);
+  }
+
 }
 
 // Auto-assigned event handlers:
@@ -398,17 +436,17 @@ void FrameWorkspace::on_actionNew__triggered()
 void FrameWorkspace::on_actionOpen__triggered()
 {
   QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
-                                 | QFileDialog::ReadOnly                    // read-only is also to read
-                                 | QFileDialog::DontUseCustomDirectoryIcons // uniformity
-      ;
+    | QFileDialog::ReadOnly                    // read-only is also to read
+    | QFileDialog::DontUseCustomDirectoryIcons // uniformity
+    ;
 
   QString all_context = FrameFile::FileInputFilter();
   QString fmt_name;
   QString dir_name = QDir::currentPath();
 
   QStringList all_paths =
-      // FrameFile::queryInputFiles(fmt_name);
-      QFileDialog::getOpenFileNames(this, tr("Input files"), dir_name, all_context, &fmt_name, options);
+    // FrameFile::queryInputFiles(fmt_name);
+    QFileDialog::getOpenFileNames(this, tr("Input files"), dir_name, all_context, &fmt_name, options);
 
   if (all_paths.isEmpty())
     return;
@@ -427,8 +465,8 @@ void FrameWorkspace::on_actionOpen__triggered()
 void FrameWorkspace::on_actionToggleLayout__triggered()
 {
   QGuiApplication::setLayoutDirection((this->layoutDirection() == Qt::LeftToRight)
-                                          ? Qt::RightToLeft
-                                          : Qt::LeftToRight);
+    ? Qt::RightToLeft
+    : Qt::LeftToRight);
   this->updateUi();
 }
 
@@ -493,8 +531,8 @@ void FrameWorkspace::on_actionExportScene__triggered()
   QFileDialog::Options opts = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
   QString str_fmt;
   QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]"), fi.completeBaseName(), tr("PostScript file (*.eps);;PNG image file (*.png);;JPEG inage file (*.jpg);;Bitmap (*.bmp);;All files (*.*)") // temporarily constant
-                                                   ,
-                                                   &str_fmt, opts);
+    ,
+    &str_fmt, opts);
 
   if (!save_file.isEmpty())
   {
@@ -511,8 +549,8 @@ void FrameWorkspace::on_actionExportScene__triggered()
       pOpen->writeSceneAsPostScript(save_file);
     else
       QMessageBox::information(this,
-                               tr("Unknown format"), tr("Show me the easy way from here to PDF, please!"),
-                               QMessageBox::Close);
+        tr("Unknown format"), tr("Show me the easy way from here to PDF, please!"),
+        QMessageBox::Close);
   }
 }
 

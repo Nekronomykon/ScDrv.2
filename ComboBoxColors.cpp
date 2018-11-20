@@ -1,26 +1,16 @@
 #include "ComboBoxColors.h"
 
-#include <QLatin1String>
+#include "FrameFile.h"
 
-#include <vtkStringArray.h>
-
-vtkNew<vtkNamedColors> ComboBoxColors::namedColors;
-
-ComboBoxColors::ComboBoxColors(QWidget* parent)
+ComboBoxColors::ComboBoxColors(QWidget *parent)
   : QComboBox(parent)
 {
-  this->loadColorNames();
-}
+  this->addItems(FrameFile::GetBackgroundColorNames());
+  vtkStdString s_one(FrameFile::ViewMolecule::GetDefaultBackgroundColorName());
+  QString name(s_one.c_str());
 
-void ComboBoxColors::loadColorNames(void)
-{
-  vtkNew<vtkStringArray> names;
-  namedColors->GetColorNames(names);
-  size_t nNames = names->GetSize();
-  for (size_t j = 0; j < nNames; ++j)
-  {
-    vtkStdString a_name(names->GetValue(j));
-    QString str_name( tr(a_name.c_str() ) );
-    this->addItem(str_name);
-  }
+  int nSel = this->findText(name);
+  if (nSel < 0)
+    name = tr("black");
+  this->setCurrentText(name);
 }

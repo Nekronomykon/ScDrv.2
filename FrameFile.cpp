@@ -12,9 +12,11 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include <vtkStringArray.h>
+
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
-
+#include <vtkNamedColors.h>
 #include <vtkImageWriter.h>
 
 #include <vtkPNGWriter.h>
@@ -30,11 +32,11 @@
 
 #include "FileFormat.h"
 
-typedef vtkSmartPointer<vtkImageWriter>       ImgWrite;
-typedef vtkSmartPointer<vtkPNGWriter>         ImgWritePNG;
-typedef vtkSmartPointer<vtkJPEGWriter>        ImgWriteJPEG;
-typedef vtkSmartPointer<vtkBMPWriter>         ImgWriteBMP;
-typedef vtkSmartPointer<vtkPostScriptWriter>  ImgWritePS;
+typedef vtkSmartPointer<vtkImageWriter> ImgWrite;
+typedef vtkSmartPointer<vtkPNGWriter> ImgWritePNG;
+typedef vtkSmartPointer<vtkJPEGWriter> ImgWriteJPEG;
+typedef vtkSmartPointer<vtkBMPWriter> ImgWriteBMP;
+typedef vtkSmartPointer<vtkPostScriptWriter> ImgWritePS;
 
 // static members
 QStringList FrameFile::recent_files;
@@ -47,7 +49,24 @@ FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
 
 inline QStringList FrameFile::getRecentFiles() { return recent_files; }
 
-inline QStringList & FrameFile::recentFiles() { return recent_files; }
+inline QStringList &FrameFile::recentFiles() { return recent_files; }
+
+QStringList FrameFile::GetBackgroundColorNames()
+{
+  vtkNew<vtkNamedColors> colors;
+  vtkNew<vtkStringArray> col_names;
+
+  colors->GetColorNames(col_names);
+  QStringList names;
+  size_t nNames = col_names->GetSize();
+  for (size_t j = 0; j < nNames; ++j)
+  {
+    vtkStdString a_name(col_names->GetValue(j));
+    names << QString(tr(a_name.c_str()));
+  }
+
+  return names;
+}
 
 void FrameFile::resetRecentFiles(QStringList again_recent)
 {
@@ -76,8 +95,7 @@ FrameFile::FileContext FrameFile::CastInputPathFormat(const QString &path)
   auto it_fmt = all_formats.begin();
   do
   {
-    if (it_fmt.key().hasBuild()
-      && it_fmt.value() == sx) // (it_fmt.value().indexOf(sx) != -1) or whatever else similar...
+    if (it_fmt.key().hasBuild() && it_fmt.value() == sx) // (it_fmt.value().indexOf(sx) != -1) or whatever else similar...
       all_fmts.push_back(it_fmt.key());
   } while (++it_fmt != all_formats.end());
 
@@ -86,17 +104,14 @@ FrameFile::FileContext FrameFile::CastInputPathFormat(const QString &path)
   // if (all_fmts.empty())  all_fmts.copy(all_formats);
   if (!res)
   {
-    QMessageBox::warning(nullptr, tr("Ambiguous")
-      , tr("More than one file format could be attributed to the following file:\n%1\nUser intervention is required").arg(path)
-      , QMessageBox::Ok | QMessageBox::Ignore
-    );
+    QMessageBox::warning(nullptr, tr("Ambiguous"), tr("More than one file format could be attributed to the following file:\n%1\nUser intervention is required").arg(path), QMessageBox::Ok | QMessageBox::Ignore);
   }
   return res;
 }
 
 QString FrameFile::keyRecentFiles() { return QStringLiteral("RecentFiles"); }
 QString FrameFile::keyFile() { return QStringLiteral("File"); }
-void FrameFile::storeRecentFiles(QSettings & s)
+void FrameFile::storeRecentFiles(QSettings &s)
 {
   writeRecentFiles(getRecentFiles(), s);
 }
@@ -110,7 +125,8 @@ QStringList FrameFile::readRecentFiles(QSettings &settings)
 {
   QStringList result;
   const int count = settings.beginReadArray(keyRecentFiles());
-  for (int i = 0; i < count; ++i) {
+  for (int i = 0; i < count; ++i)
+  {
     settings.setArrayIndex(i);
     result.append(settings.value(keyFile()).toString());
   }
@@ -122,7 +138,8 @@ int FrameFile::writeRecentFiles(const QStringList &files, QSettings &settings)
 {
   const int count = files.size();
   settings.beginWriteArray(keyRecentFiles());
-  for (int i = 0; i < count; ++i) {
+  for (int i = 0; i < count; ++i)
+  {
     settings.setArrayIndex(i);
     settings.setValue(keyFile(), files.at(i));
   }
@@ -132,7 +149,7 @@ int FrameFile::writeRecentFiles(const QStringList &files, QSettings &settings)
 
 void FrameFile::addToRecent(const QString &one)
 {
-  auto& recent_list = recentFiles();
+  auto &recent_list = recentFiles();
   recent_list.removeAll(one);
   recent_list.prepend(one);
 }
@@ -181,7 +198,7 @@ QString FrameFile::FileInputFilter()
     res += ");;";
   }
   // If format is not uniquely detected, treat is as plain text
-  res += tr("All files (*.*)"); 
+  res += tr("All files (*.*)");
   return res;
 }
 
@@ -207,10 +224,9 @@ void FrameFile::ClearFileInputContext()
 
 // this-driven functions
 FrameFile::FrameFile(QWidget *parent)
-  : QTabWidget(parent), format_current_(format_active)
-  , bonds_build_(BuildBonds::New())
-  //, extend_(new QToolButton(this))
-  //, compress_(new QToolButton(this))
+    : QTabWidget(parent), format_current_(format_active), bonds_build_(BuildBonds::New())
+//, extend_(new QToolButton(this))
+//, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);
@@ -265,8 +281,6 @@ bool FrameFile::acquireAsXYZ() { return this->acquireUsing<MoleculeAcquireFileXY
 bool FrameFile::acquireAsWFN() { return this->acquireUsing<MoleculeAcquireFileWFN>(); }
 bool FrameFile::acquireAsCUBE() { return this->acquireUsing<MoleculeAcquireFileCUBE>(); }
 
-
-
 // data facets
 vtkMolecule *FrameFile::getMolecule() const
 {
@@ -280,8 +294,9 @@ EditTextSource *FrameFile::getEditSource() const
 }
 EditTextSource *FrameFile::setEditSource()
 {
-  auto* pOne = this->getEditSource();
-  if (pOne) this->setCurrentWidget(pOne);
+  auto *pOne = this->getEditSource();
+  if (pOne)
+    this->setCurrentWidget(pOne);
   return pOne;
 }
 
@@ -292,8 +307,9 @@ QVTKMoleculeWidget *FrameFile::getViewStructure() const
 
 QVTKMoleculeWidget *FrameFile::setViewStructure()
 {
-  auto* pOne = this->getViewStructure();
-  if (pOne) this->setCurrentWidget(pOne);
+  auto *pOne = this->getViewStructure();
+  if (pOne)
+    this->setCurrentWidget(pOne);
   return pOne;
 }
 
@@ -304,11 +320,11 @@ ViewMoleculeAtomic *FrameFile::getEditAtomic() const
 
 ViewMoleculeAtomic *FrameFile::setEditAtomic()
 {
-  auto* pOne = this->getEditAtomic();
-  if (pOne) this->setCurrentWidget(pOne);
+  auto *pOne = this->getEditAtomic();
+  if (pOne)
+    this->setCurrentWidget(pOne);
   return pOne;
 }
-
 
 void FrameFile::InterpretFileName()
 {
@@ -398,8 +414,8 @@ bool FrameFile::writeSceneAsPNG(const TypeFileName &save_path)
   if (!save_file.endsWith(ext))
     save_file += ext;
 
-// Here comes saving... 
-// TODO: Rethink saving and format casting here...
+  // Here comes saving...
+  // TODO: Rethink saving and format casting here...
 
   ImgWritePNG write_image(ImgWritePNG::New());
   write_image->SetCompressionLevel(9);
@@ -410,7 +426,6 @@ bool FrameFile::writeSceneAsPNG(const TypeFileName &save_path)
   }
   write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
   write_image->Write();
-
 
   return true;
 }
@@ -430,8 +445,8 @@ bool FrameFile::writeSceneAsJPEG(const TypeFileName &save_path)
   if (!save_file.endsWith(ext))
     save_file += ext;
 
-  // Here comes saving... 
-// TODO: Rethink saving and format casting here...
+  // Here comes saving...
+  // TODO: Rethink saving and format casting here...
 
   ImgWriteJPEG write_image(ImgWriteJPEG::New());
   write_image->ProgressiveOn();
@@ -443,7 +458,6 @@ bool FrameFile::writeSceneAsJPEG(const TypeFileName &save_path)
   }
   write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
   write_image->Write();
-
 
   return true;
 }
@@ -463,8 +477,8 @@ bool FrameFile::writeSceneAsBitmap(const TypeFileName &save_path)
   if (!save_file.endsWith(ext))
     save_file += ext;
 
-  // Here comes saving... 
-// TODO: Rethink saving and format casting here...
+  // Here comes saving...
+  // TODO: Rethink saving and format casting here...
 
   ImgWriteBMP write_image(ImgWriteBMP::New());
   {
@@ -474,7 +488,6 @@ bool FrameFile::writeSceneAsBitmap(const TypeFileName &save_path)
   }
   write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
   write_image->Write();
-
 
   return true;
 }
@@ -494,8 +507,8 @@ bool FrameFile::writeSceneAsPostScript(const TypeFileName &save_path)
   if (!save_file.endsWith(ext))
     save_file += ext;
 
-  // Here comes saving... 
-// TODO: Rethink saving and format casting here...
+  // Here comes saving...
+  // TODO: Rethink saving and format casting here...
 
   ImgWritePS write_image(ImgWritePS::New());
   {
@@ -505,7 +518,6 @@ bool FrameFile::writeSceneAsPostScript(const TypeFileName &save_path)
   }
   write_image->SetFileName(FileNameRoot::getPtrFrom(save_file));
   write_image->Write();
-
 
   return true;
 }

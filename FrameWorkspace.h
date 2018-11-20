@@ -92,6 +92,7 @@ protected slots:
   void on_actionMolSpace__triggered();
 
   void loadPathContentFrom(const QString &);
+  void setSceneBackground(const QString &);
 
 protected:
   void changeEvent(QEvent *e) override;

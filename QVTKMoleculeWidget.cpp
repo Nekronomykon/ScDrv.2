@@ -52,8 +52,11 @@ QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFill() { return style_VdW;
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS; }
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
 
+vtkStdString QVTKMoleculeWidget::name_default_background("antique_white");
+
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-  : BaseWidget(parent), renderer_(OpenGLRenderer::New()), nameBgColor_("SlateGray")
+  : BaseWidget(parent), renderer_(OpenGLRenderer::New())
+  , name_background_(GetDefaultBackgroundColorName())
   , mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
   , styleInteractor_(IntStyleRbrBndPick::New())
 {
@@ -68,9 +71,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   // VTK Renderer
   renderer_->SetUseFXAA(true); // antaliasing is now On
 
-  vtkNew<vtkNamedColors> colrs;
-  bgColor_ = colrs->GetColor3d(nameBgColor_);
-
+  this->AdjustBackgroundColor();
   // renderer->AddActor(sphereActor);
   renderer_->AddActor(mol);
 
@@ -85,6 +86,13 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 }
 
 QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
+
+void QVTKMoleculeWidget::AdjustBackgroundColor()
+{
+  vtkNew<vtkNamedColors> colors;
+  bgColor_ = colors->GetColor3d(name_background_);
+
+}
 
 void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
 {
@@ -113,6 +121,24 @@ void QVTKMoleculeWidget::doRender()
   mol_style_.SetupMoleculeMapper(mol_mapper_);
   this->GetRenderWindow()->Render();
 }
+
+vtkStdString QVTKMoleculeWidget::GetDefaultBackgroundColorName() { return name_default_background; }
+
+vtkStdString QVTKMoleculeWidget::ResetDefaultBackgroundColorName(vtkStdString name_new)
+{
+  std::swap(name_default_background, name_new);
+  return name_new;
+}
+
+vtkStdString QVTKMoleculeWidget::GetBackgroundColorName() const { return name_background_; }
+vtkStdString QVTKMoleculeWidget::ResetBackgroundColorName(vtkStdString name_new)
+{
+  std::swap(name_background_, name_new);
+  this->AdjustBackgroundColor();
+  this->doRender();
+  return name_new;
+}
+
 
 bool QVTKMoleculeWidget::moleculeInBallsSticks() const { return bool(mol_style_ == style_BnS); }
 

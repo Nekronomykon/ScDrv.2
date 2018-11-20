@@ -63,6 +63,8 @@ public:
   // static methods:
   static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
 
+  static QStringList GetBackgroundColorNames();
+
   static QStringList getRecentFiles();
   static QStringList &recentFiles();
   static void resetRecentFiles(QStringList /*rclf*/ = QStringList());

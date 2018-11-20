@@ -54,10 +54,21 @@ public:
   static MolStyle styleBall();
   static MolStyle styleBond();
 
+protected:
+  static vtkStdString name_default_background;
+
+  void AdjustBackgroundColor(void);
+
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
   bool resetStyle(const QVTKMoleculeMapStyle & /*style*/);
   void doRender();
+
+  static vtkStdString GetDefaultBackgroundColorName();
+  static vtkStdString ResetDefaultBackgroundColorName(vtkStdString name_new);
+
+  vtkStdString GetBackgroundColorName() const;
+  vtkStdString ResetBackgroundColorName(vtkStdString name_new);
 
   bool moleculeInBallsSticks() const;
   bool moleculeInSpaceFill() const;
@@ -71,7 +82,7 @@ private:
 
 private:
   Renderer renderer_;
-  vtkStdString nameBgColor_;
+  vtkStdString name_background_;
   vtkColor3d bgColor_;
   MolMapper mol_mapper_;
   MolStyle mol_style_;
