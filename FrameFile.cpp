@@ -1,5 +1,7 @@
 #include "FrameFile.h"
 
+#include <set>
+
 #include <QFile>
 #include <QSet>
 #include <QMap>
@@ -169,38 +171,40 @@ int FrameFile::addViewWidget(QPointer<W> &ww, const QString &title)
 
 QString FrameFile::FileInputFilter()
 {
-  QString res;
-  QSet<QString> regx;
+  QString res(tr("Known file types ("));
+  std::set<QString> regx;
 
+  QString by_format;
   auto it_fmt = all_formats.begin();
   do
   {
     //if (!it_fmt.key().hasBuild())
     //  continue;
 
-    res += it_fmt.key();
+    by_format += it_fmt.key();
     QString mask(tr("*."));
     mask += it_fmt.value();
 
     regx.insert(mask);
 
-    res += " (";
-    res += mask;
-    res += ");;";
+    by_format += " (";
+    by_format += mask;
+    by_format += ");;";
   } while (++it_fmt != all_formats.end());
 
-  if (!regx.isEmpty())
+  assert(!regx.empty());
+
+  QString reg;
+  for (const QString &extn : regx)
   {
-    res += "Known file types (";
-    QString reg;
-    for (const QString &extn : regx)
-    {
-      reg += extn;
-      reg += " ";
-    }
-    res += reg.trimmed();
-    res += ");;";
+    reg += extn;
+    reg += " ";
   }
+  res += reg.trimmed();
+  res += ");;";
+
+  res += by_format;
+
   // If format is not uniquely detected, treat is as plain text
   res += tr("All files (*.*)");
   return res;
@@ -228,9 +232,9 @@ void FrameFile::ClearFileInputContext()
 
 // this-driven functions
 FrameFile::FrameFile(QWidget *parent)
-    : QTabWidget(parent), format_current_(format_active), bonds_build_(BuildBonds::New())
-//, extend_(new QToolButton(this))
-//, compress_(new QToolButton(this))
+  : QTabWidget(parent), format_current_(format_active), bonds_build_(BuildBonds::New())
+  //, extend_(new QToolButton(this))
+  //, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);
