@@ -2,11 +2,10 @@
 #define MoleculeAcquire_File_WFN_h
 
 /*=========================================================================
-
-  Program:   Visualization Toolkit
+  Program:   Local Fork of the Visualization Toolkit (VTK) C++ Part
   Module:    MoleculeAcquireFileWFN.h
 
-  Copyright (c) ScrewDriver
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -24,9 +23,8 @@
  * NOT YET FINALLY RELEASED!
  *
  * @par Thanks:
- * ScrewDriver de Blackheadborough who developed and contributed this class
- * NB: It is preconverted from the MoleculeAcquireFileXYZ class
- * and yet not in its final executive form.
+ * ScrewDriver te Blackheadborough who developed and contributed this class
+ * NB: Here it is not yet in its final executive form.
 */
 
 #ifdef _MSC_VER
@@ -59,8 +57,8 @@ public:
   //@}
 
 protected:
-  MoleculeAcquireFileWFN();
-  ~MoleculeAcquireFileWFN() override;
+  MoleculeAcquireFileWFN() = default;
+  ~MoleculeAcquireFileWFN() override  = default;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
     vtkInformationVector *) override;

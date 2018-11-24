@@ -3,10 +3,10 @@
 
 /*=========================================================================
 
-  Program:   Visualization Toolkit
+  Program:   Local Fork of the Visualization Toolkit (VTK) C++ Part
   Module:    MoleculeAcquireFileEXTOUT.h
 
-  Copyright (c) ScrewDriver
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -18,14 +18,14 @@
  * @class   MoleculeAcquireFileEXTOUT
  * @brief   read molecular graph .mgp files from AIMAll
  *
- * MoleculeAcquireFileEXTOUT is a source object that reads waefunction files
- * This format is intentionally specified as a single-structure one.
+ * MoleculeAcquireFileEXTOUT is is for the result files from the AIMAll calcutaions
+ * This format is specified as a single-structure one.
  *
  * NOT YET FINALLY RELEASED!
  *
  * @par Thanks:
- * ScrewDriver de Blackheadborough who developed and contributed this class
- * NB: It is preconverted from the MoleculeAcquireFileXYZ class
+ * ScrewDriver te Blackheadborough who developed and contributed this class
+ * NB: It is preconverted from the MoleculeAcquireFileWFN class
  * and yet not in its final executive form.
 */
 
@@ -43,7 +43,7 @@ class vtkMolecule;
 
 class MoleculeAcquireFileEXTOUT
   : public MoleculeAcquireFileQTAIM
-  , public TraitsCentreWFN<MoleculeAcquireFileEXTOUT>
+  , public TraitsLabelNumberXYZ<MoleculeAcquireFileEXTOUT>
 {
 public:
   static MoleculeAcquireFileEXTOUT *New();
@@ -59,8 +59,8 @@ public:
   //@}
 
 protected:
-  MoleculeAcquireFileEXTOUT();
-  ~MoleculeAcquireFileEXTOUT() override;
+  MoleculeAcquireFileEXTOUT() = default;
+  ~MoleculeAcquireFileEXTOUT() override = default;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
     vtkInformationVector *) override;

@@ -1,11 +1,10 @@
 /*=========================================================================
 
-  Program:   Visualization Toolkit
+  Program:   Local Fork of the Visualization Toolkit (VTK) C++ Part
   Module:    MoleculeAcquireFileWFN.cxx
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -35,11 +34,6 @@
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileWFN);
 
-//----------------------------------------------------------------------------
-MoleculeAcquireFileWFN::MoleculeAcquireFileWFN() {}
-
-//----------------------------------------------------------------------------
-MoleculeAcquireFileWFN::~MoleculeAcquireFileWFN() {}
 
 //----------------------------------------------------------------------------
 vtkMolecule *MoleculeAcquireFileWFN::GetOutput()

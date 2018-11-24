@@ -6,7 +6,7 @@
   Program:   Visualization Toolkit
   Module:    MoleculeAcquireFileMGP.h
 
-  Copyright (c) ScrewDriver
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -18,14 +18,14 @@
  * @class   MoleculeAcquireFileMGP
  * @brief   read wavefunction .wfn files
  *
- * MoleculeAcquireFileMGP is a source object that reads waefunction files
- * This format is intentionally specified as a single-structure one.
+ * MoleculeAcquireFileMGP is for the result files from the AIMAll calcutaions
+ * This format is specified as a single-structure one.
  *
  * NOT YET FINALLY RELEASED!
  *
  * @par Thanks:
- * ScrewDriver de Blackheadborough who developed and contributed this class
- * NB: It is preconverted from the MoleculeAcquireFileXYZ class
+ * ScrewDriver te Blackheadborough who developed and contributed this class
+ * NB: It is preconverted from the MoleculeAcquireFileWFN class
  * and yet not in its final executive form.
 */
 
@@ -43,7 +43,7 @@ class vtkMolecule;
 
 class MoleculeAcquireFileMGP
   : public MoleculeAcquireFileQTAIM
-  , public TraitsCentreWFN<MoleculeAcquireFileMGP>
+  , public TraitsLabelNumberXYZ<MoleculeAcquireFileMGP>
 {
 public:
   static MoleculeAcquireFileMGP *New();
@@ -59,8 +59,8 @@ public:
   //@}
 
 protected:
-  MoleculeAcquireFileMGP();
-  ~MoleculeAcquireFileMGP() override;
+  MoleculeAcquireFileMGP() = default;
+  ~MoleculeAcquireFileMGP() override = default;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
     vtkInformationVector *) override;
