@@ -27,7 +27,14 @@
 #include "EditTextSource.h"
 #include "QVTKMoleculeWidget.h"
 // temporary view header to implement table views of atoms / bonds in Molecule
-#include <vtkQtTableView.h>
+// #include <vtkQtTableView.h>
+
+#include <vtkRenderWindow.h>
+#include <vtkWindowToImageFilter.h>
+
+#include <vtkPNGWriter.h>
+#include <vtkJPEGWriter.h>
+
 #include "ViewMoleculeAtomic.h"
 #include "ViewMoleculeBonds.h"
 
@@ -120,10 +127,10 @@ public:
   bool acquireAsCUBE();
 
   // Writer functionality
-  bool writeSceneAsPNG(const TypeFileName&);
-  bool writeSceneAsJPEG(const TypeFileName&);
-  bool writeSceneAsBitmap(const TypeFileName&);
-  bool writeSceneAsPostScript(const TypeFileName&);
+  bool writeSceneAsPNG(const TypeFileName &);
+  bool writeSceneAsJPEG(const TypeFileName &);
+  bool writeSceneAsBitmap(const TypeFileName &);
+  bool writeSceneAsPostScript(const TypeFileName &);
 
   // facets
   vtkMolecule *getMolecule() const;
@@ -148,8 +155,46 @@ protected:
   template <class T>
   bool acquireUsing();
 
-  template<class Reader>
-  void ReadAdditionalInformation(Reader*){}
+  template <class Reader>
+  void ReadAdditionalInformation(Reader *) {}
+
+  template <class Writer>
+  void SetupImageWriter(Writer *) {}
+
+  // template<>
+  void SetupImageWriter(vtkPNGWriter *pPNG)
+  {
+    pPNG->SetCompressionLevel(9);
+  }
+
+  void SetupImageWriter(vtkJPEGWriter *pJPG)
+  {
+    pJPG->ProgressiveOn();
+    pJPG->SetQuality(75);
+  }
+
+  template <class TImgWrite>
+  bool ExportImageWith(const QString &name)
+  {
+    FrameFile::ViewMolecule *pMolView = this->setViewStructure();
+    assert(pMolView);
+    assert(pMolView == view_molecule_);
+
+    if (pMolView != view_molecule_)
+      return false;
+
+    vtkSmartPointer<TImgWrite> write_image(vtkSmartPointer<TImgWrite>::New());
+    this->SetupImageWriter(write_image.GetPointer());
+    {
+      vtkNew<vtkWindowToImageFilter> w2img;
+      w2img->SetInput(pMolView->GetRenderWindow());
+      write_image->SetInputConnection(w2img->GetOutputPort());
+    }
+    write_image->SetFileName(FileNameRoot::getPtrFrom(name));
+    write_image->Write();
+
+    return true;
+  }
 
 private:
   static QStringList recent_files;
@@ -163,8 +208,6 @@ private:
 
   BuildBonds bonds_build_;
 
-  //QPointer <QToolButton> extend_;
-  //QPointer <QToolButton> compress_;
   QVector<QWidget *> view_current_;
   // ..chosen from:
   QPointer<EditSource> edit_source_;
