@@ -134,9 +134,10 @@ struct TraitsNSymbolicXYZ : TraitsBase
 
       std::istringstream ssinp(str_line);
 
+      size_t numThisAtom;
       std::string atomType;
       float x, y, z;
-      if (!(ssinp >> atomType >> atomType >> x >> y >> z))
+      if (!(ssinp >> numThisAtom >> atomType >> x >> y >> z))
         return -(++i);
       mol->AppendAtom(ptrTable->GetAtomicNumber(atomType.c_str()), x, y, z);
       // mol->LabelAtom(i, atomType);
