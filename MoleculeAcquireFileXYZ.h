@@ -38,7 +38,7 @@
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireFile.h"
-
+#include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
 class vtkMolecule;
@@ -49,7 +49,7 @@ class MoleculeAcquireFileXYZ
 {
 protected:
   typedef MoleculeAcquireFile::Molecule Molecule;
-  typedef TraitsSymbolicXYZ<MoleculeAcquireFileXYZ> Traits;
+  typedef TraitsSymbolicXYZ Traits;
 
 public:
   static MoleculeAcquireFileXYZ *New();
@@ -58,8 +58,8 @@ public:
 
 
 protected:
-  MoleculeAcquireFileXYZ();
-  ~MoleculeAcquireFileXYZ() override;
+  explicit MoleculeAcquireFileXYZ() = default;
+  ~MoleculeAcquireFileXYZ() override = default;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
     vtkInformationVector *) override;

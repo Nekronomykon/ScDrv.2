@@ -35,13 +35,6 @@
 vtkStandardNewMacro(MoleculeAcquireFileXYZ);
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFileXYZ::MoleculeAcquireFileXYZ()
-{}
-
-//----------------------------------------------------------------------------
-MoleculeAcquireFileXYZ::~MoleculeAcquireFileXYZ()
-{}
-
 int MoleculeAcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request)
   , vtkInformationVector **vtkNotUsed(inputVector)
   , vtkInformationVector *outputVector)
@@ -110,11 +103,13 @@ int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
     return 0;
   }
 
+  // int MoleculeAcquireFileXYZ::ReadSimpleMolecule(file_in, output);
+
   int timestep = 0;
   int nbAtoms = 0;
   std::string str_line;
 
-  if (!std::getline(file_in, str_line))
+    if (!std::getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->FileName());
     return 0;

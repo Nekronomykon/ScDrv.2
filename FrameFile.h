@@ -125,6 +125,8 @@ public:
   bool acquireAsXYZ();
   bool acquireAsWFN();
   bool acquireAsCUBE();
+  bool acquireAsMGP();
+  bool acquireAsExtOut();
 
   // Writer functionality
   bool writeSceneAsPNG(const TypeFileName &);
@@ -174,27 +176,7 @@ protected:
   }
 
   template <class TImgWrite>
-  bool ExportImageWith(const QString &name)
-  {
-    FrameFile::ViewMolecule *pMolView = this->setViewStructure();
-    assert(pMolView);
-    assert(pMolView == view_molecule_);
-
-    if (pMolView != view_molecule_)
-      return false;
-
-    vtkSmartPointer<TImgWrite> write_image(vtkSmartPointer<TImgWrite>::New());
-    this->SetupImageWriter(write_image.GetPointer());
-    {
-      vtkNew<vtkWindowToImageFilter> w2img;
-      w2img->SetInput(pMolView->GetRenderWindow());
-      write_image->SetInputConnection(w2img->GetOutputPort());
-    }
-    write_image->SetFileName(FileNameRoot::getPtrFrom(name));
-    write_image->Write();
-
-    return true;
-  }
+  bool ExportImageWith(const QString &name);
 
 private:
   static QStringList recent_files;

@@ -140,8 +140,8 @@ protected:
   int FillInputPortInformation(int port, vtkInformation *info) override;
 
 private:
-  MoleculeAcquireBase(const MoleculeAcquireBase &) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireBase &) VTK_DELETE_FUNCTION;
+  MoleculeAcquireBase(const MoleculeAcquireBase &) = delete;
+  void operator=(const MoleculeAcquireBase &) = delete;
 
   //----------------------------------------------------------------------------
   vtkIdType NumberOfAtoms_;

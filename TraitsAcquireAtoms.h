@@ -65,19 +65,27 @@ static inline std::string trim_copy(std::string s) {
 
 struct TraitsBase
 {
+  typedef std::basic_istream<char, std::char_traits<char>> BaseInput;
+
   static const double AngstromInBohr;
-  static std::string ScrollEmptyStrings(std::istream &in);
-  static size_t MeasureStringGroup(std::istream &in);
+  static std::string ScrollEmptyStrings(BaseInput &/*in*/);
+  static size_t MeasureStringGroup(BaseInput& /*in*/);
+  static bool ScrollDownTo(BaseInput& /*in*/, const char* /*key*/);
 };
+
+template<class T>
+class TraitsEmpty
+  : public TraitsBase
+{};
 
 /*********************************************************************************
   XMol XYZ format:
   (CHAR)SYMBOL X Y Z
 **********************************************************************************/
 
-template <class T>
-struct TraitsSymbolicXYZ : TraitsBase
+template <class T> class TraitsSymbolicXYZ : public TraitsBase
 {
+public:
   template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
@@ -96,7 +104,7 @@ struct TraitsSymbolicXYZ : TraitsBase
       if (str_line.empty())
         return ++i;
 
-        std::istringstream ssinp(str_line);
+      std::istringstream ssinp(str_line);
 
       std::string atomType;
       float x, y, z;
@@ -114,9 +122,9 @@ struct TraitsSymbolicXYZ : TraitsBase
   NUM# SYMBOL X Y Z
 **********************************************************************************/
 
-template <class T>
-struct TraitsNSymbolicXYZ : TraitsBase
+template <typename T> class TraitsNSymbolicXYZ : public TraitsBase
 {
+public:
   template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
@@ -151,9 +159,9 @@ struct TraitsNSymbolicXYZ : TraitsBase
   NUM# SYMBOL X pad Y pad Z pad
 **********************************************************************************/
 
-template <class T>
-struct TraitsSymXYZPadded : TraitsBase
+template <class T>  class TraitsSymXYZPadded : public TraitsBase
 {
+public:
   template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
@@ -222,9 +230,11 @@ struct TraitsNumericXYZ : TraitsBase
   GAMESS XYZ format:
   (CHAR)LABEL[10] (REAL)ATOM_NUM X Y Z
 **********************************************************************************/
-template <class T>
-struct TraitsLabelNumberXYZ : TraitsBase
+template <typename T>
+class TraitsLabelNumberXYZ
+  : public TraitsBase
 {
+public:
   template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {

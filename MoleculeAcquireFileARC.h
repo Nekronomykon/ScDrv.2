@@ -49,8 +49,8 @@ public:
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
 protected:
-  MoleculeAcquireFileARC();
-  ~MoleculeAcquireFileARC() override;
+  explicit MoleculeAcquireFileARC() = default;
+  ~MoleculeAcquireFileARC() override = default;
 
 public:
   int RequestInformation(vtkInformation *, vtkInformationVector **,
@@ -60,8 +60,8 @@ public:
                   vtkInformationVector *) override;
 
 private:
-  MoleculeAcquireFileARC(const MoleculeAcquireFileARC &) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileARC &) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFileARC(const MoleculeAcquireFileARC &) = delete;
+  void operator=(const MoleculeAcquireFileARC &) = delete;
 };
 
 #endif // !MoleculeAcquire_FileARC_h

@@ -12,7 +12,7 @@
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireBase.h"
-#include "ImplFileName.h"
+#include "ImplReadFile.h"
 
 #include "TraitsAcquireAtoms.h"
 
@@ -39,11 +39,11 @@ public:
 
 protected:
   explicit MoleculeAcquireFile();
-  ~MoleculeAcquireFile() override;
+  ~MoleculeAcquireFile() override = default;
 
 private:
-  MoleculeAcquireFile(const MoleculeAcquireFile &) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFile &) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFile(const MoleculeAcquireFile &) = delete;
+  void operator=(const MoleculeAcquireFile &) = delete;
 
   // members:
 private:

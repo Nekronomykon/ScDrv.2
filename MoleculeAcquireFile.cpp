@@ -27,9 +27,6 @@ MoleculeAcquireFile::MoleculeAcquireFile()
 }
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFile::~MoleculeAcquireFile() {}
-
-//----------------------------------------------------------------------------
 void MoleculeAcquireFile::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);

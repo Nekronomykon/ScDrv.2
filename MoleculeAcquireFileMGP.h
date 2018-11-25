@@ -36,40 +36,38 @@
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireFileQTAIM.h"
-
+#include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
 class vtkMolecule;
 
 class MoleculeAcquireFileMGP
-  : public MoleculeAcquireFileQTAIM
-  , public TraitsLabelNumberXYZ<MoleculeAcquireFileMGP>
+  : public ImplReadFile< MoleculeAcquireFileMGP, TraitsLabelNumberXYZ>
 {
+  // typedef  ImplReadFile< MoleculeAcquireFileMGP, TraitsLabelNumberXYZ> _Base;
+  typedef TraitsLabelNumberXYZ<MoleculeAcquireFileMGP> Traits;
 public:
+  typedef Traits::BaseInput BaseInput;
   static MoleculeAcquireFileMGP *New();
-  vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFileQTAIM);
-  void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
+  vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFile);
+  // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-  //@{
-  /**
-   * Get/Set the output (vtkMolecule) that the reader will fill
-   */
-  vtkMolecule *GetOutput();
-  void SetOutput(vtkMolecule *) override;
-  //@}
+  int PreParseStream(BaseInput&);
+  int ReadSimpleMolecule(BaseInput&, vtkMolecule*);
 
 protected:
-  MoleculeAcquireFileMGP() = default;
+  explicit MoleculeAcquireFileMGP() = default;
   ~MoleculeAcquireFileMGP() override = default;
 
-  int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
-  int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
+  //int RequestData(vtkInformation *, vtkInformationVector **,
+  //  vtkInformationVector *) override;
+
+  //int RequestInformation(vtkInformation *, vtkInformationVector **,
+  //  vtkInformationVector *) override;
 
 private:
-  MoleculeAcquireFileMGP(const MoleculeAcquireFileMGP&) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileMGP&) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFileMGP(const MoleculeAcquireFileMGP&) = delete;
+  void operator=(const MoleculeAcquireFileMGP&) = delete;
 };
 
 

@@ -34,10 +34,6 @@ using namespace std;
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileARC);
 
-MoleculeAcquireFileARC::MoleculeAcquireFileARC() : MoleculeAcquireFile() {}
-
-MoleculeAcquireFileARC::~MoleculeAcquireFileARC() {}
-
 //----------------------------------------------------------------------------
 void MoleculeAcquireFileARC::PrintSelf(ostream& os, vtkIndent indent)
 {

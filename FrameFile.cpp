@@ -29,6 +29,8 @@
 #include "MoleculeAcquireFileXYZ.h"
 #include "MoleculeAcquireFileWFN.h"
 #include "MoleculeAcquireFileCUBE.h"
+#include "MoleculeAcquireFileMGP.h"
+#include "MoleculeAcquireFileEXTOUT.h"
 
 #include "FileFormat.h"
 
@@ -84,7 +86,8 @@ void FrameFile::BuildFileContext()
   all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
   all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";
   all_formats[FileContext("Wavefunction files", &FrameFile::acquireAsWFN)] = "wfn";
-  // all_formats[FileContext("Generic text files", nullptr, &FrameFile::saveTextSource)] = "txt";
+  all_formats[FileContext("AIMAll Molecular Graph files", &FrameFile::acquireAsMGP)] = "mgp";
+  all_formats[FileContext("AIMAll Extreme output", &FrameFile::acquireAsExtOut)] = "extout";
   // all_formats[FileContext("Portable Network Graphics file", nullptr, &FrameFile::writeSceneAsPNG)] = "png";
 }
 
@@ -281,6 +284,29 @@ bool FrameFile::acquireUsing()
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
 
+template<class T>
+inline bool FrameFile::ExportImageWith(const QString & name)
+{
+  FrameFile::ViewMolecule *pMolView = this->setViewStructure();
+  assert(pMolView);
+  assert(pMolView == view_molecule_);
+
+  if (pMolView != view_molecule_)
+    return false;
+
+  vtkSmartPointer<T> write_image(vtkSmartPointer<T>::New());
+  this->SetupImageWriter(write_image.GetPointer());
+  {
+    vtkNew<vtkWindowToImageFilter> w2img;
+    w2img->SetInput(pMolView->GetRenderWindow());
+    write_image->SetInputConnection(w2img->GetOutputPort());
+  }
+  write_image->SetFileName(FileNameRoot::getPtrFrom(name));
+  write_image->Write();
+
+  return true;
+}
+
 // data facets
 vtkMolecule *FrameFile::getMolecule() const
 {
@@ -403,6 +429,8 @@ bool FrameFile::acquireAsOUT() { return this->acquireUsing<MoleculeAcquireFileOU
 bool FrameFile::acquireAsXYZ() { return this->acquireUsing<MoleculeAcquireFileXYZ>(); }
 bool FrameFile::acquireAsWFN() { return this->acquireUsing<MoleculeAcquireFileWFN>(); }
 bool FrameFile::acquireAsCUBE() { return this->acquireUsing<MoleculeAcquireFileCUBE>(); }
+bool FrameFile::acquireAsMGP(){  return this->acquireUsing<MoleculeAcquireFileMGP>(); }
+bool FrameFile::acquireAsExtOut(){  return this->acquireUsing<MoleculeAcquireFileEXTOUT>();}
 
 // image writer functions
 bool FrameFile::writeSceneAsPNG(const TypeFileName &save_path)

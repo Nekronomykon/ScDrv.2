@@ -1,14 +1,16 @@
 #include "TraitsAcquireAtoms.h"
 
+using namespace std;
+
 const double TraitsBase::AngstromInBohr = 0.52917721067;
 
-std::string TraitsBase::ScrollEmptyStrings(std::istream &in)
+string TraitsBase::ScrollEmptyStrings(BaseInput& in)
 {
-  std::string str_line;
+  string str_line;
 
   do
   {
-    if (!std::getline(in, str_line))
+    if (!getline(in, str_line))
       break;
     rtrim(str_line);
   } while (str_line.empty());
@@ -16,9 +18,9 @@ std::string TraitsBase::ScrollEmptyStrings(std::istream &in)
   return ltrim_copy(str_line);
 }
 
-size_t TraitsBase::MeasureStringGroup(std::istream &in)
+size_t TraitsBase::MeasureStringGroup(BaseInput& in)
 {
-  std::string str_line = ScrollEmptyStrings(in);
+  string str_line = ScrollEmptyStrings(in);
 
   if (str_line.empty())
     return 0; // error, 'in' is not Ok...
@@ -27,7 +29,7 @@ size_t TraitsBase::MeasureStringGroup(std::istream &in)
   do
   {
     ++nRes;
-    if(!std::getline(in, str_line))
+    if(!getline(in, str_line))
       break;
     rtrim(str_line);
   } while (!str_line.empty());
@@ -38,4 +40,25 @@ size_t TraitsBase::MeasureStringGroup(std::istream &in)
     ++nRes;
   
   return nRes;
+}
+
+bool TraitsBase::ScrollDownTo(BaseInput & in, const char * key_ptr)
+{
+  string key(key_ptr);
+  if (key.empty()) 
+    return false;
+
+  string one_line;
+  if (!std::getline(in, one_line))
+    return false;
+  do
+  {
+    rtrim(one_line);
+    if (one_line.empty())
+      continue;
+    if (!one_line.compare(key))
+      return true;
+  } while (std::getline(in, one_line));
+
+  return false;
 }
