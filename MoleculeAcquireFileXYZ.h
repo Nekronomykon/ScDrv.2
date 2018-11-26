@@ -44,31 +44,29 @@
 class vtkMolecule;
 
 class MoleculeAcquireFileXYZ
-  : public MoleculeAcquireFile
-  , public TraitsSymbolicXYZ<MoleculeAcquireFileXYZ>
+  : public ImplReadFile<MoleculeAcquireFileXYZ,TraitsSymbolicXYZ>
 {
+  typedef  ImplReadFile<MoleculeAcquireFileXYZ,TraitsSymbolicXYZ> _Base;
 protected:
   typedef MoleculeAcquireFile::Molecule Molecule;
-  typedef TraitsSymbolicXYZ Traits;
+  typedef TraitsSymbolicXYZ<MoleculeAcquireFileXYZ> Traits;
+  typedef Traits::BaseInput BaseInput;
 
 public:
   static MoleculeAcquireFileXYZ *New();
   vtkTypeMacro(MoleculeAcquireFileXYZ, MoleculeAcquireFile);
-  void PrintSelf(ostream& os, vtkIndent indent) override;
+  // void PrintSelf(ostream& os, vtkIndent indent) override;
 
+  int PreParseStream(BaseInput&);
+  int ReadSimpleMolecule(BaseInput&, Molecule*);
 
 protected:
   explicit MoleculeAcquireFileXYZ() = default;
   ~MoleculeAcquireFileXYZ() override = default;
 
-  int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
-  int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
-
 private:
-  MoleculeAcquireFileXYZ(const MoleculeAcquireFileXYZ&) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileXYZ&) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFileXYZ(const MoleculeAcquireFileXYZ&) = delete;
+  void operator=(const MoleculeAcquireFileXYZ&) = delete;
 };
 
 #endif // !MoleculeAcquire_File_XYZ_h

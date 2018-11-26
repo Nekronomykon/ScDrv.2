@@ -39,31 +39,25 @@
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-class vtkMolecule;
-
 class MoleculeAcquireFileMGP
-  : public ImplReadFile< MoleculeAcquireFileMGP, TraitsLabelNumberXYZ>
+  : public ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ>
 {
-  // typedef  ImplReadFile< MoleculeAcquireFileMGP, TraitsLabelNumberXYZ> _Base;
+  typedef ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ> _Base;
   typedef TraitsLabelNumberXYZ<MoleculeAcquireFileMGP> Traits;
 public:
   typedef Traits::BaseInput BaseInput;
+  typedef _Base::Molecule Molecule;
+
   static MoleculeAcquireFileMGP *New();
   vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFile);
   // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
   int PreParseStream(BaseInput&);
-  int ReadSimpleMolecule(BaseInput&, vtkMolecule*);
+  int ReadSimpleMolecule(BaseInput&, Molecule*);
 
 protected:
   explicit MoleculeAcquireFileMGP() = default;
   ~MoleculeAcquireFileMGP() override = default;
-
-  //int RequestData(vtkInformation *, vtkInformationVector **,
-  //  vtkInformationVector *) override;
-
-  //int RequestInformation(vtkInformation *, vtkInformationVector **,
-  //  vtkInformationVector *) override;
 
 private:
   MoleculeAcquireFileMGP(const MoleculeAcquireFileMGP&) = delete;

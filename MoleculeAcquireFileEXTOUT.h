@@ -36,36 +36,29 @@
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireFileQTAIM.h"
-
+#include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
 class vtkMolecule;
 
 class MoleculeAcquireFileEXTOUT
-  : public MoleculeAcquireFileQTAIM
-  , public TraitsLabelNumberXYZ<MoleculeAcquireFileEXTOUT>
+  : public ImplReadFile<MoleculeAcquireFileEXTOUT,TraitsSymbolicXYZ>
 {
+  typedef ImplReadFile<MoleculeAcquireFileEXTOUT, TraitsSymbolicXYZ> _Base;
+  typedef TraitsSymbolicXYZ<MoleculeAcquireFileEXTOUT> Traits;
 public:
+  typedef Traits::BaseInput BaseInput;
+  typedef typename _Base::Molecule Molecule;
   static MoleculeAcquireFileEXTOUT *New();
   vtkTypeMacro(MoleculeAcquireFileEXTOUT, MoleculeAcquireFileQTAIM);
-  void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
+  // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-  //@{
-  /**
-   * Get/Set the output (vtkMolecule) that the reader will fill
-   */
-  vtkMolecule *GetOutput();
-  void SetOutput(vtkMolecule *) override;
-  //@}
+  int PreParseStream(BaseInput&);
+  int ReadSimpleMolecule(BaseInput&, Molecule*);
 
 protected:
   MoleculeAcquireFileEXTOUT() = default;
   ~MoleculeAcquireFileEXTOUT() override = default;
-
-  int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
-  int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
 
 private:
   MoleculeAcquireFileEXTOUT(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;

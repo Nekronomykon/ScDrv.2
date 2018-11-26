@@ -110,7 +110,8 @@ public:
       float x, y, z;
       if (!(ssinp >> atomType >> x >> y >> z))
         return -(++i);
-      mol->AppendAtom(ptrTable->GetAtomicNumber(atomType.c_str()), x, y, z);
+      int idType = ptrTable->GetAtomicNumber(atomType.c_str());
+      mol->AppendAtom(idType, x, y, z);
       // mol->LabelAtom(i, atomType);
     }
     return 0;
@@ -122,7 +123,7 @@ public:
   NUM# SYMBOL X Y Z
 **********************************************************************************/
 
-template <typename T> class TraitsNSymbolicXYZ : public TraitsBase
+template <class T> class TraitsNSymbolicXYZ : public TraitsBase
 {
 public:
   template <typename Molecule>
@@ -147,7 +148,8 @@ public:
       float x, y, z;
       if (!(ssinp >> numThisAtom >> atomType >> x >> y >> z))
         return -(++i);
-      mol->AppendAtom(ptrTable->GetAtomicNumber(atomType.c_str()), x, y, z);
+      int idType = ptrTable->GetAtomicNumber(atomType.c_str());
+      mol->AppendAtom(idType, x, y, z);
       // mol->LabelAtom(i, atomType);
     }
     return 0;
@@ -197,9 +199,9 @@ public:
   (UNSIGNED INT)ATOM_NUM X Y Z
 **********************************************************************************/
 
-template <class T>
-struct TraitsNumericXYZ : TraitsBase
+template <class T> class TraitsNumericXYZ : public TraitsBase
 {
+public:
   template <typename Molecule>
   static int AppendAtoms(std::istream &in, int nAtoms, Molecule *mol)
   {
@@ -230,9 +232,7 @@ struct TraitsNumericXYZ : TraitsBase
   GAMESS XYZ format:
   (CHAR)LABEL[10] (REAL)ATOM_NUM X Y Z
 **********************************************************************************/
-template <typename T>
-class TraitsLabelNumberXYZ
-  : public TraitsBase
+template <class T> class TraitsLabelNumberXYZ : public TraitsBase
 {
 public:
   template <typename Molecule>

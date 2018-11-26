@@ -35,7 +35,6 @@ using namespace std;
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileMGP);
 
-
 //----------------------------------------------------------------------------
 int MoleculeAcquireFileMGP::PreParseStream(BaseInput &infile)
 {
@@ -88,3 +87,11 @@ int MoleculeAcquireFileMGP::ReadSimpleMolecule(BaseInput &infile, vtkMolecule *p
   }
   return 1;
 }
+
+//----------------------------------------------------------------------------
+//void MoleculeAcquireFileMGP::PrintSelf(ostream& os, vtkIndent indent)
+//{
+//  _Base::PrintSelf(os, indent);
+//}
+//
+//----------------------------------------------------------------------------

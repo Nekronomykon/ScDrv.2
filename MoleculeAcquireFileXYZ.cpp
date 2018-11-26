@@ -19,15 +19,14 @@
 #include <vtkObjectFactory.h>
 
 #include <vtkMolecule.h>
-#include <vtkPeriodicTable.h>
 
-#include <vtkStreamingDemandDrivenPipeline.h>
+// #include <vtkStreamingDemandDrivenPipeline.h>
 
 #include <cmath>
 #include <cstring>
-
 #include <fstream>
 #include <sstream>
+using namespace std;
 
 #include "TraitsAcquireAtoms.h"
 
@@ -35,38 +34,23 @@
 vtkStandardNewMacro(MoleculeAcquireFileXYZ);
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(request)
-  , vtkInformationVector **vtkNotUsed(inputVector)
-  , vtkInformationVector *outputVector)
+int MoleculeAcquireFileXYZ::PreParseStream(BaseInput& file_in)
 {
-  vtkInformation* outInfo = outputVector->GetInformationObject(0);
-
-  if (!this->HasFileName())
-    return 0;
-
-  std::ifstream file_in(this->GetFileName());
-
-  if (!file_in.is_open())
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error opening file: " << this->FileName());
-    return 0;
-  }
-
   int natoms = 0;
   // istream::pos_type current_pos = file_in.tellg();
-  std::string str_line;
-  if (!std::getline(file_in, str_line))
+  string str_line;
+  if (!getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->FileName());
     return 0;
   }
-  std::istringstream ssinp(str_line);
+  istringstream ssinp(str_line);
   ssinp >> natoms;
 
   assert(!this->GetNumberOfAtoms()); // assured that it is read first
   this->SetNumberOfAtoms(natoms);
 
-  std::string title;
+  string title;
   if (!std::getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading title string: " << this->FileName());
@@ -78,43 +62,18 @@ int MoleculeAcquireFileXYZ::RequestInformation(vtkInformation *vtkNotUsed(reques
   return (nStrings >= natoms) ? 1 : 0;
 }
 
-int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
-  vtkInformationVector **,
-  vtkInformationVector *outVector)
+int MoleculeAcquireFileXYZ::ReadSimpleMolecule(BaseInput& file_in, Molecule*output)
 {
-  vtkInformation* outInfo = outVector->GetInformationObject(0);
-
-  vtkMolecule *output = vtkMolecule::SafeDownCast(vtkDataObject::GetData(outVector));
-
-  if (!output)
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileXYZ does not have a vtkMolecule as output.");
-    return 1;
-  }
-
-  if (!this->HasFileName())
-    return 0;
-
-  ifstream file_in(this->GetFileName());
-
-  if (!file_in.is_open())
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error opening file: " << this->FileName());
-    return 0;
-  }
-
-  // int MoleculeAcquireFileXYZ::ReadSimpleMolecule(file_in, output);
-
   int timestep = 0;
   int nbAtoms = 0;
-  std::string str_line;
+  string str_line;
 
-    if (!std::getline(file_in, str_line))
+  if (!getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->FileName());
     return 0;
   }
-  std::istringstream ssinp(str_line);
+  istringstream ssinp(str_line);
   ssinp >> nbAtoms;
   // file_in.get(); // end of line char
 
@@ -122,11 +81,10 @@ int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom number " << this->FileName()
       << " Premature EOF while reading molecule.");
-    // file_in.close();
     return 0;
   }
-  std::string title;
-  std::getline(file_in, title);  // second line is a title
+  string title;
+  getline(file_in, title);  // second line is a title
 
   // construct vtkMolecule
   int nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
@@ -148,7 +106,9 @@ int MoleculeAcquireFileXYZ::RequestData(vtkInformation *,
 }
 
 //----------------------------------------------------------------------------
-void MoleculeAcquireFileXYZ::PrintSelf(ostream& os, vtkIndent indent)
-{
-  this->Superclass::PrintSelf(os, indent);
-}
+//void MoleculeAcquireFileXYZ::PrintSelf(ostream& os, vtkIndent indent)
+//{
+//  _Base::PrintSelf(os, indent);
+//}
+//
+//----------------------------------------------------------------------------

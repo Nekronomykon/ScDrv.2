@@ -45,9 +45,10 @@ class MolecularStructure;
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireBase : public vtkAlgorithm
 {
 protected:
+public:
   typedef vtkMolecule Molecule;
   // typedef MolecularStructure Molecule;
-public:
+
   static MoleculeAcquireBase *New();
   vtkTypeMacro(MoleculeAcquireBase, vtkAlgorithm)
   void PrintSelf(ostream &os, vtkIndent indent) override;

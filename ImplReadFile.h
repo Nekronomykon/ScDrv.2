@@ -17,18 +17,19 @@
 #include "TraitsAcquireAtoms.h"
 
 template<class T
-  , template <class U> class TTraits = TraitsEmpty
+  , template <typename U> class TTraits // = TraitsEmpty
   , class TBase = MoleculeAcquireFile
   , class TName = vtkStdString
 >
 class ImplReadFile
   : public TBase
-  , public TTraits<T>
-  // , public ImplFileName<T, TName>
+  // , public TTraits<T>
 {
   typedef TBase _Base;
+  typedef typename TTraits<T> Traits;
 public:
-  typedef TraitsBase::BaseInput BaseInput;
+  typedef typename Traits::BaseInput BaseInput;
+  typedef typename TBase::Molecule Molecule;
   void PrintSelf(std::ostream &os, vtkIndent indent) override
   {
     T* pT = static_cast<T*>(this);
@@ -91,7 +92,7 @@ public:
   }
 
   int PreParseStream(BaseInput&) { assert(0); return 1; }
-  int ReadSimpleMolecule(BaseInput&,vtkMolecule*) { assert(0); return 1; }
+  int ReadSimpleMolecule(BaseInput&,Molecule*) { assert(0); return 1; }
 
 protected:
   ImplReadFile() = default;
