@@ -12,24 +12,14 @@
 =========================================================================*/
 
 #include "MoleculeAcquireFileSUM.h"
+#include "TraitsAcquireAtoms.h"
 
-#include <vtkInformation.h>
-#include <vtkInformationVector.h>
 #include <vtkObjectFactory.h>
-
-#include <vtkMolecule.h>
-#include <vtkPeriodicTable.h>
-
-#include <vtkStreamingDemandDrivenPipeline.h>
 
 #include <cmath>
 #include <cstring>
-
 #include <fstream>
 #include <sstream>
-
-#include "TraitsAcquireAtoms.h"
-
 using namespace std;
 
 //----------------------------------------------------------------------------
@@ -66,7 +56,7 @@ int MoleculeAcquireFileSUM::ReadSimpleMolecule(BaseInput &infile, vtkMolecule *p
   string one_line;
   if (!getline(infile, one_line) || !getline(infile, one_line) || !getline(infile, one_line))
   {
-    vtkErrorMacro(<< "MGP file is unexpectedly finished: " << this->FileName());
+    vtkErrorMacro(<< "SUM file is unexpectedly finished: " << this->FileName());
     return 0;
   }
   int nResult = Traits::AppendAtoms(infile, this->GetNumberOfAtoms(), pMol);

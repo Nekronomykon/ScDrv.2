@@ -12,24 +12,14 @@
 =========================================================================*/
 
 #include "MoleculeAcquireFileMGP.h"
+#include "TraitsAcquireAtoms.h"
 
-#include <vtkInformation.h>
-#include <vtkInformationVector.h>
 #include <vtkObjectFactory.h>
-
-#include <vtkMolecule.h>
-#include <vtkPeriodicTable.h>
-
-#include <vtkStreamingDemandDrivenPipeline.h>
 
 #include <cmath>
 #include <cstring>
-
 #include <fstream>
 #include <sstream>
-
-#include "TraitsAcquireAtoms.h"
-
 using namespace std;
 
 //----------------------------------------------------------------------------

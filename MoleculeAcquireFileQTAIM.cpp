@@ -13,13 +13,15 @@
   =========================================================================*/
 
 #include "MoleculeAcquireFileQTAIM.h"
+#include "TraitsAcquireAtoms.h"
 
 #include <vtkObjectFactory.h>
 
-#include <string>
-#include <vector>
+#include <cmath>
+#include <cstring>
 #include <fstream>
-#include <iostream>
+#include <sstream>
+using namespace std;
 
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileQTAIM);

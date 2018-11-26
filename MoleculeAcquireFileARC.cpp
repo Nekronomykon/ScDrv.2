@@ -14,21 +14,14 @@
 
 #include "MoleculeAcquireFileARC.h"
 
-#include <vtkInformation.h>
-#include <vtkInformationVector.h>
+#include "TraitsAcquireAtoms.h"
+
 #include <vtkObjectFactory.h>
-
-#include <vtkMolecule.h>
-#include <vtkPeriodicTable.h>
-
-#include <vtkStreamingDemandDrivenPipeline.h>
 
 #include <cmath>
 #include <cstring>
-#include <string>
 #include <fstream>
 #include <sstream>
-
 using namespace std;
 
 //----------------------------------------------------------------------------

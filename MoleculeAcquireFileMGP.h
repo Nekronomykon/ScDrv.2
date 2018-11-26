@@ -45,13 +45,13 @@ class MoleculeAcquireFileMGP
   typedef ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
   typedef TraitsLabelNumberXYZ<MoleculeAcquireFileMGP> Traits;
 public:
-  typedef Traits::BaseInput BaseInput;
   typedef _Base::Molecule Molecule;
 
   static MoleculeAcquireFileMGP *New();
   vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFile);
   // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
+  typedef Traits::BaseInput BaseInput;
   int PreParseStream(BaseInput&);
   int ReadSimpleMolecule(BaseInput&, Molecule*);
 

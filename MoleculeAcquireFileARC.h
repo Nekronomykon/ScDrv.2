@@ -1,5 +1,5 @@
-#ifndef MoleculeAcquire_FileARC_h
-#define MoleculeAcquire_FileARC_h
+#ifndef MoleculeAcquireFileARC_h
+#define MoleculeAcquireFileARC_h
 
 /*=========================================================================
 
@@ -30,10 +30,10 @@
 #pragma once
 #else  // !_MSC_VER
 #endif //  _MSC_VER
-
+#include "MoleculeAcquireFile.h"
+#include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-#include "MoleculeAcquireFile.h"
 
 class MoleculeAcquireFileARC
     : public MoleculeAcquireFile,
@@ -64,4 +64,4 @@ private:
   void operator=(const MoleculeAcquireFileARC &) = delete;
 };
 
-#endif // !MoleculeAcquire_FileARC_h
+#endif // !MoleculeAcquireFileARC_h

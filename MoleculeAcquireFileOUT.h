@@ -1,5 +1,5 @@
-#ifndef MoleculeAcquire_FileOUT_h
-#define MoleculeAcquire_FileOUT_h
+#ifndef MoleculeAcquireFileOUT_h
+#define MoleculeAcquireFileOUT_h
 
 /*=========================================================================
 
@@ -34,40 +34,35 @@
 #pragma once
 #else  // !_MSC_VER
 #endif //  _MSC_VER
-
+#include "MoleculeAcquireFile.h"
+#include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-#include "MoleculeAcquireFile.h"
 
 class MoleculeAcquireFileOUT
-  : public MoleculeAcquireFile
-  , public TraitsNSymbolicXYZ<MoleculeAcquireFileOUT>
-
+    : public ImplReadFile<MoleculeAcquireFileOUT, TraitsNSymbolicXYZ, MoleculeAcquireFile>
 {
+  typedef ImplReadFile<MoleculeAcquireFileOUT, TraitsNSymbolicXYZ, MoleculeAcquireFile> _Base;
+
 protected:
+  typedef TraitsNSymbolicXYZ<MoleculeAcquireFileOUT> Traits;
   typedef MoleculeAcquireFile::Molecule Molecule;
 
 public:
   static MoleculeAcquireFileOUT *New();
   vtkTypeMacro(MoleculeAcquireFileOUT, MoleculeAcquireFile);
-  void PrintSelf(ostream& os, vtkIndent indent) override;
 
+  typedef Traits::BaseInput BaseInput;
+  int PreParseStream(BaseInput &);
+  int ReadSimpleMolecule(BaseInput &, Molecule *);
 
 protected:
-  MoleculeAcquireFileOUT();
-  virtual ~MoleculeAcquireFileOUT();
-
-  typedef TraitsNSymbolicXYZ<MoleculeAcquireFileOUT> Traits;
-
-  int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
-
-  int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
+  MoleculeAcquireFileOUT() = default;
+  ~MoleculeAcquireFileOUT() override = default;
 
 private:
-  MoleculeAcquireFileOUT(const MoleculeAcquireFileOUT&) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileOUT&) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFileOUT(const MoleculeAcquireFileOUT &) = delete;
+  void operator=(const MoleculeAcquireFileOUT &) = delete;
 };
 
-#endif // !MoleculeAcquire_FileOUT_h
+#endif // !MoleculeAcquireFileOUT_h
