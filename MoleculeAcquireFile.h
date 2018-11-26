@@ -24,7 +24,7 @@ class MoleculeAcquireFile
 {
 protected:
   typedef MoleculeAcquireBase::Molecule Molecule;
-  typedef std::ifstream FileInput;
+  typedef TraitsBase::BaseInput FileInput;
   typedef FileInput::pos_type FileInputPos;
 
 public:

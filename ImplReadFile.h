@@ -12,21 +12,20 @@
 #include <vtkInformation.h>
 #include <vtkMolecule.h>
 
-#include "MoleculeAcquireBase.h"
+#include "MoleculeAcquireFile.h"
 #include "ImplFileName.h"
 #include "TraitsAcquireAtoms.h"
 
 template<class T
   , template <typename U> class TTraits // = TraitsEmpty
-  , class TBase = MoleculeAcquireFile
-  , class TName = vtkStdString
+  , class TBase // = MoleculeAcquireBase
 >
 class ImplReadFile
   : public TBase
   // , public TTraits<T>
 {
   typedef TBase _Base;
-  typedef typename TTraits<T> Traits;
+  typedef TTraits<T> Traits;
 public:
   typedef typename Traits::BaseInput BaseInput;
   typedef typename TBase::Molecule Molecule;

@@ -57,7 +57,7 @@ public:
   //@}
 
 protected:
-  MoleculeAcquireFileWFN() = default;
+  explicit MoleculeAcquireFileWFN() = default;
   ~MoleculeAcquireFileWFN() override  = default;
 
   int RequestData(vtkInformation *, vtkInformationVector **,

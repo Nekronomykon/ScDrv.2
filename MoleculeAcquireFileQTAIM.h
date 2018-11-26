@@ -84,15 +84,15 @@ protected:
 
   typedef std::complex<short> CriticalPointType;
 
-  MoleculeAcquireFileQTAIM();
-  ~MoleculeAcquireFileQTAIM() override;
+  explicit MoleculeAcquireFileQTAIM() = default;
+  ~MoleculeAcquireFileQTAIM() override = default;
 
 private:
-  MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileQTAIM &) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
+  void operator=(const MoleculeAcquireFileQTAIM &) = delete;
 
-  vtkIdType NumberOfOrbitals_;
-  vtkIdType NumberOfPrimitives_;
+  vtkIdType NumberOfOrbitals_ = 0;
+  vtkIdType NumberOfPrimitives_ = 0;
   vtkIdType CriticalPoints[NumberOfCPTypes];
 };
 

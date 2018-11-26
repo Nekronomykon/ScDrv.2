@@ -25,16 +25,6 @@
 vtkStandardNewMacro(MoleculeAcquireFileQTAIM);
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM()
-  : NumberOfOrbitals_(0)      // empty space...
-  , NumberOfPrimitives_(0)    // empty basis...
-{}
-
-//----------------------------------------------------------------------------
-MoleculeAcquireFileQTAIM::~MoleculeAcquireFileQTAIM()
-{}
-
-//----------------------------------------------------------------------------
 void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);

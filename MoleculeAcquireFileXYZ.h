@@ -44,9 +44,9 @@
 class vtkMolecule;
 
 class MoleculeAcquireFileXYZ
-  : public ImplReadFile<MoleculeAcquireFileXYZ,TraitsSymbolicXYZ>
+  : public ImplReadFile<MoleculeAcquireFileXYZ,TraitsSymbolicXYZ, MoleculeAcquireFile>
 {
-  typedef  ImplReadFile<MoleculeAcquireFileXYZ,TraitsSymbolicXYZ> _Base;
+  typedef  ImplReadFile<MoleculeAcquireFileXYZ,TraitsSymbolicXYZ, MoleculeAcquireFile> _Base;
 protected:
   typedef MoleculeAcquireFile::Molecule Molecule;
   typedef TraitsSymbolicXYZ<MoleculeAcquireFileXYZ> Traits;

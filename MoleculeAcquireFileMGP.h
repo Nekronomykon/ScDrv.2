@@ -1,5 +1,5 @@
-#ifndef MoleculeAcquire_FileMGP
-#define MoleculeAcquire_FileMGP
+#ifndef MoleculeAcquireFileMGP_h
+#define MoleculeAcquireFileMGP_h
 
 /*=========================================================================
 
@@ -40,9 +40,9 @@
 #include "TraitsAcquireAtoms.h"
 
 class MoleculeAcquireFileMGP
-  : public ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ>
+  : public ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM>
 {
-  typedef ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ> _Base;
+  typedef ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
   typedef TraitsLabelNumberXYZ<MoleculeAcquireFileMGP> Traits;
 public:
   typedef Traits::BaseInput BaseInput;
@@ -65,4 +65,4 @@ private:
 };
 
 
-#endif // !MoleculeAcquire_FileMGP
+#endif // !MoleculeAcquireFileMGP_h

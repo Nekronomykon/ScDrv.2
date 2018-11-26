@@ -126,6 +126,7 @@ public:
   bool acquireAsWFN();
   bool acquireAsCUBE();
   bool acquireAsMGP();
+  bool acquireAsSUM();
   bool acquireAsExtOut();
 
   // Writer functionality

@@ -34,9 +34,6 @@ MoleculeAcquireBase::MoleculeAcquireBase()
 }
 
 //----------------------------------------------------------------------------
-MoleculeAcquireBase::~MoleculeAcquireBase() {}
-
-//----------------------------------------------------------------------------
 void MoleculeAcquireBase::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);

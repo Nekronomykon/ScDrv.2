@@ -30,6 +30,7 @@
 #include "MoleculeAcquireFileWFN.h"
 #include "MoleculeAcquireFileCUBE.h"
 #include "MoleculeAcquireFileMGP.h"
+#include "MoleculeAcquireFileSUM.h"
 #include "MoleculeAcquireFileEXTOUT.h"
 
 #include "FileFormat.h"
@@ -87,6 +88,7 @@ void FrameFile::BuildFileContext()
   all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";
   all_formats[FileContext("Wavefunction files", &FrameFile::acquireAsWFN)] = "wfn";
   all_formats[FileContext("AIMAll Molecular Graph files", &FrameFile::acquireAsMGP)] = "mgp";
+  all_formats[FileContext("AIMAll atomic summae files", &FrameFile::acquireAsSUM)] = "sum";
   all_formats[FileContext("AIMAll Extreme output", &FrameFile::acquireAsExtOut)] = "extout";
   // all_formats[FileContext("Portable Network Graphics file", nullptr, &FrameFile::writeSceneAsPNG)] = "png";
 }
@@ -430,6 +432,7 @@ bool FrameFile::acquireAsXYZ() { return this->acquireUsing<MoleculeAcquireFileXY
 bool FrameFile::acquireAsWFN() { return this->acquireUsing<MoleculeAcquireFileWFN>(); }
 bool FrameFile::acquireAsCUBE() { return this->acquireUsing<MoleculeAcquireFileCUBE>(); }
 bool FrameFile::acquireAsMGP(){  return this->acquireUsing<MoleculeAcquireFileMGP>(); }
+bool FrameFile::acquireAsSUM(){  return this->acquireUsing<MoleculeAcquireFileSUM>(); }
 bool FrameFile::acquireAsExtOut(){  return this->acquireUsing<MoleculeAcquireFileEXTOUT>();}
 
 // image writer functions

@@ -112,8 +112,8 @@ public:
   //@}
 
 protected:
-  MoleculeAcquireBase();
-  ~MoleculeAcquireBase() override;
+  explicit MoleculeAcquireBase();
+  ~MoleculeAcquireBase() override = default;
 
   // convenience method
   virtual int RequestInformation(vtkInformation *request,
@@ -145,7 +145,7 @@ private:
   void operator=(const MoleculeAcquireBase &) = delete;
 
   //----------------------------------------------------------------------------
-  vtkIdType NumberOfAtoms_;
+  vtkIdType NumberOfAtoms_ = 0L;
 };
 
 #endif // !MoleculeAcquire_Base_h

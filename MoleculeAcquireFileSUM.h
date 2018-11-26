@@ -1,10 +1,10 @@
-#ifndef MoleculeAcquire_FileEXTOUT
-#define MoleculeAcquire_FileEXTOUT
+#ifndef MoleculeAcquireFileSUM_h
+#define MoleculeAcquireFileSUM_h
 
 /*=========================================================================
 
-  Program:   Local Fork of the Visualization Toolkit (VTK) C++ Part
-  Module:    MoleculeAcquireFileEXTOUT.h
+  Program:   Visualization Toolkit
+  Module:    MoleculeAcquireFileSUM.h
 
   Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
@@ -15,10 +15,10 @@
 
 =========================================================================*/
 /**
- * @class   MoleculeAcquireFileEXTOUT
- * @brief   read molecular graph .mgp files from AIMAll
+ * @class   MoleculeAcquireFileSUM
+ * @brief   read wavefunction .wfn files
  *
- * MoleculeAcquireFileEXTOUT is is for the result files from the AIMAll calcutaions
+ * MoleculeAcquireFileSUM is for the result files from the AIMAll calcutaions
  * This format is specified as a single-structure one.
  *
  * NOT YET FINALLY RELEASED!
@@ -39,32 +39,30 @@
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-class vtkMolecule;
-
-class MoleculeAcquireFileEXTOUT
-  : public ImplReadFile<MoleculeAcquireFileEXTOUT,TraitsSymbolicXYZ, MoleculeAcquireFileQTAIM>
+class MoleculeAcquireFileSUM
+  : public ImplReadFile<MoleculeAcquireFileSUM, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM>
 {
-  typedef ImplReadFile<MoleculeAcquireFileEXTOUT, TraitsSymbolicXYZ, MoleculeAcquireFileQTAIM> _Base;
-  typedef TraitsSymbolicXYZ<MoleculeAcquireFileEXTOUT> Traits;
+  typedef ImplReadFile<MoleculeAcquireFileSUM, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
+  typedef TraitsLabelNumberXYZ<MoleculeAcquireFileSUM> Traits;
 public:
   typedef Traits::BaseInput BaseInput;
-  typedef typename _Base::Molecule Molecule;
-  static MoleculeAcquireFileEXTOUT *New();
-  vtkTypeMacro(MoleculeAcquireFileEXTOUT, MoleculeAcquireFileQTAIM);
+  typedef _Base::Molecule Molecule;
+
+  static MoleculeAcquireFileSUM *New();
+  vtkTypeMacro(MoleculeAcquireFileSUM, MoleculeAcquireFile);
   // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
   int PreParseStream(BaseInput&);
   int ReadSimpleMolecule(BaseInput&, Molecule*);
 
 protected:
-  explicit MoleculeAcquireFileEXTOUT() = default;
-  ~MoleculeAcquireFileEXTOUT() override = default;
+  explicit MoleculeAcquireFileSUM() = default;
+  ~MoleculeAcquireFileSUM() override = default;
 
 private:
-  MoleculeAcquireFileEXTOUT(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFileSUM(const MoleculeAcquireFileSUM&) = delete;
+  void operator=(const MoleculeAcquireFileSUM&) = delete;
 };
 
 
-
-#endif // !MoleculeAcquire_FileEXTOUT
+#endif // !MoleculeAcquire_FileSUM
