@@ -17,7 +17,7 @@ class CommandPickFragment
 public:
   static CommandPickFragment *New() { return new CommandPickFragment; }
   vtkTypeMacro(CommandPickFragment, vtkCommand);
-  void PrintSelf(ostream& os, vtkIndent indent) override;
+  // void PrintSelf(ostream& os, vtkIndent indent) override;
 
 // Adjust that
   void Execute(vtkObject *caller, unsigned long eventId,

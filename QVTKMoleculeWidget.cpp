@@ -68,11 +68,9 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   Actor mol(OpenGLActor::New());
   mol->SetMapper(mol_mapper_.Get());
 
-  // VTK Renderer
+  // VTK Renderer setup
   renderer_->SetUseFXAA(true); // antaliasing is now On
-
   this->AdjustBackgroundColor();
-  // renderer->AddActor(sphereActor);
   renderer_->AddActor(mol);
 
   // VTK/Qt wedded

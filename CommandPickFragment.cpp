@@ -5,9 +5,9 @@
 // vtkStandardNewMacro(CommandPickFragment);
 
 //----------------------------------------------------------------------------
-void CommandPickFragment::PrintSelf(ostream& os, vtkIndent indent)
-{
-}
+// void CommandPickFragment::PrintSelf(ostream& os, vtkIndent indent)
+// {
+// }
 
 //----------------------------------------------------------------------------
 void CommandPickFragment::Execute(vtkObject *caller, unsigned long eventId,

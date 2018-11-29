@@ -67,10 +67,36 @@ struct TraitsBase
 {
   typedef std::basic_istream<char, std::char_traits<char>> BaseInput;
 
+  enum
+  {
+    id_Q = 0, 
+    id_H, idHe,
+    idLi, idBe, id_B, id_C, id_N, id_O, id_F, idNe,
+    idNa, idMg, idAl, idSi, id_P, id_S, idCl, idAr,
+    id_K, idCa, idSc,
+    idTi, id_V, idCr, idMn, idFe, idCo, idNi, idCu, idZn,
+    idGa, idGe, idAs, idSe, idBr, idKr,
+    idRb, idSr, id_Y,
+    idZr, idNb, idMo, idTc, idRu, idRh, idPd, idAg, idCd,
+    idIn, idSn, idSb, idTe, id_I, idXe,
+    idCs, idBa,
+    idLa, idCe, idPr, idNd, idPm, idSm, idEu, idGd, idTb, idDy, idHo, idEr, idTm, idYb, idLu,
+    idHf, idTa, id_W, idRe, idOs, idIr, idPt, idAu, idHg,
+    idTl, idPb, idBi, idPo, idAt, idRn,
+    idFr, idRa,
+    idAc, idTh, idPa, id_U, idNp, idPu, idAm, idCm, idBk, idCf, idEs, idFm, idMd, idNo, idLr,
+    idRf, idDb, idSg, idBh, idHs, idMt, idDs, idRg, idCn,
+    idNh, idFl, idMc, idLv, idTs, idOg,
+    idUnknownYet = 255
+  };
+
   static const double AngstromInBohr;
+
   static std::string ScrollEmptyStrings(BaseInput &/*in*/);
   static size_t MeasureStringGroup(BaseInput& /*in*/);
   static bool ScrollDownTo(BaseInput& /*in*/, const char* /*key*/);
+
+  static vtkIdType ElementSymbolToNumber(const char* symbol);
 };
 
 template<class T>
