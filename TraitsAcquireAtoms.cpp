@@ -175,12 +175,12 @@ vtkIdType TraitsBase::ElementSymbolToNumber(const char * symbol)
   }
   case('M'):
   {
-    if (k1 == 'c') k1 == idMc;
-    else if (k1 == 'd') k1 == idMd;
-    else if (k1 == 'g') k1 == idMg;
-    else if (k1 == 'o') k1 == idMo;
-    else if (k1 == 'n') k1 == idMn;
-    else if (k1 == 't') k1 == idMt;
+    if (k1 == 'c') number = idMc;
+    else if (k1 == 'd') number = idMd;
+    else if (k1 == 'g') number = idMg;
+    else if (k1 == 'o') number = idMo;
+    else if (k1 == 'n') number = idMn;
+    else if (k1 == 't') number = idMt;
     break;
   }
   case('N'):
@@ -256,21 +256,9 @@ vtkIdType TraitsBase::ElementSymbolToNumber(const char * symbol)
     else if (k1 == 's') number = idTs;
     break;
   }
-  case('U'):
-  {
-    number = id_U;
-    break;
-  }
-  case('V'):
-  {
-    number = id_V;
-    break;
-  }
-  case('W'):
-  {
-    number = id_W;
-    break;
-  }
+  case('U'): {    number = id_U;    break;  }
+  case('V'): {    number = id_V;    break;  }
+  case('W'): {    number = id_W;    break;  }
   case('X'):
   {
     if (k1 == 'e') number = idXe;
