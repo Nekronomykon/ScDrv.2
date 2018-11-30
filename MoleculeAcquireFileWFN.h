@@ -34,36 +34,27 @@
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireFileQTAIM.h"
-
+#include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
 class vtkMolecule;
 
 class MoleculeAcquireFileWFN
-  : public MoleculeAcquireFileQTAIM
-  , public TraitsCentreWFN<MoleculeAcquireFileWFN>
+  : public ImplReadFile<MoleculeAcquireFileWFN,TraitsCentreWFN,MoleculeAcquireFileQTAIM>
 {
+  typedef TraitsCentreWFN<MoleculeAcquireFileWFN> Traits;
 public:
   static MoleculeAcquireFileWFN *New();
   vtkTypeMacro(MoleculeAcquireFileWFN, MoleculeAcquireFileQTAIM);
-  void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
+  // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-  //@{
-  /**
-   * Get/Set the output (vtkMolecule) that the reader will fill
-   */
-  vtkMolecule *GetOutput();
-  void SetOutput(vtkMolecule *) override;
-  //@}
+  typedef Traits::BaseInput BaseInput;
+  int PreParseStream(BaseInput&);
+  int ReadSimpleMolecule(BaseInput&, Molecule*);
 
 protected:
   explicit MoleculeAcquireFileWFN() = default;
   ~MoleculeAcquireFileWFN() override  = default;
-
-  int RequestData(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
-  int RequestInformation(vtkInformation *, vtkInformationVector **,
-    vtkInformationVector *) override;
 
 private:
   MoleculeAcquireFileWFN(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;

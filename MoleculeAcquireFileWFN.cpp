@@ -35,36 +35,8 @@
 vtkStandardNewMacro(MoleculeAcquireFileWFN);
 
 
-//----------------------------------------------------------------------------
-vtkMolecule *MoleculeAcquireFileWFN::GetOutput()
+int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
 {
-  return vtkMolecule::SafeDownCast(this->GetOutputDataObject(0));
-}
-
-//----------------------------------------------------------------------------
-void MoleculeAcquireFileWFN::SetOutput(vtkMolecule *output)
-{
-  this->GetExecutive()->SetOutputData(0, output);
-}
-
-int MoleculeAcquireFileWFN::RequestInformation(
-    vtkInformation *vtkNotUsed(request),
-    vtkInformationVector **vtkNotUsed(inputVector),
-    vtkInformationVector *outputVector)
-{
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
-
-  if (!this->HasFileName())
-    return 0;
-
-  ifstream file_in(this->GetFileName());
-
-  if (!file_in.is_open())
-  {
-    vtkErrorMacro("MoleculeAcquireFileWFN error opening file: " << this->FileName());
-    return 0;
-  }
-
   std::string str_line;
   std::string title;
   if (!std::getline(file_in, str_line))
@@ -181,28 +153,8 @@ int MoleculeAcquireFileWFN::RequestInformation(
   return 1;
 }
 
-int MoleculeAcquireFileWFN::RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *outVector)
+int MoleculeAcquireFileWFN::ReadSimpleMolecule(BaseInput& file_in,Molecule* output)
 {
-  vtkInformation *outInfo = outVector->GetInformationObject(0);
-  vtkMolecule *output = vtkMolecule::SafeDownCast(vtkDataObject::GetData(outVector));
-
-  if (!output)
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN does not have a vtkMolecule as output.");
-    return 1;
-  }
-
-  if (!this->HasFileName())
-    return 0;
-
-  ifstream file_in(this->GetFileName());
-
-  if (!file_in.is_open())
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN error opening file: " << this->FileName());
-    return 0;
-  }
-
   std::string str_line;
   std::string title;
 
@@ -247,7 +199,7 @@ int MoleculeAcquireFileWFN::RequestData(vtkInformation *, vtkInformationVector *
   }
 
   // construct vtkMolecule
-  int nResult = AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
+  int nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
   if (nResult)
   {
     if (nResult > 0)
@@ -267,8 +219,8 @@ int MoleculeAcquireFileWFN::RequestData(vtkInformation *, vtkInformationVector *
 }
 
 //----------------------------------------------------------------------------
-void MoleculeAcquireFileWFN::PrintSelf(ostream &os, vtkIndent indent)
-{
-  this->Superclass::PrintSelf(os, indent);
-  // os << indent << "Number of TimeSteps: " << this->NumberOfTimeSteps;
-}
+// void MoleculeAcquireFileWFN::PrintSelf(ostream &os, vtkIndent indent)
+// {
+//   this->Superclass::PrintSelf(os, indent);
+//   // os << indent << "Number of TimeSteps: " << this->NumberOfTimeSteps;
+// }

@@ -6,7 +6,6 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-#include <vtkPeriodicTable.h>
 #include <vtkMolecule.h>
 
 #include <vtkNew.h>
@@ -117,7 +116,6 @@ public:
   {
     assert(nAtoms > 0);
 
-    vtkNew<vtkPeriodicTable> ptrTable;
     std::string str_line;
 
     assert(mol);
@@ -136,7 +134,7 @@ public:
       float x, y, z;
       if (!(ssinp >> atomType >> x >> y >> z))
         return -(++i);
-      int idType = ptrTable->GetAtomicNumber(atomType.c_str());
+      int idType = ElementSymbolToNumber(atomType.c_str());
       mol->AppendAtom(idType, x, y, z);
       // mol->LabelAtom(i, atomType);
     }
@@ -157,7 +155,7 @@ public:
   {
     assert(nAtoms > 0);
 
-    vtkNew<vtkPeriodicTable> ptrTable;
+    // vtkNew<vtkPeriodicTable> ptrTable;
     std::string str_line;
 
     assert(mol);
@@ -174,7 +172,7 @@ public:
       float x, y, z;
       if (!(ssinp >> numThisAtom >> atomType >> x >> y >> z))
         return -(++i);
-      int idType = ptrTable->GetAtomicNumber(atomType.c_str());
+      int idType = ElementSymbolToNumber(atomType.c_str());
       mol->AppendAtom(idType, x, y, z);
       // mol->LabelAtom(i, atomType);
     }
@@ -195,7 +193,7 @@ public:
   {
     assert(nAtoms > 0);
 
-    vtkNew<vtkPeriodicTable> ptrTable;
+    // vtkNew<vtkPeriodicTable> ptrTable;
     std::string str_line;
     std::string pad;
 
@@ -213,7 +211,7 @@ public:
       float x, y, z;
       if (!(ssinp >> atomType >> x >> pad >> y >> pad >> z))
         return -(++i);
-      mol->AppendAtom(ptrTable->GetAtomicNumber(atomType.c_str()), x, y, z);
+      mol->AppendAtom(ElementSymbolToNumber(atomType.c_str()), x, y, z);
       // mol->LabelAtom(i, atomType);
     }
     return 0;
@@ -320,10 +318,11 @@ struct TraitsCentreWFN : TraitsBase
         >> atomType))
         return -(++i);
 
-      mol->AppendAtom(atomType,
-        x * AngstromInBohr,
-        y * AngstromInBohr,
-        z * AngstromInBohr);
+      mol->AppendAtom(atomType
+      , x // * AngstromInBohr,
+      , y // * AngstromInBohr,
+      , z // * AngstromInBohr
+        );
       // mol->LabelAtom(i, label);
     }
     return 0;
