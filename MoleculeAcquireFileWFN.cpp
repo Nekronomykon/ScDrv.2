@@ -13,23 +13,16 @@
 =========================================================================*/
 
 #include "MoleculeAcquireFileWFN.h"
+#include "TraitsAcquireAtoms.h"
 
-#include <vtkInformation.h>
-#include <vtkInformationVector.h>
 #include <vtkObjectFactory.h>
-
-#include <vtkMolecule.h>
-#include <vtkPeriodicTable.h>
-
-#include <vtkStreamingDemandDrivenPipeline.h>
 
 #include <cmath>
 #include <cstring>
-
 #include <fstream>
 #include <sstream>
+using namespace std;
 
-#include "TraitsAcquireAtoms.h"
 
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileWFN);
@@ -37,16 +30,16 @@ vtkStandardNewMacro(MoleculeAcquireFileWFN);
 
 int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
 {
-  std::string str_line;
-  std::string title;
-  if (!std::getline(file_in, str_line))
+  string str_line;
+  string title;
+  if (!getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading title string: " << this->FileName());
     return 0;
   }
   title = str_line;
 
-  if (!std::getline(file_in, str_line))
+  if (!getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading sizes string: " << this->FileName());
     return 0;
@@ -55,10 +48,11 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
   int nAtoms = 0;
   int nOrbs = 0;
   int nPrims = 0;
-  std::string str_orb_type; // orbital type marker
-  std::string skip;
+  string str_orb_type; // orbital type marker
+  string skip;
   char cEq;
-  std::istringstream ssinp(str_line);
+  
+  istringstream ssinp(str_line);
   if (!(ssinp >> str_orb_type                // "SLATER" || "GTO" || "GAUSSIAN"
         >> nOrbs >> skip /* "MOL" */ >> skip // "ORBITALS"
         >> nPrims >> skip                    // "PRIMITIVES"
@@ -86,7 +80,7 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
 
   for (int i = 0; i < nAtoms; i++)
   {
-    if (!std::getline(file_in, str_line))
+    if (!getline(file_in, str_line))
     {
       vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading atom string #" << i + 1 << " in " << this->FileName());
       return 0;
@@ -96,7 +90,7 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
   int nTextSectionHeight = (nPrims + 19) / 20; // 20 ints per string; format constant
   for (int i = 0; i < nTextSectionHeight; ++i)
   {
-    if (!std::getline(file_in, str_line))
+    if (!getline(file_in, str_line))
     {
       vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading CENTRE ASSIGNMENTS string #" << (++i) << " in " << this->FileName());
       return 0;
@@ -104,7 +98,7 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
   }
   for (int i = 0; i < nTextSectionHeight; ++i)
   {
-    if (!std::getline(file_in, str_line))
+    if (!getline(file_in, str_line))
     {
       vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading TYPE ASSIGNMENTS string #" << (++i) << " in " << this->FileName());
       return 0;
@@ -115,7 +109,7 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
 
   for (int i = 0; i < nTextSectionHeight; ++i)
   {
-    if (!std::getline(file_in, str_line))
+    if (!getline(file_in, str_line))
     {
       vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading EXPONENTS string #" << (++i) << " in " << this->FileName());
       return 0;
@@ -124,14 +118,14 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
 
   for (int j = 0; j < nOrbs; ++j)
   {
-    if (!std::getline(file_in, str_line))
+    if (!getline(file_in, str_line))
     {
       vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ORBITAL #" << (++j) << " header in " << this->FileName());
       return 0;
     }
     for (int i = 0; i < nTextSectionHeight; ++i)
     {
-      if (!std::getline(file_in, str_line))
+      if (!getline(file_in, str_line))
       {
         vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ORBITAL #" << (++j) << " in string #" << (++i) << " in " << this->FileName());
         return 0;
@@ -139,12 +133,12 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
     }
   }
 
-  if (!std::getline(file_in, str_line))
+  if (!getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading END DATA string in " << this->FileName());
     return 0;
   }
-  if (!std::getline(file_in, str_line))
+  if (!getline(file_in, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ENERGY/VIRIAL string in " << this->FileName());
     return 0;
@@ -155,20 +149,20 @@ int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
 
 int MoleculeAcquireFileWFN::ReadSimpleMolecule(BaseInput& file_in,Molecule* output)
 {
-  std::string str_line;
-  std::string title;
+  string str_line;
+  string title;
 
   // first non-empty string is the title
   do
   {
-    if (!std::getline(file_in, str_line))
+    if (!getline(file_in, str_line))
     {
       vtkErrorMacro("MoleculeAcquireFileWFN error: premature EOF while reading title from" << this->FileName());
       return 0;
     }
   } while (str_line.empty());
 
-  if (!std::getline(file_in, str_line))
+  if (!getline(file_in, str_line))
   {
     vtkErrorMacro("MoleculeAcquireFileWFN error: premature EOF while reading sizes from" << this->FileName());
     return 0;
@@ -176,11 +170,11 @@ int MoleculeAcquireFileWFN::ReadSimpleMolecule(BaseInput& file_in,Molecule* outp
 
   int nAtoms = 0;
   size_t nOrbs = 0, nPrims = 0;
-  std::string str_orb_type; // orbital type marker
-  std::string skip;
+  string str_orb_type; // orbital type marker
+  string skip;
   char cEq;
 
-  std::istringstream ssinp(str_line);
+  istringstream ssinp(str_line);
   if (!(ssinp >> str_orb_type                // "SLATER" || "GTO" || "GAUSSIAN"
         >> nOrbs >> skip /* "MOL" */ >> skip // "ORBITALS"
         >> nPrims >> skip                    // "PRIMITIVES"
