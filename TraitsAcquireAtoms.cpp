@@ -129,7 +129,7 @@ vtkIdType TraitsBase::ElementSymbolToNumber(const char * symbol)
   {
     if (k1 == 'e') number = idFe;
     else if (k1 == 'l') number = idFl;
-    else if (k1 == 'l') number = idFm;
+    else if (k1 == 'm') number = idFm;
     else number = id_F;
     break;
   }
