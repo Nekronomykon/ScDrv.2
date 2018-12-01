@@ -1,5 +1,11 @@
 #include "CommandPickFragment.h"
 
+#include <vtkProp3DCollection.h>
+#include <vtkHardwareSelector.h>
+
+#include <QString>
+#include <QMessageBox>
+
 //----------------------------------------------------------------------------
 // vtkStandardNewMacro(CommandPickFragment);
 
@@ -30,9 +36,43 @@ void CommandPickFragment::Execute(vtkObject *caller, unsigned long eventId,
         static_cast<unsigned int>(pR->GetPickY2()));
     // Make the actual pick and pass the result to the convenience function
     // defined earlier
-    vtkSelection *result = selector->Select();
+    vtkSmartPointer<vtkSelection> result (selector->Select());
     this->SetIdArrays(result);
     this->DumpMolSelection();
-    result->Delete();
+    // result->Delete();
   }
+}
+
+inline void CommandPickFragment::SetIdArrays(vtkSelection * sel)
+{
+  this->GetMoleculeMapper()->GetSelectedAtomsAndBonds(sel
+    , this->GetSelectedAtomsIndex() // vertex
+    , this->GetSelectedBondsIndex() // edge
+  );
+}
+
+void CommandPickFragment::DumpMolSelection()
+{
+  vtkMolecule *mol = this->GetMoleculeMapper()->GetInput();
+
+  // Print selection
+  ostringstream osel;
+  osel << " :: Selection ::"
+    << endl << "[Atoms]: " << this->GetSelectedAtomsIndex()->GetNumberOfTuples() << "::" << endl;
+  for (vtkIdType i = 0; i < this->GetSelectedAtomsIndex()->GetNumberOfTuples(); i++)
+  {
+    osel << this->GetSelectedAtomsIndex()->GetValue(i) + 1 << "; ";
+  }
+  osel << endl << "[Bonds]: " << this->GetSelectedBondsIndex()->GetNumberOfTuples() << "::" << endl;
+  for (vtkIdType i = 0; i < this->GetSelectedBondsIndex()->GetNumberOfTuples(); i++)
+  {
+    vtkBond bond = mol->GetBond(this->GetSelectedBondsIndex()->GetValue(i));
+    osel << bond.GetId() << ":(" << bond.GetBeginAtomId() << "--"
+      << bond.GetEndAtomId() << ");";
+  }
+  osel << endl << flush;
+  QMessageBox::information(nullptr
+    , QString("Selection")
+    , QString(osel.str().c_str())
+  );
 }

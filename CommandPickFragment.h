@@ -20,6 +20,9 @@
 #include <vtkMolecule.h>
 #include <vtkMoleculeMapper.h>
 
+#include <sstream>
+using namespace std;
+
 class CommandPickFragment
     : public vtkCommand
 {
@@ -29,14 +32,14 @@ public:
   // void PrintSelf(ostream& os, vtkIndent indent) override;
 
   // Adjust that
-  void Execute(vtkObject *caller, unsigned long eventId,
-               void *callData) override;
+  void Execute(vtkObject* /*caller*/, unsigned long /*eventId*/
+    , void* /*callData*/) override;
 
-  vtkIdTypeArray *GetSelectedAtomsIndex() const { return idxAtoms_.Get(); }
-  vtkIdTypeArray *GetSelectedBondsIndex() const { return idxBonds_.Get(); }
+  vtkIdTypeArray* GetSelectedAtomsIndex() const { return idxAtoms_.Get(); }
+  vtkIdTypeArray* GetSelectedBondsIndex() const { return idxBonds_.Get(); }
 
   vtkRenderer *GetRenderer() const { return ptrRenderer_; }
-  vtkRenderer *ResetRenderer(vtkRenderer *ptr)
+  vtkRenderer *ResetRenderer(vtkRenderer* ptr = nullptr)
   {
     if (ptr != ptrRenderer_)
       std::swap(ptr, ptrRenderer_);
@@ -44,7 +47,7 @@ public:
   }
 
   vtkAreaPicker *GetAreaPicker() const { return ptrAreaPicker_; }
-  vtkAreaPicker *ResetAreaPicker(vtkAreaPicker *ptr)
+  vtkAreaPicker *ResetAreaPicker(vtkAreaPicker* ptr = nullptr)
   {
     if (ptr != ptrAreaPicker_)
       std::swap(ptr, ptrAreaPicker_);
@@ -52,21 +55,21 @@ public:
   }
 
   vtkMoleculeMapper *GetMoleculeMapper() const { return ptrMoleculeMapper_; }
-  vtkMoleculeMapper *ResetMoleculeMapper(vtkMoleculeMapper *ptr)
+  vtkMoleculeMapper *ResetMoleculeMapper(vtkMoleculeMapper* ptr = nullptr)
   {
     if (ptr != ptrMoleculeMapper_)
       std::swap(ptr, ptrMoleculeMapper_);
     return ptr;
   }
 
-  void SetIdArrays(vtkSelection *sel)
-  {
-    this->GetMoleculeMapper()->GetSelectedAtomsAndBonds(sel, this->GetSelectedAtomsIndex(), this->GetSelectedBondsIndex());
-  }
+  void SetIdArrays(vtkSelection* /*sel*/);
 
 protected:
   CommandPickFragment() = default;
   ~CommandPickFragment() override = default;
+
+  void DumpMolSelection();
+
 
 private:
   // selection index:

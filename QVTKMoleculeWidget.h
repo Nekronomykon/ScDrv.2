@@ -31,7 +31,7 @@
 #include <vtkMoleculeMapper.h>
 
 #include <vtkInteractorStyle.h>
-
+#include <vtkAreaPicker.h>
 #include "CommandPickFragment.h"
 
 #include "QVTKMoleculeMapStyle.h"
@@ -79,6 +79,7 @@ private:
   typedef vtkSmartPointer<vtkActor> Actor;
   typedef vtkSmartPointer<vtkMoleculeMapper> MolMapper;
   typedef vtkSmartPointer<vtkRenderer> Renderer;
+  typedef vtkSmartPointer<vtkAreaPicker> AreaPicker;
 
 private:
   Renderer renderer_;
@@ -86,7 +87,7 @@ private:
   vtkColor3d bgColor_;
   MolMapper mol_mapper_;
   MolStyle mol_style_;
-
+  AreaPicker area_picker_;
   InteractorStyle styleInteractor_;
   vtkNew<CommandPickFragment> cmdPickFragment_;
 

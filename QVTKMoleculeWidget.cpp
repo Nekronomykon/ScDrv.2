@@ -19,7 +19,7 @@
 #include <vtkOpenGLMoleculeMapper.h>
 
 #include <vtkNamedColors.h>
-
+#include <vtkRenderedAreaPicker.h>
 #include <vtkPolyDataMapper.h>
 
 #include <vtkInteractorStyleRubberBandPick.h>
@@ -28,6 +28,7 @@ typedef vtkSmartPointer<vtkLODActor> LODActor;
 typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
 typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> OpenGLMolMapper;
+typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 typedef vtkSmartPointer<vtkInteractorStyleRubberBandPick> IntStyleRbrBndPick;
 
@@ -58,6 +59,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   : BaseWidget(parent), renderer_(OpenGLRenderer::New())
   , name_background_(GetDefaultBackgroundColorName())
   , mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
+  , area_picker_(RenderedAreaPicker::New())
   , styleInteractor_(IntStyleRbrBndPick::New())
 {
   // this->setAttribute(Qt::WA_NativeWindow, false);
@@ -79,8 +81,12 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   vtkRenderWindowInteractor* pIren = this->GetInteractor();
   assert(pIren);
   pIren->SetInteractorStyle(styleInteractor_);
+  pIren->SetPicker(area_picker_);
 
-  pIren->AddObserver(vtkCommand::EndPickEvent, cmdPickFragment_);
+  cmdPickFragment_->ResetMoleculeMapper(mol_mapper_.Get());
+  cmdPickFragment_->ResetRenderer(renderer_.Get());
+  cmdPickFragment_->ResetAreaPicker(area_picker_.Get());
+  area_picker_->AddObserver(vtkCommand::EndPickEvent, cmdPickFragment_);
 }
 
 QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
