@@ -35,8 +35,8 @@ public:
   void Execute(vtkObject* /*caller*/, unsigned long /*eventId*/
     , void* /*callData*/) override;
 
-  vtkIdTypeArray* GetSelectedAtomsIndex() const { return idxAtoms_.Get(); }
-  vtkIdTypeArray* GetSelectedBondsIndex() const { return idxBonds_.Get(); }
+  vtkIdTypeArray* IndexSelectedAtoms() const { return idxAtoms_.Get(); }
+  vtkIdTypeArray* IndexSelectedBonds() const { return idxBonds_.Get(); }
 
   vtkRenderer *GetRenderer() const { return ptrRenderer_; }
   vtkRenderer *ResetRenderer(vtkRenderer* ptr = nullptr)

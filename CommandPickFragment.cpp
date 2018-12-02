@@ -36,18 +36,19 @@ void CommandPickFragment::Execute(vtkObject *caller, unsigned long eventId,
         static_cast<unsigned int>(pR->GetPickY2()));
     // Make the actual pick and pass the result to the convenience function
     // defined earlier
-    vtkSmartPointer<vtkSelection> result (selector->Select());
+    // vtkSmartPointer<vtkSelection> result (selector->Select());
+    vtkSelection* result(selector->Select());
     this->SetIdArrays(result);
     this->DumpMolSelection();
-    // result->Delete();
+    result->Delete();
   }
 }
 
 inline void CommandPickFragment::SetIdArrays(vtkSelection * sel)
 {
   this->GetMoleculeMapper()->GetSelectedAtomsAndBonds(sel
-    , this->GetSelectedAtomsIndex() // vertex
-    , this->GetSelectedBondsIndex() // edge
+    , this->IndexSelectedAtoms() // vertex
+    , this->IndexSelectedBonds() // edge
   );
 }
 
@@ -58,15 +59,15 @@ void CommandPickFragment::DumpMolSelection()
   // Print selection
   ostringstream osel;
   osel << " :: Selection ::"
-    << endl << "[Atoms]: " << this->GetSelectedAtomsIndex()->GetNumberOfTuples() << "::" << endl;
-  for (vtkIdType i = 0; i < this->GetSelectedAtomsIndex()->GetNumberOfTuples(); i++)
+    << endl << "[Atoms]: " << this->IndexSelectedAtoms()->GetNumberOfTuples() << "::" << endl;
+  for (vtkIdType i = 0; i < this->IndexSelectedAtoms()->GetNumberOfTuples(); i++)
   {
-    osel << this->GetSelectedAtomsIndex()->GetValue(i) + 1 << "; ";
+    osel << this->IndexSelectedAtoms()->GetValue(i) + 1 << "; ";
   }
-  osel << endl << "[Bonds]: " << this->GetSelectedBondsIndex()->GetNumberOfTuples() << "::" << endl;
-  for (vtkIdType i = 0; i < this->GetSelectedBondsIndex()->GetNumberOfTuples(); i++)
+  osel << endl << "[Bonds]: " << this->IndexSelectedBonds()->GetNumberOfTuples() << "::" << endl;
+  for (vtkIdType i = 0; i < this->IndexSelectedBonds()->GetNumberOfTuples(); i++)
   {
-    vtkBond bond = mol->GetBond(this->GetSelectedBondsIndex()->GetValue(i));
+    vtkBond bond = mol->GetBond(this->IndexSelectedBonds()->GetValue(i));
     osel << bond.GetId() << ":(" << bond.GetBeginAtomId() << "--"
       << bond.GetEndAtomId() << ");";
   }
