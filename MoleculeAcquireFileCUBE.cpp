@@ -290,7 +290,7 @@ int MoleculeAcquireFileCUBE::FillOutputPortInformation(int port, vtkInformation 
   return 1;
 }
 
-void MoleculeAcquireFileCUBE::PrintSelf(ostream& os, vtkIndent indent)
-{
-  this->Superclass::PrintSelf(os, indent);
-}
+// void MoleculeAcquireFileCUBE::PrintSelf(ostream& os, vtkIndent indent)
+// {
+//   this->Superclass::PrintSelf(os, indent);
+// }
