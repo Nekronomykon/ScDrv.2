@@ -33,6 +33,8 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <string>
+using namespace std;
 
 vtkStandardNewMacro(MoleculeAcquireFileCUBE);
 
@@ -50,28 +52,13 @@ MoleculeAcquireFileCUBE::MoleculeAcquireFileCUBE()
 }
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFileCUBE::~MoleculeAcquireFileCUBE()
-{}
-
-//----------------------------------------------------------------------------
-vtkMolecule *MoleculeAcquireFileCUBE::GetOutput()
-{
-  return vtkMolecule::SafeDownCast(this->GetOutputDataObject(0));
-}
-
-//----------------------------------------------------------------------------
-void MoleculeAcquireFileCUBE::SetOutput(vtkMolecule *output)
-{
-  this->GetExecutive()->SetOutputData(0, output);
-}
-
-//----------------------------------------------------------------------------
 vtkImageData *MoleculeAcquireFileCUBE::GetGridOutput()
 {
   return (this->GetNumberOfOutputPorts() < 2) ? nullptr :
     vtkImageData::SafeDownCast(this->GetOutputDataObject(1));
 }
 
+//----------------------------------------------------------------------------
 int MoleculeAcquireFileCUBE::RequestInformation(
   vtkInformation *vtkNotUsed(request),
   vtkInformationVector **vtkNotUsed(inputVector),
@@ -100,7 +87,7 @@ int MoleculeAcquireFileCUBE::RequestInformation(
   int n1, n2, n3;
   if (!(file_in >> n1 >> tmpd >> tmpd >> tmpd))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file " << this->FileName()
       << " Premature EOF while grid size.");
     return 0;
   }
@@ -128,6 +115,7 @@ int MoleculeAcquireFileCUBE::RequestInformation(
   return 1;
 }
 
+//----------------------------------------------------------------------------
 int MoleculeAcquireFileCUBE::RequestData(
   vtkInformation *,
   vtkInformationVector **,

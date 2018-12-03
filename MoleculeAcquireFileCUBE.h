@@ -47,14 +47,6 @@ public:
   vtkTypeMacro(MoleculeAcquireFileCUBE, MoleculeAcquireFile)
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
-  //@{
-  /**
-   * Get/Set the output (vtkMolecule) that the reader will fill
-   */
-  vtkMolecule *GetOutput();
-  void SetOutput(vtkMolecule *) override;
-  //@}
-
   /**
    * Get/Set the output (vtkImageData) that the reader will fill
    */
@@ -62,7 +54,7 @@ public:
 
 protected:
   MoleculeAcquireFileCUBE();
-  ~MoleculeAcquireFileCUBE() override;
+  ~MoleculeAcquireFileCUBE() override = default;
 
   int RequestData(vtkInformation *, vtkInformationVector **,
                   vtkInformationVector *) override;
