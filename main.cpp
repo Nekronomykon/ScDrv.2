@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 {
   vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(8);
   QSurfaceFormat::setDefaultFormat(QVTKMoleculeWidget::defaultFormat());
+  
   QVTKApplication app(argc, argv);
   // app.setAttribute(Qt::AA_NativeWindows, false);
   QCoreApplication::setApplicationName("ScrewDriver");
