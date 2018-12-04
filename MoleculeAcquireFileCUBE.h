@@ -45,7 +45,7 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileCUBE
 public:
   static MoleculeAcquireFileCUBE *New();
   vtkTypeMacro(MoleculeAcquireFileCUBE, MoleculeAcquireFile)
-  .. void PrintSelf(ostream &os, vtkIndent indent) override;
+  // void PrintSelf(ostream &os, vtkIndent indent) override;
 
   /**
    * Get/Set the output (vtkImageData) that the reader will fill

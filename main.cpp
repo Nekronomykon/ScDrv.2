@@ -8,11 +8,13 @@
 #include "QVTKMoleculeWidget.h" // to specify Surface Format, as below
 
 #include <QVTKApplication.h>
+#include <vtkOpenGLRenderWindow.h>
 
 #include "FrameWorkspace.h"
 
 int main(int argc, char *argv[])
 {
+  vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(8);
   QSurfaceFormat::setDefaultFormat(QVTKMoleculeWidget::defaultFormat());
   QVTKApplication app(argc, argv);
   // app.setAttribute(Qt::AA_NativeWindows, false);
