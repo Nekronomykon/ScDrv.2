@@ -76,8 +76,11 @@ int MoleculeAcquireFileCUBE::RequestInformation(
   }
 
   char title[256];
-  file_in.getline(title, 256); // first title line
-  file_in.getline(title, 256); // second title line with name of scalar field?
+  string one_line;
+  getline(file_in, one_line); // first title line
+  // file_in.getline(title, 256); 
+  getline(file_in, one_line); // second title line with name of scalar field?
+//  file_in.getline(title, 256); 
 
                                // the set the information for the imagedata output
   vtkInformation *gridInfo = this->GetExecutive()->GetOutputInformation(1);

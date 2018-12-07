@@ -63,8 +63,8 @@ protected:
   int FillOutputPortInformation(int, vtkInformation *) override;
 
 private:
-  MoleculeAcquireFileCUBE(const MoleculeAcquireFileCUBE &) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileCUBE &) VTK_DELETE_FUNCTION;
+  MoleculeAcquireFileCUBE(const MoleculeAcquireFileCUBE &) = delete;
+  void operator=(const MoleculeAcquireFileCUBE &) = delete;
 };
 
 #endif // !MoleculeAcquire_File_CUBE_h
