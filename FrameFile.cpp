@@ -245,6 +245,7 @@ FrameFile::FrameFile(QWidget *parent)
   this->tabBar()->setAutoHide(true);
 
   this->addViewWidget(edit_source_, tr("Source"));
+  this->addViewWidget(view_source_, tr("XXXX"));
 
   this->doClearAll();
 }

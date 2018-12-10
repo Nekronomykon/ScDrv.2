@@ -35,6 +35,7 @@
 #include <vtkPNGWriter.h>
 #include <vtkJPEGWriter.h>
 
+#include "ViewSource.h"
 #include "ViewMoleculeAtomic.h"
 #include "ViewMoleculeBonds.h"
 
@@ -194,6 +195,7 @@ private:
   QVector<QWidget *> view_current_;
   // ..chosen from:
   QPointer<EditSource> edit_source_;
+  QPointer<ViewSource> view_source_;
   QPointer<QVTKMoleculeWidget> view_molecule_;
   QPointer<ViewMoleculeAtomic> view_atomic_;
   QPointer<ViewMoleculeBonds> view_bonds_;

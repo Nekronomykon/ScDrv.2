@@ -48,8 +48,6 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   this->updateUi();
 }
 
-FrameWorkspace::~FrameWorkspace() {}
-
 void FrameWorkspace::openAllFiles(const QStringList &all)
 {
   if (all.empty())

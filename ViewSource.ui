@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ViewSource</class>
+ <widget class="QWidget" name="ViewSource">
+</widget>
+ <customwidgets>
+  <customwidget>
+  <class>CodeEditor</class>
+  <extends>QPlainTextEdit</extends>
+  <header>CodeEditor.h</header>
+  </customwidget>
+  <customwidget>
+  <class>EditTextSource</class>
+  <extends>CodeEditor</extends>
+  <header>EditTextSource.h</header>
+  </customwidget>
+  </customwidgets>
+ <resources/>
+</ui>

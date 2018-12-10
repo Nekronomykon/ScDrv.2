@@ -20,8 +20,8 @@
 
 #include "ComboBoxColors.h"
 
-#include "ui_FrameWorkspace.h"
 #include <QMainWindow>
+#include "ui_FrameWorkspace.h"
 
 class FrameWorkspace
     : public QMainWindow,
@@ -39,7 +39,7 @@ public:
   typedef Child::FileContext FileFormat;
 
   explicit FrameWorkspace(QWidget * /*parent*/ = Q_NULLPTR);
-  ~FrameWorkspace() override;
+  ~FrameWorkspace() override = default;
 
   static int hasRecentFiles();
 
