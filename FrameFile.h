@@ -51,8 +51,8 @@ class FrameFile;
 typedef class FileFormatContext<FrameFile> FrameFileContext;
 
 class FrameFile
-    : public QTabWidget,
-      public ImplFileName<FrameFile, QString>
+  : public QTabWidget,
+  public ImplFileName<FrameFile, QString>
 {
   Q_OBJECT
 public:
@@ -117,6 +117,20 @@ public:
   bool saveTextSource(const TypeFileName &) const;
 
   TypeFileName dumpSource() const;
+
+  template<typename Check>
+  static QStringList ListFormats(Check check)
+  {
+    QStringList res;
+
+    for (const auto& one : all_formats)
+    {
+      if (check(one))
+      {
+        res.push_back(QString(one.key()));
+      }
+    }
+  }
 
   // Reader functionality
   bool interpretNone();
@@ -194,7 +208,7 @@ private:
 
   QVector<QWidget *> view_current_;
   // ..chosen from:
-  QPointer<EditSource> edit_source_;
+  // QPointer<EditSource> edit_source_;
   QPointer<ViewSource> view_source_;
   QPointer<QVTKMoleculeWidget> view_molecule_;
   QPointer<ViewMoleculeAtomic> view_atomic_;

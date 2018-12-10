@@ -14,13 +14,15 @@
 #include "ui_ViewSource.h"
 
 class ViewSource
-: public QWidget
-, private Ui_ViewSource
+  : public QWidget
+  , private Ui_ViewSource
 {
   Q_OBJECT
-   public: 
-   explicit ViewSource(QWidget* /*parent*/ = nullptr);
-   ~ViewSource() override = default;
+public:
+  explicit ViewSource(QWidget* /*parent*/ = nullptr);
+  ~ViewSource() override = default;
+
+  EditTextSource* getTextSource() const;
 private:
 };
 

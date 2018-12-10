@@ -120,6 +120,7 @@ FrameFile::FileContext FrameFile::CastInputPathFormat(const QString &path)
 
 QString FrameFile::keyRecentFiles() { return QStringLiteral("RecentFiles"); }
 QString FrameFile::keyFile() { return QStringLiteral("File"); }
+
 void FrameFile::storeRecentFiles(QSettings &s)
 {
   writeRecentFiles(getRecentFiles(), s);
@@ -178,7 +179,7 @@ QString FrameFile::FileInputFilter()
   std::set<QString> regx;
 
   QString by_format;
-  auto it_fmt = all_formats.begin();
+  auto it_fmt = all_formats.cbegin();
   do
   {
     //if (!it_fmt.key().hasBuild())
@@ -193,7 +194,7 @@ QString FrameFile::FileInputFilter()
     by_format += " (";
     by_format += mask;
     by_format += ");;";
-  } while (++it_fmt != all_formats.end());
+  } while (++it_fmt != all_formats.cend());
 
   assert(!regx.empty());
 
@@ -235,17 +236,17 @@ void FrameFile::ClearFileInputContext()
 
 // this-driven functions
 FrameFile::FrameFile(QWidget *parent)
-    : QTabWidget(parent), format_current_(format_active), bonds_build_(BuildBonds::New())
-//, extend_(new QToolButton(this))
-//, compress_(new QToolButton(this))
+  : QTabWidget(parent), format_current_(format_active), bonds_build_(BuildBonds::New())
+  //, extend_(new QToolButton(this))
+  //, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::South);
   this->setTabShape(QTabWidget::Rounded);
   this->tabBar()->setAutoHide(true);
 
-  this->addViewWidget(edit_source_, tr("Source"));
-  this->addViewWidget(view_source_, tr("XXXX"));
+  //this->addViewWidget(edit_source_, tr("Source"));
+  this->addViewWidget(view_source_, tr("Source"));
 
   this->doClearAll();
 }
@@ -264,7 +265,8 @@ bool FrameFile::readCurrentFormatFrom(const QString &from)
 
 bool FrameFile::interpretNone()
 {
-  edit_source_->setReadOnly(false);
+  assert(this->getEditSource());
+  this->setEditSource()->setReadOnly(false);
   return true;
 }
 
@@ -319,13 +321,13 @@ vtkMolecule *FrameFile::getMolecule() const
 // data views
 EditTextSource *FrameFile::getEditSource() const
 {
-  return edit_source_;
+  return (!view_source_) ? nullptr : view_source_->getTextSource();
 }
 EditTextSource *FrameFile::setEditSource()
 {
   auto *pOne = this->getEditSource();
   if (pOne)
-    this->setCurrentWidget(pOne);
+    this->setCurrentWidget(view_source_);
   return pOne;
 }
 
@@ -365,19 +367,19 @@ void FrameFile::doClearAll()
   structure_.Initialize();
   this->hideStructureViews();
   this->resetFormat();
-  edit_source_->setPlainText(tr(""));
-  edit_source_->setReadOnly(false);
+  this->getEditSource()->setPlainText(tr(""));
+  this->getEditSource()->setReadOnly(false);
 }
 
 void FrameFile::hideStructureViews()
 {
-  this->setCurrentWidget(edit_source_);
+  this->setCurrentWidget(view_source_);
   while (this->count() > 1)
   {
     this->removeTab(1);
   }
   view_current_.resize(1);
-  view_current_[0] = edit_source_; // may be excessive, but...
+  view_current_[0] = view_source_; // may be excessive, but...
 }
 
 void FrameFile::showStructureViews()
@@ -407,23 +409,34 @@ bool FrameFile::readTextSource(const TypeFileName &from)
   if (!file.open(QIODevice::Text | QIODevice::ReadOnly))
     return false;
 
-  edit_source_->load(&file);
-  edit_source_->setReadOnly(false);
+  auto* pSrc = this->getEditSource();
+  assert(pSrc);
+
+  pSrc->load(&file);
+  this->setEditSource()->setReadOnly(false);
+
   return true;
 }
 
 bool FrameFile::saveTextSource(const TypeFileName &path_to) const
 {
-  edit_source_->dump();
+  auto* pSrc = this->getEditSource();
+  assert(pSrc);
+
+  pSrc->dump();
   if (QFile::exists(path_to))
     QFile::remove(path_to);
-  return QFile::copy(edit_source_->getDumpPath(), path_to);
+
+  return QFile::copy(pSrc->getDumpPath(), path_to);
 }
 
 FrameFile::TypeFileName FrameFile::dumpSource() const
 {
-  EditTextSource *pSrc = this->getEditSource();
+  auto *pSrc = this->getEditSource();
+  assert(pSrc);
+
   pSrc->dump();
+
   return pSrc->getDumpPath();
 }
 
@@ -432,9 +445,9 @@ bool FrameFile::acquireAsOUT() { return this->acquireUsing<MoleculeAcquireFileOU
 bool FrameFile::acquireAsXYZ() { return this->acquireUsing<MoleculeAcquireFileXYZ>(); }
 bool FrameFile::acquireAsWFN() { return this->acquireUsing<MoleculeAcquireFileWFN>(); }
 bool FrameFile::acquireAsCUBE() { return this->acquireUsing<MoleculeAcquireFileCUBE>(); }
-bool FrameFile::acquireAsMGP(){  return this->acquireUsing<MoleculeAcquireFileMGP>(); }
-bool FrameFile::acquireAsSUM(){  return this->acquireUsing<MoleculeAcquireFileSUM>(); }
-bool FrameFile::acquireAsExtOut(){  return this->acquireUsing<MoleculeAcquireFileEXTOUT>();}
+bool FrameFile::acquireAsMGP() { return this->acquireUsing<MoleculeAcquireFileMGP>(); }
+bool FrameFile::acquireAsSUM() { return this->acquireUsing<MoleculeAcquireFileSUM>(); }
+bool FrameFile::acquireAsExtOut() { return this->acquireUsing<MoleculeAcquireFileEXTOUT>(); }
 
 // image writer functions
 bool FrameFile::writeSceneAsPNG(const TypeFileName &save_path)

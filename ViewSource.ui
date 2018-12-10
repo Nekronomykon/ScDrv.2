@@ -2,18 +2,35 @@
 <ui version="4.0">
  <class>ViewSource</class>
  <widget class="QWidget" name="ViewSource">
-</widget>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QComboBox" name="selectTextFormats_"/>
+   </item>
+   <item>
+    <widget class="EditTextSource" name="editTextSource_"/>
+   </item>
+  </layout>
+ </widget>
  <customwidgets>
   <customwidget>
-  <class>CodeEditor</class>
-  <extends>QPlainTextEdit</extends>
-  <header>CodeEditor.h</header>
+   <class>CodeEditor</class>
+   <extends>QPlainTextEdit</extends>
+   <header>CodeEditor.h</header>
   </customwidget>
   <customwidget>
-  <class>EditTextSource</class>
-  <extends>CodeEditor</extends>
-  <header>EditTextSource.h</header>
+   <class>EditTextSource</class>
+   <extends>CodeEditor</extends>
+   <header>EditTextSource.h</header>
   </customwidget>
-  </customwidgets>
+ </customwidgets>
  <resources/>
+ <connections/>
 </ui>
