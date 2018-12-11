@@ -51,8 +51,8 @@ class FrameFile;
 typedef class FileFormatContext<FrameFile> FrameFileContext;
 
 class FrameFile
-  : public QTabWidget,
-  public ImplFileName<FrameFile, QString>
+    : public QTabWidget,
+      public ImplFileName<FrameFile, QString>
 {
   Q_OBJECT
 public:
@@ -118,18 +118,21 @@ public:
 
   TypeFileName dumpSource() const;
 
-  template<typename Check>
-  static QStringList ListFormats(Check check)
+  template <typename Iter, typename Check>
+  static QStringList GetCompatibleFormats(Iter from, Iter to, Check check)
   {
     QStringList res;
-
-    for (const auto& one : all_formats)
+    if (from != to)
     {
-      if (check(one))
+      do
       {
-        res.push_back(QString(one.key()));
-      }
+        if (check(one))
+        {
+          res.push_back(one.key().Name());
+        }
+      } while (++from != to);
     }
+    return res;
   }
 
   // Reader functionality
