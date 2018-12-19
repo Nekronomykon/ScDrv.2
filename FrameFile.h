@@ -126,9 +126,9 @@ public:
     {
       do
       {
-        if (check(one))
+        if (check(from.key()))
         {
-          res.push_back(one.key().Name());
+          res.push_back(from.key().Name());
         }
       } while (++from != to);
     }
