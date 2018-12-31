@@ -249,6 +249,14 @@ void FrameWorkspace::updateUi()
   FrameFile::ViewMolecule* pV = !pActive ? nullptr : pActive->getViewStructure();
   bool bHasGraph(bHasChild && pV != nullptr);
 
+  vtkCamera*pCam = !pV ? nullptr : pV->GetActiveCamera();
+
+  actionProjOrthogonal_->setChecked(pCam ? pCam->GetParallelProjection() : false);
+  actionProjOrthogonal_->setEnabled(bHasGraph);
+
+  actionProjPerspective_->setChecked(pCam ? !pCam->GetParallelProjection() : false);
+  actionProjPerspective_->setEnabled(bHasGraph);
+
   actionMolBalls_->setChecked(bHasGraph ? pV->moleculeInBallsSticks() : false);
   actionMolBalls_->setEnabled(bHasGraph);
   
@@ -499,22 +507,24 @@ void FrameWorkspace::on_actionSourceCast__triggered()
 
 //
 
-inline void FrameWorkspace::on_actionProjOrthogonal__triggered()
+void FrameWorkspace::on_actionProjOrthogonal__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  vtkCamera* pCam = pMolView->GetRenderer()->GetActiveCamera();
+  vtkCamera* pCam = pMolView->GetActiveCamera();
+  assert(pCam);
   if (pCam) pCam->ParallelProjectionOn();
   pMolView->doRender();
 }
 
-inline void FrameWorkspace::on_actionProjPerspective__triggered()
+void FrameWorkspace::on_actionProjPerspective__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  vtkCamera* pCam = pMolView->GetRenderer()->GetActiveCamera();
+  vtkCamera* pCam = pMolView->GetActiveCamera();
+  assert(pCam);
   if (pCam) pCam->ParallelProjectionOff();
   pMolView->doRender();
 }

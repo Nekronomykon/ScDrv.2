@@ -65,6 +65,7 @@ public:
   void doRender();
 
   vtkRenderer* GetRenderer() const { return renderer_; }
+  vtkCamera*   GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
 
   static vtkStdString GetDefaultBackgroundColorName();
   static vtkStdString ResetDefaultBackgroundColorName(vtkStdString name_new);
