@@ -86,8 +86,8 @@ protected slots:
   void on_actionSourceEdit__triggered();
   void on_actionSourceCast__triggered();
   //
-  void on_actionProjOrthogonal_triggered();
-  void on_actionProjPerspective_triggered();
+  void on_actionProjOrthogonal__triggered();
+  void on_actionProjPerspective__triggered();
   //
   void on_actionMolFast__triggered();
   void on_actionMolBalls__triggered();

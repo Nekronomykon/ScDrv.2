@@ -499,7 +499,7 @@ void FrameWorkspace::on_actionSourceCast__triggered()
 
 //
 
-inline void FrameWorkspace::on_actionProjOrthogonal_triggered()
+inline void FrameWorkspace::on_actionProjOrthogonal__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
@@ -509,7 +509,7 @@ inline void FrameWorkspace::on_actionProjOrthogonal_triggered()
   pMolView->doRender();
 }
 
-inline void FrameWorkspace::on_actionProjPerspective_triggered()
+inline void FrameWorkspace::on_actionProjPerspective__triggered()
 {
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
