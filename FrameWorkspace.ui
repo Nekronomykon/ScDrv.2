@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_">
@@ -94,9 +94,17 @@
      <addaction name="actionLabelAtoms_"/>
      <addaction name="actionLabelBonds_"/>
     </widget>
+    <widget class="QMenu" name="menuProj">
+     <property name="title">
+      <string>Pro&amp;jection</string>
+     </property>
+     <addaction name="actionProjPerspective_"/>
+     <addaction name="actionProjOrthogonal_"/>
+    </widget>
+    <addaction name="actionToggleLayout_"/>
     <addaction name="actionFullScreen_"/>
     <addaction name="separator"/>
-    <addaction name="actionToggleLayout_"/>
+    <addaction name="menuProj"/>
     <addaction name="separator"/>
     <addaction name="menuMolecule_"/>
     <addaction name="separator"/>
@@ -342,6 +350,16 @@
   <action name="actionExportCoords_">
    <property name="text">
     <string>&amp;Coordnates..</string>
+   </property>
+  </action>
+  <action name="actionProjPerspective_">
+   <property name="text">
+    <string>&amp;Perspective</string>
+   </property>
+  </action>
+  <action name="actionProjOrthogonal_">
+   <property name="text">
+    <string>Orthogonal</string>
    </property>
   </action>
  </widget>

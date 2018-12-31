@@ -141,6 +141,12 @@ void FrameWorkspace::setupActions()
   const QIcon iconSrcCast = QIcon::fromTheme("edit-compile", QIcon(":/images/SrcCast.png"));
   actionSourceCast_->setIcon(iconSrcCast);
 
+  const QIcon iconOrtho(":/images/ProjOrtho.png");
+  actionProjOrthogonal_->setIcon(iconOrtho);
+
+  const QIcon iconPersp(":/images/ProjPersp.png");
+  actionProjPerspective_->setIcon(iconPersp);
+
   const QIcon iconMolVdW(":/images/MolVDW.png");
   actionMolSpace_->setIcon(iconMolVdW);
 
@@ -176,12 +182,14 @@ void FrameWorkspace::setupToolBars()
   tbSrc->addAction(actionSourceCast_);
   tbSrc->addSeparator();
 
-  QToolBar *tbBg = this->addToolBar(tr("Background"));
-  tbBg->addWidget(colors_back_);
-  tbBg->addSeparator();
-  // here color QLineEdit controls could also be added
+  QToolBar *tbView = this->addToolBar(tr("View"));
+  tbView->addWidget(colors_back_);
+  // ?? here color QLineEdit controls could also be added
+  tbView->addSeparator();
+  tbView->addAction(actionProjOrthogonal_);
+  tbView->addAction(actionProjPerspective_);
 
-  QToolBar *tbMol = this->addToolBar(tr("Molecule"));
+  QToolBar *tbMol = this->addToolBar(tr("View"));
   tbMol->addAction(actionMolFast_);
   tbMol->addAction(actionMolStick_);
   tbMol->addAction(actionMolBalls_);
