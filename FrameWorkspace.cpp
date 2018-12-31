@@ -17,7 +17,11 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
+#include <vtkCamera.h>
+
 #include <vtkSphereSource.h>
+
+
 #include <vtkSmartPointer.h>
 
 // Constructor
@@ -491,6 +495,28 @@ void FrameWorkspace::on_actionSourceCast__triggered()
   pEditSrc->dump();
 
   // now we should invoke the current format context to interpret:
+}
+
+//
+
+inline void FrameWorkspace::on_actionProjOrthogonal_triggered()
+{
+  FrameFile *pOpen = this->getActiveChild();
+  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
+  assert(pMolView);
+  vtkCamera* pCam = pMolView->GetRenderer()->GetActiveCamera();
+  if (pCam) pCam->ParallelProjectionOn();
+  pMolView->doRender();
+}
+
+inline void FrameWorkspace::on_actionProjPerspective_triggered()
+{
+  FrameFile *pOpen = this->getActiveChild();
+  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
+  assert(pMolView);
+  vtkCamera* pCam = pMolView->GetRenderer()->GetActiveCamera();
+  if (pCam) pCam->ParallelProjectionOff();
+  pMolView->doRender();
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()

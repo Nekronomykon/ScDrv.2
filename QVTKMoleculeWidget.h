@@ -64,6 +64,8 @@ public:
   bool resetStyle(const QVTKMoleculeMapStyle & /*style*/);
   void doRender();
 
+  vtkRenderer* GetRenderer() const { return renderer_; }
+
   static vtkStdString GetDefaultBackgroundColorName();
   static vtkStdString ResetDefaultBackgroundColorName(vtkStdString name_new);
 
