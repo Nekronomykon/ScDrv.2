@@ -43,7 +43,7 @@ class QVTKMoleculeWidget
   Q_OBJECT
 public:
   typedef QVTKOpenGLWidget BaseWidget;
-  explicit QVTKMoleculeWidget(QWidget * /*parent*/ = Q_NULLPTR);
+  explicit QVTKMoleculeWidget(QWidget* /*parent*/ = nullptr);
   ~QVTKMoleculeWidget() override;
 
   typedef QVTKMoleculeMapStyle MolStyle;

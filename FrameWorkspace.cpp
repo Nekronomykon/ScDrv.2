@@ -241,20 +241,18 @@ void FrameWorkspace::updateUi()
   bool bHasChild(pActive != nullptr);
 
   bool bHasPath(bHasChild && pActive->HasFileName());
-  actionSave_->setEnabled(bHasPath);
-  actionReload_->setEnabled(bHasPath
-    // && pActive->isModified()
-  );
+  actionSave_->setEnabled(bHasPath && pActive->isModified() );
+  actionReload_->setEnabled(bHasPath && pActive->isModified() );
 
   FrameFile::ViewMolecule* pV = !pActive ? nullptr : pActive->getViewStructure();
   bool bHasGraph(bHasChild && pV != nullptr);
 
-  vtkCamera*pCam = !pV ? nullptr : pV->GetActiveCamera();
+  //vtkCamera*pCam = !pV ? nullptr : pV->GetActiveCamera();
 
-  actionProjOrthogonal_->setChecked(pCam ? pCam->GetParallelProjection() : false);
+  // actionProjOrthogonal_->setChecked(pCam ? pCam->GetParallelProjection() : false);
   actionProjOrthogonal_->setEnabled(bHasGraph);
 
-  actionProjPerspective_->setChecked(pCam ? !pCam->GetParallelProjection() : false);
+  // actionProjPerspective_->setChecked(pCam ? !pCam->GetParallelProjection() : false);
   actionProjPerspective_->setEnabled(bHasGraph);
 
   actionMolBalls_->setChecked(bHasGraph ? pV->moleculeInBallsSticks() : false);

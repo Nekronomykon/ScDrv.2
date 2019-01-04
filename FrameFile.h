@@ -99,6 +99,12 @@ public:
 
   void InterpretFileName(); // inherited from _FileName
 
+  bool isModified() const { return isModified_; }
+  void setModified(bool b = true)
+  {
+    isModified_ = b;
+  }
+
   template <class W>
   int addViewWidget(QPointer<W> & /*ww*/, const QString & /*title*/);
   void hideStructureViews();
@@ -202,6 +208,8 @@ private:
   static QMap<FileContext, QString> all_formats;
   static FileContext format_active;
 
+  bool isModified_ = false;
+
   FileContext format_current_;
 
   // vtkIdTypeArray positions_;
@@ -213,9 +221,9 @@ private:
   // ..chosen from:
   // QPointer<EditSource> edit_source_;
   QPointer<ViewSource> view_source_;
-  QPointer<QVTKMoleculeWidget> view_molecule_;
-  QPointer<ViewMoleculeAtomic> view_atomic_;
-  QPointer<ViewMoleculeBonds> view_bonds_;
+  QPointer<QVTKMoleculeWidget> view_molecule_ = nullptr;
+  QPointer<ViewMoleculeAtomic> view_atomic_ = nullptr;
+  QPointer<ViewMoleculeBonds> view_bonds_ = nullptr;
 };
 
 #endif // !Frame_File_h
