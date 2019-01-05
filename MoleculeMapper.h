@@ -24,6 +24,11 @@
  * molecule.
 */
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include <vtkMapper.h>
 #include <vtkNew.h> // For vtkNew

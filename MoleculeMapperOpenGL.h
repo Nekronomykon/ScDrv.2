@@ -22,6 +22,11 @@
  * vtkOpenGLSphereMapper and vtkOpenGLStickMapper to do the rendering.
 */
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
 // #include "vtkDomainsChemistryOpenGL2Module.h" // For export macro
 #include "MoleculeMapper.h"
 #include <vtkNew.h> // For vtkNew

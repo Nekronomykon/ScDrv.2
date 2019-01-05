@@ -1,11 +1,6 @@
 #ifndef QVTK_MoleculeWidget_h
 #define QVTK_MoleculeWidget_h
 
-#ifdef _MSC_VER
-#pragma once
-#else  // !_MSC_VER
-#endif //  _MSC_VER
-
 /*=========================================================================
 
   Program:   Visualization Toolkit Local Fork Copy
@@ -18,6 +13,11 @@
    PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
 
 #include <QVTKOpenGLWidget.h>
 #include <QVTKOpenGLNativeWidget.h>
