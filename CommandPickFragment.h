@@ -18,10 +18,11 @@
 #include <vtkRenderer.h>
 #include <vtkSelection.h>
 #include <vtkMolecule.h>
-#include <vtkMoleculeMapper.h>
 
 #include <sstream>
 using namespace std;
+
+#include "MoleculeMapper.h"
 
 class CommandPickFragment
     : public vtkCommand
@@ -54,8 +55,8 @@ public:
     return ptr;
   }
 
-  vtkMoleculeMapper *GetMoleculeMapper() const { return ptrMoleculeMapper_; }
-  vtkMoleculeMapper *ResetMoleculeMapper(vtkMoleculeMapper* ptr = nullptr)
+  MoleculeMapper *GetMoleculeMapper() const { return ptrMoleculeMapper_; }
+  MoleculeMapper *ResetMoleculeMapper(MoleculeMapper* ptr = nullptr)
   {
     if (ptr != ptrMoleculeMapper_)
       std::swap(ptr, ptrMoleculeMapper_);
@@ -76,9 +77,10 @@ private:
   vtkNew<vtkIdTypeArray> idxAtoms_;
   vtkNew<vtkIdTypeArray> idxBonds_;
   // temporary
-  vtkRenderer *ptrRenderer_;
-  vtkAreaPicker *ptrAreaPicker_;
-  vtkMoleculeMapper *ptrMoleculeMapper_;
+  vtkRenderer *ptrRenderer_ = nullptr;
+  vtkAreaPicker *ptrAreaPicker_ = nullptr;
+
+  MoleculeMapper *ptrMoleculeMapper_;
 };
 
 #endif // !Command_PickFragment_h

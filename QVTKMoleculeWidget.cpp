@@ -16,7 +16,6 @@
 
 #include <vtkOpenGLActor.h>
 #include <vtkOpenGLRenderer.h>
-#include <vtkOpenGLMoleculeMapper.h>
 
 #include <vtkNamedColors.h>
 #include <vtkRenderedAreaPicker.h>
@@ -24,28 +23,30 @@
 
 #include <vtkInteractorStyleRubberBandPick.h>
 
+#include "MoleculeMapperOpenGL.h"
+
 typedef vtkSmartPointer<vtkLODActor> LODActor;
 typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
-typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> OpenGLMolMapper;
+typedef vtkSmartPointer<MoleculeMapperOpenGL> OpenGLMolMapper;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 typedef vtkSmartPointer<vtkInteractorStyleRubberBandPick> IntStyleRbrBndPick;
 
-const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_Sticks =
-{ true, vtkMoleculeMapper::UnitRadius, 0.15f, true, false, vtkMoleculeMapper::DiscreteByAtom, 0.15f };
+const MoleculeMapperStyle QVTKMoleculeWidget::style_Sticks =
+{ true, MoleculeMapper::UnitRadius, 0.15f, true, false, MoleculeMapper::DiscreteByAtom, 0.15f };
 // [0] -> sticks
 
-const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_BnS =
-{ true, vtkMoleculeMapper::VDWRadius, 0.25f, true, false, vtkMoleculeMapper::DiscreteByAtom, 0.125f };
+const MoleculeMapperStyle QVTKMoleculeWidget::style_BnS =
+{ true, MoleculeMapper::VDWRadius, 0.25f, true, false, MoleculeMapper::DiscreteByAtom, 0.125f };
 // [1] -> balls and sticks
 
-const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_VdW =
-{ true, vtkMoleculeMapper::VDWRadius, 1.0f, false, false, 0, 0 };
+const MoleculeMapperStyle QVTKMoleculeWidget::style_VdW =
+{ true, MoleculeMapper::VDWRadius, 1.0f, false, false, 0, 0 };
 // [2] -> van der Waals
 
-const QVTKMoleculeMapStyle QVTKMoleculeWidget::style_Fast =
-{ true, vtkMoleculeMapper::UnitRadius, 0.375f, true, false, vtkMoleculeMapper::SingleColor, 0.1f };
+const MoleculeMapperStyle QVTKMoleculeWidget::style_Fast =
+{ true, MoleculeMapper::UnitRadius, 0.375f, true, false, MoleculeMapper::SingleColor, 0.1f };
 // [3] -> fast internal
 
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFast() { return style_Fast; }
@@ -89,8 +90,6 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   area_picker_->AddObserver(vtkCommand::EndPickEvent, cmdPickFragment_);
 }
 
-QVTKMoleculeWidget::~QVTKMoleculeWidget() {}
-
 void QVTKMoleculeWidget::AdjustBackgroundColor()
 {
   vtkNew<vtkNamedColors> colors;
@@ -110,7 +109,7 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
   this->doRender();
 }
 
-bool QVTKMoleculeWidget::resetStyle(const QVTKMoleculeMapStyle &style)
+bool QVTKMoleculeWidget::resetStyle(const MoleculeMapperStyle &style)
 {
   if (style == mol_style_)
     return false;

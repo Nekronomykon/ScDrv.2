@@ -122,10 +122,10 @@ static const char *Symbols[119] = {
   "Ds",
   "Rg",
   "Cn",
-  "Uut",
-  "Uuq",
-  "Uup",
-  "Uuh",
+  "Nh",
+  "Fl",
+  "Mc",
+  "Lv",
   "Ts",
   "Og"
 };
@@ -244,10 +244,10 @@ static const char *LowerSymbols[119] = {
   "ds",
   "rg",
   "cn",
-  "uut",
-  "uuq",
-  "uup",
-  "uuh",
+  "nh",
+  "fl",
+  "mc",
+  "lv",
   "ts",
   "og"
 };
@@ -366,10 +366,10 @@ static const char *Names[119] = {
   "Darmstadtium",
   "Roentgenium",
   "Copernicium",
-  "Ununtrium",
-  "Ununquadium",
-  "Ununpentium",
-  "Ununhexium",
+  "Nihonium",
+  "Flerovium",
+  "Moscovium",
+  "Livermorium",
   "Tenessine",
   "Oganesson"
 };
@@ -488,10 +488,10 @@ static const char *LowerNames[119] = {
   "darmstadtium",
   "roentgenium",
   "copernicium",
-  "ununtrium",
-  "ununquadium",
-  "ununpentium",
-  "ununhexium",
+  "nihonium",
+  "flerovium",
+  "moscovium",
+  "livermorium",
   "tenessine",
   "oganesson"
 };
@@ -741,7 +741,7 @@ static const char *ElectronicConfigurations[119] = {
 };
 
 static const char *Families[119] = {
-  "",
+  "Dummy atom",
   "Non-Metal",
   "Noblegas",
   "Alkali_Earth",

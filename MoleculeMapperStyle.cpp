@@ -1,6 +1,8 @@
-#include "QVTKMoleculeMapStyle.h"
+#include "MoleculeMapperStyle.h"
 
-void QVTKMoleculeMapStyle::SetupMoleculeMapper(vtkMoleculeMapper *pmap) const
+#include "MoleculeMapper.h"
+
+void MoleculeMapperStyle::SetupMoleculeMapper(MoleculeMapper *pmap) const
 {
   // atoms
   pmap->SetRenderAtoms(bRenderAtoms_);

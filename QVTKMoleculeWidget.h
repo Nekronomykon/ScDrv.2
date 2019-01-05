@@ -28,13 +28,14 @@
 #include <vtkColor.h>
 #include <vtkStdString.h>
 #include <vtkMolecule.h>
-#include <vtkMoleculeMapper.h>
 
 #include <vtkInteractorStyle.h>
 #include <vtkAreaPicker.h>
+
+#include "MoleculeMapper.h"
 #include "CommandPickFragment.h"
 
-#include "QVTKMoleculeMapStyle.h"
+#include "MoleculeMapperStyle.h"
 
 
 class QVTKMoleculeWidget
@@ -44,9 +45,9 @@ class QVTKMoleculeWidget
 public:
   typedef QVTKOpenGLWidget BaseWidget;
   explicit QVTKMoleculeWidget(QWidget* /*parent*/ = nullptr);
-  ~QVTKMoleculeWidget() override;
+  ~QVTKMoleculeWidget() override = default;
 
-  typedef QVTKMoleculeMapStyle MolStyle;
+  typedef MoleculeMapperStyle MolStyle;
   typedef vtkSmartPointer<vtkInteractorStyle> InteractorStyle;
 
   static MolStyle styleFast();
@@ -61,7 +62,7 @@ protected:
 
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
-  bool resetStyle(const QVTKMoleculeMapStyle & /*style*/);
+  bool resetStyle(const MoleculeMapperStyle & /*style*/);
   void doRender();
 
   vtkRenderer* GetRenderer() const { return renderer_; }
@@ -80,7 +81,7 @@ public:
 
 private:
   typedef vtkSmartPointer<vtkActor> Actor;
-  typedef vtkSmartPointer<vtkMoleculeMapper> MolMapper;
+  typedef vtkSmartPointer<MoleculeMapper> MolMapper;
   typedef vtkSmartPointer<vtkRenderer> Renderer;
   typedef vtkSmartPointer<vtkAreaPicker> AreaPicker;
 
