@@ -56,7 +56,7 @@ public:
   static MolStyle styleBond();
 
 protected:
-  static vtkStdString name_default_background;
+  static vtkStdString name_background_default;
 
   void AdjustBackgroundColor(void);
 

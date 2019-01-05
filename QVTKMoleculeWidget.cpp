@@ -28,10 +28,11 @@
 typedef vtkSmartPointer<vtkLODActor> LODActor;
 typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
-typedef vtkSmartPointer<MoleculeMapperOpenGL> OpenGLMolMapper;
+typedef vtkSmartPointer<vtkInteractorStyleRubberBandPick> IntStyleRbrBndPick;
+
+typedef vtkSmartPointer<MoleculeMapperOpenGL> MolMapperOpenGL;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
-typedef vtkSmartPointer<vtkInteractorStyleRubberBandPick> IntStyleRbrBndPick;
 
 const MoleculeMapperStyle QVTKMoleculeWidget::style_Sticks =
 { true, MoleculeMapper::UnitRadius, 0.15f, true, false, MoleculeMapper::DiscreteByAtom, 0.15f };
@@ -54,12 +55,12 @@ QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFill() { return style_VdW;
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS; }
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
 
-vtkStdString QVTKMoleculeWidget::name_default_background("antique_white");
+vtkStdString QVTKMoleculeWidget::name_background_default("antique_white");
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   : BaseWidget(parent), renderer_(OpenGLRenderer::New())
   , name_background_(GetDefaultBackgroundColorName())
-  , mol_mapper_(OpenGLMolMapper::New()), mol_style_(style_Fast)
+  , mol_mapper_(MolMapperOpenGL::New()), mol_style_(style_Fast)
   , area_picker_(RenderedAreaPicker::New())
   , styleInteractor_(IntStyleRbrBndPick::New())
 {
@@ -73,10 +74,11 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   // VTK Renderer setup
   renderer_->SetUseFXAA(true); // antaliasing is now On
+
   this->AdjustBackgroundColor();
   renderer_->AddActor(mol);
 
-  // VTK/Qt wedded
+  // VTK/Qt wedding...
   this->GetRenderWindow()->AddRenderer(renderer_);
 
   vtkRenderWindowInteractor* pIren = this->GetInteractor();
@@ -125,11 +127,11 @@ void QVTKMoleculeWidget::doRender()
   this->GetRenderWindow()->Render();
 }
 
-vtkStdString QVTKMoleculeWidget::GetDefaultBackgroundColorName() { return name_default_background; }
+vtkStdString QVTKMoleculeWidget::GetDefaultBackgroundColorName() { return name_background_default; }
 
 vtkStdString QVTKMoleculeWidget::ResetDefaultBackgroundColorName(vtkStdString name_new)
 {
-  std::swap(name_default_background, name_new);
+  std::swap(name_background_default, name_new);
   return name_new;
 }
 
