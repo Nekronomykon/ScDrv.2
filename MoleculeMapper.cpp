@@ -45,6 +45,8 @@
 #include <vtkVector.h>
 #include <vtkVectorOperators.h>
 
+const MoleculeMapperStyle MoleculeMapper::styleFast =
+{ true, MoleculeMapper::UnitRadius, 0.375f, true, false, MoleculeMapper::SingleColor, 0.1f, 64, 64, 64};
 
 // Note this class may have an accelerated subclass ala
 // vtkOpenGLMoleculeMapper. If you change this class please

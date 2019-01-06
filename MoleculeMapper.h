@@ -361,7 +361,14 @@ protected:
    */
   vtkNew<vtkPeriodicTable> PeriodicTable;
 
+  /**
+  * predefined styles:
+   */
+
+  static const MoleculeMapperStyle styleFast;
+
 private:
+  // delete:
   MoleculeMapper(const MoleculeMapper&) = delete;
   void operator=(const MoleculeMapper&) = delete;
 };

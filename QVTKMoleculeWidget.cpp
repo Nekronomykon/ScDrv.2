@@ -47,7 +47,7 @@ const MoleculeMapperStyle QVTKMoleculeWidget::style_VdW =
 // [2] -> van der Waals
 
 const MoleculeMapperStyle QVTKMoleculeWidget::style_Fast =
-{ true, MoleculeMapper::UnitRadius, 0.375f, true, false, MoleculeMapper::SingleColor, 0.1f };
+{ true, MoleculeMapper::UnitRadius, 0.375f, true, false, MoleculeMapper::SingleColor, 0.1f, 64, 64, 64};
 // [3] -> fast internal
 
 QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFast() { return style_Fast; }
