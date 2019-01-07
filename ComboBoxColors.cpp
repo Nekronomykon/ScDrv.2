@@ -11,6 +11,6 @@ ComboBoxColors::ComboBoxColors(QWidget *parent)
 
   int nSel = this->findText(name);
   if (nSel < 0)
-    name = tr("black");
+    name = tr("white");
   this->setCurrentText(name);
 }

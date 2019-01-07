@@ -34,33 +34,13 @@ typedef vtkSmartPointer<MoleculeMapperOpenGL> MolMapperOpenGL;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 
-const MoleculeMapperStyle QVTKMoleculeWidget::style_Sticks =
-{ true, MoleculeMapper::UnitRadius, 0.15f, true, false, MoleculeMapper::DiscreteByAtom, 0.15f };
-// [0] -> sticks
-
-const MoleculeMapperStyle QVTKMoleculeWidget::style_BnS =
-{ true, MoleculeMapper::VDWRadius, 0.25f, true, false, MoleculeMapper::DiscreteByAtom, 0.125f };
-// [1] -> balls and sticks
-
-const MoleculeMapperStyle QVTKMoleculeWidget::style_VdW =
-{ true, MoleculeMapper::VDWRadius, 1.0f, false, false, 0, 0 };
-// [2] -> van der Waals
-
-const MoleculeMapperStyle QVTKMoleculeWidget::style_Fast =
-{ true, MoleculeMapper::UnitRadius, 0.375f, true, false, MoleculeMapper::SingleColor, 0.1f, 64, 64, 64};
-// [3] -> fast internal
-
-QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFast() { return style_Fast; }
-QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleFill() { return style_VdW; }
-QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBall() { return style_BnS; }
-QVTKMoleculeWidget::MolStyle QVTKMoleculeWidget::styleBond() { return style_Sticks; }
 
 vtkStdString QVTKMoleculeWidget::name_background_default("antique_white");
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   : BaseWidget(parent), renderer_(OpenGLRenderer::New())
   , name_background_(GetDefaultBackgroundColorName())
-  , mol_mapper_(MolMapperOpenGL::New()), mol_style_(style_Fast)
+  , mol_mapper_(MolMapperOpenGL::New())
   , area_picker_(RenderedAreaPicker::New())
   , styleInteractor_(IntStyleRbrBndPick::New())
 {
@@ -111,20 +91,12 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
   this->doRender();
 }
 
-bool QVTKMoleculeWidget::resetStyle(const MoleculeMapperStyle &style)
-{
-  if (style == mol_style_)
-    return false;
-  mol_style_ = style;
-  this->doRender();
-  return true;
-}
-
 void QVTKMoleculeWidget::doRender()
 {
   renderer_->SetBackground(bgColor_.GetData());
-  mol_style_.SetupMoleculeMapper(mol_mapper_);
   this->GetRenderWindow()->Render();
+  // this->GetMoleculeMapper()->Render();
+  // renderer_->Render();
 }
 
 vtkStdString QVTKMoleculeWidget::GetDefaultBackgroundColorName() { return name_background_default; }
@@ -143,12 +115,3 @@ vtkStdString QVTKMoleculeWidget::ResetBackgroundColorName(vtkStdString name_new)
   this->doRender();
   return name_new;
 }
-
-
-bool QVTKMoleculeWidget::moleculeInBallsSticks() const { return bool(mol_style_ == style_BnS); }
-
-bool QVTKMoleculeWidget::moleculeInSpaceFill() const { return bool(mol_style_ == style_VdW); }
-
-bool QVTKMoleculeWidget::moleculeInFastRender() const { return bool(mol_style_ == style_Fast); }
-
-bool QVTKMoleculeWidget::moleculeInSticks() const { return bool(mol_style_ == style_Sticks); }

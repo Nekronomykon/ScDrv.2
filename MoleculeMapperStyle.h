@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include <vtkColor.h>
+#include <vtkMoleculeMapper.h>
 
 class MoleculeMapper;
 
@@ -31,11 +32,38 @@ public:
   bool RenderAtomsOff() { bRenderAtoms_ = false; }
   bool ToggleRenderAtoms() { bRenderAtoms_ = !bRenderAtoms_; }
   //
-  short GetTypeAtomicRadius() const { return styleAtomRadius_; }
+  enum {
+    CovalentRadius = 0,
+    VDWRadius,
+    UnitRadius,
+    CustomArrayRadius
+  };
+  short GetAtomicRadiusType() const { return styleAtomRadius_; }
   short ResetAtomicRadiusType(short rad_type)
   {
     std::swap(rad_type, styleAtomRadius_);
     return rad_type;
+  }
+  static const char* AtomRadiusModeName(short mode)
+  {
+    switch (mode)
+    {
+    case CovalentRadius:
+      return "CovalentRadius";
+    case VDWRadius:
+      return "VDWRadius";
+    case UnitRadius:
+      return "UnitRadius";
+    case CustomArrayRadius:
+      return "CustomArrayRadius";
+    default:
+      return nullptr;
+    }
+  }
+  const char * GetAtomicRadiusTypeAsString() const
+  {
+    const char* res = AtomRadiusModeName( this->GetAtomicRadiusType() );
+    return  (!res) ? "InvalidType" : res;
   }
   //
   float GetAtomicRadiusScale() const
@@ -64,6 +92,27 @@ public:
     std::swap(col_type, styleBondColor_);
     return col_type;
   }
+  enum {
+    SingleColor = 0,
+    DiscreteByAtom
+  };
+  static const char* BondColorModeName(short mode)
+  {
+    switch (mode)
+    {
+    case SingleColor:
+      return "SingleColor";
+    case DiscreteByAtom:
+      return "DiscreteByAtom";
+    default:
+      return nullptr;
+    }
+  }
+  const char* GetBondColorModeAsString() const
+  {
+    const char* res = BondColorModeName(this->GetTypeBondsColor());
+    return  (!res) ? "InvalidType" : res;
+  }
   //
   float GetBondRadius() const { return radBonds_; }
   float ReserBondRadius(float rb)
@@ -75,25 +124,32 @@ public:
   //////////////////////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////////////////////
-  //
-  void SetupMoleculeMapper(MoleculeMapper* pmap) const;
-
-  // Why don't we rely upon the default behaviour?
-  //
-  bool operator ==(const MoleculeMapperStyle& v) const
-  {
-    return bool((styleAtomRadius_ == v.styleAtomRadius_)
-      && (radAtomsScale_ == v.radAtomsScale_)
-      && (styleBondColor_ == v.styleBondColor_)
-      && (bRenderMulti_ == v.bRenderMulti_)
-      && (radBonds_ == v.radBonds_)
-      //&& (colorBond_[0] == v.colorBond_[0])
-      //&& (colorBond_[1] == v.colorBond_[1])
-      //&& (colorBond_[2] == v.colorBond_[2])
-      );
-  }
+  // Just in case the application of the external style upon the VTK class
+  // vtkMoleculeMapper
+  // 
+  void SetupMoleculeMapper(vtkMoleculeMapper* pmap) const;
   //
   //////////////////////////////////////////////////////////////////////////
 };
+
+static inline
+bool operator ==(const MoleculeMapperStyle& w, const MoleculeMapperStyle& v)
+{
+  return bool((w.styleAtomRadius_ == v.styleAtomRadius_)
+    && (w.radAtomsScale_ == v.radAtomsScale_)
+    && (w.styleBondColor_ == v.styleBondColor_)
+    && (w.bRenderMulti_ == v.bRenderMulti_)
+    && (w.radBonds_ == v.radBonds_)
+    && (w.colorBond_[0] == v.colorBond_[0])
+    && (w.colorBond_[1] == v.colorBond_[1])
+    && (w.colorBond_[2] == v.colorBond_[2])
+    );
+}
+
+static inline
+bool operator !=(const MoleculeMapperStyle& w, const MoleculeMapperStyle& v)
+{
+  return !(w  == v);
+}
 
 #endif // MoleculeMapper_Style_h

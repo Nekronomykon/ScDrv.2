@@ -32,7 +32,7 @@ MoleculeMapperOpenGL::MoleculeMapperOpenGL()
 {
   // Setup glyph mappers
   this->FastAtomMapper->SetScalarRange
-    (0, this->PeriodicTable->GetNumberOfElements());
+  (0, this->PeriodicTable->GetNumberOfElements());
   this->FastAtomMapper->SetColorModeToMapScalars();
   this->FastAtomMapper->SetScalarModeToUsePointFieldData();
 
@@ -43,33 +43,33 @@ MoleculeMapperOpenGL::MoleculeMapperOpenGL()
   this->FastAtomMapper->AddObserver(vtkCommand::StartEvent, cb);
   this->FastAtomMapper->AddObserver(vtkCommand::EndEvent, cb);
   this->FastAtomMapper->AddObserver(vtkCommand::ProgressEvent,
-                                     cb);
+    cb);
 
   this->FastBondMapper->AddObserver(vtkCommand::StartEvent, cb);
   this->FastBondMapper->AddObserver(vtkCommand::EndEvent, cb);
   this->FastBondMapper->AddObserver(vtkCommand::ProgressEvent,
-                                     cb);
+    cb);
 
   // Connect the trivial producers to forward the glyph polydata
   this->FastAtomMapper->SetInputConnection
-    (this->AtomGlyphPointOutput->GetOutputPort());
+  (this->AtomGlyphPointOutput->GetOutputPort());
   this->FastBondMapper->SetInputConnection
-    (this->BondGlyphPointOutput->GetOutputPort());
+  (this->BondGlyphPointOutput->GetOutputPort());
 }
 
 //----------------------------------------------------------------------------
-void MoleculeMapperOpenGL::Render(vtkRenderer *ren, vtkActor *act )
+void MoleculeMapperOpenGL::Render(vtkRenderer *ren, vtkActor *act)
 {
   // Update cached polydata if needed
   this->UpdateGlyphPolyData();
 
   // Pass rendering call on
-  if (this->RenderAtoms)
+  if (this->GetStyle().HasToRenderAtoms())
   {
     this->FastAtomMapper->Render(ren, act);
   }
 
-  if (this->RenderBonds)
+  if (this->GetStyle().HasToRenderBonds())
   {
     this->FastBondMapper->Render(ren, act);
   }
@@ -86,12 +86,12 @@ void MoleculeMapperOpenGL::ProcessSelectorPixelBuffers(
   vtkProp *prop)
 {
   // forward to helper
-  if (this->RenderAtoms)
+  if (this->GetStyle().HasToRenderAtoms())
   {
     this->FastAtomMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
   }
 
-  if (this->RenderBonds)
+  if (this->GetStyle().HasToRenderBonds())
   {
     this->FastBondMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
   }
@@ -128,20 +128,20 @@ void MoleculeMapperOpenGL::UpdateBondGlyphPolyData()
 {
   this->Superclass::UpdateBondGlyphPolyData();
 
-  switch(this->BondColorMode)
+  switch (this->GetStyle().GetTypeBondsColor())
   {
-    case SingleColor:
-      this->FastBondMapper->SetColorModeToDefault();
-      this->FastBondMapper->SetScalarModeToUsePointData();
-      break;
-    default:
-    case DiscreteByAtom:
-      this->FastBondMapper->SetLookupTable(
-            this->BondGlyphMapper->GetLookupTable());
-      this->FastBondMapper->SetScalarRange
-        (0, this->PeriodicTable->GetNumberOfElements());
-      this->FastBondMapper->SetScalarModeToUsePointData();
-      break;
+  case (MMStyle::SingleColor):
+    this->FastBondMapper->SetColorModeToDefault();
+    this->FastBondMapper->SetScalarModeToUsePointData();
+    break;
+  default:
+  case (MMStyle::DiscreteByAtom):
+    this->FastBondMapper->SetLookupTable(
+      this->BondGlyphMapper->GetLookupTable());
+    this->FastBondMapper->SetScalarRange
+    (0, this->PeriodicTable->GetNumberOfElements());
+    this->FastBondMapper->SetScalarModeToUsePointData();
+    break;
   }
 
   // Setup glypher

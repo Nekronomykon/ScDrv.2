@@ -50,6 +50,8 @@ class vtkTrivialProducer;
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
 {
 public:
+  typedef MoleculeMapperStyle MMStyle;
+
   static MoleculeMapper *New();
   vtkTypeMacro(MoleculeMapper, vtkMapper);
   void PrintSelf(ostream& os, vtkIndent indent) override;
@@ -62,181 +64,42 @@ public:
   vtkMolecule *GetInput();
   //@}
   MoleculeMapperStyle& Style() { return styleMap_; }
+  const MoleculeMapperStyle& CurrentStyle() const { return styleMap_; }
   MoleculeMapperStyle  GetStyle() const { return styleMap_; }
   void ResetStyleToDefault() { /*return*/ this->SetStyle(styleFast); }
   void SetStyle(const MoleculeMapperStyle& msty)
-  {
+  { 
+    if (styleMap_ != msty)
+    {
+      this->GlyphDataInitialized = false;
+    }
     styleMap_ = msty;
-    styleMap_.SetupMoleculeMapper(this);
   }
 
   /**
-   * Set ivars to default ball-and-stick settings. This is equivalent
-   * to the following:
-   * - SetRenderAtoms( true )
-   * - SetRenderBonds( true )
-   * - SetAtomicRadiusType( VDWRadius )
-   * - SetAtomicRadiusScaleFactor( 0.3 )
-   * - SetBondColorMode( DiscreteByAtom )
-   * - SetUseMultiCylindersForBonds( true )
-   * - SetBondRadius( 0.075 )
-   */
-  void UseBallAndStickSettings();
-  bool IsSetAsBallAndStick() const { return (styleMap_ == styleBallStick); }
+  * Predefined styles in use:
+  */
+  void UseBallAndStickSettings() { this->SetStyle(styleBallSticks); }
+  bool IsSetBallsSticks() const { return (styleMap_ == styleBallSticks); }
 
-  /**
-   * Set ivars to default van der Waals spheres settings. This is
-   * equivalent to the following:
-   * - SetRenderAtoms( true )
-   * - SetRenderBonds( true )
-   * - SetAtomicRadiusType( VDWRadius )
-   * - SetAtomicRadiusScaleFactor( 1.0 )
-   * - SetBondColorMode( DiscreteByAtom )
-   * - SetUseMultiCylindersForBonds( true )
-   * - SetBondRadius( 0.075 )
-   */
-   // void UseVDWSpheresSettings();
+  void UseSticksOnlySettings() { this->SetStyle(styleSticks); }
+  bool IsSetSticksOnly() const { return (styleMap_ == styleSticks); }
 
-   /**
-    * Set ivars to default liquorice stick settings. This is
-    * equivalent to the following:
-    * - SetRenderAtoms( true )
-    * - SetRenderBonds( true )
-    * - SetAtomicRadiusType( UnitRadius )
-    * - SetAtomicRadiusScaleFactor( 0.1 )
-    * - SetBondColorMode( DiscreteByAtom )
-    * - SetUseMultiCylindersForBonds( false )
-    * - SetBondRadius( 0.1 )
-    */
-    // void UseLiquoriceStickSettings();
+  void UseSpaceFillSettings() { this->SetStyle(styleCPK); }
+  bool IsSetSpaceFill() const { return (styleMap_ == styleCPK); }
 
+  void UseFastRenderSettings() { this->SetStyle(styleFast); }
+  bool IsSetFastRender() const { return (styleMap_ == styleFast); }
+
+    //@{
     /**
-     * Set ivars to use fast settings that may be useful for rendering
-     * extremely large molecules where the overall shape is more
-     * important than the details of the atoms/bond. This is equivalent
-     * to the following:
-     * - SetRenderAtoms( true )
-     * - SetRenderBonds( true )
-     * - SetAtomicRadiusType( UnitRadius )
-     * - SetAtomicRadiusScaleFactor( 0.60 )
-     * - SetBondColorMode( SingleColor )
-     * - SetBondColor( 50, 50, 50 )
-     * - SetUseMultiCylindersForBonds( false )
-     * - SetBondRadius( 0.075 )
+     * Get/Set whether or not to render the unit cell lattice, if present.
+     * Default: On.
      */
-     // void UseFastSettings();
-  bool IsSetAsFast() const { return (styleMap_ == styleFast); }
-
-  //@{
-  /**
-   * Get/Set whether or not to render atoms. Default: On.
-   */
-  vtkGetMacro(RenderAtoms, bool);
-  vtkSetMacro(RenderAtoms, bool);
-  vtkBooleanMacro(RenderAtoms, bool);
-  //@}
-
-  //@{
-  /**
-   * Get/Set whether or not to render bonds. Default: On.
-   */
-  vtkGetMacro(RenderBonds, bool);
-  vtkSetMacro(RenderBonds, bool);
-  vtkBooleanMacro(RenderBonds, bool);
-  //@}
-
-  //@{
-  /**
-   * Get/Set whether or not to render the unit cell lattice, if present.
-   * Default: On.
-   */
-  vtkGetMacro(RenderLattice, bool)
+    vtkGetMacro(RenderLattice, bool)
     vtkSetMacro(RenderLattice, bool)
     vtkBooleanMacro(RenderLattice, bool)
     //@}
-
-    enum {
-    CovalentRadius = 0,
-    VDWRadius,
-    UnitRadius,
-    CustomArrayRadius
-  };
-
-  //@{
-  /**
-   * Get/Set the type of radius used to generate the atoms. Default:
-   * VDWRadius. If CustomArrayRadius is used, the VertexData array named
-   * 'radii' is used for per-atom radii.
-   */
-  vtkGetMacro(AtomicRadiusType, int);
-  vtkSetMacro(AtomicRadiusType, int);
-  const char * GetAtomicRadiusTypeAsString();
-  void SetAtomicRadiusTypeToCovalentRadius()
-  {
-    this->SetAtomicRadiusType(CovalentRadius);
-  }
-  void SetAtomicRadiusTypeToVDWRadius()
-  {
-    this->SetAtomicRadiusType(VDWRadius);
-  }
-  void SetAtomicRadiusTypeToUnitRadius()
-  {
-    this->SetAtomicRadiusType(UnitRadius);
-  }
-  void SetAtomicRadiusTypeToCustomArrayRadius()
-  {
-    this->SetAtomicRadiusType(CustomArrayRadius);
-  }
-  //@}
-
-  //@{
-  /**
-   * Get/Set the uniform scaling factor applied to the atoms.
-   * This is ignored when AtomicRadiusType == CustomArrayRadius.
-   * Default: 0.3.
-   */
-  vtkGetMacro(AtomicRadiusScaleFactor, float);
-  vtkSetMacro(AtomicRadiusScaleFactor, float);
-  //@}
-
-  //@{
-  /**
-   * Get/Set whether multicylinders will be used to represent multiple
-   * bonds. Default: On.
-   */
-  vtkGetMacro(UseMultiCylindersForBonds, bool);
-  vtkSetMacro(UseMultiCylindersForBonds, bool);
-  vtkBooleanMacro(UseMultiCylindersForBonds, bool);
-  //@}
-
-  enum {
-    SingleColor = 0,
-    DiscreteByAtom
-  };
-
-  //@{
-  /**
-   * Get/Set the method by which bonds are colored.
-
-   * If 'SingleColor' is used, all bonds will be the same color. Use
-   * SetBondColor to set the rgb values used.
-
-   * If 'DiscreteByAtom' is selected, each bond is colored using the
-   * same lookup table as the atoms at each end, with a sharp color
-   * boundary at the bond center.
-   */
-  vtkGetMacro(BondColorMode, int);
-  vtkSetMacro(BondColorMode, int);
-  const char * GetBondColorModeAsString();
-  void SetBondColorModeToSingleColor()
-  {
-    this->SetBondColorMode(SingleColor);
-  }
-  void SetBondColorModeToDiscreteByAtom()
-  {
-    this->SetBondColorMode(DiscreteByAtom);
-  }
-  //@}
 
   //@{
   /**
@@ -247,20 +110,13 @@ public:
   vtkSetVector3Macro(BondColor, unsigned char);
   //@}
 
-  //@{
-  /**
-   * Get/Set the radius of the bond cylinders. Default: 0.075
-   */
-  vtkGetMacro(BondRadius, float);
-  vtkSetMacro(BondRadius, float);
-  //@}
 
   //@{
   /**
    * Get/Set the color of the bonds as an rgb tuple.
    * Default: {255, 255, 255} (white)
    */
-  vtkGetVector3Macro(LatticeColor, unsigned char)
+    vtkGetVector3Macro(LatticeColor, unsigned char)
     vtkSetVector3Macro(LatticeColor, unsigned char)
     //@}
 
@@ -313,9 +169,9 @@ protected:
   /**
    * Customize atom rendering
    */
-  bool RenderAtoms;
-  int AtomicRadiusType;
-  float AtomicRadiusScaleFactor;
+   // bool RenderAtoms;
+   // int AtomicRadiusType;
+   // float AtomicRadiusScaleFactor;
   char* AtomicRadiusArrayName;
   //@}
 
@@ -323,10 +179,6 @@ protected:
   /**
    * Customize bond rendering
    */
-  bool RenderBonds;
-  int BondColorMode;
-  bool UseMultiCylindersForBonds;
-  float BondRadius;
   unsigned char BondColor[3];
   //@}
 
@@ -374,7 +226,10 @@ protected:
   * predefined styles:
    */
   static const MoleculeMapperStyle styleFast;
-  static const MoleculeMapperStyle styleBallStick; // reserved
+  static const MoleculeMapperStyle styleSticks;
+  static const MoleculeMapperStyle styleBallSticks;
+  static const MoleculeMapperStyle styleCPK;
+
 private:
   // delete:
   MoleculeMapper(const MoleculeMapper&) = delete;

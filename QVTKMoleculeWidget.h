@@ -47,13 +47,7 @@ public:
   explicit QVTKMoleculeWidget(QWidget* /*parent*/ = nullptr);
   ~QVTKMoleculeWidget() override = default;
 
-  typedef MoleculeMapperStyle MolStyle;
   typedef vtkSmartPointer<vtkInteractorStyle> InteractorStyle;
-
-  static MolStyle styleFast();
-  static MolStyle styleFill();
-  static MolStyle styleBall();
-  static MolStyle styleBond();
 
 protected:
   static vtkStdString name_background_default;
@@ -75,33 +69,15 @@ public:
   vtkStdString GetBackgroundColorName() const;
   vtkStdString ResetBackgroundColorName(vtkStdString name_new);
 
-  //void SetMoleculeBallsSticks()
-  //{
-  //  mol_mapper_->UseBallAndStickSettings();
-  //  this->doRender();
-  //}
-  bool moleculeInBallsSticks() const;
+  void SetMoleculeSpaceFill() { mol_mapper_->UseSpaceFillSettings(); this->doRender(); }
+  void SetMoleculeBallsSticks() { mol_mapper_->UseBallAndStickSettings(); this->doRender(); }
+  void SetMoleculeSticksOnly() { mol_mapper_->UseSticksOnlySettings(); this->doRender(); }
+  void SetMoleculeFastRender() { mol_mapper_->UseFastRenderSettings(); this->doRender(); }
 
-  // void SetMoleculeSpaceFill()
-  //{
-  //  mol_mapper_->UseVDWSpheresSettings();
-  //  this->doRender();
-  //}
-  bool moleculeInSpaceFill() const;
-
-  //void SetMoleculeFast()
-  //{
-  //  mol_mapper_->UseFastSettings();
-  //  this->doRender();
-  //}
-  bool moleculeInFastRender() const;
-
-  //void SetMoleculeSticks()
-  //{
-  //  mol_mapper_->UseLiquoriceStickSettings();
-  //  this->doRender();
-  //}
-  bool moleculeInSticks() const;
+  bool MoleculeIsSpaceFill() const { return mol_mapper_->IsSetSpaceFill(); }
+  bool MoleculeIsBallsSticks() const { return mol_mapper_->IsSetBallsSticks(); }
+  bool MoleculeIsSticks() const { return mol_mapper_->IsSetSticksOnly(); }
+  bool MoleculeIsFast() const { return mol_mapper_->IsSetFastRender(); }
 
 private:
   typedef vtkSmartPointer<vtkActor> Actor;
@@ -114,15 +90,10 @@ private:
   vtkStdString name_background_;
   vtkColor3d bgColor_;
   MolMapper mol_mapper_;
-  MolStyle mol_style_;
   AreaPicker area_picker_;
   InteractorStyle styleInteractor_;
   vtkNew<CommandPickFragment> cmdPickFragment_;
 
-  static const MolStyle style_VdW;
-  static const MolStyle style_BnS;
-  static const MolStyle style_Fast;
-  static const MolStyle style_Sticks;
 };
 
 #endif // !QVTK_MoleculeWidget_h

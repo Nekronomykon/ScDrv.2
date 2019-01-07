@@ -20,7 +20,7 @@
 #include <algorithm> 
 #include <cctype>
 #include <locale>
-#include <charconv> // STD C++17
+// #include <charconv> // STD C++17
 
 // trim from start (in place)
 static inline void ltrim(std::string &s) {

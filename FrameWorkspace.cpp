@@ -255,19 +255,20 @@ void FrameWorkspace::updateUi()
   // actionProjPerspective_->setChecked(pCam ? !pCam->GetParallelProjection() : false);
   actionProjPerspective_->setEnabled(bHasGraph);
 
-  actionMolBalls_->setChecked(bHasGraph ? pV->moleculeInBallsSticks() : false);
+  actionMolBalls_->setChecked(bHasGraph ? pV->MoleculeIsBallsSticks() : false);
   actionMolBalls_->setEnabled(bHasGraph);
   
-  actionMolSpace_->setChecked(bHasGraph ? pV->moleculeInSpaceFill() : false);
+  actionMolSpace_->setChecked(bHasGraph ? pV->MoleculeIsSpaceFill() : false);
   actionMolSpace_->setEnabled(bHasGraph);
 
-  actionMolFast_->setChecked(bHasGraph ? pV->moleculeInFastRender() : false);
+  actionMolFast_->setChecked(bHasGraph ? pV->MoleculeIsFast() : false);
   actionMolFast_->setEnabled(bHasGraph);
 
-  actionMolStick_->setChecked(bHasGraph ? pV->moleculeInSticks() : false);
+  actionMolStick_->setChecked(bHasGraph ? pV->MoleculeIsSticks() : false);
   actionMolStick_->setEnabled(bHasGraph);
 
   actionMolBonds_->setEnabled(bHasGraph);
+
   actionLabelAtoms_->setEnabled(bHasGraph);
   actionLabelBonds_->setEnabled(bHasGraph);
 }
@@ -532,7 +533,7 @@ void FrameWorkspace::on_actionMolFast__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  pMolView->GetMoleculeMapper()->ResetStyleToDefault();
+  pMolView->SetMoleculeFastRender();
   this->updateUi();
 }
 void FrameWorkspace::on_actionMolBalls__triggered()
@@ -540,7 +541,7 @@ void FrameWorkspace::on_actionMolBalls__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  pMolView->resetStyle(FrameFile::ViewMolecule::styleBall());
+  pMolView->SetMoleculeBallsSticks();
   this->updateUi();
 }
 void FrameWorkspace::on_actionMolStick__triggered()
@@ -548,7 +549,7 @@ void FrameWorkspace::on_actionMolStick__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  pMolView->resetStyle(FrameFile::ViewMolecule::styleBond());
+  pMolView->SetMoleculeSticksOnly();
   this->updateUi();
 }
 void FrameWorkspace::on_actionMolSpace__triggered()
@@ -556,7 +557,7 @@ void FrameWorkspace::on_actionMolSpace__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  pMolView->resetStyle(FrameFile::ViewMolecule::styleFill());
+  pMolView->SetMoleculeSpaceFill();
   this->updateUi();
 }
 
