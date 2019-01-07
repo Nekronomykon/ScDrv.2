@@ -46,7 +46,7 @@
 #include <vtkVectorOperators.h>
 
 const MoleculeMapperStyle MoleculeMapper::styleFast =
-{ true, MoleculeMapper::UnitRadius, 0.375f, true, false, MoleculeMapper::SingleColor, 0.1f, 64, 64, 64 };
+{ true, MoleculeMapper::UnitRadius, 0.4f, true, false, MoleculeMapper::SingleColor, 0.125f, 64, 64, 64 };
 const MoleculeMapperStyle MoleculeMapper::styleBallStick =
 { true, MoleculeMapper::VDWRadius, 0.25f, true, false, MoleculeMapper::DiscreteByAtom, 0.125f, 0, 0, 0 };
 
@@ -62,7 +62,7 @@ MoleculeMapper::MoleculeMapper()
   , RenderLattice(false)
 {
   // Initialize ivars:
-  // this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 50;
+  this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 64; // ???
   this->ResetStyleToDefault();
   this->LatticeColor[0] = this->LatticeColor[1] = this->LatticeColor[2] = 255;
   this->SetAtomicRadiusArrayName("radii");
