@@ -67,6 +67,7 @@ public:
 
   vtkRenderer* GetRenderer() const { return renderer_; }
   vtkCamera*   GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
+  MoleculeMapper*GetMoleculeMapper() const { return mol_mapper_; }
 
   static vtkStdString GetDefaultBackgroundColorName();
   static vtkStdString ResetDefaultBackgroundColorName(vtkStdString name_new);
@@ -74,9 +75,32 @@ public:
   vtkStdString GetBackgroundColorName() const;
   vtkStdString ResetBackgroundColorName(vtkStdString name_new);
 
+  //void SetMoleculeBallsSticks()
+  //{
+  //  mol_mapper_->UseBallAndStickSettings();
+  //  this->doRender();
+  //}
   bool moleculeInBallsSticks() const;
+
+  // void SetMoleculeSpaceFill()
+  //{
+  //  mol_mapper_->UseVDWSpheresSettings();
+  //  this->doRender();
+  //}
   bool moleculeInSpaceFill() const;
+
+  //void SetMoleculeFast()
+  //{
+  //  mol_mapper_->UseFastSettings();
+  //  this->doRender();
+  //}
   bool moleculeInFastRender() const;
+
+  //void SetMoleculeSticks()
+  //{
+  //  mol_mapper_->UseLiquoriceStickSettings();
+  //  this->doRender();
+  //}
   bool moleculeInSticks() const;
 
 private:

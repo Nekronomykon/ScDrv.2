@@ -51,7 +51,7 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
 {
 public:
   static MoleculeMapper *New();
-  vtkTypeMacro(MoleculeMapper,vtkMapper);
+  vtkTypeMacro(MoleculeMapper, vtkMapper);
   void PrintSelf(ostream& os, vtkIndent indent) override;
 
   //@{
@@ -61,6 +61,14 @@ public:
   void SetInputData(vtkMolecule *in);
   vtkMolecule *GetInput();
   //@}
+  MoleculeMapperStyle& Style() { return styleMap_; }
+  MoleculeMapperStyle  GetStyle() const { return styleMap_; }
+  void ResetStyleToDefault() { /*return*/ this->SetStyle(styleFast); }
+  void SetStyle(const MoleculeMapperStyle& msty)
+  {
+    styleMap_ = msty;
+    styleMap_.SetupMoleculeMapper(this);
+  }
 
   /**
    * Set ivars to default ball-and-stick settings. This is equivalent
@@ -74,6 +82,7 @@ public:
    * - SetBondRadius( 0.075 )
    */
   void UseBallAndStickSettings();
+  bool IsSetAsBallAndStick() const { return (styleMap_ == styleBallStick); }
 
   /**
    * Set ivars to default van der Waals spheres settings. This is
@@ -86,36 +95,37 @@ public:
    * - SetUseMultiCylindersForBonds( true )
    * - SetBondRadius( 0.075 )
    */
-  void UseVDWSpheresSettings();
+   // void UseVDWSpheresSettings();
 
-  /**
-   * Set ivars to default liquorice stick settings. This is
-   * equivalent to the following:
-   * - SetRenderAtoms( true )
-   * - SetRenderBonds( true )
-   * - SetAtomicRadiusType( UnitRadius )
-   * - SetAtomicRadiusScaleFactor( 0.1 )
-   * - SetBondColorMode( DiscreteByAtom )
-   * - SetUseMultiCylindersForBonds( false )
-   * - SetBondRadius( 0.1 )
-   */
-  void UseLiquoriceStickSettings();
+   /**
+    * Set ivars to default liquorice stick settings. This is
+    * equivalent to the following:
+    * - SetRenderAtoms( true )
+    * - SetRenderBonds( true )
+    * - SetAtomicRadiusType( UnitRadius )
+    * - SetAtomicRadiusScaleFactor( 0.1 )
+    * - SetBondColorMode( DiscreteByAtom )
+    * - SetUseMultiCylindersForBonds( false )
+    * - SetBondRadius( 0.1 )
+    */
+    // void UseLiquoriceStickSettings();
 
-  /**
-   * Set ivars to use fast settings that may be useful for rendering
-   * extremely large molecules where the overall shape is more
-   * important than the details of the atoms/bond. This is equivalent
-   * to the following:
-   * - SetRenderAtoms( true )
-   * - SetRenderBonds( true )
-   * - SetAtomicRadiusType( UnitRadius )
-   * - SetAtomicRadiusScaleFactor( 0.60 )
-   * - SetBondColorMode( SingleColor )
-   * - SetBondColor( 50, 50, 50 )
-   * - SetUseMultiCylindersForBonds( false )
-   * - SetBondRadius( 0.075 )
-   */
-  void UseFastSettings();
+    /**
+     * Set ivars to use fast settings that may be useful for rendering
+     * extremely large molecules where the overall shape is more
+     * important than the details of the atoms/bond. This is equivalent
+     * to the following:
+     * - SetRenderAtoms( true )
+     * - SetRenderBonds( true )
+     * - SetAtomicRadiusType( UnitRadius )
+     * - SetAtomicRadiusScaleFactor( 0.60 )
+     * - SetBondColorMode( SingleColor )
+     * - SetBondColor( 50, 50, 50 )
+     * - SetUseMultiCylindersForBonds( false )
+     * - SetBondRadius( 0.075 )
+     */
+     // void UseFastSettings();
+  bool IsSetAsFast() const { return (styleMap_ == styleFast); }
 
   //@{
   /**
@@ -141,11 +151,11 @@ public:
    * Default: On.
    */
   vtkGetMacro(RenderLattice, bool)
-  vtkSetMacro(RenderLattice, bool)
-  vtkBooleanMacro(RenderLattice, bool)
-  //@}
+    vtkSetMacro(RenderLattice, bool)
+    vtkBooleanMacro(RenderLattice, bool)
+    //@}
 
-  enum {
+    enum {
     CovalentRadius = 0,
     VDWRadius,
     UnitRadius,
@@ -251,24 +261,24 @@ public:
    * Default: {255, 255, 255} (white)
    */
   vtkGetVector3Macro(LatticeColor, unsigned char)
-  vtkSetVector3Macro(LatticeColor, unsigned char)
-  //@}
+    vtkSetVector3Macro(LatticeColor, unsigned char)
+    //@}
 
-  //@{
-  /**
-   * Extract the ids atoms and/or bonds rendered by this molecule from a
-   * vtkSelection object. The vtkIdTypeArray
-   */
-  virtual void GetSelectedAtomsAndBonds(vtkSelection *selection,
-                                        vtkIdTypeArray *atomIds,
-                                        vtkIdTypeArray *bondIds);
+    //@{
+    /**
+     * Extract the ids atoms and/or bonds rendered by this molecule from a
+     * vtkSelection object. The vtkIdTypeArray
+     */
+    virtual void GetSelectedAtomsAndBonds(vtkSelection *selection,
+      vtkIdTypeArray *atomIds,
+      vtkIdTypeArray *bondIds);
   virtual void GetSelectedAtoms(vtkSelection *selection,
-                                vtkIdTypeArray *atomIds)
+    vtkIdTypeArray *atomIds)
   {
     this->GetSelectedAtomsAndBonds(selection, atomIds, nullptr);
   }
   virtual void GetSelectedBonds(vtkSelection *selection,
-                                vtkIdTypeArray *bondIds)
+    vtkIdTypeArray *bondIds)
   {
     this->GetSelectedAtomsAndBonds(selection, nullptr, bondIds);
   }
@@ -283,7 +293,7 @@ public:
   double * GetBounds() override;
   void GetBounds(double bounds[6]) override { vtkAbstractMapper3D::GetBounds(bounds); }
   int FillInputPortInformation(int port, vtkInformation* info) override;
-  bool GetSupportsSelection() override {return true;}
+  bool GetSupportsSelection() override { return true; }
   //@}
 
 //@{
@@ -293,7 +303,7 @@ public:
    */
   vtkGetStringMacro(AtomicRadiusArrayName);
   vtkSetStringMacro(AtomicRadiusArrayName);
-//@}
+  //@}
 
 protected:
   MoleculeMapper();
@@ -321,8 +331,6 @@ protected:
   //@}
 
   bool RenderLattice;
-
-  MoleculeMapperStyle styleMap_;
 
   /**
    * Internal render methods
@@ -361,12 +369,12 @@ protected:
    */
   vtkNew<vtkPeriodicTable> PeriodicTable;
 
+  MoleculeMapperStyle styleMap_;
   /**
   * predefined styles:
    */
-
   static const MoleculeMapperStyle styleFast;
-
+  static const MoleculeMapperStyle styleBallStick; // reserved
 private:
   // delete:
   MoleculeMapper(const MoleculeMapper&) = delete;

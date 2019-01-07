@@ -532,7 +532,7 @@ void FrameWorkspace::on_actionMolFast__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  pMolView->resetStyle(FrameFile::ViewMolecule::styleFast());
+  pMolView->GetMoleculeMapper()->ResetStyleToDefault();
   this->updateUi();
 }
 void FrameWorkspace::on_actionMolBalls__triggered()
