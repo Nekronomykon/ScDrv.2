@@ -56,7 +56,6 @@ protected:
 
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
-  bool resetStyle(const MoleculeMapperStyle & /*style*/);
   void doRender();
 
   vtkRenderer* GetRenderer() const { return renderer_; }
