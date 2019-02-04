@@ -39,32 +39,37 @@
 class vtkMolecule;
 class vtkImageData;
 
-class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileCUBE
-    : public MoleculeAcquireFile
+namespace vtk
 {
-public:
-  static MoleculeAcquireFileCUBE *New();
-  vtkTypeMacro(MoleculeAcquireFileCUBE, MoleculeAcquireFile)
-  // void PrintSelf(ostream &os, vtkIndent indent) override;
 
-  /**
-   * Get/Set the output (vtkImageData) that the reader will fill
-   */
-  vtkImageData *GetGridOutput();
+  class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileCUBE
+    : public MoleculeAcquireFile
+  {
+  public:
+    static MoleculeAcquireFileCUBE *New();
+    vtkTypeMacro(MoleculeAcquireFileCUBE, MoleculeAcquireFile)
+      // void PrintSelf(ostream &os, vtkIndent indent) override;
 
-protected:
-  MoleculeAcquireFileCUBE();
-  ~MoleculeAcquireFileCUBE() override = default;
+      /**
+       * Get/Set the output (vtkImageData) that the reader will fill
+       */
+      vtkImageData *GetGridOutput();
 
-  int RequestData(vtkInformation *, vtkInformationVector **,
-                  vtkInformationVector *) override;
-  int RequestInformation(vtkInformation *, vtkInformationVector **,
-                         vtkInformationVector *) override;
-  int FillOutputPortInformation(int, vtkInformation *) override;
+  protected:
+    MoleculeAcquireFileCUBE();
+    ~MoleculeAcquireFileCUBE() override = default;
 
-private:
-  MoleculeAcquireFileCUBE(const MoleculeAcquireFileCUBE &) = delete;
-  void operator=(const MoleculeAcquireFileCUBE &) = delete;
-};
+    int RequestData(vtkInformation *, vtkInformationVector **,
+      vtkInformationVector *) override;
+    int RequestInformation(vtkInformation *, vtkInformationVector **,
+      vtkInformationVector *) override;
+    int FillOutputPortInformation(int, vtkInformation *) override;
+
+  private:
+    MoleculeAcquireFileCUBE(const MoleculeAcquireFileCUBE &) = delete;
+    void operator=(const MoleculeAcquireFileCUBE &) = delete;
+  };
+
+}; // namespace vtk
 
 #endif // !MoleculeAcquire_File_CUBE_h

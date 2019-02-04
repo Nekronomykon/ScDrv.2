@@ -34,7 +34,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+
 using namespace std;
+using namespace vtk;
 
 vtkStandardNewMacro(MoleculeAcquireFileCUBE);
 

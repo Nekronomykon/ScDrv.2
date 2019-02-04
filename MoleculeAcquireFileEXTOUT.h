@@ -41,30 +41,33 @@
 
 class vtkMolecule;
 
-class MoleculeAcquireFileEXTOUT
-  : public ImplReadFile<MoleculeAcquireFileEXTOUT,TraitsSymbolicXYZ, MoleculeAcquireFileQTAIM>
+namespace vtk
 {
-  typedef ImplReadFile<MoleculeAcquireFileEXTOUT, TraitsSymbolicXYZ, MoleculeAcquireFileQTAIM> _Base;
-  typedef TraitsSymbolicXYZ<MoleculeAcquireFileEXTOUT> Traits;
-public:
-  typedef Traits::BaseInput BaseInput;
-  typedef typename _Base::Molecule Molecule;
-  static MoleculeAcquireFileEXTOUT *New();
-  vtkTypeMacro(MoleculeAcquireFileEXTOUT, MoleculeAcquireFileQTAIM);
-  // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-  int PreParseStream(BaseInput&);
-  int ReadSimpleMolecule(BaseInput&, Molecule*);
+  class MoleculeAcquireFileEXTOUT
+    : public ImplReadFile<MoleculeAcquireFileEXTOUT, TraitsSymbolicXYZ, MoleculeAcquireFileQTAIM>
+  {
+    typedef ImplReadFile<MoleculeAcquireFileEXTOUT, TraitsSymbolicXYZ, MoleculeAcquireFileQTAIM> _Base;
+    typedef TraitsSymbolicXYZ<MoleculeAcquireFileEXTOUT> Traits;
+  public:
+    typedef Traits::BaseInput BaseInput;
+    typedef typename _Base::Molecule Molecule;
+    static MoleculeAcquireFileEXTOUT *New();
+    vtkTypeMacro(MoleculeAcquireFileEXTOUT, MoleculeAcquireFileQTAIM);
+    // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-protected:
-  explicit MoleculeAcquireFileEXTOUT() = default;
-  ~MoleculeAcquireFileEXTOUT() override = default;
+    int PreParseStream(BaseInput&);
+    int ReadSimpleMolecule(BaseInput&, Molecule*);
 
-private:
-  MoleculeAcquireFileEXTOUT(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
-};
+  protected:
+    explicit MoleculeAcquireFileEXTOUT() = default;
+    ~MoleculeAcquireFileEXTOUT() override = default;
 
+  private:
+    MoleculeAcquireFileEXTOUT(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
+    void operator=(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
+  };
 
+}; // namespace vtk
 
 #endif // !MoleculeAcquire_FileEXTOUT

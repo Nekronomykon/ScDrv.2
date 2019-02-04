@@ -29,6 +29,8 @@
 // temporary view header to implement table views of atoms / bonds in Molecule
 // #include <vtkQtTableView.h>
 
+using namespace vtk;
+
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
 

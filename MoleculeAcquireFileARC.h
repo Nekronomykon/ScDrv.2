@@ -34,34 +34,37 @@
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-
-class MoleculeAcquireFileARC
-    : public MoleculeAcquireFile,
-      public TraitsSymXYZPadded<MoleculeAcquireFileARC>
+namespace vtk
 {
-protected:
-  typedef MoleculeAcquireFile::Molecule Molecule;
-  typedef TraitsSymXYZPadded<MoleculeAcquireFileARC> Traits;
+  class MoleculeAcquireFileARC
+    : public MoleculeAcquireFile,
+    public TraitsSymXYZPadded<MoleculeAcquireFileARC>
+  {
+  protected:
+    typedef MoleculeAcquireFile::Molecule Molecule;
+    typedef TraitsSymXYZPadded<MoleculeAcquireFileARC> Traits;
 
-public:
-  static MoleculeAcquireFileARC *New();
-  vtkTypeMacro(MoleculeAcquireFileARC, MoleculeAcquireFile);
-  void PrintSelf(ostream &os, vtkIndent indent) override;
+  public:
+    static MoleculeAcquireFileARC *New();
+    vtkTypeMacro(MoleculeAcquireFileARC, MoleculeAcquireFile);
+    void PrintSelf(ostream &os, vtkIndent indent) override;
 
-protected:
-  explicit MoleculeAcquireFileARC() = default;
-  ~MoleculeAcquireFileARC() override = default;
+  protected:
+    explicit MoleculeAcquireFileARC() = default;
+    ~MoleculeAcquireFileARC() override = default;
 
-public:
-  int RequestInformation(vtkInformation *, vtkInformationVector **,
-                         vtkInformationVector *) override;
+  public:
+    int RequestInformation(vtkInformation *, vtkInformationVector **,
+      vtkInformationVector *) override;
 
-  int RequestData(vtkInformation *, vtkInformationVector **,
-                  vtkInformationVector *) override;
+    int RequestData(vtkInformation *, vtkInformationVector **,
+      vtkInformationVector *) override;
 
-private:
-  MoleculeAcquireFileARC(const MoleculeAcquireFileARC &) = delete;
-  void operator=(const MoleculeAcquireFileARC &) = delete;
-};
+  private:
+    MoleculeAcquireFileARC(const MoleculeAcquireFileARC &) = delete;
+    void operator=(const MoleculeAcquireFileARC &) = delete;
+  };
+
+}; // namespace vtk
 
 #endif // !MoleculeAcquireFileARC_h

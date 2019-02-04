@@ -30,6 +30,7 @@ Program:   Visualization Toolkit Local Copy
 #include <sstream>
 
 using namespace std;
+using namespace vtk;
 
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileOUT);

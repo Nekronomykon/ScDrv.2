@@ -39,26 +39,31 @@
 
 class vtkMolecule;
 
-class MoleculeAcquireFileWFN
-  : public ImplReadFile<MoleculeAcquireFileWFN,TraitsCentreWFN,MoleculeAcquireFileQTAIM>
+namespace vtk
 {
-  typedef TraitsCentreWFN<MoleculeAcquireFileWFN> Traits;
-public:
-  static MoleculeAcquireFileWFN *New();
-  vtkTypeMacro(MoleculeAcquireFileWFN, MoleculeAcquireFileQTAIM);
-  // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-  typedef Traits::BaseInput BaseInput;
-  int PreParseStream(BaseInput&);
-  int ReadSimpleMolecule(BaseInput&, Molecule*);
+  class MoleculeAcquireFileWFN
+    : public ImplReadFile<MoleculeAcquireFileWFN, TraitsCentreWFN, MoleculeAcquireFileQTAIM>
+  {
+    typedef TraitsCentreWFN<MoleculeAcquireFileWFN> Traits;
+  public:
+    static MoleculeAcquireFileWFN *New();
+    vtkTypeMacro(MoleculeAcquireFileWFN, MoleculeAcquireFileQTAIM);
+    // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-protected:
-  explicit MoleculeAcquireFileWFN() = default;
-  ~MoleculeAcquireFileWFN() override  = default;
+    typedef Traits::BaseInput BaseInput;
+    int PreParseStream(BaseInput&);
+    int ReadSimpleMolecule(BaseInput&, Molecule*);
 
-private:
-  MoleculeAcquireFileWFN(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;
-  void operator=(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;
-};
+  protected:
+    explicit MoleculeAcquireFileWFN() = default;
+    ~MoleculeAcquireFileWFN() override = default;
+
+  private:
+    MoleculeAcquireFileWFN(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;
+    void operator=(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;
+  };
+
+}; // namespace vtk
 
 #endif // !MoleculeAcquire_File_WFN_h

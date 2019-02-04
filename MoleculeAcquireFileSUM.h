@@ -39,30 +39,34 @@
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-class MoleculeAcquireFileSUM
-  : public ImplReadFile<MoleculeAcquireFileSUM, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM>
+namespace vtk
 {
-  typedef ImplReadFile<MoleculeAcquireFileSUM, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
-  typedef TraitsLabelNumberXYZ<MoleculeAcquireFileSUM> Traits;
-public:
-  typedef Traits::BaseInput BaseInput;
-  typedef _Base::Molecule Molecule;
 
-  static MoleculeAcquireFileSUM *New();
-  vtkTypeMacro(MoleculeAcquireFileSUM, MoleculeAcquireFile);
-  // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
+  class MoleculeAcquireFileSUM
+    : public ImplReadFile<MoleculeAcquireFileSUM, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM>
+  {
+    typedef ImplReadFile<MoleculeAcquireFileSUM, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
+    typedef TraitsLabelNumberXYZ<MoleculeAcquireFileSUM> Traits;
+  public:
+    typedef Traits::BaseInput BaseInput;
+    typedef _Base::Molecule Molecule;
 
-  int PreParseStream(BaseInput&);
-  int ReadSimpleMolecule(BaseInput&, Molecule*);
+    static MoleculeAcquireFileSUM *New();
+    vtkTypeMacro(MoleculeAcquireFileSUM, MoleculeAcquireFile);
+    // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-protected:
-  explicit MoleculeAcquireFileSUM() = default;
-  ~MoleculeAcquireFileSUM() override = default;
+    int PreParseStream(BaseInput&);
+    int ReadSimpleMolecule(BaseInput&, Molecule*);
 
-private:
-  MoleculeAcquireFileSUM(const MoleculeAcquireFileSUM&) = delete;
-  void operator=(const MoleculeAcquireFileSUM&) = delete;
-};
+  protected:
+    explicit MoleculeAcquireFileSUM() = default;
+    ~MoleculeAcquireFileSUM() override = default;
 
+  private:
+    MoleculeAcquireFileSUM(const MoleculeAcquireFileSUM&) = delete;
+    void operator=(const MoleculeAcquireFileSUM&) = delete;
+  };
+
+}; // namespace vtk
 
 #endif // !MoleculeAcquire_FileSUM

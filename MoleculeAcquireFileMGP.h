@@ -39,30 +39,34 @@
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-class MoleculeAcquireFileMGP
-  : public ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM>
+namespace vtk
 {
-  typedef ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
-  typedef TraitsLabelNumberXYZ<MoleculeAcquireFileMGP> Traits;
-public:
-  typedef _Base::Molecule Molecule;
 
-  static MoleculeAcquireFileMGP *New();
-  vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFile);
-  // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
+  class MoleculeAcquireFileMGP
+    : public ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM>
+  {
+    typedef ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
+    typedef TraitsLabelNumberXYZ<MoleculeAcquireFileMGP> Traits;
+  public:
+    typedef _Base::Molecule Molecule;
 
-  typedef Traits::BaseInput BaseInput;
-  int PreParseStream(BaseInput&);
-  int ReadSimpleMolecule(BaseInput&, Molecule*);
+    static MoleculeAcquireFileMGP *New();
+    vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFile);
+    // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-protected:
-  explicit MoleculeAcquireFileMGP() = default;
-  ~MoleculeAcquireFileMGP() override = default;
+    typedef Traits::BaseInput BaseInput;
+    int PreParseStream(BaseInput&);
+    int ReadSimpleMolecule(BaseInput&, Molecule*);
 
-private:
-  MoleculeAcquireFileMGP(const MoleculeAcquireFileMGP&) = delete;
-  void operator=(const MoleculeAcquireFileMGP&) = delete;
-};
+  protected:
+    explicit MoleculeAcquireFileMGP() = default;
+    ~MoleculeAcquireFileMGP() override = default;
 
+  private:
+    MoleculeAcquireFileMGP(const MoleculeAcquireFileMGP&) = delete;
+    void operator=(const MoleculeAcquireFileMGP&) = delete;
+  };
+
+}; // namespace vtk
 
 #endif // !MoleculeAcquireFileMGP_h

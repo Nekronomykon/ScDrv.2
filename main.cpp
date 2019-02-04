@@ -6,11 +6,13 @@
 #include <QSurfaceFormat>
 
 #include "QVTKMoleculeWidget.h" // to specify Surface Format, as below
+using namespace vtk;
 
 #include <QVTKApplication.h>
 #include <vtkOpenGLRenderWindow.h>
 
 #include "FrameWorkspace.h"
+
 
 int main(int argc, char *argv[])
 {

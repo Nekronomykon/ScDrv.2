@@ -42,58 +42,63 @@
 
 class vtkMolecule;
 
-class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
-    : public MoleculeAcquireFile
+namespace vtk
 {
-public:
-  static MoleculeAcquireFileQTAIM *New();
-  vtkTypeMacro(MoleculeAcquireFileQTAIM,MoleculeAcquireFile);
-  void PrintSelf(ostream &os, vtkIndent indent) override;
 
-  vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
-  virtual vtkIdType SetNumberOfOrbitals(vtkIdType nnew)
+  class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
+    : public MoleculeAcquireFile
   {
-    if(nnew != this->GetNumberOfOrbitals())
-    {
-      std::swap(NumberOfOrbitals_, nnew);
-      this->Modified();
-    }
-    return nnew;
-  }
+  public:
+    static MoleculeAcquireFileQTAIM *New();
+    vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFile);
+    void PrintSelf(ostream &os, vtkIndent indent) override;
 
-  vtkIdType GetNumberOfPrimitives() const { return NumberOfPrimitives_; }
-  vtkIdType SetNumberOfPrimitives(vtkIdType nnew)
-  {
-    if(nnew != GetNumberOfPrimitives())
+    vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
+    virtual vtkIdType SetNumberOfOrbitals(vtkIdType nnew)
     {
-      std::swap(NumberOfPrimitives_, nnew);
-      this->Modified();
+      if (nnew != this->GetNumberOfOrbitals())
+      {
+        std::swap(NumberOfOrbitals_, nnew);
+        this->Modified();
+      }
+      return nnew;
     }
-    return nnew;
-  }
-protected:
-  enum
-  {
-    AtomMaximumCP = 0,
-    BondSaddleCP = 1,
-    RingSaddleCP = 2,
-    CageMinimumCP = 3,
-    NonNuclearMaxCP = 4,
-    NumberOfCPTypes = 5
+
+    vtkIdType GetNumberOfPrimitives() const { return NumberOfPrimitives_; }
+    vtkIdType SetNumberOfPrimitives(vtkIdType nnew)
+    {
+      if (nnew != GetNumberOfPrimitives())
+      {
+        std::swap(NumberOfPrimitives_, nnew);
+        this->Modified();
+      }
+      return nnew;
+    }
+  protected:
+    enum
+    {
+      AtomMaximumCP = 0,
+      BondSaddleCP = 1,
+      RingSaddleCP = 2,
+      CageMinimumCP = 3,
+      NonNuclearMaxCP = 4,
+      NumberOfCPTypes = 5
+    };
+
+    typedef std::complex<short> CriticalPointType;
+
+    explicit MoleculeAcquireFileQTAIM() = default;
+    ~MoleculeAcquireFileQTAIM() override = default;
+
+  private:
+    MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
+    void operator=(const MoleculeAcquireFileQTAIM &) = delete;
+
+    vtkIdType NumberOfOrbitals_ = 0;
+    vtkIdType NumberOfPrimitives_ = 0;
+    vtkIdType CriticalPoints[NumberOfCPTypes];
   };
 
-  typedef std::complex<short> CriticalPointType;
-
-  explicit MoleculeAcquireFileQTAIM() = default;
-  ~MoleculeAcquireFileQTAIM() override = default;
-
-private:
-  MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
-  void operator=(const MoleculeAcquireFileQTAIM &) = delete;
-
-  vtkIdType NumberOfOrbitals_ = 0;
-  vtkIdType NumberOfPrimitives_ = 0;
-  vtkIdType CriticalPoints[NumberOfCPTypes];
-};
+}; // namespace vtk
 
 #endif // !MoleculeAcquire_FileQTAIM_h
