@@ -34,6 +34,8 @@
 class vtkOpenGLSphereMapper;
 class vtkOpenGLStickMapper;
 
+namespace vtk {
+
 class /*VTKDOMAINSCHEMISTRYOPENGL2_EXPORT*/ MoleculeMapperOpenGL
   : public MoleculeMapper
 {
@@ -81,5 +83,7 @@ private:
   MoleculeMapperOpenGL(const MoleculeMapperOpenGL&) = delete;
   void operator=(const MoleculeMapperOpenGL&) = delete;
 };
+
+} // namespace vtk
 
 #endif // !MoleculeMapper_OpenGL_h

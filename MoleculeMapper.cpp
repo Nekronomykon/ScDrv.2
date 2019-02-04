@@ -45,6 +45,8 @@
 #include <vtkVector.h>
 #include <vtkVectorOperators.h>
 
+using namespace vtk;
+
 const MoleculeMapperStyle MoleculeMapper::styleFast =
 { true, MoleculeMapperStyle::UnitRadius, 0.4f, true, false, MoleculeMapperStyle::SingleColor, 0.125f, 64, 64, 64 };
 const MoleculeMapperStyle MoleculeMapper::styleBallSticks =

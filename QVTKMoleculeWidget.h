@@ -37,9 +37,11 @@
 
 #include "MoleculeMapperStyle.h"
 
-
+namespace vtk
+{
+}
 class QVTKMoleculeWidget
-    : public QVTKOpenGLWidget
+  : public QVTKOpenGLWidget
 {
   Q_OBJECT
 public:
@@ -95,4 +97,5 @@ private:
 
 };
 
+}; // namespace vtk
 #endif // !QVTK_MoleculeWidget_h

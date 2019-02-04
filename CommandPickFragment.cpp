@@ -6,6 +6,8 @@
 #include <QString>
 #include <QMessageBox>
 
+using namespace vtk;
+
 //----------------------------------------------------------------------------
 // vtkStandardNewMacro(CommandPickFragment);
 

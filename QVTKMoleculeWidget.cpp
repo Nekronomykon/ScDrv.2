@@ -25,6 +25,8 @@
 
 #include "MoleculeMapperOpenGL.h"
 
+using namespace vtk;
+
 typedef vtkSmartPointer<vtkLODActor> LODActor;
 typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;

@@ -24,6 +24,8 @@
 #include <vtkPeriodicTable.h>
 #include <vtkTrivialProducer.h>
 
+using namespace vtk;
+
 //-----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeMapperOpenGL)
 

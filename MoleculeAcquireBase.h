@@ -42,7 +42,10 @@ class vtkDataSet;
 class vtkMolecule;
 class MolecularStructure;
 
-class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireBase : public vtkAlgorithm
+namespace vtk {
+
+class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireBase
+ : public vtkAlgorithm
 {
 protected:
 public:
@@ -147,5 +150,7 @@ private:
   //----------------------------------------------------------------------------
   vtkIdType NumberOfAtoms_ = 0L;
 };
+
+} // namespace vtk
 
 #endif // !MoleculeAcquireBase_h

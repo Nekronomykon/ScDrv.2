@@ -24,6 +24,9 @@ using namespace std;
 
 #include "MoleculeMapper.h"
 
+namespace vtk
+{
+
 class CommandPickFragment
     : public vtkCommand
 {
@@ -82,5 +85,7 @@ private:
 
   MoleculeMapper *ptrMoleculeMapper_;
 };
+
+} // namespace vtk
 
 #endif // !Command_PickFragment_h

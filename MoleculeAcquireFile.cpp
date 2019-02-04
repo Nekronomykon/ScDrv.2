@@ -16,6 +16,8 @@ PURPOSE.  See the above copyright notice for more information.
 
 #include <vtkObjectFactory.h>
 
+using namespace vtk;
+
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFile);
 

@@ -9,6 +9,9 @@
 #include <vtkColor.h>
 #include <vtkMoleculeMapper.h>
 
+namespace vtk
+{
+
 class MoleculeMapper;
 
 struct MoleculeMapperStyle
@@ -151,5 +154,7 @@ bool operator !=(const MoleculeMapperStyle& w, const MoleculeMapperStyle& v)
 {
   return !(w  == v);
 }
+
+} // namespace vtk
 
 #endif // MoleculeMapper_Style_h

@@ -47,6 +47,8 @@ class vtkTrivialProducer;
 
 #include "MoleculeMapperStyle.h"
 
+namespace vtk
+{
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
 {
 public:
@@ -235,5 +237,7 @@ private:
   MoleculeMapper(const MoleculeMapper&) = delete;
   void operator=(const MoleculeMapper&) = delete;
 };
+
+} // namespace vtk
 
 #endif // !MoleculeMapper_h

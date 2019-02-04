@@ -21,6 +21,8 @@
 #include <vtkStreamingDemandDrivenPipeline.h>
 #include <vtkTrivialProducer.h>
 
+using namespace vtk;
+
 vtkStandardNewMacro(MoleculeAcquireBase);
 
 //----------------------------------------------------------------------------
