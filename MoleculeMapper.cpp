@@ -44,6 +44,7 @@
 #include <vtkUnsignedShortArray.h>
 #include <vtkVector.h>
 #include <vtkVectorOperators.h>
+#include <vtkStringArray.h>
 
 using namespace vtk;
 
@@ -67,6 +68,8 @@ MoleculeMapper::MoleculeMapper()
   : styleMap_(styleFast)
   , AtomicRadiusArrayName(nullptr)
   , RenderLattice(false)
+  , GlyphDataInitialized(false)
+  , areLabelDataInitialized_(false)
 {
   // Initialize ivars:
   this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 64; // ???
@@ -136,7 +139,7 @@ MoleculeMapper::MoleculeMapper()
   this->LatticeMapper->SetColorModeToDefault();
 
   // Force the glyph data to be generated on the next render:
-  this->GlyphDataInitialized = false;
+  // this->GlyphDataInitialized = false;
 
   this->SetInputArrayToProcess(0, 0, 0,
     vtkDataObject::FIELD_ASSOCIATION_VERTICES,
@@ -258,24 +261,24 @@ void MoleculeMapper::UpdateGlyphPolyData()
 {
   vtkMolecule *molecule = this->GetInput();
 
-  if (!this->GlyphDataInitialized 
-    ||  (
-      (molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime()
-        || this->GetMTime() > this->AtomGlyphPolyData->GetMTime()
-        || this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime()
-        ) 
-     && this->GetStyle().HasToRenderAtoms() ) )
+  if (!this->GlyphDataInitialized
+    || (
+    (molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime()
+      || this->GetMTime() > this->AtomGlyphPolyData->GetMTime()
+      || this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime()
+      )
+      && this->GetStyle().HasToRenderAtoms()))
   {
     this->UpdateAtomGlyphPolyData();
   }
 
   if (!this->GlyphDataInitialized
-    ||  (
+    || (
     (molecule->GetMTime() > this->BondGlyphPolyData->GetMTime()
       || this->GetMTime() > this->BondGlyphPolyData->GetMTime()
       || this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()
       ) &&
-    this->GetStyle().HasToRenderBonds() ))
+      this->GetStyle().HasToRenderBonds()))
   {
     this->UpdateBondGlyphPolyData();
   }
@@ -382,7 +385,7 @@ void MoleculeMapper::UpdateAtomGlyphPolyData()
       scaleFactors->InsertNextValue(this->GetStyle().GetAtomicRadiusScale());
     }
     break;
-  case (MMStyle::CustomArrayRadius): 
+  case (MMStyle::CustomArrayRadius):
   {
     vtkDataArray *allRadii = molecule->GetVertexData()->GetArray(this->AtomicRadiusArrayName);
     if (!allRadii)
@@ -459,7 +462,7 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
   // Allocate memory -- find out how many cylinders are needed
   vtkIdType numCylinders = numBonds;
   // Up to three cylinders per bond if multicylinders are enabled:
-  if (this->GetStyle().IsMultiBonds() )
+  if (this->GetStyle().IsMultiBonds())
   {
     numCylinders *= 3;
   }
@@ -717,6 +720,20 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
   this->BondGlyphMapper->SetOrientationArray("Orientation Vectors");
   this->BondGlyphMapper->SetSelectionIdArray("Selection Ids");
   this->BondGlyphMapper->UseSelectionIdsOn();
+}
+
+//----------------------------------------------------------------------------
+void MoleculeMapper::UpdateAtomLabel()
+{
+  dataAtomsLabel_->Initialize();
+  vtkMolecule *molecule = this->GetInput();
+}
+
+//----------------------------------------------------------------------------
+void MoleculeMapper::UpdateBondLabel()
+{
+  dataBondsLabel_->Initialize();
+  vtkMolecule *molecule = this->GetInput();
 }
 
 //----------------------------------------------------------------------------
