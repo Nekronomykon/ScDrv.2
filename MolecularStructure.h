@@ -15,15 +15,18 @@
 #include <vtkMolecule.h>
 
 #include "BondsetBuild.h"
+using namespace vtk;
 
 #include "GraphPath.h"
 
 #include <deque>
 #include <list>
 
-typedef std::pair<vtkIdType,vtkIdType> IncidenceIndex;
-typedef std::deque<IncidenceIndex> PathSequence;
-typedef std::list<PathSequence> PathPool;
+using namespace std;
+
+typedef pair<vtkIdType,vtkIdType> IncidenceIndex;
+typedef deque<IncidenceIndex> PathSequence;
+typedef list<PathSequence> PathPool;
 typedef vtkSmartPointer<vtkIdTypeArray> IndexArray;
 
 class MolecularStructure

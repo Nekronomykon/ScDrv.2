@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "BondsetBuild.h"
 
+using namespace vtk;
+
 #include <vtkCommand.h>
 #include <vtkInformation.h>
 #include <vtkInformationVector.h>
@@ -32,12 +34,9 @@
 vtkStandardNewMacro(BondsetBuild);
 
 //----------------------------------------------------------------------------
-BondsetBuild::BondsetBuild() : Tolerance(0.45)
-{
-}
-
-//----------------------------------------------------------------------------
-BondsetBuild::~BondsetBuild() {}
+BondsetBuild::BondsetBuild()
+  : Tolerance(0.45f)
+{}
 
 //----------------------------------------------------------------------------
 void BondsetBuild::PrintSelf(ostream& os, vtkIndent indent)

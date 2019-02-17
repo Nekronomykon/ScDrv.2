@@ -33,7 +33,10 @@ void MoleculeAcquireFile::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 
+  bool bHas = this->HasFileName();
+
   os << indent << "FileName"
-    << (this->HasFileName() ? this->GetFileName() : "(null)") << "@Pos: " << (unsigned long) posRead_
-    << std::endl;
+    << (bHas ? this->GetFileName() : "(null)");
+  if (bHas) os << "@Pos: " << (unsigned long)posRead_;
+  os << std::endl;
 }

@@ -44,38 +44,43 @@
 class vtkDataSet;
 class vtkMolecule;
 
-class /*VTKDOMAINSCHEMISTRY_EXPORT*/ BondsetBuild : public vtkMoleculeAlgorithm
-{
-public:
-  static BondsetBuild *New();
-  vtkTypeMacro(BondsetBuild, vtkMoleculeAlgorithm)
-  void PrintSelf(ostream& os, vtkIndent indent) override;
+namespace vtk {
 
-  //@{
-  /**
+  class /*VTKDOMAINSCHEMISTRY_EXPORT*/ BondsetBuild
+      : public vtkMoleculeAlgorithm
+  {
+  public:
+    static BondsetBuild *New();
+    vtkTypeMacro(BondsetBuild, vtkMoleculeAlgorithm)
+    void PrintSelf(ostream& os, vtkIndent indent) override;
+
+    //@{
+    /**
    * Set/Get the tolerance used in the comparisons. (Default: 0.45)
    */
-  vtkSetMacro(Tolerance, float)
-  vtkGetMacro(Tolerance, float)
-  //@}
+    vtkSetMacro(Tolerance, float)
+    vtkGetMacro(Tolerance, float)
+    //@}
 
-protected:
-  BondsetBuild();
-  ~BondsetBuild() override;
+    protected:
+      BondsetBuild();
+    ~BondsetBuild() override = default;
 
-  /**
+    /**
    * This is called by the superclass.
    * This is the method you should override.
    */
-  int RequestData(vtkInformation* request
-    , vtkInformationVector** inputVector
-    , vtkInformationVector* outputVector) override;
+    int RequestData(vtkInformation* request
+                    , vtkInformationVector** inputVector
+                    , vtkInformationVector* outputVector) override;
 
-  float Tolerance;
+    float Tolerance;
 
-private:
-  BondsetBuild(const BondsetBuild&) VTK_DELETE_FUNCTION;
-  void operator=(const BondsetBuild&) VTK_DELETE_FUNCTION;
-};
+  private:
+    BondsetBuild(const BondsetBuild&) = delete;
+    void operator=(const BondsetBuild&) = delete;
+  };
+
+}; // namespace vtk
 
 #endif // !Bondset_Build_h
