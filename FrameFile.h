@@ -216,6 +216,8 @@ private:
 
   // vtkIdTypeArray positions_;
   MolecularStructure structure_;
+  vtkNew<vtkStringArray> labelAtoms_;
+  vtkNew<vtkStringArray> labelBonds_;
 
   BuildBonds bonds_build_;
 

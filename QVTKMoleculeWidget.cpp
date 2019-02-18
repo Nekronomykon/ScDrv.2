@@ -17,6 +17,8 @@
 #include <vtkOpenGLActor.h>
 #include <vtkOpenGLRenderer.h>
 
+#include <vtkLabelPlacementMapper.h>
+
 #include <vtkNamedColors.h>
 #include <vtkRenderedAreaPicker.h>
 #include <vtkPolyDataMapper.h>

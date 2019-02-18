@@ -37,6 +37,8 @@
 
 #include "MoleculeMapperStyle.h"
 
+class vtkLabelPlacementMapper;
+
 namespace vtk
 {
 
@@ -83,6 +85,7 @@ namespace vtk
   private:
     typedef vtkSmartPointer<vtkActor> Actor;
     typedef vtkSmartPointer<MoleculeMapper> MolMapper;
+    typedef vtkSmartPointer<vtkLabelPlacementMapper> LabelMapper;
     typedef vtkSmartPointer<vtkRenderer> Renderer;
     typedef vtkSmartPointer<vtkAreaPicker> AreaPicker;
 
@@ -91,6 +94,8 @@ namespace vtk
     vtkStdString name_background_;
     vtkColor3d bgColor_;
     MolMapper mol_mapper_;
+    LabelMapper labelAtoms_;
+    LabelMapper labelBonds_;
     AreaPicker area_picker_;
     InteractorStyle styleInteractor_;
     vtkNew<CommandPickFragment> cmdPickFragment_;
