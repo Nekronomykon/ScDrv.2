@@ -22,8 +22,8 @@ namespace vtk
 {
 
 class MoleculeAcquireFile
-    : public MoleculeAcquireBase,
-      public ImplFileName<MoleculeAcquireFile, vtkStdString>
+    : public MoleculeAcquireBase
+    , public ImplFileName<MoleculeAcquireFile, vtkStdString>
 {
 protected:
   typedef MoleculeAcquireBase::Molecule Molecule;
@@ -32,7 +32,8 @@ protected:
 
 public:
   static MoleculeAcquireFile *New();
-  vtkTypeMacro(MoleculeAcquireFile, MoleculeAcquireBase) void PrintSelf(std::ostream &os, vtkIndent indent) override;
+  vtkTypeMacro(MoleculeAcquireFile, MoleculeAcquireBase);
+  void PrintSelf(std::ostream &os, vtkIndent indent) override;
 
   //
   // void ResetPos(FileInputPos pos) { posRead_ = pos; }

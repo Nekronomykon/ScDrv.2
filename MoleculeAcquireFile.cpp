@@ -25,7 +25,7 @@ vtkStandardNewMacro(MoleculeAcquireFile);
 MoleculeAcquireFile::MoleculeAcquireFile()
   : posRead_(0L)
 {
-  this->SetNumberOfInputPorts(0);
+  this->SetNumberOfInputPorts(0); // only internal generation
 }
 
 //----------------------------------------------------------------------------

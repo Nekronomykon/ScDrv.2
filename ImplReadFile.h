@@ -41,7 +41,7 @@ public:
   void PrintBeyond(std::ostream&, vtkIndent) {}
 
   int RequestInformation(vtkInformation *
-    , vtkInformationVector **
+    , vtkInformationVector ** inInfo
     , vtkInformationVector * outputVector) override
   {
     vtkInformation* outInfo = outputVector->GetInformationObject(0);
@@ -87,7 +87,7 @@ public:
       return 0;
     }
 
-    return pT->ReadSimpleMolecule(file_in,output);
+    return pT->ReadSimpleMolecule(file_in, output);
   }
 
   int PreParseStream(BaseInput&) { assert(0); return 1; }

@@ -3,7 +3,7 @@
 
 /*=========================================================================
 
-  Program:   Visualization Toolkit
+  Program:   Visualization Toolkit Local Fork
   Module:    MoleculeMapper.h
 
   Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
@@ -30,8 +30,9 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include <vtkMapper.h>
 #include <vtkNew.h> // For vtkNew
+
+#include <vtkMapper.h>
 
 class vtkActor;
 class vtkGlyph3DMapper;
