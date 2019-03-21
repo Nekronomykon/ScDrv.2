@@ -18,19 +18,19 @@
 
 class vtkPoints;
 
-class CriticalPointStructure
+class CriticalPoints
 : public vtkPoints
 {
 
 public:
-  static CriticalPointStructure* New();
-  vtkTypeMacro(CriticalPointStructure,vtkPoints)
+  static CriticalPoints* New();
+  vtkTypeMacro(CriticalPoints,vtkPoints)
   void PrintSelf(ostream &os, vtkIndent indent) override;
   void Initialize() override;
 
 protected:
-  CriticalPointStructure() = default;
-  ~CriticalPointStructure() override = default;
+  CriticalPoints() = default;
+  ~CriticalPoints() override = default;
 
 private:
   vtkSmartPointer<vtkMolecule> molecule_;
