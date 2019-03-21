@@ -59,7 +59,7 @@ namespace vtk
     int ReadSimpleMolecule(BaseInput &, Molecule *);
 
   protected:
-    MoleculeAcquireFileOUT() = default;
+    explicit MoleculeAcquireFileOUT() = default;
     ~MoleculeAcquireFileOUT() override = default;
 
   private:

@@ -56,7 +56,7 @@ namespace vtk
       vtkImageData *GetGridOutput();
 
   protected:
-    MoleculeAcquireFileCUBE();
+    explicit MoleculeAcquireFileCUBE();
     ~MoleculeAcquireFileCUBE() override = default;
 
     int RequestData(vtkInformation *, vtkInformationVector **,

@@ -29,8 +29,12 @@ public:
   void Initialize() override;
 
 protected:
-  CriticalPoints() = default;
+  explicit CriticalPoints() = default;
   ~CriticalPoints() override = default;
+
+private:
+  CriticalPoints(const CriticalPoints &) = delete;
+  void operator=(const CriticalPoints &) = delete;
 
 private:
   vtkSmartPointer<vtkMolecule> molecule_;
