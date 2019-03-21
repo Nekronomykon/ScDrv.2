@@ -7,6 +7,10 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
+#include <vtkObject.h>
+#include <vtkObjectFactory.h>
+
+#include <vtkPoints.h>
 #include <vtkMolecule.h>
 
 #include <vtkSmartPointer.h>
@@ -14,16 +18,13 @@
 
 class vtkPoints;
 
-namespace vtk
-{
-
-class /*VTKDOMAINSCHEMISTRY_EXPORT*/ CriticalPointStructure
-    : public vtkMolecule
+class CriticalPointStructure
+: public vtkPoints
 {
 
 public:
-  static CriticalPointStructure *New();
-  vtkTypeMacro(CriticalPointStructure, vtkMolecule);
+  static CriticalPointStructure* New();
+  vtkTypeMacro(CriticalPointStructure,vtkPoints)
   void PrintSelf(ostream &os, vtkIndent indent) override;
   void Initialize() override;
 
@@ -32,9 +33,8 @@ protected:
   ~CriticalPointStructure() override = default;
 
 private:
-  vtkNew<vtkPoints> points_;
+  vtkSmartPointer<vtkMolecule> molecule_;
+  // vtkNew<vtkPoints> points_;
 };
-
-}; // namespace vtk
 
 #endif // !CriticalPointStructure_h

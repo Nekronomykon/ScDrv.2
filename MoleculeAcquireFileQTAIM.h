@@ -41,6 +41,7 @@
 #include <complex>
 
 class vtkMolecule;
+class CriticalPointStructure;
 
 namespace vtk
 {

@@ -14,6 +14,7 @@
 
 #include "MoleculeAcquireFileQTAIM.h"
 #include "TraitsAcquireAtoms.h"
+#include "CriticalPointStructure.h"
 
 #include <vtkObjectFactory.h>
 

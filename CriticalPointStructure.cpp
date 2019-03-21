@@ -1,16 +1,21 @@
 #include "CriticalPointStructure.h"
 using namespace vtk;
 
+#include <vtkObject.h>
+
 #include <vtkPoints.h>
 
+// vtkCxxRevisionMacro(CriticalPointStructure, "$Revision: 1.1 $");
 //-----------------------------------------------------------------------------
-vtkObjectFactoryNewMacro(CriticalPointStructure)
-// Can not yet understand what is wrong here
+vtkStandardNewMacro(CriticalPointStructure)
+// Can not ng here
+
+// CriticalPointStructure::CriticalPointStructure(){}
 
 //-----------------------------------------------------------------------------
 void CriticalPointStructure::Initialize()
 {
-  points_->Initialize();
+  // molecule_->Initialize();
   this->Superclass::Initialize();
 }
 

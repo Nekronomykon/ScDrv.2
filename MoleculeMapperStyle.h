@@ -31,9 +31,9 @@ public:
   //////////////////////////////////////////////////////////////////////////
   //
   bool HasToRenderAtoms() const { return bRenderAtoms_; }
-  bool RenderAtomsOn() { bRenderAtoms_ = true; }
-  bool RenderAtomsOff() { bRenderAtoms_ = false; }
-  bool ToggleRenderAtoms() { bRenderAtoms_ = !bRenderAtoms_; }
+  void RenderAtomsOn() { bRenderAtoms_ = true; }
+  void RenderAtomsOff() { bRenderAtoms_ = false; }
+  bool ToggleRenderAtoms() { bRenderAtoms_ = !bRenderAtoms_; return bRenderAtoms_; }
   //
   enum {
     CovalentRadius = 0,
@@ -85,9 +85,9 @@ public:
   void ToggleRenderBonds() { bRenderBonds_ = !bRenderBonds_; }
   //
   bool IsMultiBonds() const { return bRenderMulti_; }
-  bool MultiBondsOn() { bRenderMulti_ = true; }
-  bool MultiBondsOff() { bRenderMulti_ = false; }
-  bool ToggleMultiBonds() { bRenderMulti_ = !bRenderMulti_; }
+  void MultiBondsOn() { bRenderMulti_ = true; }
+  void MultiBondsOff() { bRenderMulti_ = false; }
+  bool ToggleMultiBonds() { bRenderMulti_ = !bRenderMulti_; return bRenderMulti_;}
   //
   short GetTypeBondsColor() const { return styleBondColor_; }
   short ResetTypeBondsColor(short col_type)
