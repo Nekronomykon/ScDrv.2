@@ -16,36 +16,35 @@
 #include "ImplFileName.h"
 #include "TraitsAcquireAtoms.h"
 
-template<class T
-  , template <typename U> class TTraits // = TraitsEmpty
-  , class TBase // = MoleculeAcquireBase
->
+template <class T, template <typename U> class TTraits // = TraitsEmpty
+          ,
+          class TBase // = MoleculeAcquireBase
+          >
 class ImplReadFile
-  : public TBase
-  // , public TTraits<T>
+    : public TBase
+// , public TTraits<T>
 {
   typedef TBase _Base;
   typedef TTraits<T> Traits;
+
 public:
   typedef typename Traits::BaseInput BaseInput;
   typedef typename TBase::Molecule Molecule;
   void PrintSelf(std::ostream &os, vtkIndent indent) override
   {
-    T* pT = static_cast<T*>(this);
+    T *pT = static_cast<T *>(this);
     pT->PrintBefore(os, indent);
     _Base::PrintSelf(os, indent);
     pT->PrintBeyond(os, indent);
   }
 
-  void PrintBefore(std::ostream&, vtkIndent) {}
-  void PrintBeyond(std::ostream&, vtkIndent) {}
+  void PrintBefore(std::ostream &, vtkIndent) {}
+  void PrintBeyond(std::ostream &, vtkIndent) {}
 
-  int RequestInformation(vtkInformation *
-    , vtkInformationVector ** inInfo
-    , vtkInformationVector * outputVector) override
+  int RequestInformation(vtkInformation *, vtkInformationVector **inInfo, vtkInformationVector *outputVector) override
   {
-    vtkInformation* outInfo = outputVector->GetInformationObject(0);
-    T* pT = static_cast<T*>(this);
+    vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    T *pT = static_cast<T *>(this);
 
     if (!pT->HasFileName())
       return 0;
@@ -58,14 +57,12 @@ public:
       return 0;
     }
 
-    return pT->PreParseStream(file_in);
+    return pT->ParseStreamInfo(file_in, outputVector);
   }
 
-  int RequestData(vtkInformation *
-    , vtkInformationVector **
-    , vtkInformationVector * outputVector) override
+  int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *outputVector) override
   {
-    T* pT = static_cast<T*>(this);
+    T *pT = static_cast<T *>(this);
 
     if (!pT->HasFileName())
       return 0;
@@ -81,17 +78,16 @@ public:
     return pT->ParseStreamData(file_in, outputVector);
   }
 
-  template<typename Stream>
-  int ParseStreamData(Stream& src, vtkInformationVector* out)
+  template <typename Stream>
+  int ParseStreamData(Stream &src, vtkInformationVector *out)
   {
-    T* pT = static_cast<T*>(this);
+    T *pT = static_cast<T *>(this);
 
     assert(out);
-    if(!out)
-     return 0;
+    if (!out)
+      return 0;
 
-    vtkInformation* outInfo = out->GetInformationObject(0);
-
+    vtkInformation *outInfo = out->GetInformationObject(0);
 
     vtkMolecule *molxyz = vtkMolecule::SafeDownCast(vtkDataObject::GetData(out));
     if (!molxyz)
@@ -102,18 +98,26 @@ public:
     return pT->ReadSimpleMolecule(src, molxyz);
   }
 
-  int PreParseStream(BaseInput&) { assert(0); return 1; }
-  int ReadSimpleMolecule(BaseInput&,Molecule*) { assert(0); return 1; }
+  int ParseStreamInfo(BaseInput &, vtkInformationVector *out)
+  {
+    if (!out) return 0;
+    vtkInformation *outInfo = out->GetInformationObject(0);
+    return outInfo ? 1 : 0;
+  }
+
+  int ReadSimpleMolecule(BaseInput &, Molecule *)
+  {
+    assert(0);
+    return 1;
+  }
 
 protected:
   explicit ImplReadFile() = default;
   ~ImplReadFile() override = default;
 
 private:
-  ImplReadFile(const ImplReadFile&) = delete;
-  void operator =(const ImplReadFile&) = delete;
+  ImplReadFile(const ImplReadFile &) = delete;
+  void operator=(const ImplReadFile &) = delete;
 };
 
 #endif // !Impl_ReadFile_h
-
-
