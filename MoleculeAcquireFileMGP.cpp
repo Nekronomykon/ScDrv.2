@@ -28,7 +28,7 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileMGP);
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileMGP::PreParseStream(BaseInput &infile)
+int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVector*)
 {
   if (!Traits::ScrollDownTo(infile, "Nuclear Charges and Cartesian Coordinates:"))
     return 0;

@@ -52,7 +52,7 @@ namespace vtk
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
     typedef Traits::BaseInput BaseInput;
-    int PreParseStream(BaseInput&);
+    int ParseStreamInfo(BaseInput&,vtkInformationVector*);
     int ReadSimpleMolecule(BaseInput&, Molecule*);
 
   protected:

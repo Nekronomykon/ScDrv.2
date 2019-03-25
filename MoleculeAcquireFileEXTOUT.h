@@ -56,7 +56,7 @@ namespace vtk
     vtkTypeMacro(MoleculeAcquireFileEXTOUT, MoleculeAcquireFileQTAIM);
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-    int PreParseStream(BaseInput&);
+    int ParseStreamInfo(BaseInput&,vtkInformationVector*);
     int ReadSimpleMolecule(BaseInput&, Molecule*);
 
   protected:
@@ -64,8 +64,8 @@ namespace vtk
     ~MoleculeAcquireFileEXTOUT() override = default;
 
   private:
-    MoleculeAcquireFileEXTOUT(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
-    void operator=(const MoleculeAcquireFileEXTOUT&) VTK_DELETE_FUNCTION;
+    MoleculeAcquireFileEXTOUT(const MoleculeAcquireFileEXTOUT&) = delete;
+    void operator=(const MoleculeAcquireFileEXTOUT&) = delete;
   };
 
 }; // namespace vtk

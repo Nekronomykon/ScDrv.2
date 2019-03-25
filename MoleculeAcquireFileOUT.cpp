@@ -36,7 +36,7 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileOUT);
 
 //----------------------------------------------------------------------------
-  int MoleculeAcquireFileOUT:: PreParseStream(BaseInput & file_in)
+  int MoleculeAcquireFileOUT:: ParseStreamInfo(BaseInput & file_in,vtkInformationVector*)
 {
   int natoms = 0;
   string str_line;

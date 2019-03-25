@@ -28,7 +28,7 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileSUM);
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileSUM::PreParseStream(BaseInput &infile)
+int MoleculeAcquireFileSUM::ParseStreamInfo(BaseInput &infile,vtkInformationVector*)
 {
   if (!Traits::ScrollDownTo(infile, "Nuclear Charges and Cartesian Coordinates:"))
     return 0;

@@ -30,7 +30,7 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileWFN);
 
 
-int MoleculeAcquireFileWFN::PreParseStream(BaseInput& file_in)
+int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVector*)
 {
   string str_line;
   string title;

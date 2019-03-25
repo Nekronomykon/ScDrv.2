@@ -35,6 +35,9 @@
 #Qt Creator / qmake
 *.user
 
+#VS Code
+.vscode/ipch
+
 #CMake additionals
 Build
 Build*

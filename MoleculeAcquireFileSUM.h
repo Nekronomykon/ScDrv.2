@@ -55,7 +55,7 @@ namespace vtk
     vtkTypeMacro(MoleculeAcquireFileSUM, MoleculeAcquireFile);
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-    int PreParseStream(BaseInput&);
+    int ParseStreamInfo(BaseInput&,vtkInformationVector*);
     int ReadSimpleMolecule(BaseInput&, Molecule*);
 
   protected:

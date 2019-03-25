@@ -36,7 +36,7 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileXYZ);
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileXYZ::PreParseStream(BaseInput& file_in)
+int MoleculeAcquireFileXYZ::ParseStreamInfo(BaseInput& file_in,vtkInformationVector*)
 {
   int natoms = 0;
   // istream::pos_type current_pos = file_in.tellg();

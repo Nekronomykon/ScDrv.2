@@ -55,7 +55,7 @@ namespace vtk
     vtkTypeMacro(MoleculeAcquireFileOUT, MoleculeAcquireFile);
 
     typedef Traits::BaseInput BaseInput;
-    int PreParseStream(BaseInput &);
+    int ParseStreamInfo(BaseInput &,vtkInformationVector*);
     int ReadSimpleMolecule(BaseInput &, Molecule *);
 
   protected:

@@ -29,7 +29,7 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileEXTOUT);
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileEXTOUT::PreParseStream(BaseInput &infile)
+int MoleculeAcquireFileEXTOUT::ParseStreamInfo(BaseInput &infile,vtkInformationVector*)
 {
   if (!Traits::ScrollDownTo(infile, " The nuclear coordinates:"))
     return 0;
