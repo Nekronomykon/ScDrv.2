@@ -3,7 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "/home/serge/VTK/include/vtk-8.2/*",
+                "/home/serge/include/vtk-8.2/*",
                 "/home/serge/Qt/5.12.2/gcc_64/include/*",
                 "/home/serge/Qt/5.12.2/gcc_64/include/QtCore/*",
                 "/home/serge/Qt/5.12.2/gcc_64/include/QtGui/*",

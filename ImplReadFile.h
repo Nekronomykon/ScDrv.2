@@ -65,15 +65,6 @@ public:
     , vtkInformationVector **
     , vtkInformationVector * outputVector) override
   {
-    vtkInformation* outInfo = outputVector->GetInformationObject(0);
-    vtkMolecule *output = vtkMolecule::SafeDownCast(vtkDataObject::GetData(outputVector));
-
-    if (!output)
-    {
-      vtkErrorMacro(<< "We do not have a vtkMolecule as output.");
-      return 1;
-    }
-
     T* pT = static_cast<T*>(this);
 
     if (!pT->HasFileName())
@@ -87,14 +78,35 @@ public:
       return 0;
     }
 
-    return pT->ReadSimpleMolecule(file_in, output);
+    return pT->ParseStreamData(file_in, outputVector);
+  }
+
+  template<typename Stream>
+  int ParseStreamData(Stream& src, vtkInformationVector* out)
+  {
+    T* pT = static_cast<T*>(this);
+
+    assert(out);
+    if(!out)
+     return 0;
+
+    vtkInformation* outInfo = out->GetInformationObject(0);
+
+
+    vtkMolecule *molxyz = vtkMolecule::SafeDownCast(vtkDataObject::GetData(out));
+    if (!molxyz)
+    {
+      vtkErrorMacro(<< "We do not have a vtkMolecule as output.");
+      return 1;
+    }
+    return pT->ReadSimpleMolecule(src, molxyz);
   }
 
   int PreParseStream(BaseInput&) { assert(0); return 1; }
   int ReadSimpleMolecule(BaseInput&,Molecule*) { assert(0); return 1; }
 
 protected:
-  ImplReadFile() = default;
+  explicit ImplReadFile() = default;
   ~ImplReadFile() override = default;
 
 private:
