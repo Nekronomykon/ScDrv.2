@@ -38,67 +38,84 @@
 
 #include <vtkSetGet.h>
 
+#include <CriticalPoints.h>
+
 #include <complex>
 
 class vtkMolecule;
-class CriticalPointStructure;
 
 namespace vtk
 {
 
-  class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
+class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
     : public MoleculeAcquireFile
+{
+  typedef MoleculeAcquireFile _Base;
+
+public:
+  static MoleculeAcquireFileQTAIM *New();
+  vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFile);
+  void PrintSelf(ostream &os, vtkIndent indent) override;
+
+  vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
+  virtual vtkIdType SetNumberOfOrbitals(vtkIdType nnew)
   {
-  public:
-    static MoleculeAcquireFileQTAIM *New();
-    vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFile);
-    void PrintSelf(ostream &os, vtkIndent indent) override;
-
-    vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
-    virtual vtkIdType SetNumberOfOrbitals(vtkIdType nnew)
+    if (nnew != this->GetNumberOfOrbitals())
     {
-      if (nnew != this->GetNumberOfOrbitals())
-      {
-        std::swap(NumberOfOrbitals_, nnew);
-        this->Modified();
-      }
-      return nnew;
+      std::swap(NumberOfOrbitals_, nnew);
+      this->Modified();
     }
+    return nnew;
+  }
 
-    vtkIdType GetNumberOfPrimitives() const { return NumberOfPrimitives_; }
-    vtkIdType SetNumberOfPrimitives(vtkIdType nnew)
+  vtkIdType GetNumberOfPrimitives() const { return NumberOfPrimitives_; }
+  vtkIdType SetNumberOfPrimitives(vtkIdType nnew)
+  {
+    if (nnew != GetNumberOfPrimitives())
     {
-      if (nnew != GetNumberOfPrimitives())
-      {
-        std::swap(NumberOfPrimitives_, nnew);
-        this->Modified();
-      }
-      return nnew;
+      std::swap(NumberOfPrimitives_, nnew);
+      this->Modified();
     }
-  protected:
-    enum
+    return nnew;
+  }
+
+  template <typename Stream>
+  int _ParseStreamData(Stream &src, vtkInformationVector *out)
+  {
+    int kBaseRes = 0; //_Base::ParseStreamData(src, out);
+    if (kBaseRes)
     {
-      AtomMaximumCP = 0,
-      BondSaddleCP = 1,
-      RingSaddleCP = 2,
-      CageMinimumCP = 3,
-      NonNuclearMaxCP = 4,
-      NumberOfCPTypes = 5
-    };
+      //CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(out, 1));
+      // here we go down read all criticals:
+      return kBaseRes;
+    }
+    return kBaseRes;
+  }
 
-    typedef std::complex<short> CriticalPointType;
-
-    explicit MoleculeAcquireFileQTAIM() = default;
-    ~MoleculeAcquireFileQTAIM() override = default;
-
-  private:
-    MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
-    void operator=(const MoleculeAcquireFileQTAIM &) = delete;
-
-    vtkIdType NumberOfOrbitals_ = 0;
-    vtkIdType NumberOfPrimitives_ = 0;
-    vtkIdType CriticalPoints[NumberOfCPTypes];
+protected:
+  enum
+  {
+    AtomMaximumCP = 0,
+    BondSaddleCP = 1,
+    RingSaddleCP = 2,
+    CageMinimumCP = 3,
+    NonNuclearMaxCP = 4,
+    NumberOfCPTypes = 5
   };
+
+  typedef std::complex<short> CriticalPointType;
+
+  explicit MoleculeAcquireFileQTAIM() = default;
+  ~MoleculeAcquireFileQTAIM() override = default;
+
+private:
+  MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
+  void operator=(const MoleculeAcquireFileQTAIM &) = delete;
+
+  vtkIdType NumberOfOrbitals_ = 0;
+  vtkIdType NumberOfPrimitives_ = 0;
+  vtkIdType CriticalPoints[NumberOfCPTypes];
+};
 
 }; // namespace vtk
 
