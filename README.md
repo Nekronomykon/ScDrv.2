@@ -12,5 +12,5 @@ A cross-platform tool for chemists with computers.
 * numerical analysis
 
 ## Depends on:
-* VTK (8.2.0+)
-* Qt (5.12.2+)
+* [VTK](http://vtk.org) (current version 8.2.0)
+* [Qt](http://qt.io) (current version 5.12.2)
