@@ -1,6 +1,6 @@
 # ScDrv
 
-A cross-platform tool for chemists with computers. 
+A cross-platform tool for chemists with computers with the emphasis on the molecular (property) fields distribulted on the spatial (3D) grids. 
 
 ## Fields: 
 * molecular modeling
@@ -12,5 +12,15 @@ A cross-platform tool for chemists with computers.
 * numerical analysis
 
 ## Depends on:
-* [VTK](http://vtk.org) (current version 8.2.0)
-* [Qt](http://qt.io) (current version 5.12.2)
+* [VTK](http://vtk.org) (currently using version 8.2.0)
+* [Qt](http://qt.io) (currently using version 5.12.2)
+
+## Distribulion
+Open source
+
+## Build
+[CMake](http://cmake.org)-based.
+
+## Developer
+ScrewDriver te Blackheadborough
+
