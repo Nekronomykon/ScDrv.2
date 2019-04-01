@@ -62,7 +62,7 @@
     <addaction name="actionAbout_"/>
     <addaction name="actionAboutQt_"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
+   <widget class="QMenu" name="menuEdit_">
     <property name="title">
      <string>&amp;Edit</string>
     </property>
@@ -94,7 +94,7 @@
      <addaction name="actionLabelAtoms_"/>
      <addaction name="actionLabelBonds_"/>
     </widget>
-    <widget class="QMenu" name="menuProj">
+    <widget class="QMenu" name="menuProject_">
      <property name="title">
       <string>Pro&amp;jection</string>
      </property>
@@ -104,7 +104,7 @@
     <addaction name="actionToggleLayout_"/>
     <addaction name="actionFullScreen_"/>
     <addaction name="separator"/>
-    <addaction name="menuProj"/>
+    <addaction name="menuProject_"/>
     <addaction name="separator"/>
     <addaction name="menuMolecule_"/>
     <addaction name="separator"/>
@@ -119,6 +119,8 @@
     <addaction name="actionSourceEdit_"/>
     <addaction name="actionSourceCast_"/>
     <addaction name="separator"/>
+    <addaction name="actionBoxCenter_"/>
+    <addaction name="separator"/>
     <addaction name="actionOptions_"/>
    </widget>
    <widget class="QMenu" name="menuWindows_">
@@ -126,16 +128,16 @@
      <string>&amp;Windows</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menu_Format">
+   <widget class="QMenu" name="menuFormat_">
     <property name="title">
      <string>&amp;Format</string>
     </property>
     <addaction name="actionPageSetup_"/>
    </widget>
    <addaction name="menuFile_"/>
-   <addaction name="menuEdit"/>
+   <addaction name="menuEdit_"/>
    <addaction name="menuView_"/>
-   <addaction name="menu_Format"/>
+   <addaction name="menuFormat_"/>
    <addaction name="menuTools_"/>
    <addaction name="menuWindows_"/>
    <addaction name="menuHelp_"/>
@@ -262,6 +264,11 @@
   <action name="actionOptions_">
    <property name="text">
     <string>&amp;Options</string>
+   </property>
+  </action>
+  <action name="actionBoxCenter_">
+   <property name="text">
+    <string>Bo&amp;x center</string>
    </property>
   </action>
   <action name="actionSaveAs_">
