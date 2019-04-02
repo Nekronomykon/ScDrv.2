@@ -70,6 +70,7 @@ MoleculeMapper::MoleculeMapper()
   , RenderLattice(false)
   , GlyphDataInitialized(false)
   , areLabelDataInitialized_(false)
+  , pad_(1.5)
 {
   // Initialize ivars:
   this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 64; // ???
@@ -839,13 +840,13 @@ double *MoleculeMapper::GetBounds()
       this->Update();
     }
     input->GetBounds(this->Bounds);
-    // Pad bounds by 3 Angstrom to contain spheres, etc
-    this->Bounds[0] -= 3.0;
-    this->Bounds[1] += 3.0;
-    this->Bounds[2] -= 3.0;
-    this->Bounds[3] += 3.0;
-    this->Bounds[4] -= 3.0;
-    this->Bounds[5] += 3.0;
+    // Pad bounds by several Angstrom to contain spheres, etc
+    this->Bounds[0] -= pad_;
+    this->Bounds[1] += pad_;
+    this->Bounds[2] -= pad_;
+    this->Bounds[3] += pad_;
+    this->Bounds[4] -= pad_;
+    this->Bounds[5] += pad_;
   }
   return this->Bounds;
 }

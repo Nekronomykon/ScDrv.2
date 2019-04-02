@@ -9,7 +9,7 @@
 using namespace vtk;
 
 //----------------------------------------------------------------------------
-// vtkStandardNewMacro(CommandPickFragment);
+vtkStandardNewMacro(CommandPickFragment);
 
 //----------------------------------------------------------------------------
 // void CommandPickFragment::PrintSelf(ostream& os, vtkIndent indent)
@@ -41,7 +41,10 @@ void CommandPickFragment::Execute(vtkObject *caller, unsigned long eventId,
     // vtkSmartPointer<vtkSelection> result (selector->Select());
     vtkSelection* result(selector->Select());
     this->SetIdArrays(result);
+
+
     this->DumpMolSelection();
+
     result->Delete();
   }
 }
@@ -61,10 +64,10 @@ void CommandPickFragment::DumpMolSelection()
   // Print selection
   ostringstream osel;
   osel << " :: Selection ::"
-    << endl << "[Atoms]: " << this->IndexSelectedAtoms()->GetNumberOfTuples() << "::" << endl;
+    << endl << "[Atoms]: " << this->IndexSelectedAtoms()->GetNumberOfTuples() << ":" << endl;
   for (vtkIdType i = 0; i < this->IndexSelectedAtoms()->GetNumberOfTuples(); i++)
   {
-    osel << this->IndexSelectedAtoms()->GetValue(i) + 1 << "; ";
+    osel << this->IndexSelectedAtoms()->GetValue(i) << "; ";
   }
   osel << endl << "[Bonds]: " << this->IndexSelectedBonds()->GetNumberOfTuples() << "::" << endl;
   for (vtkIdType i = 0; i < this->IndexSelectedBonds()->GetNumberOfTuples(); i++)
@@ -74,6 +77,7 @@ void CommandPickFragment::DumpMolSelection()
       << bond.GetEndAtomId() << ");";
   }
   osel << endl << flush;
+  //
   QMessageBox::information(nullptr
     , QString("Selection")
     , QString(osel.str().c_str())

@@ -248,12 +248,12 @@
   </action>
   <action name="actionForget_">
    <property name="text">
-    <string>&amp;Forget this</string>
+    <string>F&amp;orget this</string>
    </property>
   </action>
   <action name="actionForgetAll_">
    <property name="text">
-    <string>Forget all &amp;recent</string>
+    <string>Forget &amp;all recent</string>
    </property>
   </action>
   <action name="actionFullScreen_">

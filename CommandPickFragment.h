@@ -31,7 +31,7 @@ namespace vtk
     : public vtkCommand
   {
   public:
-    static CommandPickFragment *New() { return new CommandPickFragment; }
+    static CommandPickFragment *New();
     vtkTypeMacro(CommandPickFragment, vtkCommand);
     // void PrintSelf(ostream& os, vtkIndent indent) override;
 

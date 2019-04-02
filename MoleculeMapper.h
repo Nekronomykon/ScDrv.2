@@ -233,6 +233,13 @@ namespace vtk
      */
     vtkNew<vtkPeriodicTable> PeriodicTable;
 
+    /**
+     * padding value
+     **/
+
+    double pad_;
+
+    /* */
     MoleculeMapperStyle styleMap_;
     /**
     * predefined styles:
