@@ -95,7 +95,9 @@ protected slots:
   void on_actionMolBalls__triggered();
   void on_actionMolStick__triggered();
   void on_actionMolSpace__triggered();
-
+  //
+  void on_actionSetFont__triggered();
+  //
   void loadPathContentFrom(const QString &);
   void setSceneBackground(const QString &);
 

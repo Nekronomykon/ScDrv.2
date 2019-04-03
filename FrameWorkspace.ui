@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_">
@@ -116,6 +116,7 @@
     <property name="title">
      <string>&amp;Tools</string>
     </property>
+    <addaction name="actionSetFont_"/>
     <addaction name="actionSourceEdit_"/>
     <addaction name="actionSourceCast_"/>
     <addaction name="separator"/>
@@ -367,6 +368,11 @@
   <action name="actionProjOrthogonal_">
    <property name="text">
     <string>Orthogonal</string>
+   </property>
+  </action>
+  <action name="actionSetFont_">
+   <property name="text">
+    <string>Set text &amp;font..</string>
    </property>
   </action>
  </widget>

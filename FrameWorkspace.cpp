@@ -15,6 +15,8 @@
 #include <QSplitter>
 #include <QListWidget>
 
+#include <QFontDialog>
+
 #include <vtkSphereSource.h>
 #include <vtkCamera.h>
 
@@ -598,4 +600,20 @@ void FrameWorkspace::on_actionExportScene__triggered()
 
 void FrameWorkspace::on_actionExportCoords__triggered()
 {
+}
+
+void FrameWorkspace::on_actionSetFont__triggered()
+{
+FrameFile *pOpen = this->getActiveChild();
+assert(pOpen);
+QWidget* pW = pOpen->setEditSource();
+assert(pW);
+
+QFontDialog::FontDialogOptions settings = // QFontDialog::NoButtons | 
+QFontDialog::DontUseNativeDialog | QFontDialog::ScalableFonts | QFontDialog::MonospacedFonts;
+
+bool ok;
+QFont font = QFontDialog::getFont(
+                &ok, pW->font(), this, tr("Set text edit font"), settings);
+                if(ok) pW->setFont(font);
 }
