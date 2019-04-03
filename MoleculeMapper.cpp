@@ -70,7 +70,7 @@ MoleculeMapper::MoleculeMapper()
   , RenderLattice(false)
   , GlyphDataInitialized(false)
   , areLabelDataInitialized_(false)
-  , pad_(1.5)
+  , pad_(2)
 {
   // Initialize ivars:
   this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 64; // ???

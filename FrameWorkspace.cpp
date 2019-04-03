@@ -12,22 +12,19 @@
 #include <QMdiSubWindow>
 #include <QMessageBox>
 #include <QFileDialog>
-
-#include <vtkGenericOpenGLRenderWindow.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkCamera.h>
+#include <QSplitter>
+#include <QListWidget>
 
 #include <vtkSphereSource.h>
-
+#include <vtkCamera.h>
 
 #include <vtkSmartPointer.h>
 
 // Constructor
 FrameWorkspace::FrameWorkspace(QWidget *parent)
   : QMainWindow(parent), edit_workspace_(new ViewWorkspace)
-  , view_files_(new ViewFilesystem), progress_(new QProgressBar)
+  , view_files_(new ViewFilesystem), view_file_content_(new ViewFileContent)
+  , progress_(new QProgressBar)
   , colors_back_(new ComboBoxColors)
 {
   this->setupUi(this);
@@ -208,7 +205,11 @@ void FrameWorkspace::setupDockingViews()
   pInit = new QDockWidget(tr("Files"), this);
   pInit->setWidget(view_files_);
   pNext = new QDockWidget(tr("Workspace"), this);
-  pNext->setWidget(edit_workspace_);
+  QSplitter *pForm = new QSplitter(Qt::Vertical);
+
+  pForm->addWidget(edit_workspace_);
+  pForm->addWidget(view_file_content_);
+  pNext->setWidget(pForm);
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
   this->tabifyDockWidget(pInit, pNext);
   pInit->show();

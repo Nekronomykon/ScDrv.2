@@ -30,7 +30,8 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include <vtkNew.h> // For vtkNew
+#include <vtkNew.h> // For vtkNew<>
+#include <vtkSmartPointer.h> // For vtkSmartPointer<>
 
 #include <vtkMapper.h>
 

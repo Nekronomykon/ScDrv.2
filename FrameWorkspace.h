@@ -16,12 +16,14 @@
 
 #include "ViewWorkspace.h"
 #include "ViewFilesystem.h"
+#include "ViewFileContent.h"
 #include "FrameFile.h"
 
 #include "ComboBoxColors.h"
 
 #include <QMainWindow>
 #include "ui_FrameWorkspace.h"
+
 
 class FrameWorkspace
     : public QMainWindow,
@@ -128,6 +130,7 @@ private:
   QPointer<ModelWorkspace> model_workspace_;
   QPointer<ViewWorkspace> edit_workspace_;
   QPointer<ViewFilesystem> view_files_;
+  QPointer<ViewFileContent> view_file_content_;
 
   QPointer<QProgressBar> progress_;
 
