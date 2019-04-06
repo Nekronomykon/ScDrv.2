@@ -65,7 +65,9 @@ vtkObjectFactoryNewMacro(MoleculeMapper);
 
 //----------------------------------------------------------------------------
 MoleculeMapper::MoleculeMapper()
-  : styleMap_(styleFast)
+  : AtomGlyphMapper(/* Glyph3DMap::New() */)
+  , BondGlyphMapper(/* Glyph3DMap::New() */)
+  , styleMap_(styleFast)
   , AtomicRadiusArrayName(nullptr)
   , RenderLattice(false)
   , GlyphDataInitialized(false)
@@ -133,8 +135,7 @@ MoleculeMapper::MoleculeMapper()
   (this->AtomGlyphPointOutput->GetOutputPort());
 
   this->BondGlyphPointOutput->SetOutput(this->BondGlyphPolyData);
-  this->BondGlyphMapper->SetInputConnection
-  (this->BondGlyphPointOutput->GetOutputPort());
+  this->BondGlyphMapper->SetInputConnection(this->BondGlyphPointOutput->GetOutputPort());
 
   this->LatticeMapper->SetInputData(this->LatticePolyData);
   this->LatticeMapper->SetColorModeToDefault();
@@ -172,20 +173,12 @@ void MoleculeMapper::GetSelectedAtomsAndBonds(vtkSelection *selection,
   vtkIdTypeArray *bondIds)
 {
   // Sanity check
-  if (selection == nullptr || (atomIds == nullptr && bondIds == nullptr))
-  {
-    return;
-  }
+  if (!selection) return; 
+  if (!atomIds && (!bondIds)) return;
 
   // Clear the inputs
-  if (atomIds != nullptr)
-  {
-    atomIds->Reset();
-  }
-  if (bondIds != nullptr)
-  {
-    bondIds->Reset();
-  }
+  if (atomIds) atomIds->Reset();
+  if (bondIds) bondIds->Reset();
 
   const vtkIdType numAtoms = this->GetInput()->GetNumberOfAtoms();
   const vtkIdType numBonds = this->GetInput()->GetNumberOfBonds();
@@ -199,7 +192,9 @@ void MoleculeMapper::GetSelectedAtomsAndBonds(vtkSelection *selection,
 
     // Check if the mapper is this instance of MoleculeMapper
     vtkActor *selActor = vtkActor::SafeDownCast(
-      node->GetProperties()->Get(vtkSelectionNode::PROP()));
+      node->GetProperties()->Get(vtkSelectionNode::PROP())
+    );
+
     if (selActor && (selActor->GetMapper() == this))
     {
       // Separate the selection ids into atoms and bonds

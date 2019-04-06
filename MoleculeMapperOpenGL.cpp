@@ -44,13 +44,11 @@ MoleculeMapperOpenGL::MoleculeMapperOpenGL()
 
   this->FastAtomMapper->AddObserver(vtkCommand::StartEvent, cb);
   this->FastAtomMapper->AddObserver(vtkCommand::EndEvent, cb);
-  this->FastAtomMapper->AddObserver(vtkCommand::ProgressEvent,
-    cb);
+  this->FastAtomMapper->AddObserver(vtkCommand::ProgressEvent, cb);
 
   this->FastBondMapper->AddObserver(vtkCommand::StartEvent, cb);
   this->FastBondMapper->AddObserver(vtkCommand::EndEvent, cb);
-  this->FastBondMapper->AddObserver(vtkCommand::ProgressEvent,
-    cb);
+  this->FastBondMapper->AddObserver(vtkCommand::ProgressEvent, cb);
 
   // Connect the trivial producers to forward the glyph polydata
   this->FastAtomMapper->SetInputConnection
@@ -82,10 +80,9 @@ void MoleculeMapperOpenGL::Render(vtkRenderer *ren, vtkActor *act)
   }
 }
 
-void MoleculeMapperOpenGL::ProcessSelectorPixelBuffers(
-  vtkHardwareSelector *sel,
-  std::vector<unsigned int> &pixeloffsets,
-  vtkProp *prop)
+void MoleculeMapperOpenGL::ProcessSelectorPixelBuffers(vtkHardwareSelector *sel
+, std::vector<unsigned int> &pixeloffsets
+, vtkProp *prop)
 {
   // forward to helper
   if (this->GetStyle().HasToRenderAtoms())
@@ -117,11 +114,11 @@ void MoleculeMapperOpenGL::ReleaseGraphicsResources(vtkWindow *w)
 void MoleculeMapperOpenGL::UpdateAtomGlyphPolyData()
 {
   this->Superclass::UpdateAtomGlyphPolyData();
-  this->FastAtomMapper->SetLookupTable(this->AtomGlyphMapper->GetLookupTable());
+  this->FastAtomMapper->SetLookupTable(this->GetAtomMapper()->GetLookupTable());
   this->FastAtomMapper->SetScaleArray("Scale Factors");
 
   // Copy the color array info:
-  this->FastAtomMapper->SelectColorArray(this->AtomGlyphMapper->GetArrayId());
+  this->FastAtomMapper->SelectColorArray(this->GetAtomMapper()->GetArrayId());
 }
 
 //----------------------------------------------------------------------------
@@ -139,7 +136,7 @@ void MoleculeMapperOpenGL::UpdateBondGlyphPolyData()
   default:
   case (MMStyle::DiscreteByAtom):
     this->FastBondMapper->SetLookupTable(
-      this->BondGlyphMapper->GetLookupTable());
+      this->GetBondMapper()->GetLookupTable());
     this->FastBondMapper->SetScalarRange
     (0, this->PeriodicTable->GetNumberOfElements());
     this->FastBondMapper->SetScalarModeToUsePointData();

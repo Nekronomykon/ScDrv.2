@@ -50,6 +50,9 @@ class vtkTrivialProducer;
 
 #include "MoleculeMapperStyle.h"
 
+// typedef vtkSmartPointer<vtkGlyph3DMapper> Glyph3DMap;
+typedef vtkNew<vtkGlyph3DMapper> Glyph3DMap;
+
 namespace vtk
 {
   class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
@@ -167,6 +170,13 @@ namespace vtk
     vtkSetStringMacro(AtomicRadiusArrayName);
     //@}
 
+    /**
+     * Get/Set Atoms/Bonds mappers (still Get only :)
+     *  
+     **/
+    vtkGlyph3DMapper* GetAtomMapper()const{return AtomGlyphMapper.Get();}
+    vtkGlyph3DMapper* GetBondMapper()const{return BondGlyphMapper.Get();}
+
   protected:
     MoleculeMapper();
     ~MoleculeMapper() override;
@@ -216,26 +226,27 @@ namespace vtk
     virtual void UpdateBondLabel();
     //@}
 
-    //@{
-    /**
-     * Internal mappers
-     */
-    vtkNew<vtkGlyph3DMapper> AtomGlyphMapper;
-    vtkNew<vtkGlyph3DMapper> BondGlyphMapper;
-    //@}
-
-    unsigned char LatticeColor[3];
-    vtkNew<vtkPolyData> LatticePolyData;
-    vtkNew<vtkPolyDataMapper> LatticeMapper;
-    virtual void UpdateLatticePolyData();
-
     /**
      * Periodic table for lookups
      */
     vtkNew<vtkPeriodicTable> PeriodicTable;
+    vtkNew<vtkPolyDataMapper> LatticeMapper;
+
+  private:
+    //@{
+    /**
+     * Internal mappers
+     */
+    Glyph3DMap AtomGlyphMapper;
+    Glyph3DMap BondGlyphMapper;
+    //@}
+
+    unsigned char LatticeColor[3];
+    vtkNew<vtkPolyData> LatticePolyData;
+    virtual void UpdateLatticePolyData();
 
     /**
-     * padding value
+     * padding value for the viewport
      **/
 
     double pad_;
@@ -250,7 +261,6 @@ namespace vtk
     static const MoleculeMapperStyle styleBallSticks;
     static const MoleculeMapperStyle styleCPK;
 
-  private:
     // delete:
     MoleculeMapper(const MoleculeMapper&) = delete;
     void operator=(const MoleculeMapper&) = delete;

@@ -54,8 +54,8 @@ public:
   /**
    * provide access to the underlying mappers
    */
-  vtkOpenGLSphereMapper *GetFastAtomMapper() {
-      return this->FastAtomMapper; }
+  vtkOpenGLSphereMapper *GetFastAtomMapper() {return this->FastAtomMapper; }
+  vtkOpenGLStickMapper  *GetFastBondMapper() {return this->FastBondMapper; }
   /**
    * allows a mapper to update a selections color buffers
    * Called from a prop which in turn is called from the selector
