@@ -65,8 +65,8 @@ vtkObjectFactoryNewMacro(MoleculeMapper);
 
 //----------------------------------------------------------------------------
 MoleculeMapper::MoleculeMapper()
-  : AtomGlyphMapper(/* Glyph3DMap::New() */)
-  , BondGlyphMapper(/* Glyph3DMap::New() */)
+  : glyphAtoms_(/* Glyph3DMap::New() */)
+  , glyphBonds_(/* Glyph3DMap::New() */)
   , styleMap_(styleFast)
   , AtomicRadiusArrayName(nullptr)
   , RenderLattice(false)
@@ -86,7 +86,7 @@ MoleculeMapper::MoleculeMapper()
   sphere->SetPhiResolution(50);
   sphere->SetThetaResolution(50);
   sphere->Update();
-  this->AtomGlyphMapper->SetSourceConnection(sphere->GetOutputPort());
+  this->glyphAtoms_->SetSourceConnection(sphere->GetOutputPort());
 
   vtkNew<vtkCylinderSource> cylinder;
   cylinder->SetRadius(1.0);
@@ -102,7 +102,7 @@ MoleculeMapper::MoleculeMapper()
   cylXformFilter->SetInputConnection(cylinder->GetOutputPort());
   cylXformFilter->SetTransform(cylXform);
   cylXformFilter->Update();
-  this->BondGlyphMapper->SetSourceConnection(cylXformFilter->GetOutputPort());
+  this->glyphBonds_->SetSourceConnection(cylXformFilter->GetOutputPort());
 
   // Configure default LookupTable
   vtkNew<vtkLookupTable> lut;
@@ -110,32 +110,32 @@ MoleculeMapper::MoleculeMapper()
   this->SetLookupTable(lut);
 
   // Setup glyph mappers
-  this->AtomGlyphMapper->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
-  this->AtomGlyphMapper->SetColorModeToMapScalars();
-  this->AtomGlyphMapper->SetScalarModeToUsePointFieldData();
-  this->AtomGlyphMapper->SetScaleModeToScaleByMagnitude();
-  this->BondGlyphMapper->SetScaleModeToScaleByVectorComponents();
+  this->glyphAtoms_->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
+  this->glyphAtoms_->SetColorModeToMapScalars();
+  this->glyphAtoms_->SetScalarModeToUsePointFieldData();
+  this->glyphAtoms_->SetScaleModeToScaleByMagnitude();
+  this->glyphBonds_->SetScaleModeToScaleByVectorComponents();
   // Bond color mode is setup during updates
 
   // Forward commands to instance mappers
   vtkNew<vtkEventForwarderCommand> cb;
   cb->SetTarget(this);
 
-  this->AtomGlyphMapper->AddObserver(vtkCommand::StartEvent, cb);
-  this->AtomGlyphMapper->AddObserver(vtkCommand::EndEvent, cb);
-  this->AtomGlyphMapper->AddObserver(vtkCommand::ProgressEvent, cb);
+  this->glyphAtoms_->AddObserver(vtkCommand::StartEvent, cb);
+  this->glyphAtoms_->AddObserver(vtkCommand::EndEvent, cb);
+  this->glyphAtoms_->AddObserver(vtkCommand::ProgressEvent, cb);
 
-  this->BondGlyphMapper->AddObserver(vtkCommand::StartEvent, cb);
-  this->BondGlyphMapper->AddObserver(vtkCommand::EndEvent, cb);
-  this->BondGlyphMapper->AddObserver(vtkCommand::ProgressEvent, cb);
+  this->glyphBonds_->AddObserver(vtkCommand::StartEvent, cb);
+  this->glyphBonds_->AddObserver(vtkCommand::EndEvent, cb);
+  this->glyphBonds_->AddObserver(vtkCommand::ProgressEvent, cb);
 
   // Connect the trivial producers to forward the glyph polydata
   this->AtomGlyphPointOutput->SetOutput(this->AtomGlyphPolyData);
-  this->AtomGlyphMapper->SetInputConnection
+  this->glyphAtoms_->SetInputConnection
   (this->AtomGlyphPointOutput->GetOutputPort());
 
   this->BondGlyphPointOutput->SetOutput(this->BondGlyphPolyData);
-  this->BondGlyphMapper->SetInputConnection(this->BondGlyphPointOutput->GetOutputPort());
+  this->glyphBonds_->SetInputConnection(this->BondGlyphPointOutput->GetOutputPort());
 
   this->LatticeMapper->SetInputData(this->LatticePolyData);
   this->LatticeMapper->SetColorModeToDefault();
@@ -238,12 +238,12 @@ void MoleculeMapper::GlyphRender(vtkRenderer *ren, vtkActor *act)
   // Pass rendering call on
   if (styleMap_.HasToRenderAtoms())
   {
-    this->AtomGlyphMapper->Render(ren, act);
+    this->glyphAtoms_->Render(ren, act);
   }
 
   if (this->GetStyle().HasToRenderBonds())
   {
-    this->BondGlyphMapper->Render(ren, act);
+    this->glyphBonds_->Render(ren, act);
   }
 
   if (this->RenderLattice)
@@ -342,13 +342,13 @@ void MoleculeMapper::UpdateAtomGlyphPolyData()
     {
       int colorArrayIdx =
         this->AtomGlyphPolyData->GetPointData()->AddArray(colorArray);
-      this->AtomGlyphMapper->SelectColorArray(colorArrayIdx);
+      this->glyphAtoms_->SelectColorArray(colorArrayIdx);
     }
     colorArray->Delete();
   }
 
   this->AtomGlyphPolyData->SetPoints(points.Get());
-  this->AtomGlyphMapper->SetLookupTable(this->LookupTable);
+  this->glyphAtoms_->SetLookupTable(this->LookupTable);
 
   vtkNew<vtkFloatArray> scaleFactors;
   scaleFactors->SetNumberOfComponents(1);
@@ -418,7 +418,7 @@ void MoleculeMapper::UpdateAtomGlyphPolyData()
   }
 
   this->AtomGlyphPolyData->GetPointData()->AddArray(scaleFactors);
-  this->AtomGlyphMapper->SetScaleArray("Scale Factors");
+  this->glyphAtoms_->SetScaleArray("Scale Factors");
 }
 
 //----------------------------------------------------------------------------
@@ -493,8 +493,8 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
     cylColors->Allocate(3 * numCylinders);
     cylColors->SetName("Colors");
     this->BondGlyphPolyData->GetPointData()->SetScalars(cylColors);
-    this->BondGlyphMapper->SetColorModeToDefault();
-    this->BondGlyphMapper->SetScalarModeToUsePointData();
+    this->glyphBonds_->SetColorModeToDefault();
+    this->glyphBonds_->SetScalarModeToUsePointData();
     break;
   default:
   case (MMStyle::DiscreteByAtom):
@@ -503,11 +503,11 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
     cylColors->Allocate(numCylinders);
     cylColors->SetName("Colors");
     this->BondGlyphPolyData->GetPointData()->SetScalars(cylColors);
-    this->BondGlyphMapper->SetLookupTable(this->LookupTable);
-    this->BondGlyphMapper->SetScalarRange
+    this->glyphBonds_->SetLookupTable(this->LookupTable);
+    this->glyphBonds_->SetScalarRange
     (0, this->PeriodicTable->GetNumberOfElements());
-    this->BondGlyphMapper->SetScalarModeToUsePointData();
-    this->AtomGlyphMapper->SetColorModeToMapScalars();
+    this->glyphBonds_->SetScalarModeToUsePointData();
+    this->glyphAtoms_->SetColorModeToMapScalars();
     break;
   }
 
@@ -712,10 +712,10 @@ void MoleculeMapper::UpdateBondGlyphPolyData()
   this->BondGlyphPolyData->Squeeze();
 
   // Setup glypher
-  this->BondGlyphMapper->SetScaleArray("Scale Factors");
-  this->BondGlyphMapper->SetOrientationArray("Orientation Vectors");
-  this->BondGlyphMapper->SetSelectionIdArray("Selection Ids");
-  this->BondGlyphMapper->UseSelectionIdsOn();
+  this->glyphBonds_->SetScaleArray("Scale Factors");
+  this->glyphBonds_->SetOrientationArray("Orientation Vectors");
+  this->glyphBonds_->SetSelectionIdArray("Selection Ids");
+  this->glyphBonds_->UseSelectionIdsOn();
 }
 
 //----------------------------------------------------------------------------
@@ -817,8 +817,8 @@ void MoleculeMapper::UpdateLatticePolyData()
 //----------------------------------------------------------------------------
 void MoleculeMapper::ReleaseGraphicsResources(vtkWindow *w)
 {
-  this->AtomGlyphMapper->ReleaseGraphicsResources(w);
-  this->BondGlyphMapper->ReleaseGraphicsResources(w);
+  this->glyphAtoms_->ReleaseGraphicsResources(w);
+  this->glyphBonds_->ReleaseGraphicsResources(w);
 }
 
 double *MoleculeMapper::GetBounds()
@@ -861,8 +861,8 @@ void MoleculeMapper::PrintSelf(ostream& os
   this->Superclass::PrintSelf(os, indent);
 
   os << indent << "AtomGlyphMapper:\n";
-  this->AtomGlyphMapper->PrintSelf(os, indent.GetNextIndent());
+  this->glyphAtoms_->PrintSelf(os, indent.GetNextIndent());
 
   os << indent << "BondGlyphMapper:\n";
-  this->BondGlyphMapper->PrintSelf(os, indent.GetNextIndent());
+  this->glyphBonds_->PrintSelf(os, indent.GetNextIndent());
 }

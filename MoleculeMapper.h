@@ -174,8 +174,8 @@ namespace vtk
      * Get/Set Atoms/Bonds mappers (still Get only :)
      *  
      **/
-    vtkGlyph3DMapper* GetAtomMapper()const{return AtomGlyphMapper.Get();}
-    vtkGlyph3DMapper* GetBondMapper()const{return BondGlyphMapper.Get();}
+    vtkGlyph3DMapper* GetAtomMapper()const{return glyphAtoms_.Get();}
+    vtkGlyph3DMapper* GetBondMapper()const{return glyphBonds_.Get();}
 
   protected:
     MoleculeMapper();
@@ -237,8 +237,8 @@ namespace vtk
     /**
      * Internal mappers
      */
-    Glyph3DMap AtomGlyphMapper;
-    Glyph3DMap BondGlyphMapper;
+    Glyph3DMap glyphAtoms_;
+    Glyph3DMap glyphBonds_;
     //@}
 
     unsigned char LatticeColor[3];

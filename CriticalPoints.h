@@ -17,16 +17,22 @@
 #include <vtkNew.h>
 
 class vtkPoints;
+class vtkMolecule;
+
+typedef vtkNew<vtkMolecule> Molecule;
+// typedef vtkSmartPointer<vtkMolecule> Molecule;
 
 class CriticalPoints
 : public vtkPoints
 {
-
 public:
   static CriticalPoints* New();
   vtkTypeMacro(CriticalPoints,vtkPoints)
   void PrintSelf(ostream &os, vtkIndent indent) override;
   void Initialize() override;
+
+  //accessor
+  vtkMolecule* GetMolecule() const {return molecule_;}
 
 protected:
   explicit CriticalPoints() = default;
@@ -37,8 +43,8 @@ private:
   void operator=(const CriticalPoints &) = delete;
 
 private:
-  vtkSmartPointer<vtkMolecule> molecule_;
-  // vtkNew<vtkPoints> points_;
+  Molecule molecule_;
+
 };
 
 #endif // !CriticalPointStructure_h
