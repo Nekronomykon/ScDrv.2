@@ -18,23 +18,27 @@
 using namespace vtk;
 
 #include "GraphPath.h"
+#include "CriticalPoints.h"
 
 #include <deque>
 #include <list>
 
 using namespace std;
 
-typedef pair<vtkIdType,vtkIdType> IncidenceIndex;
+typedef pair<vtkIdType, vtkIdType> IncidenceIndex;
 typedef deque<IncidenceIndex> PathSequence;
 typedef list<PathSequence> PathPool;
 typedef vtkSmartPointer<vtkIdTypeArray> IndexArray;
 
+typedef vtkSmartPointer<BondsetBuild> BuildBonds;
+typedef vtkSmartPointer<vtkMolecule> Molecule;
+typedef vtkNew<vtkMolecule> NewMolecule;
+
+typedef vtkNew<CriticalPoints> CritPoints;
+
 class MolecularStructure
 {
-  typedef vtkSmartPointer<BondsetBuild> BuildBonds;
-  typedef vtkSmartPointer<vtkMolecule> Molecule;
-  typedef vtkNew<vtkMolecule> NewMolecule;
- public:
+public:
   enum Units
   {
     Bohrs,
@@ -42,11 +46,10 @@ class MolecularStructure
     Picometers
   };
 
-
   explicit MolecularStructure();
   ~MolecularStructure();
 
-  vtkMolecule* Initialize();
+  vtkMolecule *Initialize();
 
   vtkMolecule *getMolecule() const;
   operator vtkMolecule *() const;
@@ -59,8 +62,9 @@ class MolecularStructure
 
 private:
   BuildBonds bonds_build_;
-  // data
-  vtkStdString title_;
+  // data./S  
+  CritPoints critical_;
+
   Molecule molecule_;
   IndexArray idxSelectedAtoms_;
   IndexArray idxSelectedBonds_;
