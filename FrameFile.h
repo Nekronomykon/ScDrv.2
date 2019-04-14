@@ -52,6 +52,8 @@ using namespace vtk;
 class FrameFile;
 typedef class FileFormatContext<FrameFile> FrameFileContext;
 
+typedef vtkNew<CriticalPoints> NewCritPoints;
+
 class FrameFile
     : public QTabWidget,
       public ImplFileName<FrameFile, QString>
@@ -215,7 +217,8 @@ private:
   FileContext format_current_;
 
   // vtkIdTypeArray positions_;
-  MolecularStructure structure_;
+  // MolecularStructure structure_;
+  NewCritPoints structure_;
   vtkNew<vtkStringArray> labelAtoms_;
   vtkNew<vtkStringArray> labelBonds_;
 

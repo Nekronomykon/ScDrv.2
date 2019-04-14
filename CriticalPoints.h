@@ -19,8 +19,8 @@
 class vtkPoints;
 class vtkMolecule;
 
-typedef vtkNew<vtkMolecule> Molecule;
-// typedef vtkSmartPointer<vtkMolecule> Molecule;
+typedef vtkNew<vtkMolecule> NewMolecule;
+typedef vtkSmartPointer<vtkMolecule> Molecule;
 
 class CriticalPoints
 : public vtkPoints
@@ -43,7 +43,7 @@ private:
   void operator=(const CriticalPoints &) = delete;
 
 private:
-  Molecule molecule_;
+  NewMolecule molecule_;
 
 };
 

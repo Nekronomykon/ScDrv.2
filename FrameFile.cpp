@@ -278,12 +278,18 @@ bool FrameFile::acquireUsing()
   if (!str.isEmpty())
   {
     vtkSmartPointer<T> reader(vtkSmartPointer<T>::New());
-    reader->SetOutput(structure_.Initialize());
+    NewMolecule molNew;
+    reader->SetOutput( molNew );
     QByteArray bytes = str.toLatin1();
     reader->ResetFileName(bytes.data());
-
     reader->Update();
-    structure_.UpdateBonds();
+
+    // structure_.UpdateBonds();
+    bonds_build_->SetInputData(molNew);
+    bonds_build_->SetOutput( this->getMolecule() );
+    bonds_build_->Update();
+
+
     this->ReadAdditionalInformation(reader.Get());
   }
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
@@ -315,7 +321,7 @@ inline bool FrameFile::ExportImageWith(const QString & name)
 // data facets
 vtkMolecule *FrameFile::getMolecule() const
 {
-  return structure_.getMolecule();
+  return structure_->GetMolecule();
 }
 
 // data views
@@ -364,7 +370,7 @@ void FrameFile::InterpretFileName()
 
 void FrameFile::doClearAll()
 {
-  structure_.Initialize();
+  structure_->Initialize();
   this->hideStructureViews();
   this->resetFormat();
   this->getEditSource()->setPlainText(tr(""));

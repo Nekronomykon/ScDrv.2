@@ -62,7 +62,8 @@ public:
 
 private:
   BuildBonds bonds_build_;
-  // data./S  
+  // data
+  vtkStdString title_;  
   CritPoints critical_;
 
   Molecule molecule_;
