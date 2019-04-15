@@ -44,6 +44,7 @@ namespace vtk
 
 class QVTKMoleculeWidget
     : public QVTKOpenGLNativeWidget
+// : public QVTKOpenGLWidget
 {
   Q_OBJECT
 public:
@@ -55,7 +56,6 @@ public:
   typedef vtkSmartPointer<vtkInteractorStyle> InteractorStyle;
 
 protected:
-
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
   void doRender();
@@ -64,7 +64,7 @@ public:
   vtkCamera *GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
   MoleculeMapper *GetMoleculeMapper() const { return mol_mapper_; }
 
-void ResetBgColor(const char* /*bytes*/ );
+  void ResetBgColor(const char * /*bytes*/);
 
   void SetMoleculeSpaceFill()
   {

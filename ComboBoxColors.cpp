@@ -1,7 +1,5 @@
 #include "ComboBoxColors.h"
 
-#include "QVTKMoleculeWidget.h"
-
 vtkStdString ComboBoxColors::bgcolor_default("antique_white");
 vtkNew<vtkNamedColors> ComboBoxColors::named_colors;
 

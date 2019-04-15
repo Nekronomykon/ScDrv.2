@@ -46,7 +46,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
     , styleInteractor_(IntStyleRbrBndPick::New())
 {
   // VTK Renderer setup
-  renderer_->SetUseFXAA(true); // antaliasing is now On
+  // renderer_->SetUseFXAA(true); // antaliasing is now On
 
   Actor mol(OpenGLActor::New());
   mol->SetMapper(mol_mapper_.Get());
@@ -83,8 +83,6 @@ void QVTKMoleculeWidget::doRender()
 {
   renderer_->SetBackground(bgColor_.GetData());
   this->renderWindow()->Render();
-  // this->GetMoleculeMapper()->Render();
-  // renderer_->Render();
 }
 
 void QVTKMoleculeWidget::ResetBgColor(const char* bytes)

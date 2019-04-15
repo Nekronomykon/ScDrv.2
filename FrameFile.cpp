@@ -274,6 +274,7 @@ bool FrameFile::acquireUsing()
     // bonds_build_->Update();
 
     this->ReadAdditionalInformation(reader.Get());
+    view_molecule_->ShowMolecule(reader->GetOutput());
   }
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
