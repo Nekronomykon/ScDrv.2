@@ -27,64 +27,64 @@ using namespace std;
 namespace vtk
 {
 
-  class CommandPickFragment
+class CommandPickFragment
     : public vtkCommand
+{
+public:
+  static CommandPickFragment *New();
+  vtkTypeMacro(CommandPickFragment, vtkCommand);
+  // void PrintSelf(ostream& os, vtkIndent indent) override;
+
+  // Adjust that
+  void Execute(vtkObject * /*caller*/, unsigned long /*eventId*/
+               ,
+               void * /*callData*/) override;
+
+  vtkIdTypeArray *IndexSelectedAtoms() const { return idxAtoms_.Get(); }
+  vtkIdTypeArray *IndexSelectedBonds() const { return idxBonds_.Get(); }
+
+  vtkRenderer *GetRenderer() const { return ptrRenderer_; }
+  vtkRenderer *ResetRenderer(vtkRenderer *ptr = nullptr)
   {
-  public:
-    static CommandPickFragment *New();
-    vtkTypeMacro(CommandPickFragment, vtkCommand);
-    // void PrintSelf(ostream& os, vtkIndent indent) override;
+    if (ptr != ptrRenderer_)
+      std::swap(ptr, ptrRenderer_);
+    return ptr;
+  }
 
-    // Adjust that
-    void Execute(vtkObject* /*caller*/, unsigned long /*eventId*/
-      , void* /*callData*/) override;
+  vtkAreaPicker *GetAreaPicker() const { return ptrAreaPicker_; }
+  vtkAreaPicker *ResetAreaPicker(vtkAreaPicker *ptr = nullptr)
+  {
+    if (ptr != ptrAreaPicker_)
+      std::swap(ptr, ptrAreaPicker_);
+    return ptr;
+  }
 
-    vtkIdTypeArray* IndexSelectedAtoms() const { return idxAtoms_.Get(); }
-    vtkIdTypeArray* IndexSelectedBonds() const { return idxBonds_.Get(); }
+  MoleculeMapper *GetMoleculeMapper() const { return ptrMoleculeMapper_; }
+  MoleculeMapper *ResetMoleculeMapper(MoleculeMapper *ptr = nullptr)
+  {
+    if (ptr != ptrMoleculeMapper_)
+      std::swap(ptr, ptrMoleculeMapper_);
+    return ptr;
+  }
 
-    vtkRenderer *GetRenderer() const { return ptrRenderer_; }
-    vtkRenderer *ResetRenderer(vtkRenderer* ptr = nullptr)
-    {
-      if (ptr != ptrRenderer_)
-        std::swap(ptr, ptrRenderer_);
-      return ptr;
-    }
+  void SetIdArrays(vtkSelection * /*sel*/);
 
-    vtkAreaPicker *GetAreaPicker() const { return ptrAreaPicker_; }
-    vtkAreaPicker *ResetAreaPicker(vtkAreaPicker* ptr = nullptr)
-    {
-      if (ptr != ptrAreaPicker_)
-        std::swap(ptr, ptrAreaPicker_);
-      return ptr;
-    }
+protected:
+  CommandPickFragment() = default;
+  ~CommandPickFragment() override = default;
 
-    MoleculeMapper *GetMoleculeMapper() const { return ptrMoleculeMapper_; }
-    MoleculeMapper *ResetMoleculeMapper(MoleculeMapper* ptr = nullptr)
-    {
-      if (ptr != ptrMoleculeMapper_)
-        std::swap(ptr, ptrMoleculeMapper_);
-      return ptr;
-    }
+  void DumpMolSelection();
 
-    void SetIdArrays(vtkSelection* /*sel*/);
+private:
+  // selection index:
+  vtkNew<vtkIdTypeArray> idxAtoms_;
+  vtkNew<vtkIdTypeArray> idxBonds_;
+  // temporary
+  vtkRenderer *ptrRenderer_ = nullptr;
+  vtkAreaPicker *ptrAreaPicker_ = nullptr;
 
-  protected:
-    CommandPickFragment() = default;
-    ~CommandPickFragment() override = default;
-
-    void DumpMolSelection();
-
-
-  private:
-    // selection index:
-    vtkNew<vtkIdTypeArray> idxAtoms_;
-    vtkNew<vtkIdTypeArray> idxBonds_;
-    // temporary
-    vtkRenderer *ptrRenderer_ = nullptr;
-    vtkAreaPicker *ptrAreaPicker_ = nullptr;
-
-    MoleculeMapper *ptrMoleculeMapper_;
-  };
+  MoleculeMapper *ptrMoleculeMapper_;
+};
 
 }; // namespace vtk
 

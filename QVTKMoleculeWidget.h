@@ -42,65 +42,73 @@ class vtkLabelPlacementMapper;
 namespace vtk
 {
 
-  class QVTKMoleculeWidget
-    : public QVTKOpenGLWidget
+class QVTKMoleculeWidget
+    : public QVTKOpenGLNativeWidget
+{
+  Q_OBJECT
+public:
+  typedef QVTKOpenGLNativeWidget BaseWidget;
+  // typedef QVTKOpenGLWidget BaseWidget;
+  explicit QVTKMoleculeWidget(QWidget * /*parent*/ = nullptr);
+  ~QVTKMoleculeWidget() override = default;
+
+  typedef vtkSmartPointer<vtkInteractorStyle> InteractorStyle;
+
+protected:
+
+public:
+  void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
+  void doRender();
+
+  vtkRenderer *GetRenderer() const { return renderer_; }
+  vtkCamera *GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
+  MoleculeMapper *GetMoleculeMapper() const { return mol_mapper_; }
+
+void ResetBgColor(const char* /*bytes*/ );
+
+  void SetMoleculeSpaceFill()
   {
-    Q_OBJECT
-  public:
-    typedef QVTKOpenGLWidget BaseWidget;
-    explicit QVTKMoleculeWidget(QWidget* /*parent*/ = nullptr);
-    ~QVTKMoleculeWidget() override = default;
+    mol_mapper_->UseSpaceFillSettings();
+    this->doRender();
+  }
+  void SetMoleculeBallsSticks()
+  {
+    mol_mapper_->UseBallAndStickSettings();
+    this->doRender();
+  }
+  void SetMoleculeSticksOnly()
+  {
+    mol_mapper_->UseSticksOnlySettings();
+    this->doRender();
+  }
+  void SetMoleculeFastRender()
+  {
+    mol_mapper_->UseFastRenderSettings();
+    this->doRender();
+  }
 
-    typedef vtkSmartPointer<vtkInteractorStyle> InteractorStyle;
+  bool MoleculeIsSpaceFill() const { return mol_mapper_->IsSetSpaceFill(); }
+  bool MoleculeIsBallsSticks() const { return mol_mapper_->IsSetBallsSticks(); }
+  bool MoleculeIsSticks() const { return mol_mapper_->IsSetSticksOnly(); }
+  bool MoleculeIsFast() const { return mol_mapper_->IsSetFastRender(); }
 
-  protected:
-    static vtkStdString name_background_default;
+private:
+  typedef vtkSmartPointer<vtkActor> Actor;
+  typedef vtkSmartPointer<MoleculeMapper> MolMapper;
+  typedef vtkSmartPointer<vtkLabelPlacementMapper> LabelMapper;
+  typedef vtkSmartPointer<vtkRenderer> Renderer;
+  typedef vtkSmartPointer<vtkAreaPicker> AreaPicker;
 
-    void AdjustBackgroundColor(void);
-
-  public:
-    void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
-    void doRender();
-
-    vtkRenderer* GetRenderer() const { return renderer_; }
-    vtkCamera*   GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
-    MoleculeMapper* GetMoleculeMapper() const { return mol_mapper_; }
-
-    static vtkStdString GetDefaultBackgroundColorName();
-    static vtkStdString ResetDefaultBackgroundColorName(vtkStdString name_new);
-
-    vtkStdString GetBackgroundColorName() const;
-    vtkStdString ResetBackgroundColorName(vtkStdString name_new);
-
-    void SetMoleculeSpaceFill() { mol_mapper_->UseSpaceFillSettings(); this->doRender(); }
-    void SetMoleculeBallsSticks() { mol_mapper_->UseBallAndStickSettings(); this->doRender(); }
-    void SetMoleculeSticksOnly() { mol_mapper_->UseSticksOnlySettings(); this->doRender(); }
-    void SetMoleculeFastRender() { mol_mapper_->UseFastRenderSettings(); this->doRender(); }
-
-    bool MoleculeIsSpaceFill() const { return mol_mapper_->IsSetSpaceFill(); }
-    bool MoleculeIsBallsSticks() const { return mol_mapper_->IsSetBallsSticks(); }
-    bool MoleculeIsSticks() const { return mol_mapper_->IsSetSticksOnly(); }
-    bool MoleculeIsFast() const { return mol_mapper_->IsSetFastRender(); }
-
-  private:
-    typedef vtkSmartPointer<vtkActor> Actor;
-    typedef vtkSmartPointer<MoleculeMapper> MolMapper;
-    typedef vtkSmartPointer<vtkLabelPlacementMapper> LabelMapper;
-    typedef vtkSmartPointer<vtkRenderer> Renderer;
-    typedef vtkSmartPointer<vtkAreaPicker> AreaPicker;
-
-  private:
-    Renderer renderer_;
-    vtkStdString name_background_;
-    vtkColor3d bgColor_;
-    MolMapper mol_mapper_;
-    LabelMapper labelAtoms_;
-    LabelMapper labelBonds_;
-    AreaPicker area_picker_;
-    InteractorStyle styleInteractor_;
-    vtkNew<CommandPickFragment> cmdPickFragment_;
-
-  };
+private:
+  Renderer renderer_;
+  vtkColor3d bgColor_;
+  MolMapper mol_mapper_;
+  LabelMapper labelAtoms_;
+  LabelMapper labelBonds_;
+  AreaPicker area_picker_;
+  InteractorStyle styleInteractor_;
+  vtkNew<CommandPickFragment> cmdPickFragment_;
+};
 
 }; // namespace vtk
 

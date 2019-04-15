@@ -31,6 +31,8 @@
 
 using namespace vtk;
 
+#include <vtkMoleculeMapper.h>
+
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
 
@@ -42,7 +44,7 @@ using namespace vtk;
 #include "ViewMoleculeBonds.h"
 
 #include "MoleculeAcquireFile.h"
-
+#include "MoleculeMapper.h"
 #include "MolecularStructure.h"
 
 #include "BondsetBuild.h"
@@ -75,7 +77,6 @@ public:
   // static methods:
   static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
 
-  static QStringList GetBackgroundColorNames();
 
   static QStringList getRecentFiles();
   static QStringList &recentFiles();
@@ -216,6 +217,7 @@ private:
 
   FileContext format_current_;
 
+  vtkNew<vtkMoleculeMapper> mol_mapper_;
   // vtkIdTypeArray positions_;
   // MolecularStructure structure_;
   NewCritPoints structure_;

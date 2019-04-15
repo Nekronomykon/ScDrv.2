@@ -432,13 +432,15 @@ void FrameWorkspace::loadPathContentFrom(const QString &file_path)
 void FrameWorkspace::setSceneBackground(const QString &name_col)
 {
   vtkStdString name_bytes(name_col.toLatin1().data());
-  FrameFile::ViewMolecule::ResetDefaultBackgroundColorName(name_bytes);
+
+  // ComboBoxColors::ResetDefaultBackgroundColorName(name_bytes);
+  
   FrameFile *pOpen = this->getActiveChild();
   if (pOpen)
   {
     FrameFile::ViewMolecule* pV = pOpen->setViewStructure();
     if (pV)
-      pV->ResetBackgroundColorName(name_bytes);
+      pV->ResetBgColor(name_bytes);
   }
 
 }

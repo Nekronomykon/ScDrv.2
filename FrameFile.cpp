@@ -54,27 +54,6 @@ inline QStringList FrameFile::getRecentFiles() { return recent_files; }
 
 inline QStringList &FrameFile::recentFiles() { return recent_files; }
 
-QStringList FrameFile::GetBackgroundColorNames()
-{
-  vtkNew<vtkNamedColors> colors;
-  vtkNew<vtkStringArray> col_names;
-
-  colors->GetColorNames(col_names);
-  QStringList names;
-  size_t nNames = col_names->GetSize();
-  for (size_t j = 0; j < nNames; ++j)
-  {
-    vtkStdString a_name(col_names->GetValue(j));
-    if (a_name.empty())
-      continue;
-    QString sName(tr(a_name.c_str()));
-    if (!sName.isEmpty())
-      names << sName;
-  }
-
-  return names;
-}
-
 void FrameFile::resetRecentFiles(QStringList again_recent)
 {
   std::swap(recent_files, again_recent);
@@ -241,12 +220,13 @@ FrameFile::FrameFile(QWidget *parent)
   //, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
-  this->setTabPosition(QTabWidget::South);
+  this->setTabPosition(QTabWidget::North);
   this->setTabShape(QTabWidget::Rounded);
   this->tabBar()->setAutoHide(true);
 
   //this->addViewWidget(edit_source_, tr("Source"));
   this->addViewWidget(view_source_, tr("Source"));
+  this->showStructureViews();
 
   this->doClearAll();
 }
@@ -278,17 +258,20 @@ bool FrameFile::acquireUsing()
   if (!str.isEmpty())
   {
     vtkSmartPointer<T> reader(vtkSmartPointer<T>::New());
-    NewMolecule molNew;
-    reader->SetOutput( molNew );
     QByteArray bytes = str.toLatin1();
     reader->ResetFileName(bytes.data());
-    reader->Update();
+
+    // NewMolecule molNew;
+    // reader->SetOutput( molNew );
+    reader->SetOutput(this->getMolecule()); // only atoms
 
     // structure_.UpdateBonds();
-    bonds_build_->SetInputData(molNew);
-    bonds_build_->SetOutput( this->getMolecule() );
-    bonds_build_->Update();
+    // bonds_build_->RemoveAllInputs();
+    // bonds_build_->SetInputData(molNew);
+    // bonds_build_->SetOutput( this->getMolecule() );
 
+    reader->Update();
+    // bonds_build_->Update();
 
     this->ReadAdditionalInformation(reader.Get());
   }
@@ -309,7 +292,7 @@ inline bool FrameFile::ExportImageWith(const QString & name)
   this->SetupImageWriter(write_image.GetPointer());
   {
     vtkNew<vtkWindowToImageFilter> w2img;
-    w2img->SetInput(pMolView->GetRenderWindow());
+    w2img->SetInput(pMolView->renderWindow());
     write_image->SetInputConnection(w2img->GetOutputPort());
   }
   write_image->SetFileName(FileNameRoot::getPtrFrom(name));
@@ -370,22 +353,23 @@ void FrameFile::InterpretFileName()
 
 void FrameFile::doClearAll()
 {
-  structure_->Initialize();
   this->hideStructureViews();
   this->resetFormat();
   this->getEditSource()->setPlainText(tr(""));
   this->getEditSource()->setReadOnly(false);
+
+  structure_->Initialize();
 }
 
 void FrameFile::hideStructureViews()
 {
-  this->setCurrentWidget(view_source_);
-  while (this->count() > 1)
-  {
-    this->removeTab(1);
-  }
-  view_current_.resize(1);
-  view_current_[0] = view_source_; // may be excessive, but...
+  // this->setCurrentWidget(view_source_);
+  // while (this->count() > 1)
+  // {
+  //   this->removeTab(1);
+  // }
+  // view_current_.resize(1);
+  // view_current_[0] = view_source_; // may be excessive, but...
 }
 
 void FrameFile::showStructureViews()
