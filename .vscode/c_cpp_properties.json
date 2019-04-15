@@ -22,7 +22,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Serge\\VTK\\include\\vtk-8.2\\*",
+                "C:\\Serge\\VTK\\include\\vtk-8.90\\*",
                 "C:\\Qt\\5.12.2\\msvc2017_64\\include\\*",
                 "C:\\Qt\\5.12.2\\msvc2017_64\\include\\QtCore\\*",
                 "C:\\Qt\\5.12.2\\msvc2017_64\\include\\QtGui\\*",
