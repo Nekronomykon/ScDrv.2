@@ -174,6 +174,7 @@ public:
 
   // facets
   vtkMolecule *getMolecule() const;
+  void UpdateBonds();
 
   // views
   EditTextSource *getEditSource() const;

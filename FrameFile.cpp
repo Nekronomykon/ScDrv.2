@@ -301,9 +301,22 @@ bool FrameFile::acquireUsing()
     // bonds_build_->Update();
 
     this->ReadAdditionalInformation(reader.Get());
-    view_molecule_->ShowMolecule(reader->GetOutput());
+    this->UpdateBonds();
+    view_molecule_->ShowMolecule(this->getMolecule());
   }
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
+}
+
+void FrameFile::UpdateBonds()
+{
+  if (!bonds_build_)
+    return;
+  NewMolecule newmol;
+  bonds_build_->SetOutput(newmol);
+  bonds_build_->RemoveAllInputs();
+  bonds_build_->SetInputData(this->getMolecule());
+  bonds_build_->Update();
+  this->getMolecule()->DeepCopy(newmol);
 }
 
 template <class T>
