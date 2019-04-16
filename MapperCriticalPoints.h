@@ -41,7 +41,7 @@ namespace vtk
    : public vtkMapper
   {
   public:
-  }
+  };
 }; // namespace vtk;
 
 #endif // !MapperCriticalPoints_h
