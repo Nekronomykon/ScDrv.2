@@ -247,7 +247,7 @@ FrameFile::FrameFile(QWidget *parent)
 //, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
-  this->setTabPosition(QTabWidget::North);
+  this->setTabPosition(QTabWidget::South);
   this->setTabShape(QTabWidget::Rounded);
   this->tabBar()->setAutoHide(true);
 

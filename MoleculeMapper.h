@@ -6,7 +6,7 @@
   Program:   Visualization Toolkit Local Fork
   Module:    MoleculeMapper.h
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
