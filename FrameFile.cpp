@@ -73,6 +73,7 @@ bool FrameFile::ResetBackgroundColorName(const vtkStdString &name)
   name_colors->GetColor(name, view_molecule_->backgroundColor());
   ResetDefaultBgColorName(name);
   view_molecule_->doRender();
+  return true;
 }
 
 vtkStdString FrameFile::GetBackgroundColorName() const { return nameBgColor_; }
