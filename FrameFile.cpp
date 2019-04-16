@@ -15,6 +15,7 @@
 #include <QFileInfo>
 
 #include <vtkStringArray.h>
+#include <vtkStdString.h>
 
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
@@ -46,6 +47,7 @@ QStringList FrameFile::recent_files;
 
 QMap<FrameFile::FileContext, QString> FrameFile::all_formats;
 FrameFile::FileContext FrameFile::format_active;
+vtkStdString FrameFile::NameDefaultBgColor("antique_white");
 
 // static functions
 FrameFile *FrameFile::New(QWidget *parent) { return new FrameFile(parent); }
@@ -57,6 +59,29 @@ inline QStringList &FrameFile::recentFiles() { return recent_files; }
 void FrameFile::resetRecentFiles(QStringList again_recent)
 {
   std::swap(recent_files, again_recent);
+}
+
+bool FrameFile::ResetBackgroundColorName(const vtkStdString &name)
+{
+  if (!nameBgColor_.compare(name))
+    return true;
+
+  vtkNew<vtkNamedColors> name_colors;
+  if (!name_colors->ColorExists(name))
+    return false;
+  nameBgColor_ = name;
+  name_colors->GetColor(name, view_molecule_->backgroundColor());
+  ResetDefaultBgColorName(name);
+  view_molecule_->doRender();
+}
+
+vtkStdString FrameFile::GetBackgroundColorName() const { return nameBgColor_; }
+
+void FrameFile::ResetDefaultBgColorName(const vtkStdString &name)
+{
+  vtkNew<vtkNamedColors> named_colors;
+  if (named_colors->ColorExists(name))
+    NameDefaultBgColor = name;
 }
 
 void FrameFile::BuildFileContext()
@@ -99,6 +124,7 @@ FrameFile::FileContext FrameFile::CastInputPathFormat(const QString &path)
 
 QString FrameFile::keyRecentFiles() { return QStringLiteral("RecentFiles"); }
 QString FrameFile::keyFile() { return QStringLiteral("File"); }
+QString FrameFile::keyDefaultBgColor() { return QStringLiteral("BackgroundColor"); }
 
 void FrameFile::storeRecentFiles(QSettings &s)
 {
@@ -215,9 +241,9 @@ void FrameFile::ClearFileInputContext()
 
 // this-driven functions
 FrameFile::FrameFile(QWidget *parent)
-  : QTabWidget(parent), format_current_(format_active), bonds_build_(BuildBonds::New())
-  //, extend_(new QToolButton(this))
-  //, compress_(new QToolButton(this))
+    : QTabWidget(parent), format_current_(format_active), bonds_build_(BuildBonds::New())
+//, extend_(new QToolButton(this))
+//, compress_(new QToolButton(this))
 {
   this->setAttribute(Qt::WA_DeleteOnClose);
   this->setTabPosition(QTabWidget::North);
@@ -227,6 +253,7 @@ FrameFile::FrameFile(QWidget *parent)
   //this->addViewWidget(edit_source_, tr("Source"));
   this->addViewWidget(view_source_, tr("Source"));
   this->showStructureViews();
+  this->ResetBackgroundColorName(GetDefaultBgColorName());
 
   this->doClearAll();
 }
@@ -279,8 +306,8 @@ bool FrameFile::acquireUsing()
   return bool(this->getMolecule()->GetNumberOfAtoms() > 0);
 }
 
-template<class T>
-inline bool FrameFile::ExportImageWith(const QString & name)
+template <class T>
+inline bool FrameFile::ExportImageWith(const QString &name)
 {
   FrameFile::ViewMolecule *pMolView = this->setViewStructure();
   assert(pMolView);
@@ -400,7 +427,7 @@ bool FrameFile::readTextSource(const TypeFileName &from)
   if (!file.open(QIODevice::Text | QIODevice::ReadOnly))
     return false;
 
-  auto* pSrc = this->getEditSource();
+  auto *pSrc = this->getEditSource();
   assert(pSrc);
 
   pSrc->load(&file);
@@ -411,7 +438,7 @@ bool FrameFile::readTextSource(const TypeFileName &from)
 
 bool FrameFile::saveTextSource(const TypeFileName &path_to) const
 {
-  auto* pSrc = this->getEditSource();
+  auto *pSrc = this->getEditSource();
   assert(pSrc);
 
   pSrc->dump();
@@ -446,7 +473,8 @@ bool FrameFile::writeSceneAsPNG(const TypeFileName &save_path)
   // Temporary; kind of file extension mangling
   QString save_file(save_path);
   QString ext(tr(".png"));
-  if (!save_file.endsWith(ext)) save_file += ext;
+  if (!save_file.endsWith(ext))
+    save_file += ext;
 
   return this->ExportImageWith<vtkPNGWriter>(save_file);
 }
@@ -456,7 +484,8 @@ bool FrameFile::writeSceneAsJPEG(const TypeFileName &save_path)
   // Temporary; kind of file extension mangling
   QString save_file(save_path);
   QString ext(tr(".jpg"));
-  if (!save_file.endsWith(ext)) save_file += ext;
+  if (!save_file.endsWith(ext))
+    save_file += ext;
 
   return this->ExportImageWith<vtkJPEGWriter>(save_file);
 }
@@ -466,7 +495,8 @@ bool FrameFile::writeSceneAsBitmap(const TypeFileName &save_path)
   // Temporary; kind of file extension mangling
   QString save_file(save_path);
   QString ext(tr(".bmp"));
-  if (!save_file.endsWith(ext)) save_file += ext;
+  if (!save_file.endsWith(ext))
+    save_file += ext;
 
   return this->ExportImageWith<vtkBMPWriter>(save_file);
 }
@@ -476,7 +506,8 @@ bool FrameFile::writeSceneAsPostScript(const TypeFileName &save_path)
   // Temporary; kind of file extension mangling
   QString save_file(save_path);
   QString ext(tr(".eps"));
-  if (!save_file.endsWith(ext)) save_file += ext;
+  if (!save_file.endsWith(ext))
+    save_file += ext;
 
   return this->ExportImageWith<vtkPostScriptWriter>(save_file);
 }

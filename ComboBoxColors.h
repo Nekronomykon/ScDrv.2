@@ -14,15 +14,8 @@ class ComboBoxColors
 public:
   ComboBoxColors(QWidget * /*parent*/ = nullptr);
 
-  static QStringList GetBackgroundColorNames();
-
-  vtkStdString GetBackgroundColorName() const;
-  vtkStdString ResetBackgroundColorName(vtkStdString name_new);
-
-
 private:
-  static vtkNew<vtkNamedColors> named_colors;
-  static vtkStdString bgcolor_default;
+  static QStringList ColorNames();
 };
 
 #endif // !ComboBox_NamedColors_h

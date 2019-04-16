@@ -37,8 +37,12 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   // Set up action signals and slots
   connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
   connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
+
   connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
           this, &FrameWorkspace::loadPathContentFrom);
+
+  QString sColBg(this->getActiveChild()->GetBackgroundColorName().c_str());
+  colors_back_->setCurrentText(sColBg);
   connect(colors_back_, &ComboBoxColors::currentTextChanged, this, &FrameWorkspace::setSceneBackground);
 
   // progress_->setWidth(200);
@@ -433,11 +437,7 @@ void FrameWorkspace::setSceneBackground(const QString &name_col)
 
   FrameFile *pOpen = this->getActiveChild();
   if (pOpen)
-  {
-    FrameFile::ViewMolecule *pV = pOpen->setViewStructure();
-    if (pV)
-      pV->ResetBgColor(name_bytes);
-  }
+    pOpen->ResetBackgroundColorName(name_bytes);
 }
 
 // Auto-assigned event handlers:
@@ -591,9 +591,7 @@ void FrameWorkspace::on_actionExportScene__triggered()
     else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
       pOpen->writeSceneAsPostScript(save_file);
     else
-      QMessageBox::information(this
-      , tr("Unknown format")
-      , tr("Show me the easy way from here to PDF, please!"),
+      QMessageBox::information(this, tr("Unknown format"), tr("Show me the easy way from here to PDF, please!"),
                                QMessageBox::Close);
   }
 }

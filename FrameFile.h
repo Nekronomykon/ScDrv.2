@@ -21,8 +21,9 @@
 
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
+
 #include <vtkIdTypeArray.h>
-#include <vtkMolecule.h>
+#include <vtkStdString.h>
 
 #include "EditTextSource.h"
 #include "QVTKMoleculeWidget.h"
@@ -77,7 +78,6 @@ public:
   // static methods:
   static FrameFile *New(QWidget * /*parent*/ = Q_NULLPTR); // cf. mechanism in VTK
 
-
   static QStringList getRecentFiles();
   static QStringList &recentFiles();
   static void resetRecentFiles(QStringList /*rclf*/ = QStringList());
@@ -90,6 +90,8 @@ public:
 
   static QString keyRecentFiles();
   static QString keyFile();
+  static QString keyDefaultBgColor();
+
   static void storeRecentFiles(QSettings &s);
 
   static inline void loadRecentFiles(QSettings &s);
@@ -145,6 +147,12 @@ public:
     }
     return res;
   }
+
+  bool ResetBackgroundColorName(const vtkStdString &name);
+  vtkStdString GetBackgroundColorName() const;
+
+  static vtkStdString GetDefaultBgColorName() { return NameDefaultBgColor; }
+  static void ResetDefaultBgColorName(const vtkStdString &name);
 
   // Reader functionality
   bool interpretNone();
@@ -231,6 +239,9 @@ private:
   // QPointer<EditSource> edit_source_;
   QPointer<ViewSource> view_source_;
   QPointer<QVTKMoleculeWidget> view_molecule_ = nullptr;
+  static vtkStdString NameDefaultBgColor;
+  vtkStdString nameBgColor_;
+
   QPointer<ViewMoleculeAtomic> view_atomic_ = nullptr;
   QPointer<ViewMoleculeBonds> view_bonds_ = nullptr;
 };

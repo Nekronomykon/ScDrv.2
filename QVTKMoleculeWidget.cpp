@@ -84,10 +84,3 @@ void QVTKMoleculeWidget::doRender()
   renderer_->SetBackground(bgColor_.GetData());
   this->renderWindow()->Render();
 }
-
-void QVTKMoleculeWidget::ResetBgColor(const char* bytes)
-{
-  vtkNew<vtkNamedColors> colors;
-  bgColor_= colors->GetColor3d(vtkStdString(bytes));
-  this->doRender();
-}

@@ -48,6 +48,8 @@ class QVTKMoleculeWidget
 {
   Q_OBJECT
 public:
+  typedef vtkColor3d BgColorType;
+
   typedef QVTKOpenGLNativeWidget BaseWidget;
   // typedef QVTKOpenGLWidget BaseWidget;
   explicit QVTKMoleculeWidget(QWidget * /*parent*/ = nullptr);
@@ -63,8 +65,6 @@ public:
   vtkRenderer *GetRenderer() const { return renderer_; }
   vtkCamera *GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
   MoleculeMapper *GetMoleculeMapper() const { return mol_mapper_; }
-
-  void ResetBgColor(const char * /*bytes*/);
 
   void SetMoleculeSpaceFill()
   {
@@ -92,6 +92,8 @@ public:
   bool MoleculeIsSticks() const { return mol_mapper_->IsSetSticksOnly(); }
   bool MoleculeIsFast() const { return mol_mapper_->IsSetFastRender(); }
 
+  BgColorType &backgroundColor() { return bgColor_; }
+
 private:
   typedef vtkSmartPointer<vtkActor> Actor;
   typedef vtkSmartPointer<MoleculeMapper> MolMapper;
@@ -101,7 +103,7 @@ private:
 
 private:
   Renderer renderer_;
-  vtkColor3d bgColor_;
+  BgColorType bgColor_;
   MolMapper mol_mapper_;
   LabelMapper labelAtoms_;
   LabelMapper labelBonds_;

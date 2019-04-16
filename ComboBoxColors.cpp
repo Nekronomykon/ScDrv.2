@@ -1,29 +1,22 @@
 #include "ComboBoxColors.h"
 
-vtkStdString ComboBoxColors::bgcolor_default("antique_white");
-vtkNew<vtkNamedColors> ComboBoxColors::named_colors;
+#include <vtkNamedColors.h>
+
 
 ComboBoxColors::ComboBoxColors(QWidget *parent)
     : QComboBox(parent)
 {
-  this->addItems(GetBackgroundColorNames());
-
-  QString name(bgcolor_default.c_str());
-
-  int nSel = this->findText(name);
-  if (nSel < 0)
-    name = tr("white"); // ??
-  this->setCurrentText(name);
+  this->addItems(ColorNames());
 }
 
-QStringList ComboBoxColors::GetBackgroundColorNames()
+QStringList ComboBoxColors::ColorNames()
 {
   static QStringList allNames;
-  
+
   if (allNames.isEmpty())
   {
     vtkNew<vtkStringArray> col_names;
-
+    vtkNew<vtkNamedColors> named_colors;
     named_colors->GetColorNames(col_names);
     size_t nNames = col_names->GetSize();
     for (size_t j = 0; j < nNames; ++j)
@@ -36,6 +29,6 @@ QStringList ComboBoxColors::GetBackgroundColorNames()
         allNames << sName;
     }
   }
+
   return allNames;
 }
-
