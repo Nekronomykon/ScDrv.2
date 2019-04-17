@@ -108,6 +108,9 @@ protected:
   explicit MoleculeAcquireFileQTAIM() = default;
   ~MoleculeAcquireFileQTAIM() override = default;
 
+  template<class Stream>
+  vtkIdType ReadNumberCPs(Stream& sin); 
+
 private:
   MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
   void operator=(const MoleculeAcquireFileQTAIM &) = delete;

@@ -30,18 +30,26 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include <vtkNew.h> // For vtkNew<>
+#include <vtkNew.h>          // For vtkNew<>
 #include <vtkSmartPointer.h> // For vtkSmartPointer<>
 
 #include <vtkMapper.h>
 
 namespace vtk
 {
-  class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MapperCriticalPoints
-   : public vtkMapper
-  {
-  public:
-  };
-}; // namespace vtk;
+class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MapperCriticalPoints
+    : public vtkMapper
+{
+public:
+  static MapperCriticalPoints *New();
+  vtkTypeMacro(MapperCriticalPoints, vtkMapper);
+  void PrintSelf(ostream &os, vtkIndent indent) override;
+
+protected:
+  MapperCriticalPoints();
+  ~MapperCriticalPoints() override;
+};
+
+}; // namespace vtk
 
 #endif // !MapperCriticalPoints_h

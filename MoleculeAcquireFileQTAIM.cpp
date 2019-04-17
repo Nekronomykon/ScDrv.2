@@ -38,3 +38,20 @@ void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
     // << (this->HasFileName() ? this->GetFileName() : "(null)" ) 
     << std::endl;
 }
+
+//----------------------------------------------------------------------------
+template <class Stream>
+vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(Stream &sin)
+{
+  vtkIdType nRes = 0;
+  string str_one;
+  getline(sin, str_one);
+  do
+  {
+    if(str_one.empty())
+    continue;
+    /* code */
+  } while (getline(sin, str_one));
+  this->ResetNumberCPs(nRes);
+  return nRes;
+}

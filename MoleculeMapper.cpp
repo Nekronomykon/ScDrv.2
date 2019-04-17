@@ -1,15 +1,14 @@
 /*=========================================================================
 
   Program:   Visualization Toolkit Local Fork
-  Module:    MoleculeMapper.cxx
+  Module:    MoleculeMapper.cpp
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
+     
+    This software is distributed WITHOUT ANY WARRANTY; without even
+    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+    PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
 #include "MoleculeMapper.h"
@@ -60,7 +59,7 @@ const MoleculeMapperStyle MoleculeMapper::styleSticks =
 // Note this class may have an accelerated subclass ala
 // vtkOpenGLMoleculeMapper. If you change this class please
 // also check that class for impacts.
-vtkObjectFactoryNewMacro(MoleculeMapper);
+vtkStandardNewMacro(MoleculeMapper)
 
 //----------------------------------------------------------------------------
 MoleculeMapper::MoleculeMapper()

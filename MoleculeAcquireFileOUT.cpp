@@ -36,7 +36,7 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileOUT);
 
 //----------------------------------------------------------------------------
-  int MoleculeAcquireFileOUT:: ParseStreamInfo(BaseInput & file_in,vtkInformationVector*)
+int MoleculeAcquireFileOUT::ParseStreamInfo(BaseInput &file_in, vtkInformationVector *)
 {
   int natoms = 0;
   string str_line;
@@ -48,8 +48,7 @@ vtkStandardNewMacro(MoleculeAcquireFileOUT);
   }
   do
   {
-    if (str_line.size() < 50
-      || str_line.compare(29, 21, "CARTESIAN COORDINATES"))
+    if (str_line.size() < 50 || str_line.compare(29, 21, "CARTESIAN COORDINATES"))
       continue;
 
     // init scan results:
@@ -64,7 +63,7 @@ vtkStandardNewMacro(MoleculeAcquireFileOUT);
 }
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileOUT::ReadSimpleMolecule(BaseInput & file_in, Molecule *output)
+int MoleculeAcquireFileOUT::ReadSimpleMolecule(BaseInput &file_in, Molecule *output)
 {
   int timestep = 0;
   int nbAtoms = 0;
@@ -96,13 +95,13 @@ int MoleculeAcquireFileOUT::ReadSimpleMolecule(BaseInput & file_in, Molecule *ou
       if (nResult)
       {
         if (nResult > 0)
-          vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom #" << nResult
-            << " from " << this->FileName()
-            << " Premature EOF while reading molecule.");
+          vtkErrorMacro(<< "MoleculeAcquireFileOUT error reading atom #" << nResult
+                        << " from " << this->FileName()
+                        << " Premature EOF while reading molecule.");
         if (nResult > 0)
-          vtkErrorMacro(<< "MoleculeAcquireFileXYZ error parsing atom #" << -nResult
-            << " from " << this->FileName()
-            << " Premature EOF while reading molecule.");
+          vtkErrorMacro(<< "MoleculeAcquireFileOUT error parsing atom #" << -nResult
+                        << " from " << this->FileName()
+                        << " Premature EOF while reading molecule.");
         return 0;
       }
       break;

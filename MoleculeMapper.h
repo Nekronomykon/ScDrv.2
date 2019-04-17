@@ -30,7 +30,7 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include <vtkNew.h> // For vtkNew<>
+#include <vtkNew.h>          // For vtkNew<>
 #include <vtkSmartPointer.h> // For vtkSmartPointer<>
 
 #include <vtkMapper.h>
@@ -55,216 +55,218 @@ typedef vtkNew<vtkGlyph3DMapper> Glyph3DMap;
 
 namespace vtk
 {
-  class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
-  {
-  public:
-    typedef MoleculeMapperStyle MMStyle;
+class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
+{
+public:
+  typedef MoleculeMapperStyle MMStyle;
 
-    static MoleculeMapper *New();
-    vtkTypeMacro(MoleculeMapper, vtkMapper);
-    void PrintSelf(ostream& os, vtkIndent indent) override;
+  static MoleculeMapper *New();
+  vtkTypeMacro(MoleculeMapper, vtkMapper);
+  void PrintSelf(ostream &os, vtkIndent indent) override;
 
-    //@{
-    /**
+  //@{
+  /**
      * Get/Set the input vtkMolecule.
      */
-    void SetInputData(vtkMolecule *in);
-    vtkMolecule *GetInput();
-    //@}
-    MoleculeMapperStyle& Style() { return styleMap_; }
-    const MoleculeMapperStyle& CurrentStyle() const { return styleMap_; }
-    MoleculeMapperStyle GetStyle() const { return styleMap_; }
-    void ResetStyleToDefault() { /*return*/ this->SetStyle(styleFast); }
-    void SetStyle(const MoleculeMapperStyle& msty)
-    {
-      if (styleMap_ != msty)
-        this->GlyphDataInitialized = false;
+  void SetInputData(vtkMolecule *in);
+  vtkMolecule *GetInput();
+  //@}
+  MoleculeMapperStyle &Style() { return styleMap_; }
+  const MoleculeMapperStyle &CurrentStyle() const { return styleMap_; }
+  MoleculeMapperStyle GetStyle() const { return styleMap_; }
+  void ResetStyleToDefault()
+  { /*return*/
+    this->SetStyle(styleFast);
+  }
+  void SetStyle(const MoleculeMapperStyle &msty)
+  {
+    if (styleMap_ != msty)
+      this->GlyphDataInitialized = false;
 
-      styleMap_ = msty;
-    }
+    styleMap_ = msty;
+  }
 
-    /**
+  /**
     * Predefined styles in use:
     */
-    void UseBallAndStickSettings() { this->SetStyle(styleBallSticks); }
-    bool IsSetBallsSticks() const { return (styleMap_ == styleBallSticks); }
+  void UseBallAndStickSettings() { this->SetStyle(styleBallSticks); }
+  bool IsSetBallsSticks() const { return (styleMap_ == styleBallSticks); }
 
-    void UseSticksOnlySettings() { this->SetStyle(styleSticks); }
-    bool IsSetSticksOnly() const { return (styleMap_ == styleSticks); }
+  void UseSticksOnlySettings() { this->SetStyle(styleSticks); }
+  bool IsSetSticksOnly() const { return (styleMap_ == styleSticks); }
 
-    void UseSpaceFillSettings() { this->SetStyle(styleCPK); }
-    bool IsSetSpaceFill() const { return (styleMap_ == styleCPK); }
+  void UseSpaceFillSettings() { this->SetStyle(styleCPK); }
+  bool IsSetSpaceFill() const { return (styleMap_ == styleCPK); }
 
-    void UseFastRenderSettings() { this->SetStyle(styleFast); }
-    bool IsSetFastRender() const { return (styleMap_ == styleFast); }
+  void UseFastRenderSettings() { this->SetStyle(styleFast); }
+  bool IsSetFastRender() const { return (styleMap_ == styleFast); }
 
-    //@{
-    /**
+  //@{
+  /**
      * Get/Set whether or not to render the unit cell lattice, if present.
      * Default: On.
      */
-    vtkGetMacro(RenderLattice, bool);
-    vtkSetMacro(RenderLattice, bool);
-    vtkBooleanMacro(RenderLattice, bool);
-    //@}
+  vtkGetMacro(RenderLattice, bool);
+  vtkSetMacro(RenderLattice, bool);
+  vtkBooleanMacro(RenderLattice, bool);
+  //@}
 
-    //@{
-    /**
+  //@{
+  /**
      * Get/Set the color of the bonds as an rgb tuple.
      * Default: {50, 50, 50} (dark grey)
      */
-    vtkGetVector3Macro(BondColor, unsigned char);
-    vtkSetVector3Macro(BondColor, unsigned char);
-    //@}
+  vtkGetVector3Macro(BondColor, unsigned char);
+  vtkSetVector3Macro(BondColor, unsigned char);
+  //@}
 
-
-    //@{
-    /**
+  //@{
+  /**
      * Get/Set the color of the bonds as an rgb tuple.
      * Default: {255, 255, 255} (white)
      */
-    vtkGetVector3Macro(LatticeColor, unsigned char);
-    vtkSetVector3Macro(LatticeColor, unsigned char);
-    //@}
+  vtkGetVector3Macro(LatticeColor, unsigned char);
+  vtkSetVector3Macro(LatticeColor, unsigned char);
+  //@}
 
-      //@{
-      /**
+  //@{
+  /**
        * Extract the ids atoms and/or bonds rendered by this molecule from a
        * vtkSelection object. The vtkIdTypeArray
        */
-    virtual void GetSelectedAtomsAndBonds(vtkSelection *selection,
-      vtkIdTypeArray *atomIds,
-      vtkIdTypeArray *bondIds);
+  virtual void GetSelectedAtomsAndBonds(vtkSelection *selection,
+                                        vtkIdTypeArray *atomIds,
+                                        vtkIdTypeArray *bondIds);
 
-    virtual void GetSelectedAtoms(vtkSelection *selection,
-      vtkIdTypeArray *atomIds)
-    {
-      this->GetSelectedAtomsAndBonds(selection, atomIds, nullptr);
-    }
+  virtual void GetSelectedAtoms(vtkSelection *selection,
+                                vtkIdTypeArray *atomIds)
+  {
+    this->GetSelectedAtomsAndBonds(selection, atomIds, nullptr);
+  }
 
-    virtual void GetSelectedBonds(vtkSelection *selection,
-      vtkIdTypeArray *bondIds)
-    {
-      this->GetSelectedAtomsAndBonds(selection, nullptr, bondIds);
-    }
-    //@}
-
-    //@{
-    /**
-     * Reimplemented from base class
-     */
-    void Render(vtkRenderer *, vtkActor *) override;
-    void ReleaseGraphicsResources(vtkWindow *) override;
-    double * GetBounds() override;
-    void GetBounds(double bounds[6]) override { vtkAbstractMapper3D::GetBounds(bounds); }
-    int FillInputPortInformation(int port, vtkInformation* info) override;
-    bool GetSupportsSelection() override { return true; }
-    //@}
+  virtual void GetSelectedBonds(vtkSelection *selection,
+                                vtkIdTypeArray *bondIds)
+  {
+    this->GetSelectedAtomsAndBonds(selection, nullptr, bondIds);
+  }
+  //@}
 
   //@{
-    /**
+  /**
+     * Reimplemented from base class
+     */
+  void Render(vtkRenderer *, vtkActor *) override;
+  void ReleaseGraphicsResources(vtkWindow *) override;
+  double *GetBounds() override;
+  void GetBounds(double bounds[6]) override { vtkAbstractMapper3D::GetBounds(bounds); }
+  int FillInputPortInformation(int port, vtkInformation *info) override;
+  bool GetSupportsSelection() override { return true; }
+  //@}
+
+  //@{
+  /**
      * Get/Set the atomic radius array name. Default: "radii"
      * It is only used when AtomicRadiusType is set to CustomArrayRadius.
      */
-    vtkGetStringMacro(AtomicRadiusArrayName);
-    vtkSetStringMacro(AtomicRadiusArrayName);
-    //@}
+  vtkGetStringMacro(AtomicRadiusArrayName);
+  vtkSetStringMacro(AtomicRadiusArrayName);
+  //@}
 
-    /**
+  /**
      * Get/Set Atoms/Bonds mappers (still Get only :)
      *  
      **/
-    vtkGlyph3DMapper* GetAtomMapper()const{return glyphAtoms_.Get();}
-    vtkGlyph3DMapper* GetBondMapper()const{return glyphBonds_.Get();}
+  vtkGlyph3DMapper *GetAtomMapper() const { return glyphAtoms_.Get(); }
+  vtkGlyph3DMapper *GetBondMapper() const { return glyphBonds_.Get(); }
 
-  protected:
-    MoleculeMapper();
-    ~MoleculeMapper() override;
+protected:
+  MoleculeMapper();
+  ~MoleculeMapper() override;
 
-    //@{
-    /**
+  //@{
+  /**
      * Customize atom rendering
      */
-     // bool RenderAtoms;
-     // int AtomicRadiusType;
-     // float AtomicRadiusScaleFactor;
-    char* AtomicRadiusArrayName;
-    //@}
+  // bool RenderAtoms;
+  // int AtomicRadiusType;
+  // float AtomicRadiusScaleFactor;
+  char *AtomicRadiusArrayName;
+  //@}
 
-    //@{
-    /**
+  //@{
+  /**
      * Customize bond rendering
      */
-    unsigned char BondColor[3];
-    //@}
+  unsigned char BondColor[3];
+  //@}
 
-    bool RenderLattice;
+  bool RenderLattice;
 
-    /**
+  /**
      * Internal render methods
      */
-    void GlyphRender(vtkRenderer *ren, vtkActor *act);
+  void GlyphRender(vtkRenderer *ren, vtkActor *act);
 
-    //@{
-    /**
+  //@{
+  /**
      * Cached variables and update methods
      */
-    vtkNew<vtkPolyData> AtomGlyphPolyData;
-    vtkNew<vtkTrivialProducer> AtomGlyphPointOutput;
-    vtkNew<vtkPolyData> BondGlyphPolyData;
-    vtkNew<vtkTrivialProducer> BondGlyphPointOutput;
-    vtkNew<vtkStringArray> dataAtomsLabel_;
-    vtkNew<vtkStringArray> dataBondsLabel_;
-    //
-    bool GlyphDataInitialized;
-    virtual void UpdateGlyphPolyData();
-    virtual void UpdateAtomGlyphPolyData();
-    virtual void UpdateBondGlyphPolyData();
-    //
-    bool areLabelDataInitialized_;
-    virtual void UpdateAtomLabel();
-    virtual void UpdateBondLabel();
-    //@}
+  vtkNew<vtkPolyData> AtomGlyphPolyData;
+  vtkNew<vtkTrivialProducer> AtomGlyphPointOutput;
+  vtkNew<vtkPolyData> BondGlyphPolyData;
+  vtkNew<vtkTrivialProducer> BondGlyphPointOutput;
+  vtkNew<vtkStringArray> dataAtomsLabel_;
+  vtkNew<vtkStringArray> dataBondsLabel_;
+  //
+  bool GlyphDataInitialized;
+  virtual void UpdateGlyphPolyData();
+  virtual void UpdateAtomGlyphPolyData();
+  virtual void UpdateBondGlyphPolyData();
+  //
+  bool areLabelDataInitialized_;
+  virtual void UpdateAtomLabel();
+  virtual void UpdateBondLabel();
+  //@}
 
-    /**
+  /**
      * Periodic table for lookups
      */
-    vtkNew<vtkPeriodicTable> PeriodicTable;
-    vtkNew<vtkPolyDataMapper> LatticeMapper;
+  vtkNew<vtkPeriodicTable> PeriodicTable;
+  vtkNew<vtkPolyDataMapper> LatticeMapper;
 
-  private:
-    //@{
-    /**
+private:
+  //@{
+  /**
      * Internal mappers
      */
-    Glyph3DMap glyphAtoms_;
-    Glyph3DMap glyphBonds_;
-    //@}
+  Glyph3DMap glyphAtoms_;
+  Glyph3DMap glyphBonds_;
+  //@}
 
-    unsigned char LatticeColor[3];
-    vtkNew<vtkPolyData> LatticePolyData;
-    virtual void UpdateLatticePolyData();
+  unsigned char LatticeColor[3];
+  vtkNew<vtkPolyData> LatticePolyData;
+  virtual void UpdateLatticePolyData();
 
-    /**
+  /**
      * padding value for the viewport
      **/
 
-    double pad_;
+  double pad_;
 
-    /* */
-    MoleculeMapperStyle styleMap_;
-    /**
+  /* */
+  MoleculeMapperStyle styleMap_;
+  /**
     * predefined styles:
      */
-    static const MoleculeMapperStyle styleFast;
-    static const MoleculeMapperStyle styleSticks;
-    static const MoleculeMapperStyle styleBallSticks;
-    static const MoleculeMapperStyle styleCPK;
+  static const MoleculeMapperStyle styleFast;
+  static const MoleculeMapperStyle styleSticks;
+  static const MoleculeMapperStyle styleBallSticks;
+  static const MoleculeMapperStyle styleCPK;
 
-    // delete:
-    MoleculeMapper(const MoleculeMapper&) = delete;
-    void operator=(const MoleculeMapper&) = delete;
-  };
+  // delete:
+  MoleculeMapper(const MoleculeMapper &) = delete;
+  void operator=(const MoleculeMapper &) = delete;
+};
 
 } // namespace vtk
 

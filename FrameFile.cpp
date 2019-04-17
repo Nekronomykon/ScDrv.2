@@ -36,6 +36,8 @@
 
 #include "FileFormat.h"
 
+#include "MapperCriticalPoints.h"
+
 typedef vtkSmartPointer<vtkImageWriter> ImgWrite;
 typedef vtkSmartPointer<vtkPNGWriter> ImgWritePNG;
 typedef vtkSmartPointer<vtkJPEGWriter> ImgWriteJPEG;
