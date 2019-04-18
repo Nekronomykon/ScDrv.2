@@ -22,99 +22,99 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-unix:  INCLUDEPATH += "/home/serge/VTK/include/vtk-9.0"
-win32: INCLUDEPATH += "C:/Serge/VTK/include/vtk-9.0"
+unix:  INCLUDEPATH += "/home/serge/VTK/include/vtk-8.90"
+win32: INCLUDEPATH += "C:/Serge/VTK/include/vtk-8.90"
 unix:  LIBS += -L"/home/serge/VTK/lib" \
--lvtkCommonCore-9.0 \
--lvtkCommonColor-9.0 \
--lvtkCommonMath-9.0 \
--lvtkCommonMisc-9.0 \
--lvtkCommonSystem-9.0 \
--lvtkCommonDataModel-9.0 \
--lvtkCommonExecutionModel-9.0 \
--lvtkCommonComputationalGeometry-9.0 \
--lvtkCommonTransforms-9.0 \
--lvtkDomainsChemistry-9.0 \
--lvtkDomainsChemistryOpenGL2-9.0 \
--lvtkFiltersCore-9.0 \
--lvtkFiltersGeneral-9.0 \
--lvtkFiltersGeneric-9.0 \
--lvtkFiltersSources-9.0 \
--lvtkFiltersGeometry-9.0 \
--lvtkFiltersExtraction-9.0 \
--lvtkFiltersStatistics-9.0 \
--lvtkGUISupportQt-9.0 \
--lvtkGUISupportQtSQL-9.0 \
--lvtkImagingCore-9.0 \
--lvtkImagingFourier-9.0 \
--lvtkInteractionStyle-9.0 \
--lvtkInteractionImage-9.0 \
--lvtkInteractionWidgets-9.0 \
--lvtkIOCore-9.0 \
--lvtkIOParallel-9.0 \
--lvtkIOXML-9.0 \
--lvtkIOParallelXML-9.0 \
--lvtkIOXMLParser-9.0 \
--lvtkRenderingCore-9.0 \
--lvtkRenderingQt-9.0 \
--lvtkRenderingImage-9.0 \
--lvtkRenderingLabel-9.0 \
--lvtkRenderingLOD-9.0 \
--lvtkRenderingOpenGL2-9.0 \
--lvtkRenderingGL2PSOpenGL2-9.0 \
--lvtkViewsCore-9.0 \
--lvtkViewsQt-9.0 \
--lvtkalglib-9.0 \
--lvtkdoubleconversion-9.0 \
--lvtkexpat-9.0 \
--lvtklzma-9.0 \
--lvtkglew-9.0 \
--lvtkzlib-9.0 \
--lvtklz4-9.0 \
--lvtksys-9.0
-win32: LIBS += C:/Serge/VTK/lib/vtkCommonCore-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonColor-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonMath-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonMisc-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonSystem-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonDataModel-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonExecutionModel-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonComputationalGeometry-9.0.lib \
-C:/Serge/VTK/lib/vtkCommonTransforms-9.0.lib \
-C:/Serge/VTK/lib/vtkDomainsChemistry-9.0.lib \
-C:/Serge/VTK/lib/vtkDomainsChemistryOpenGL2-9.0.lib \
-C:/Serge/VTK/lib/vtkFiltersCore-9.0.lib \
-C:/Serge/VTK/lib/vtkFiltersGeneral-9.0.lib \
-C:/Serge/VTK/lib/vtkFiltersGeneric-9.0.lib \
-C:/Serge/VTK/lib/vtkFiltersSources-9.0.lib \
-C:/Serge/VTK/lib/vtkFiltersGeometry-9.0.lib \
-C:/Serge/VTK/lib/vtkFiltersExtraction-9.0.lib \
-C:/Serge/VTK/lib/vtkFiltersStatistics-9.0.lib \
-C:/Serge/VTK/lib/vtkGUISupportQt-9.0.lib \
-C:/Serge/VTK/lib/vtkGUISupportQtSQL-9.0.lib \
-C:/Serge/VTK/lib/vtkImagingCore-9.0.lib \
-C:/Serge/VTK/lib/vtkImagingFourier-9.0.lib \
-C:/Serge/VTK/lib/vtkInteractionStyle-9.0.lib \
-C:/Serge/VTK/lib/vtkInteractionImage-9.0.lib \
-C:/Serge/VTK/lib/vtkInteractionWidgets-9.0.lib \
-C:/Serge/VTK/lib/vtkIOCore-9.0.lib \
-C:/Serge/VTK/lib/vtkIOParallel-9.0.lib \
-C:/Serge/VTK/lib/vtkIOXML-9.0.lib \
-C:/Serge/VTK/lib/vtkIOParallelXML-9.0.lib \
-C:/Serge/VTK/lib/vtkIOXMLParser-9.0.lib \
-C:/Serge/VTK/lib/vtkRenderingCore-9.0.lib \
-C:/Serge/VTK/lib/vtkRenderingQt-9.0.lib \
-C:/Serge/VTK/lib/vtkRenderingLOD-9.0.lib \
-C:/Serge/VTK/lib/vtkRenderingImage-9.0.lib \
-C:/Serge/VTK/lib/vtkRenderingLabel-9.0.lib \
-C:/Serge/VTK/lib/vtkRenderingOpenGL2-9.0.lib \
-C:/Serge/VTK/lib/vtkRenderingGL2PSOpenGL2-9.0.lib \
-C:/Serge/VTK/lib/vtkViewsCore-9.0.lib \
-C:/Serge/VTK/lib/vtkViewsQt-9.0.lib \
-C:/Serge/VTK/lib/vtkdoubleconversion-9.0.lib \
-C:/Serge/VTK/lib/vtkexpat-9.0.lib \
-C:/Serge/VTK/lib/vtkglew-9.0.lib \
-C:/Serge/VTK/lib/vtksys-9.0.lib
+-lvtkCommonCore-8.90 \
+-lvtkCommonColor-8.90 \
+-lvtkCommonMath-8.90 \
+-lvtkCommonMisc-8.90 \
+-lvtkCommonSystem-8.90 \
+-lvtkCommonDataModel-8.90 \
+-lvtkCommonExecutionModel-8.90 \
+-lvtkCommonComputationalGeometry-8.90 \
+-lvtkCommonTransforms-8.90 \
+-lvtkDomainsChemistry-8.90 \
+-lvtkDomainsChemistryOpenGL2-8.90 \
+-lvtkFiltersCore-8.90 \
+-lvtkFiltersGeneral-8.90 \
+-lvtkFiltersGeneric-8.90 \
+-lvtkFiltersSources-8.90 \
+-lvtkFiltersGeometry-8.90 \
+-lvtkFiltersExtraction-8.90 \
+-lvtkFiltersStatistics-8.90 \
+-lvtkGUISupportQt-8.90 \
+-lvtkGUISupportQtSQL-8.90 \
+-lvtkImagingCore-8.90 \
+-lvtkImagingFourier-8.90 \
+-lvtkInteractionStyle-8.90 \
+-lvtkInteractionImage-8.90 \
+-lvtkInteractionWidgets-8.90 \
+-lvtkIOCore-8.90 \
+-lvtkIOParallel-8.90 \
+-lvtkIOXML-8.90 \
+-lvtkIOParallelXML-8.90 \
+-lvtkIOXMLParser-8.90 \
+-lvtkRenderingCore-8.90 \
+-lvtkRenderingQt-8.90 \
+-lvtkRenderingImage-8.90 \
+-lvtkRenderingLabel-8.90 \
+-lvtkRenderingLOD-8.90 \
+-lvtkRenderingOpenGL2-8.90 \
+-lvtkRenderingGL2PSOpenGL2-8.90 \
+-lvtkViewsCore-8.90 \
+-lvtkViewsQt-8.90 \
+-lvtkalglib-8.90 \
+-lvtkdoubleconversion-8.90 \
+-lvtkexpat-8.90 \
+-lvtklzma-8.90 \
+-lvtkglew-8.90 \
+-lvtkzlib-8.90 \
+-lvtklz4-8.90 \
+-lvtksys-8.90
+win32: LIBS += C:/Serge/VTK/lib/vtkCommonCore-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonColor-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonMath-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonMisc-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonSystem-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonDataModel-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonExecutionModel-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonComputationalGeometry-8.90.lib \
+C:/Serge/VTK/lib/vtkCommonTransforms-8.90.lib \
+C:/Serge/VTK/lib/vtkDomainsChemistry-8.90.lib \
+C:/Serge/VTK/lib/vtkDomainsChemistryOpenGL2-8.90.lib \
+C:/Serge/VTK/lib/vtkFiltersCore-8.90.lib \
+C:/Serge/VTK/lib/vtkFiltersGeneral-8.90.lib \
+C:/Serge/VTK/lib/vtkFiltersGeneric-8.90.lib \
+C:/Serge/VTK/lib/vtkFiltersSources-8.90.lib \
+C:/Serge/VTK/lib/vtkFiltersGeometry-8.90.lib \
+C:/Serge/VTK/lib/vtkFiltersExtraction-8.90.lib \
+C:/Serge/VTK/lib/vtkFiltersStatistics-8.90.lib \
+C:/Serge/VTK/lib/vtkGUISupportQt-8.90.lib \
+C:/Serge/VTK/lib/vtkGUISupportQtSQL-8.90.lib \
+C:/Serge/VTK/lib/vtkImagingCore-8.90.lib \
+C:/Serge/VTK/lib/vtkImagingFourier-8.90.lib \
+C:/Serge/VTK/lib/vtkInteractionStyle-8.90.lib \
+C:/Serge/VTK/lib/vtkInteractionImage-8.90.lib \
+C:/Serge/VTK/lib/vtkInteractionWidgets-8.90.lib \
+C:/Serge/VTK/lib/vtkIOCore-8.90.lib \
+C:/Serge/VTK/lib/vtkIOParallel-8.90.lib \
+C:/Serge/VTK/lib/vtkIOXML-8.90.lib \
+C:/Serge/VTK/lib/vtkIOParallelXML-8.90.lib \
+C:/Serge/VTK/lib/vtkIOXMLParser-8.90.lib \
+C:/Serge/VTK/lib/vtkRenderingCore-8.90.lib \
+C:/Serge/VTK/lib/vtkRenderingQt-8.90.lib \
+C:/Serge/VTK/lib/vtkRenderingLOD-8.90.lib \
+C:/Serge/VTK/lib/vtkRenderingImage-8.90.lib \
+C:/Serge/VTK/lib/vtkRenderingLabel-8.90.lib \
+C:/Serge/VTK/lib/vtkRenderingOpenGL2-8.90.lib \
+C:/Serge/VTK/lib/vtkRenderingGL2PSOpenGL2-8.90.lib \
+C:/Serge/VTK/lib/vtkViewsCore-8.90.lib \
+C:/Serge/VTK/lib/vtkViewsQt-8.90.lib \
+C:/Serge/VTK/lib/vtkdoubleconversion-8.90.lib \
+C:/Serge/VTK/lib/vtkexpat-8.90.lib \
+C:/Serge/VTK/lib/vtkglew-8.90.lib \
+C:/Serge/VTK/lib/vtksys-8.90.lib
 win32:QMAKE_EXTRA_TARGETS += before_build makefilehook
 win32:makefilehook.target = $(MAKEFILE)
 win32:makefilehook.depends = .beforebuild
@@ -205,7 +205,9 @@ HEADERS += \
     TableAtomTypes.h
 
 FORMS += \
-    FrameWorkspace.ui
+    FrameWorkspace.ui \
+    ViewSource.ui \
+    Generator.ui
 
 RESOURCES += \
     ScDrv.qrc

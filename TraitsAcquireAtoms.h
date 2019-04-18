@@ -94,6 +94,7 @@ struct TraitsBase
   static std::string ScrollEmptyStrings(BaseInput &/*in*/);
   static size_t MeasureStringGroup(BaseInput& /*in*/);
   static bool ScrollDownTo(BaseInput& /*in*/, const char* /*key*/);
+  static std::string ScrollDownToPrefix(BaseInput& /*in*/, const char* /*key*/, size_t /*skip*/ = 0);
 
   static vtkIdType ElementSymbolToNumber(const char* symbol);
 };

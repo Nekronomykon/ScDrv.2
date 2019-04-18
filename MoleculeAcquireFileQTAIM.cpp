@@ -35,28 +35,18 @@ void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
   this->Superclass::PrintSelf(os, indent);
 
   os << indent << "Critical points:"
-    // << (this->HasFileName() ? this->GetFileName() : "(null)" ) 
-    << std::endl;
+     // << (this->HasFileName() ? this->GetFileName() : "(null)" )
+     << std::endl;
 }
 
 //----------------------------------------------------------------------------
-vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &sin)
+vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 {
   vtkIdType nRes = 0;
-  string str_one;
-  getline(sin, str_one);
-  do
-  {
-    if(str_one.empty())
-    continue;
-    if(!str_one.find("Total number of electron density critical points found ="))
-    {
-      istringstream inn(str_one.substr(57));
-      inn >> nRes;
-      break;
-    }
-  } while (getline(sin, str_one));
-
+  istringstream in_str(TraitsBase::ScrollDownToPrefix(inss
+  , "Total number of electron density critical points found ="
+  , 57));
+  in_str >> nRes;
   this->ResetNumberOfCPs(nRes);
   return nRes;
 }
