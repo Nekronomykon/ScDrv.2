@@ -18,7 +18,7 @@
  * @class   MoleculeMapperOpenGL
  * @brief   An accelerated class for rendering molecules
  *
- * A MoleculeMapper that uses imposters to do the rendering. It uses
+ * A Mapper that uses imposters to do the rendering. It usesMolecule
  * vtkOpenGLSphereMapper and vtkOpenGLStickMapper to do the rendering.
 */
 
@@ -28,7 +28,7 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryOpenGL2Module.h" // For export macro
-#include "MoleculeMapper.h"
+#include "MapperMolecule.h"
 #include <vtkNew.h> // For vtkNew
 
 class vtkOpenGLSphereMapper;
@@ -37,11 +37,11 @@ class vtkOpenGLStickMapper;
 namespace vtk {
 
 class /*VTKDOMAINSCHEMISTRYOPENGL2_EXPORT*/ MoleculeMapperOpenGL
-  : public MoleculeMapper
+  : public MapperMolecule
 {
 public:
   static MoleculeMapperOpenGL* New();
-  vtkTypeMacro(MoleculeMapperOpenGL, MoleculeMapper)
+  vtkTypeMacro(MoleculeMapperOpenGL, MapperMolecule)
 
   //@{
   /**

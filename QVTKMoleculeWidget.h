@@ -32,7 +32,9 @@
 #include <vtkInteractorStyle.h>
 #include <vtkAreaPicker.h>
 
-#include "MoleculeMapper.h"
+#include "MapperMolecule.h"
+#include "MapperCriticalPoints.h"
+
 #include "CommandPickFragment.h"
 
 #include "MoleculeMapperStyle.h"
@@ -64,7 +66,7 @@ public:
 
   vtkRenderer *GetRenderer() const { return renderer_; }
   vtkCamera *GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
-  MoleculeMapper *GetMoleculeMapper() const { return mol_mapper_; }
+  MapperMolecule *GetMoleculeMapper() const { return mol_mapper_; }
 
   void SetMoleculeSpaceFill()
   {
@@ -96,7 +98,8 @@ public:
 
 private:
   typedef vtkSmartPointer<vtkActor> Actor;
-  typedef vtkSmartPointer<MoleculeMapper> MolMapper;
+  typedef vtkSmartPointer<MapperMolecule> MapMolecule;
+  typedef vtkSmartPointer<MapperCriticalPoints> MapCritical;
   typedef vtkSmartPointer<vtkLabelPlacementMapper> LabelMapper;
   typedef vtkSmartPointer<vtkRenderer> Renderer;
   typedef vtkSmartPointer<vtkAreaPicker> AreaPicker;
@@ -104,7 +107,8 @@ private:
 private:
   Renderer renderer_;
   BgColorType bgColor_;
-  MolMapper mol_mapper_;
+  MapMolecule mol_mapper_;
+  MapCritical mapCritical_;
   LabelMapper labelAtoms_;
   LabelMapper labelBonds_;
   AreaPicker area_picker_;

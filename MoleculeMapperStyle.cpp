@@ -1,6 +1,6 @@
 #include "MoleculeMapperStyle.h"
 
-#include "MoleculeMapper.h"
+#include <vtkMoleculeMapper.h>
 
 using namespace vtk;
 

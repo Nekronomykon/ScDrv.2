@@ -38,11 +38,8 @@
 
 #include <vtkSetGet.h>
 
-#include <CriticalPoints.h>
-
-#include <complex>
-
 class vtkMolecule;
+class CriticalPoints;
 
 namespace vtk
 {
@@ -92,6 +89,17 @@ public:
     return kBaseRes;
   }
 
+  vtkIdType GetNumberOfCPs() const {return NumberOfCPs_;}
+  vtkIdType ResetNumberOfCPs(vtkIdType nnew = 0)
+  {
+    if(nnew != this->GetNumberOfCPs())
+    {
+      std::swap(nnew,NumberOfCPs_);
+      this->Modified();
+    }
+    return nnew;
+  }
+
 protected:
   enum
   {
@@ -103,18 +111,16 @@ protected:
     NumberOfCPTypes = 5
   };
 
-  typedef std::complex<short> CriticalPointType;
-
   explicit MoleculeAcquireFileQTAIM() = default;
   ~MoleculeAcquireFileQTAIM() override = default;
 
-  template<class Stream>
-  vtkIdType ReadNumberCPs(Stream& sin); 
+  vtkIdType ReadNumberCPs(std::istream& sin); 
 
 private:
   MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
   void operator=(const MoleculeAcquireFileQTAIM &) = delete;
 
+  vtkIdType NumberOfCPs_ = 0;
   vtkIdType NumberOfOrbitals_ = 0;
   vtkIdType NumberOfPrimitives_ = 0;
   vtkIdType CriticalPoints[NumberOfCPTypes];

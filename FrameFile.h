@@ -45,7 +45,10 @@ using namespace vtk;
 #include "ViewMoleculeBonds.h"
 
 #include "MoleculeAcquireFile.h"
-#include "MoleculeMapper.h"
+
+#include "MapperMolecule.h"
+#include "MapperCriticalPoints.h"
+
 #include "MolecularStructure.h"
 
 #include "BondsetBuild.h"
@@ -226,7 +229,7 @@ private:
 
   FileContext format_current_;
 
-  vtkNew<vtkMoleculeMapper> mol_mapper_;
+  // vtkNew<vtkMoleculeMapper> mol_mapper_;
   // vtkIdTypeArray positions_;
   // MolecularStructure structure_;
   NewCritPoints structure_;

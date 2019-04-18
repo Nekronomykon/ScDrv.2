@@ -35,6 +35,9 @@
 
 #include <vtkMapper.h>
 
+class CriticalPoints;
+class vtkGlyph3DMapper;
+
 namespace vtk
 {
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MapperCriticalPoints
@@ -45,9 +48,21 @@ public:
   vtkTypeMacro(MapperCriticalPoints, vtkMapper);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
+  void Render(vtkRenderer*, vtkActor*) override;
+
 protected:
-  MapperCriticalPoints();
-  ~MapperCriticalPoints() override;
+  explicit MapperCriticalPoints() = default;
+  ~MapperCriticalPoints() override = default;
+
+private:
+  MapperCriticalPoints(const MapperCriticalPoints &) = delete;
+  void operator=(const MapperCriticalPoints &) = delete;
+
+  // data:
+  vtkNew<vtkGlyph3DMapper> glyphMapACP_;
+  vtkNew<vtkGlyph3DMapper> glyphMapBCP_;
+  vtkNew<vtkGlyph3DMapper> glyphMapRCP_;
+  vtkNew<vtkGlyph3DMapper> glyphMapCCP_;
 };
 
 }; // namespace vtk

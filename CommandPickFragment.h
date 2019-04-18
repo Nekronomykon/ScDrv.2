@@ -22,7 +22,7 @@
 #include <sstream>
 using namespace std;
 
-#include "MoleculeMapper.h"
+#include "MapperMolecule.h"
 
 namespace vtk
 {
@@ -59,8 +59,8 @@ public:
     return ptr;
   }
 
-  MoleculeMapper *GetMoleculeMapper() const { return ptrMoleculeMapper_; }
-  MoleculeMapper *ResetMoleculeMapper(MoleculeMapper *ptr = nullptr)
+  MapperMolecule *GetMoleculeMapper() const { return ptrMoleculeMapper_; }
+  MapperMolecule *ResetMoleculeMapper(MapperMolecule *ptr = nullptr)
   {
     if (ptr != ptrMoleculeMapper_)
       std::swap(ptr, ptrMoleculeMapper_);
@@ -83,7 +83,7 @@ private:
   vtkRenderer *ptrRenderer_ = nullptr;
   vtkAreaPicker *ptrAreaPicker_ = nullptr;
 
-  MoleculeMapper *ptrMoleculeMapper_;
+  MapperMolecule *ptrMoleculeMapper_;
 };
 
 }; // namespace vtk

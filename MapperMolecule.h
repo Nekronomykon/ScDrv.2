@@ -4,7 +4,7 @@
 /*=========================================================================
 
   Program:   Visualization Toolkit Local Fork
-  Module:    MoleculeMapper.h
+  Module:    MapperMolecule.h
 
   Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
@@ -16,11 +16,11 @@
 
 =========================================================================*/
 /**
- * @class   MoleculeMapper
+ * @class   MapperMolecule
  * @brief   Mapper that draws vtkMolecule objects
  *
  *
- * MoleculeMapper uses glyphs (display lists) to quickly render a
+ * MapperMolecule uses glyphs (display lists) to quickly render a
  * molecule.
 */
 
@@ -55,13 +55,13 @@ typedef vtkNew<vtkGlyph3DMapper> Glyph3DMap;
 
 namespace vtk
 {
-class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeMapper : public vtkMapper
+class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MapperMolecule : public vtkMapper
 {
 public:
   typedef MoleculeMapperStyle MMStyle;
 
-  static MoleculeMapper *New();
-  vtkTypeMacro(MoleculeMapper, vtkMapper);
+  static MapperMolecule *New();
+  vtkTypeMacro(MapperMolecule, vtkMapper);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
   //@{
@@ -180,8 +180,8 @@ public:
   vtkGlyph3DMapper *GetBondMapper() const { return glyphBonds_.Get(); }
 
 protected:
-  MoleculeMapper();
-  ~MoleculeMapper() override;
+  MapperMolecule();
+  ~MapperMolecule() override;
 
   //@{
   /**
@@ -264,8 +264,8 @@ private:
   static const MoleculeMapperStyle styleCPK;
 
   // delete:
-  MoleculeMapper(const MoleculeMapper &) = delete;
-  void operator=(const MoleculeMapper &) = delete;
+  MapperMolecule(const MapperMolecule &) = delete;
+  void operator=(const MapperMolecule &) = delete;
 };
 
 } // namespace vtk

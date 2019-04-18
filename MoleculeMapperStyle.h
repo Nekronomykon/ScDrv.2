@@ -7,12 +7,13 @@
 #endif //  _MSC_VER
 
 #include <vtkColor.h>
-#include <vtkMoleculeMapper.h>
+
+class vtkMoleculeMapper;
 
 namespace vtk
 {
 
-class MoleculeMapper;
+class MapperMolecule;
 
 struct MoleculeMapperStyle
 {

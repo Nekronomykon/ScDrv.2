@@ -40,8 +40,7 @@ void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
 }
 
 //----------------------------------------------------------------------------
-template <class Stream>
-vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(Stream &sin)
+vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &sin)
 {
   vtkIdType nRes = 0;
   string str_one;
@@ -50,8 +49,14 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(Stream &sin)
   {
     if(str_one.empty())
     continue;
-    /* code */
+    if(!str_one.find("Total number of electron density critical points found ="))
+    {
+      istringstream inn(str_one.substr(57));
+      inn >> nRes;
+      break;
+    }
   } while (getline(sin, str_one));
-  this->ResetNumberCPs(nRes);
+
+  this->ResetNumberOfCPs(nRes);
   return nRes;
 }
