@@ -34,9 +34,9 @@ void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 
-  os << indent << "Critical points:"
+  os << indent << "Critical points = "  << this->GetNumberOfCPs() << ": ["
      // << (this->HasFileName() ? this->GetFileName() : "(null)" )
-     << std::endl;
+     << " ]" << std::endl;
 }
 
 //----------------------------------------------------------------------------
