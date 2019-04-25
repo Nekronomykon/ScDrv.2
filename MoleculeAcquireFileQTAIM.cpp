@@ -52,7 +52,9 @@ void MoleculeAcquireFileQTAIM::Initialize()
 vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 {
   vtkIdType nRes = 0;
-  istringstream in_str(TraitsBase::ScrollDownToPrefix(inss, "Total number of electron density critical points found =", 57));
+  istringstream in_str(TraitsBase::ScrollDownToPrefix(inss
+  , "Total number of electron density critical points found ="
+  , 57));
   in_str >> nRes;
   assert(!this->GetNumberOfCPs());
   if (nRes)
