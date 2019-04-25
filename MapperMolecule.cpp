@@ -63,7 +63,13 @@ vtkStandardNewMacro(MapperMolecule)
 
 //----------------------------------------------------------------------------
 MapperMolecule::MapperMolecule()
-    : glyphAtoms_(/* Glyph3DMap::New() */), glyphBonds_(/* Glyph3DMap::New() */), styleMap_(styleFast), AtomicRadiusArrayName(nullptr), RenderLattice(false), GlyphDataInitialized(false), areLabelDataInitialized_(false), pad_(2)
+    : glyphAtoms_(/* Glyph3DMap::New() */)
+    , glyphBonds_(/* Glyph3DMap::New() */)
+    , styleMap_(styleFast)
+    , AtomicRadiusArrayName(nullptr)
+    , RenderLattice(false)
+    , GlyphDataInitialized(false)
+    , areLabelDataInitialized_(false), pad_(2)
 {
   // Initialize ivars:
   this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 64; // ???
@@ -229,7 +235,7 @@ void MapperMolecule::GlyphRender(vtkRenderer *ren, vtkActor *act)
   this->UpdateGlyphPolyData();
 
   // Pass rendering call on
-  if (styleMap_.HasToRenderAtoms())
+  if (this->GetStyle().HasToRenderAtoms())
   {
     this->glyphAtoms_->Render(ren, act);
   }
@@ -250,20 +256,39 @@ void MapperMolecule::UpdateGlyphPolyData()
 {
   vtkMolecule *molecule = this->GetInput();
 
-  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime() || this->GetMTime() > this->AtomGlyphPolyData->GetMTime() || this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime()) && this->GetStyle().HasToRenderAtoms()))
+  if (!this->GlyphDataInitialized 
+  ||  (
+      ( molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime()
+      || this->GetMTime() > this->AtomGlyphPolyData->GetMTime() 
+      || this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime()
+    ) 
+    && this->GetStyle().HasToRenderAtoms()
+    )
+  )
   {
     this->UpdateAtomGlyphPolyData();
   }
 
-  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->BondGlyphPolyData->GetMTime() || this->GetMTime() > this->BondGlyphPolyData->GetMTime() || this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()) &&
-                                      this->GetStyle().HasToRenderBonds()))
+  if (!this->GlyphDataInitialized 
+  ||  (
+      ( molecule->GetMTime() > this->BondGlyphPolyData->GetMTime() 
+      || this->GetMTime() > this->BondGlyphPolyData->GetMTime() 
+      || this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()
+    ) 
+    && this->GetStyle().HasToRenderBonds()
+    )
+  )
   {
     this->UpdateBondGlyphPolyData();
   }
 
-  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->LatticePolyData->GetMTime() ||
-                                       this->GetMTime() > this->LatticePolyData->GetMTime()) &&
-                                      this->RenderLattice))
+  if (!this->GlyphDataInitialized 
+  ||  (
+      ( molecule->GetMTime() > this->LatticePolyData->GetMTime()
+      || this->GetMTime() > this->LatticePolyData->GetMTime()
+      ) 
+      && this->RenderLattice)
+  )
   {
     this->UpdateLatticePolyData();
   }
