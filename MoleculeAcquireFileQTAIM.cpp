@@ -40,6 +40,15 @@ void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
 }
 
 //----------------------------------------------------------------------------
+void MoleculeAcquireFileQTAIM::Initialize()
+{
+  // this->Superclass::Initialize();
+  this->ResetNumberOfCPs();
+  this->ResetNumberOfOrbitals();
+  this->ResetNumberOfPrimitives();
+}
+
+//----------------------------------------------------------------------------
 vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 {
   vtkIdType nRes = 0;
@@ -47,6 +56,8 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
   in_str >> nRes;
   assert(!this->GetNumberOfCPs());
   if (nRes)
+  {
     this->ResetNumberOfCPs(nRes);
+  }
   return nRes;
 }

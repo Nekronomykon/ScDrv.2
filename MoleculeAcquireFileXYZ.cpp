@@ -50,7 +50,7 @@ int MoleculeAcquireFileXYZ::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   ssinp >> natoms;
 
   assert(!this->GetNumberOfAtoms()); // assured that it is read first
-  this->SetNumberOfAtoms(natoms);
+  this->ResetNumberOfAtoms(natoms);
 
   string title;
   if (!std::getline(file_in, str_line))

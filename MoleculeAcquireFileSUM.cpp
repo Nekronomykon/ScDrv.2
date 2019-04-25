@@ -43,7 +43,7 @@ int MoleculeAcquireFileSUM::ParseStreamInfo(BaseInput &infile,vtkInformationVect
   if (!nAtomStr)
     return 0;
   assert(!this->GetNumberOfAtoms());
-  this->SetNumberOfAtoms( nAtomStr );
+  this->ResetNumberOfAtoms( nAtomStr );
 
   // Here could the specific QTAIM info be parsed...
 

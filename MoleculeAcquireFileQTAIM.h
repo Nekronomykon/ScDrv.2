@@ -54,8 +54,10 @@ public:
   vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFile);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
+  void Initialize(); // override;
+
   vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
-  virtual vtkIdType SetNumberOfOrbitals(vtkIdType nnew)
+  virtual vtkIdType ResetNumberOfOrbitals(vtkIdType nnew = 0)
   {
     if (nnew != this->GetNumberOfOrbitals())
     {
@@ -66,11 +68,22 @@ public:
   }
 
   vtkIdType GetNumberOfPrimitives() const { return NumberOfPrimitives_; }
-  vtkIdType SetNumberOfPrimitives(vtkIdType nnew)
+  vtkIdType ResetNumberOfPrimitives(vtkIdType nnew = 0)
   {
     if (nnew != GetNumberOfPrimitives())
     {
       std::swap(NumberOfPrimitives_, nnew);
+      this->Modified();
+    }
+    return nnew;
+  }
+
+  vtkIdType GetNumberOfCPs() const {return NumberOfCPs_;}
+  vtkIdType ResetNumberOfCPs(vtkIdType nnew = 0)
+  {
+    if(nnew != this->GetNumberOfCPs())
+    {
+      std::swap(nnew,NumberOfCPs_);
       this->Modified();
     }
     return nnew;
@@ -87,17 +100,6 @@ public:
       return kBaseRes;
     }
     return kBaseRes;
-  }
-
-  vtkIdType GetNumberOfCPs() const {return NumberOfCPs_;}
-  vtkIdType ResetNumberOfCPs(vtkIdType nnew = 0)
-  {
-    if(nnew != this->GetNumberOfCPs())
-    {
-      std::swap(nnew,NumberOfCPs_);
-      this->Modified();
-    }
-    return nnew;
   }
 
 protected:

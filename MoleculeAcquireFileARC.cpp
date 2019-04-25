@@ -84,7 +84,7 @@ int MoleculeAcquireFileARC::RequestInformation(vtkInformation *vtkNotUsed(reques
 
   assert(!this->GetNumberOfAtoms()); // assured that it is read first
   natoms = Traits::MeasureStringGroup(file_in);
-  this->SetNumberOfAtoms(natoms);
+  this->ResetNumberOfAtoms(natoms);
 
   return 1;
 }

@@ -57,7 +57,7 @@ namespace vtk {
       void PrintSelf(ostream &os, vtkIndent indent) override;
 
     vtkIdType GetNumberOfAtoms() const { return NumberOfAtoms_; }
-    virtual vtkIdType SetNumberOfAtoms(vtkIdType nnew)
+    virtual vtkIdType ResetNumberOfAtoms(vtkIdType nnew)
     {
       if (nnew != this->GetNumberOfAtoms())
       {

@@ -54,7 +54,7 @@ int MoleculeAcquireFileOUT::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
     // init scan results:
     natoms = Traits::MeasureStringGroup(file_in);
     assert(natoms > 0);
-    this->SetNumberOfAtoms(natoms);
+    this->ResetNumberOfAtoms(natoms);
     break;
 
   } while (getline(file_in, str_line));

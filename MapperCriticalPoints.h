@@ -37,6 +37,7 @@
 
 class CriticalPoints;
 class vtkGlyph3DMapper;
+class vtkPolyDataMapper;
 
 namespace vtk
 {
@@ -58,11 +59,18 @@ private:
   MapperCriticalPoints(const MapperCriticalPoints &) = delete;
   void operator=(const MapperCriticalPoints &) = delete;
 
-  // data:
+  // data: Atomic;
   vtkNew<vtkGlyph3DMapper> glyphMapACP_;
+  vtkSmartPointer<vtkPolyDataMapper> polyDataACP_;
+  // data: Bonds;
   vtkNew<vtkGlyph3DMapper> glyphMapBCP_;
+  vtkSmartPointer<vtkPolyDataMapper> polyDataBCP_;
+  // data: Rings;
   vtkNew<vtkGlyph3DMapper> glyphMapRCP_;
+  vtkSmartPointer<vtkPolyDataMapper> polyDataRCP_;
+  // data: Cages;
   vtkNew<vtkGlyph3DMapper> glyphMapCCP_;
+  vtkSmartPointer<vtkPolyDataMapper> polyDataCCP_;
 };
 
 }; // namespace vtk

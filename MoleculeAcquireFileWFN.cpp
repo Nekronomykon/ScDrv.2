@@ -74,11 +74,11 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   }
 
   assert(!this->GetNumberOfAtoms()); // assured that it is read first
-  this->SetNumberOfAtoms(nAtoms);
+  this->ResetNumberOfAtoms(nAtoms);
   assert(!this->GetNumberOfPrimitives());
-  this->SetNumberOfPrimitives(nPrims);
+  this->ResetNumberOfPrimitives(nPrims);
   assert(!this->GetNumberOfOrbitals());
-  this->SetNumberOfOrbitals(nOrbs);
+  this->ResetNumberOfOrbitals(nOrbs);
 
   for (int i = 0; i < nAtoms; i++)
   {
