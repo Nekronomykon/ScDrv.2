@@ -20,7 +20,7 @@
  * MoleculeAcquireFileWFN is a source object that reads waefunction files
  * This format is intentionally specified as a single-structure one.
  *
- * NOT YET FINALLY RELEASED!
+ * CLOSE TO THE FINAL FORM!
  *
  * @par Thanks:
  * ScrewDriver te Blackheadborough who developed and contributed this class
@@ -60,8 +60,8 @@ namespace vtk
     ~MoleculeAcquireFileWFN() override = default;
 
   private:
-    MoleculeAcquireFileWFN(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;
-    void operator=(const MoleculeAcquireFileWFN&) VTK_DELETE_FUNCTION;
+    MoleculeAcquireFileWFN(const MoleculeAcquireFileWFN&) = delete;
+    void operator=(const MoleculeAcquireFileWFN &) = delete;
   };
 
 }; // namespace vtk

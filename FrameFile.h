@@ -164,6 +164,7 @@ public:
   bool acquireAsOUT();
   bool acquireAsXYZ();
   bool acquireAsWFN();
+  bool acquireAsWFX();
   bool acquireAsCUBE();
   bool acquireAsMGP();
   bool acquireAsSUM();

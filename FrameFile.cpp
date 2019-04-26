@@ -29,6 +29,7 @@
 #include "MoleculeAcquireFileOUT.h"
 #include "MoleculeAcquireFileXYZ.h"
 #include "MoleculeAcquireFileWFN.h"
+#include "MoleculeAcquireFileWFX.h"
 #include "MoleculeAcquireFileCUBE.h"
 #include "MoleculeAcquireFileMGP.h"
 #include "MoleculeAcquireFileSUM.h"
@@ -94,6 +95,7 @@ void FrameFile::BuildFileContext()
   all_formats[FileContext("XMol XYZ files", &FrameFile::acquireAsXYZ)] = "xyz";
   all_formats[FileContext("Gaussian Cube files", &FrameFile::acquireAsCUBE)] = "cube";
   all_formats[FileContext("Wavefunction files", &FrameFile::acquireAsWFN)] = "wfn";
+  all_formats[FileContext("Extended wavefunction files", &FrameFile::acquireAsWFX)] = "wfx";
   all_formats[FileContext("AIMAll Molecular Graph files", &FrameFile::acquireAsMGP)] = "mgp";
   all_formats[FileContext("AIMAll atomic summae files", &FrameFile::acquireAsSUM)] = "sum";
   all_formats[FileContext("AIMAll Extreme output", &FrameFile::acquireAsExtOut)] = "extout";
@@ -478,6 +480,7 @@ bool FrameFile::acquireAsARC() { return this->acquireUsing<MoleculeAcquireFileAR
 bool FrameFile::acquireAsOUT() { return this->acquireUsing<MoleculeAcquireFileOUT>(); }
 bool FrameFile::acquireAsXYZ() { return this->acquireUsing<MoleculeAcquireFileXYZ>(); }
 bool FrameFile::acquireAsWFN() { return this->acquireUsing<MoleculeAcquireFileWFN>(); }
+bool FrameFile::acquireAsWFX() { return this->acquireUsing<MoleculeAcquireFileWFX>(); }
 bool FrameFile::acquireAsCUBE() { return this->acquireUsing<MoleculeAcquireFileCUBE>(); }
 bool FrameFile::acquireAsMGP() { return this->acquireUsing<MoleculeAcquireFileMGP>(); }
 bool FrameFile::acquireAsSUM() { return this->acquireUsing<MoleculeAcquireFileSUM>(); }
