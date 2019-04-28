@@ -17,45 +17,53 @@
 
 #include <cassert>
 
-#include <algorithm> 
+#include <algorithm>
 #include <cctype>
 #include <locale>
 // #include <charconv> // STD C++17
 
 // trim from start (in place)
-static inline void ltrim(std::string &s) {
+static inline void ltrim(std::string &s)
+{
   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
-    return !std::isspace(ch);
-  }));
+            return !std::isspace(ch);
+          }));
 }
 
 // trim from end (in place)
-static inline void rtrim(std::string &s) {
+static inline void rtrim(std::string &s)
+{
   s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
-    return !std::isspace(ch);
-  }).base(), s.end());
+            return !std::isspace(ch);
+          })
+              .base(),
+          s.end());
 }
 
 // trim from both ends (in place)
-static inline void trim(std::string &s) {
+static inline void trim(std::string &s)
+{
   ltrim(s);
   rtrim(s);
 }
 
 // trim from start (copying)
-static inline std::string ltrim_copy(std::string s) {
+static inline std::string ltrim_copy(std::string s)
+{
   ltrim(s);
   return s;
 }
 
 // trim from end (copying)
-static inline std::string rtrim_copy(std::string s) {
+static inline std::string rtrim_copy(std::string s)
+{
   rtrim(s);
   return s;
 }
 
 // trim from both ends (copying)
-static inline std::string trim_copy(std::string s) {
+static inline std::string trim_copy(std::string s)
+{
   trim(s);
   return s;
 }
@@ -69,47 +77,151 @@ struct TraitsBase
 
   enum
   {
-    id_Q = 0, 
-    id_H = 1, idHe = 2, idLi = 3, idBe = 4, id_B = 5, id_C = 6, id_N = 7, id_O = 8, id_F = 9, idNe = 10,
-    idNa = 11, idMg = 12, idAl = 13, idSi = 14, id_P = 15, id_S = 16, idCl = 17, idAr = 18,
-    id_K = 19, idCa = 20, idSc = 21, idTi = 22, id_V = 23, idCr = 24, idMn = 25,
-    idFe = 26, idCo = 27, idNi = 28, idCu = 29, idZn = 30, 
-    idGa = 31, idGe = 32, idAs = 33, idSe = 34, idBr = 35, idKr = 36,
-    idRb = 37, idSr = 38, id_Y = 39, idZr = 40, idNb = 41, idMo = 42, idTc = 43,
-    idRu = 44, idRh = 45, idPd = 46, idAg = 47, idCd = 48,
-    idIn = 49, idSn = 50, idSb = 51, idTe = 52, id_I = 53, idXe = 54, idCs = 55, idBa = 56, 
-    idLa = 57, idCe = 58, idPr = 59, idNd = 60, idPm = 61, idSm = 62, idEu = 63, 
-    idGd = 64, idTb = 65, idDy = 66, idHo = 67, idEr = 68, idTm = 69, idYb = 70, idLu = 71,
-    idHf = 72, idTa = 73, id_W = 74, idRe = 75, idOs = 76, idIr = 77, idPt = 78, idAu = 79, idHg = 80,
-    idTl = 81, idPb = 82, idBi = 83, idPo = 84, idAt = 85, idRn = 86, idFr = 87, idRa = 88,
-    idAc = 89, idTh = 90, idPa = 91, id_U = 92, idNp = 93, idPu = 94, idAm = 95,
-    idCm = 96, idBk = 97, idCf = 98, idEs = 99, idFm = 100, idMd = 101, idNo = 102, idLr = 103,
-    idRf = 104, idDb = 105, idSg = 106, idBh = 107, idHs = 108, idMt = 109, idDs = 110, idRg = 111, idCn = 112,
-    idNh = 113, idFl = 114, idMc = 115, idLv = 116, idTs = 117, idOg = 118,
+    id_Q = 0,
+    id_H = 1,
+    idHe = 2,
+    idLi = 3,
+    idBe = 4,
+    id_B = 5,
+    id_C = 6,
+    id_N = 7,
+    id_O = 8,
+    id_F = 9,
+    idNe = 10,
+    idNa = 11,
+    idMg = 12,
+    idAl = 13,
+    idSi = 14,
+    id_P = 15,
+    id_S = 16,
+    idCl = 17,
+    idAr = 18,
+    id_K = 19,
+    idCa = 20,
+    idSc = 21,
+    idTi = 22,
+    id_V = 23,
+    idCr = 24,
+    idMn = 25,
+    idFe = 26,
+    idCo = 27,
+    idNi = 28,
+    idCu = 29,
+    idZn = 30,
+    idGa = 31,
+    idGe = 32,
+    idAs = 33,
+    idSe = 34,
+    idBr = 35,
+    idKr = 36,
+    idRb = 37,
+    idSr = 38,
+    id_Y = 39,
+    idZr = 40,
+    idNb = 41,
+    idMo = 42,
+    idTc = 43,
+    idRu = 44,
+    idRh = 45,
+    idPd = 46,
+    idAg = 47,
+    idCd = 48,
+    idIn = 49,
+    idSn = 50,
+    idSb = 51,
+    idTe = 52,
+    id_I = 53,
+    idXe = 54,
+    idCs = 55,
+    idBa = 56,
+    idLa = 57,
+    idCe = 58,
+    idPr = 59,
+    idNd = 60,
+    idPm = 61,
+    idSm = 62,
+    idEu = 63,
+    idGd = 64,
+    idTb = 65,
+    idDy = 66,
+    idHo = 67,
+    idEr = 68,
+    idTm = 69,
+    idYb = 70,
+    idLu = 71,
+    idHf = 72,
+    idTa = 73,
+    id_W = 74,
+    idRe = 75,
+    idOs = 76,
+    idIr = 77,
+    idPt = 78,
+    idAu = 79,
+    idHg = 80,
+    idTl = 81,
+    idPb = 82,
+    idBi = 83,
+    idPo = 84,
+    idAt = 85,
+    idRn = 86,
+    idFr = 87,
+    idRa = 88,
+    idAc = 89,
+    idTh = 90,
+    idPa = 91,
+    id_U = 92,
+    idNp = 93,
+    idPu = 94,
+    idAm = 95,
+    idCm = 96,
+    idBk = 97,
+    idCf = 98,
+    idEs = 99,
+    idFm = 100,
+    idMd = 101,
+    idNo = 102,
+    idLr = 103,
+    idRf = 104,
+    idDb = 105,
+    idSg = 106,
+    idBh = 107,
+    idHs = 108,
+    idMt = 109,
+    idDs = 110,
+    idRg = 111,
+    idCn = 112,
+    idNh = 113,
+    idFl = 114,
+    idMc = 115,
+    idLv = 116,
+    idTs = 117,
+    idOg = 118,
     idUnknownYet = 255
   };
 
   static const double AngstromInBohr;
 
-  static std::string ScrollEmptyStrings(BaseInput &/*in*/);
-  static size_t MeasureStringGroup(BaseInput& /*in*/);
-  static bool ScrollDownTo(BaseInput& /*in*/, const char* /*key*/);
-  static std::string ScrollDownToPrefix(BaseInput& /*in*/, const char* /*key*/, size_t /*skip*/ = 0);
+  static std::string ScrollEmptyStrings(BaseInput & /*in*/);
+  static size_t MeasureStringGroup(BaseInput & /*in*/);
+  static bool ScrollDownTo(BaseInput & /*in*/, const char * /*key*/);
+  static std::string ScrollDownToPrefix(BaseInput & /*in*/, const char * /*key*/, size_t /*skip*/ = 0);
 
-  static vtkIdType ElementSymbolToNumber(const char* symbol);
+  static vtkIdType ElementSymbolToNumber(const char *symbol);
 };
 
-template<class T>
+template <class T>
 class TraitsEmpty
-  : public TraitsBase
-{};
+    : public TraitsBase
+{
+};
 
 /*********************************************************************************
   XMol XYZ format:
   (CHAR)SYMBOL X Y Z
 **********************************************************************************/
 
-template <class T> class TraitsSymbolicXYZ : public TraitsBase
+template <class T>
+class TraitsSymbolicXYZ : public TraitsBase
 {
 public:
   template <typename Molecule>
@@ -148,7 +260,8 @@ public:
   NUM# SYMBOL X Y Z
 **********************************************************************************/
 
-template <class T> class TraitsNSymbolicXYZ : public TraitsBase
+template <class T>
+class TraitsNSymbolicXYZ : public TraitsBase
 {
 public:
   template <typename Molecule>
@@ -186,7 +299,8 @@ public:
   NUM# SYMBOL X pad Y pad Z pad
 **********************************************************************************/
 
-template <class T>  class TraitsSymXYZPadded : public TraitsBase
+template <class T>
+class TraitsSymXYZPadded : public TraitsBase
 {
 public:
   template <typename Molecule>
@@ -224,7 +338,8 @@ public:
   (UNSIGNED INT)ATOM_NUM X Y Z
 **********************************************************************************/
 
-template <class T> class TraitsNumericXYZ : public TraitsBase
+template <class T>
+class TraitsNumericXYZ : public TraitsBase
 {
 public:
   template <typename Molecule>
@@ -257,7 +372,8 @@ public:
   GAMESS XYZ format:
   (CHAR)LABEL[10] (REAL)ATOM_NUM X Y Z
 **********************************************************************************/
-template <class T> class TraitsLabelNumberXYZ : public TraitsBase
+template <class T>
+class TraitsLabelNumberXYZ : public TraitsBase
 {
 public:
   template <typename Molecule>
@@ -312,22 +428,66 @@ struct TraitsCentreWFN : TraitsBase
       unsigned short int atomType;
       float x, y, z;
       if (!(ssinp >> label >> skip // <number> -> n_skip?
-        >> skip                // "(CENTRE"
-        >> skip                // "<number>)"
-        >> x >> y >> z >> skip // "CHARGE"
-        >> c_skip              // '='
-        >> atomType))
+            >> skip                // "(CENTRE"
+            >> skip                // "<number>)"
+            >> x >> y >> z >> skip // "CHARGE"
+            >> c_skip              // '='
+            >> atomType))
         return -(++i);
 
-      mol->AppendAtom(atomType
-      , x // * AngstromInBohr,
-      , y // * AngstromInBohr,
-      , z // * AngstromInBohr
-        );
+      mol->AppendAtom(atomType, x // * AngstromInBohr,
+                      ,
+                      y // * AngstromInBohr,
+                      ,
+                      z // * AngstromInBohr
+      );
       // mol->LabelAtom(i, label);
     }
     return 0;
   }
 };
 
+/**
+ * TraitsMarkup
+ * 
+ **/
+
+template <class THost>
+class TraitsReadStructureMarkup
+    : public TraitsBase
+{
+public:
+  template <typename Source>
+  vtkStdString ReadTagContent(Source &src, const char* tag)
+  {
+    assert(tag && tag[0]);
+    src.seekg(0L,std::ios_base::beg);
+
+    vtkStdString result;
+    vtkStdString tagBody(tag); 
+    rtrim(tagBody);
+    ltrim(tagBody);
+    
+    vtkStdString tagOpen("<"); 
+    tagOpen += tagBody; 
+    tagOpen += ">";
+    
+    vtkStdString tagClose("</");
+    tagClose += tagBody;
+    tagClose += ">";
+
+    // * * *
+
+    return result;
+  }
+
+  template <typename Source, typename Molecule>
+  static int AppendAtoms(Source &src, size_t nAtoms, Molecule *pMol)
+  {
+    assert(pMol);
+    int nRes = 0;
+
+    return nRes;
+  }
+};
 #endif // !__Traits_AcquireAtoms_h__

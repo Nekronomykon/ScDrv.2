@@ -45,9 +45,9 @@ namespace vtk
 {
 
 class MoleculeAcquireFileWFX
-    : public ImplReadFile<MoleculeAcquireFileWFX, TraitsCentreWFN, MoleculeAcquireFileQTAIM>
+    : public ImplReadFile<MoleculeAcquireFileWFX, TraitsReadStructureMarkup, MoleculeAcquireFileQTAIM>
 {
-  typedef TraitsCentreWFN<MoleculeAcquireFileWFX> Traits;
+  typedef TraitsReadStructureMarkup<MoleculeAcquireFileWFX> Traits;
 
 public:
   static MoleculeAcquireFileWFX *New();

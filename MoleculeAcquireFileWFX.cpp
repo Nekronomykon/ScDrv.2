@@ -150,7 +150,9 @@ int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
 int MoleculeAcquireFileWFX::ReadSimpleMolecule(BaseInput &file_in, Molecule *output)
 {
   string str_line;
-  string title;
+  string title = Traits::ReadTagContent(file_in, "Title");
+  string src_numbers = Traits::ReadTagContent(file_in)
+  if(tit)
 
   // first non-empty string is the title
   do
