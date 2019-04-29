@@ -41,6 +41,7 @@
 
 class vtkMolecule;
 
+
 namespace vtk
 {
 

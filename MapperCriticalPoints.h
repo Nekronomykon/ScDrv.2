@@ -52,7 +52,7 @@ public:
   void Render(vtkRenderer*, vtkActor*) override;
 
 protected:
-  explicit MapperCriticalPoints() = default;
+  explicit MapperCriticalPoints();
   ~MapperCriticalPoints() override = default;
 
 private:

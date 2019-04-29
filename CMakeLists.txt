@@ -17,7 +17,7 @@ endforeach()
 
 PROJECT(ScDrv)
 
-find_package(VTK REQUIRED)
+find_package(VTK "8.2" REQUIRED)
 # include(${VTK_USE_FILE})
 
 # Instruct CMake to run moc automatically when needed.

@@ -447,47 +447,4 @@ struct TraitsCentreWFN : TraitsBase
   }
 };
 
-/**
- * TraitsMarkup
- * 
- **/
-
-template <class THost>
-class TraitsReadStructureMarkup
-    : public TraitsBase
-{
-public:
-  template <typename Source>
-  vtkStdString ReadTagContent(Source &src, const char* tag)
-  {
-    assert(tag && tag[0]);
-    src.seekg(0L,std::ios_base::beg);
-
-    vtkStdString result;
-    vtkStdString tagBody(tag); 
-    rtrim(tagBody);
-    ltrim(tagBody);
-    
-    vtkStdString tagOpen("<"); 
-    tagOpen += tagBody; 
-    tagOpen += ">";
-    
-    vtkStdString tagClose("</");
-    tagClose += tagBody;
-    tagClose += ">";
-
-    // * * *
-
-    return result;
-  }
-
-  template <typename Source, typename Molecule>
-  static int AppendAtoms(Source &src, size_t nAtoms, Molecule *pMol)
-  {
-    assert(pMol);
-    int nRes = 0;
-
-    return nRes;
-  }
-};
 #endif // !__Traits_AcquireAtoms_h__

@@ -25,134 +25,112 @@
 using namespace std;
 using namespace vtk;
 
+/**
+ * TraitsMarkup
+ * 
+ **/
+
+template <class THost>
+class TraitsReadStructureMarkup : public TraitsBase
+{
+public:
+  template <typename Source>
+  vtkStdString ReadTagContent(Source &src, const char *tag)
+  {
+    assert(tag && tag[0]);
+    src.seekg(0L, std::ios_base::beg);
+
+    vtkStdString tagBody(tag);
+    ltrim(tagBody);
+    rtrim(tagBody);
+
+    vtkStdString tagOpen("<");
+    tagOpen += tagBody;
+    tagOpen += ">";
+
+    vtkStdString tagClose("</");
+    tagClose += tagBody;
+    tagClose += ">";
+
+    // * * *
+    vtkStdString result, one_line;
+    bool bReading(false);
+    getline(src, one_line);
+    do
+    {
+      // Comments to strip:
+      size_t nComment = one_line.find('#');
+      if(!nComment) continue;
+      if(nComment != vtkStdString::npos)
+        one_line = one_line.resize(nComment);
+
+      one_line = ltrim_copy(rtrim_copy(one_line));
+
+      if (one_line.empty())
+        continue;
+      
+      if (bReading)
+      {
+        if (one_line.find(tagClose) != vtkStdString::npos)
+          break;
+        result += one_line; /* delimiting */ result += "  ";
+      }
+      else
+      {
+        bReading = (one_line.find(tagOpen) != vtkStdString::npos);
+      }
+      
+      /* code */
+    } while (getline(src, one_line));
+
+    return result;
+  }
+};
+
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileWFX);
 
 int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVector *)
 {
-  string str_line;
-  string title;
-  if (!getline(file_in, str_line))
+  vtkIdType nAtoms(0);
+  string title(Traits::ReadTagContent(file_in, "Title"));
+  if (title.empty())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading title string: " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Title> section in " << this->FileName());
+  }
+  this->ResetTitle(title);
+
+  istringstream inpNAtoms(Traits::ReadTagContent(file_in, "Number of Nuclei"));
+  inpNAtoms >> nAtoms;
+  if (!nAtoms)
+  {
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Number of Nuclei> section in " << this->FileName());
     return 0;
   }
-  title = str_line;
-
-  if (!getline(file_in, str_line))
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading sizes string: " << this->FileName());
-    return 0;
-  }
-
-  int nAtoms = 0;
-  int nOrbs = 0;
-  int nPrims = 0;
-  string str_orb_type; // orbital type marker
-  string skip;
-  char cEq;
-
-  istringstream ssinp(str_line);
-  if (!(ssinp >> str_orb_type                // "SLATER" || "GTO" || "GAUSSIAN"
-        >> nOrbs >> skip /* "MOL" */ >> skip // "ORBITALS"
-        >> nPrims >> skip                    // "PRIMITIVES"
-        >> nAtoms))
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error: wrong SIZES string at " << this->FileName());
-    return 0;
-  }
-
-  if ((nAtoms <= 0) || (nOrbs <= 0) || (nPrims <= 0))
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error: wrong SIZES: nCenters=" << nAtoms
-                  << " nOrbitals=" << nOrbs
-                  << " nPrimitives=" << nPrims
-                  << " at " << this->FileName());
-    return 0;
-  }
-
-  assert(!this->GetNumberOfAtoms()); // assured that it is read first
   this->ResetNumberOfAtoms(nAtoms);
-  assert(!this->GetNumberOfPrimitives());
-  this->ResetNumberOfPrimitives(nPrims);
-  assert(!this->GetNumberOfOrbitals());
-  this->ResetNumberOfOrbitals(nOrbs);
 
-  for (int i = 0; i < nAtoms; i++)
+  if (Traits::ReadTagContent(file_in, "Atomic Numbers").empty())
   {
-    if (!getline(file_in, str_line))
-    {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading atom string #" << i + 1 << " in " << this->FileName());
-      return 0;
-    }
-  }
-
-  int nTextSectionHeight = (nPrims + 19) / 20; // 20 ints per string; format constant
-  for (int i = 0; i < nTextSectionHeight; ++i)
-  {
-    if (!getline(file_in, str_line))
-    {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading CENTRE ASSIGNMENTS string #" << (++i) << " in " << this->FileName());
-      return 0;
-    }
-  }
-  for (int i = 0; i < nTextSectionHeight; ++i)
-  {
-    if (!getline(file_in, str_line))
-    {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading TYPE ASSIGNMENTS string #" << (++i) << " in " << this->FileName());
-      return 0;
-    }
-  }
-
-  nTextSectionHeight = (nPrims + 4) / 5; // 5 reals per string; format constant
-
-  for (int i = 0; i < nTextSectionHeight; ++i)
-  {
-    if (!getline(file_in, str_line))
-    {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading EXPONENTS string #" << (++i) << " in " << this->FileName());
-      return 0;
-    }
-  }
-
-  for (int j = 0; j < nOrbs; ++j)
-  {
-    if (!getline(file_in, str_line))
-    {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading ORBITAL #" << (++j) << " header in " << this->FileName());
-      return 0;
-    }
-    for (int i = 0; i < nTextSectionHeight; ++i)
-    {
-      if (!getline(file_in, str_line))
-      {
-        vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading ORBITAL #" << (++j) << " in string #" << (++i) << " in " << this->FileName());
-        return 0;
-      }
-    }
-  }
-
-  if (!getline(file_in, str_line))
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading END DATA string in " << this->FileName());
-    return 0;
-  }
-  if (!getline(file_in, str_line))
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading ENERGY/VIRIAL string in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Atomic Numbers> section in " << this->FileName());
     return 0;
   }
 
-  return 1;
+  if (Traits::ReadTagContent(file_in, "Nuclear Cartesian Coordinates").empty())
+  {
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Nuclear Cartesian Coordinates> section in " << this->FileName());
+    return 0;
+  }
+
+  return (nAtoms > 0)? 1 : 0;
 }
 
-int MoleculeAcquireFileWFX::ReadSimpleMolecule(BaseInput &file_in, Molecule *output)
+int MoleculeAcquireFileWFX::ReadSimpleMolecule(BaseInput &file_in, Molecule *pMol)
 {
   string str_line;
   string title = Traits::ReadTagContent(file_in, "Title");
-  string src_numbers = Traits::ReadTagContent(file_in)
-  if(tit)
+  istringstream inpNumers(Traits::ReadTagContent(file_in, "Atomic Numbers"));
+  istringstream inpXYZ(Traits::ReadTagContent(file_in, "Nuclear Cartesian Coordinates"));
+  istringstream inlLabels(Traits::ReadTagContent(file_in, "Nuclear Names"));
 
   // first non-empty string is the title
   do
@@ -208,8 +186,6 @@ int MoleculeAcquireFileWFX::ReadSimpleMolecule(BaseInput &file_in, Molecule *out
                     << " Premature EOF while reading molecule.");
     return 0;
   }
-
-  // other stuff to read are to be written later
 
   return 1;
 }

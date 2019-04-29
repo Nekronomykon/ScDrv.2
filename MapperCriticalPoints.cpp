@@ -5,6 +5,10 @@ using namespace std;
 
 #include <vtkGlyph3DMapper.h>
 
+#include <vtkCubeSource.h>
+#include <vtkPlatonicSolidSource.h>
+#include <vtkRegularPolygonSource.h>
+
 #include "CriticalPoints.h"
 
 // Note this class may have an accelerated subclass ala
@@ -12,6 +16,12 @@ using namespace std;
 // also check that class for impacts.
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MapperCriticalPoints);
+
+//----------------------------------------------------------------------------
+MapperCriticalPoints::MapperCriticalPoints()
+{
+
+}
 
 //----------------------------------------------------------------------------
 void MapperCriticalPoints::PrintSelf(ostream &os, vtkIndent indent)
