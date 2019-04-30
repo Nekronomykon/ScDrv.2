@@ -6,6 +6,9 @@
 #include <QString>
 #include <QMessageBox>
 
+#include <sstream>
+
+using namespace std;
 using namespace vtk;
 
 //----------------------------------------------------------------------------

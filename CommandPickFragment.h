@@ -19,9 +19,7 @@
 #include <vtkSelection.h>
 #include <vtkMolecule.h>
 
-#include <sstream>
-using namespace std;
-
+// 
 #include "MapperMolecule.h"
 
 namespace vtk
@@ -36,9 +34,7 @@ public:
   // void PrintSelf(ostream& os, vtkIndent indent) override;
 
   // Adjust that
-  void Execute(vtkObject * /*caller*/, unsigned long /*eventId*/
-               ,
-               void * /*callData*/) override;
+  void Execute(vtkObject* /*caller*/, unsigned long /*eventId*/, void* /*callData*/) override;
 
   vtkIdTypeArray *IndexSelectedAtoms() const { return idxAtoms_.Get(); }
   vtkIdTypeArray *IndexSelectedBonds() const { return idxBonds_.Get(); }

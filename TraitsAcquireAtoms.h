@@ -447,4 +447,67 @@ struct TraitsCentreWFN : TraitsBase
   }
 };
 
+/**
+ * TraitsMarkup
+ * 
+ **/
+
+template <class THost>
+class TraitsReadStructureMarkup : public TraitsBase
+{
+public:
+  template <typename Source>
+  static std::string ReadTagContent(Source &src, const char *tag)
+  {
+    assert(tag && tag[0]);
+    src.seekg(0L, std::ios_base::beg);
+
+    std::string tagBody(tag);
+    ltrim(tagBody);
+    rtrim(tagBody);
+
+    std::string tagOpen("<");
+    tagOpen += tagBody;
+    tagOpen += ">";
+
+    std::string tagClose("</");
+    tagClose += tagBody;
+    tagClose += ">";
+
+    // * * *
+    std::string result;
+    std::string one_line;
+    bool bReading(false);
+    getline(src, one_line);
+    do
+    {
+      // Comments to strip:
+      size_t nComment = one_line.find('#');
+      if(!nComment) continue;
+      if(nComment != std::string::npos)
+        one_line.resize(nComment);
+
+      one_line = ltrim_copy(rtrim_copy(one_line));
+
+      if (one_line.empty())
+        continue;
+      
+      if (bReading)
+      {
+        if (one_line.find(tagClose) != std::string::npos)
+          break;
+        result += one_line; /* delimiting */ result += ' ';
+      }
+      else
+      {
+        bReading = (one_line.find(tagOpen) != std::string::npos);
+      }
+      
+      /* code */
+    } while (getline(src, one_line));
+
+    return result;
+  }
+};
+
 #endif // !__Traits_AcquireAtoms_h__

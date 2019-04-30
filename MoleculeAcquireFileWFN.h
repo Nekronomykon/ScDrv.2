@@ -37,7 +37,6 @@
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
-class vtkMolecule;
 
 namespace vtk
 {

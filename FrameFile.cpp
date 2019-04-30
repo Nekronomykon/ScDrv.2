@@ -338,7 +338,11 @@ inline bool FrameFile::ExportImageWith(const QString &name)
   this->SetupImageWriter(write_image.GetPointer());
   {
     vtkNew<vtkWindowToImageFilter> w2img;
+#if(VTK_MAJOR_VERSION > 8 && VTK_MINOR_VERSION > 2)
     w2img->SetInput(pMolView->renderWindow());
+#else
+    w2img->SetInput(pMolView->GetRenderWindow());
+#endif
     write_image->SetInputConnection(w2img->GetOutputPort());
   }
   write_image->SetFileName(FileNameRoot::getPtrFrom(name));

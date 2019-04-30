@@ -25,67 +25,6 @@
 using namespace std;
 using namespace vtk;
 
-/**
- * TraitsMarkup
- * 
- **/
-
-template <class THost>
-class TraitsReadStructureMarkup : public TraitsBase
-{
-public:
-  template <typename Source>
-  vtkStdString ReadTagContent(Source &src, const char *tag)
-  {
-    assert(tag && tag[0]);
-    src.seekg(0L, std::ios_base::beg);
-
-    vtkStdString tagBody(tag);
-    ltrim(tagBody);
-    rtrim(tagBody);
-
-    vtkStdString tagOpen("<");
-    tagOpen += tagBody;
-    tagOpen += ">";
-
-    vtkStdString tagClose("</");
-    tagClose += tagBody;
-    tagClose += ">";
-
-    // * * *
-    vtkStdString result, one_line;
-    bool bReading(false);
-    getline(src, one_line);
-    do
-    {
-      // Comments to strip:
-      size_t nComment = one_line.find('#');
-      if(!nComment) continue;
-      if(nComment != vtkStdString::npos)
-        one_line = one_line.resize(nComment);
-
-      one_line = ltrim_copy(rtrim_copy(one_line));
-
-      if (one_line.empty())
-        continue;
-      
-      if (bReading)
-      {
-        if (one_line.find(tagClose) != vtkStdString::npos)
-          break;
-        result += one_line; /* delimiting */ result += "  ";
-      }
-      else
-      {
-        bReading = (one_line.find(tagOpen) != vtkStdString::npos);
-      }
-      
-      /* code */
-    } while (getline(src, one_line));
-
-    return result;
-  }
-};
 
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileWFX);
@@ -98,7 +37,7 @@ int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
   {
     vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Title> section in " << this->FileName());
   }
-  this->ResetTitle(title);
+  // this->ResetTitle(title);
 
   istringstream inpNAtoms(Traits::ReadTagContent(file_in, "Number of Nuclei"));
   inpNAtoms >> nAtoms;
@@ -173,7 +112,8 @@ int MoleculeAcquireFileWFX::ReadSimpleMolecule(BaseInput &file_in, Molecule *pMo
   }
 
   // construct vtkMolecule
-  int nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
+  int nResult = 0;
+  // nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), pMol);
   if (nResult)
   {
     if (nResult > 0)

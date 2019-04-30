@@ -39,11 +39,7 @@ typedef vtkSmartPointer<MoleculeMapperOpenGL> MolMapperOpenGL;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-    : BaseWidget(parent)
-    , renderer_(OpenGLRenderer::New())
-    , mol_mapper_(MolMapperOpenGL::New())
-    , area_picker_(RenderedAreaPicker::New())
-    , styleInteractor_(IntStyleRbrBndPick::New())
+    : BaseWidget(parent), renderer_(OpenGLRenderer::New()), mol_mapper_(MolMapperOpenGL::New()), area_picker_(RenderedAreaPicker::New()), styleInteractor_(IntStyleRbrBndPick::New())
 {
   // VTK Renderer setup
   // renderer_->SetUseFXAA(true); // antaliasing is now On
@@ -53,10 +49,15 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   renderer_->AddActor(mol);
 
-  // VTK/Qt wedding...
+// VTK/Qt wedding...
+#if (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION > 2)
   this->renderWindow()->AddRenderer(renderer_);
-
   vtkRenderWindowInteractor *pIren = this->interactor();
+#else
+  this->GetRenderWindow()->AddRenderer(renderer_);
+  vtkRenderWindowInteractor *pIren = this->GetInteractor();
+#endif
+
   assert(pIren);
   pIren->SetInteractorStyle(styleInteractor_);
   pIren->SetPicker(area_picker_);
@@ -82,5 +83,9 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
 void QVTKMoleculeWidget::doRender()
 {
   renderer_->SetBackground(bgColor_.GetData());
+#if (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION > 2)
   this->renderWindow()->Render();
+#else
+  this->GetRenderWindow()->Render();
+#endif
 }
