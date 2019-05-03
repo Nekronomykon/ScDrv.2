@@ -48,13 +48,15 @@ int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
   }
   this->ResetNumberOfAtoms(nAtoms);
 
-  if (Traits::ReadTagContent(file_in, "Atomic Numbers").empty())
+  bufAtomNumbers_ = Traits::ReadTagContent(file_in, "Atomic Numbers");
+   if (bufAtomNumbers_.empty())
   {
     vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Atomic Numbers> section in " << this->FileName());
     return 0;
   }
 
-  if (Traits::ReadTagContent(file_in, "Nuclear Cartesian Coordinates").empty())
+  bufAtomCoords_ = Traits::ReadTagContent(file_in, "Nuclear Cartesian Coordinates");
+  if (bufAtomCoords_.empty())
   {
     vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Nuclear Cartesian Coordinates> section in " << this->FileName());
     return 0;
@@ -67,9 +69,9 @@ int MoleculeAcquireFileWFX::ReadSimpleMolecule(BaseInput &file_in, Molecule *pMo
 {
   string str_line;
   string title = Traits::ReadTagContent(file_in, "Title");
-  istringstream inpNumers(Traits::ReadTagContent(file_in, "Atomic Numbers"));
-  istringstream inpXYZ(Traits::ReadTagContent(file_in, "Nuclear Cartesian Coordinates"));
-  istringstream inlLabels(Traits::ReadTagContent(file_in, "Nuclear Names"));
+  istringstream inpANum(bufAtomNumbers_);
+  istringstream inpAXYZ(bufAtomCoords_);
+  istringstream inlALbl(bufAtomLabels_);
 
   // first non-empty string is the title
   do

@@ -34,7 +34,7 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include "MoleculeAcquireFile.h"
+#include "MoleculeAcquireFileQM.h"
 
 #include <vtkSetGet.h>
 
@@ -45,38 +45,17 @@ namespace vtk
 {
 
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
-    : public MoleculeAcquireFile
+    : public MoleculeAcquireFileQM
 {
-  typedef MoleculeAcquireFile _Base;
+  typedef MoleculeAcquireFileQM _Base;
 
 public:
   static MoleculeAcquireFileQTAIM *New();
-  vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFile);
+  vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFileQM);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
   void Initialize(); // override;
 
-  vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
-  virtual vtkIdType ResetNumberOfOrbitals(vtkIdType nnew = 0)
-  {
-    if (nnew != this->GetNumberOfOrbitals())
-    {
-      std::swap(NumberOfOrbitals_, nnew);
-      this->Modified();
-    }
-    return nnew;
-  }
-
-  vtkIdType GetNumberOfPrimitives() const { return NumberOfPrimitives_; }
-  vtkIdType ResetNumberOfPrimitives(vtkIdType nnew = 0)
-  {
-    if (nnew != GetNumberOfPrimitives())
-    {
-      std::swap(NumberOfPrimitives_, nnew);
-      this->Modified();
-    }
-    return nnew;
-  }
 
   vtkIdType GetNumberOfCPs() const {return NumberOfCPs_;}
   vtkIdType ResetNumberOfCPs(vtkIdType nnew = 0)
@@ -123,8 +102,6 @@ private:
   void operator=(const MoleculeAcquireFileQTAIM &) = delete;
 
   vtkIdType NumberOfCPs_ = 0;
-  vtkIdType NumberOfOrbitals_ = 0;
-  vtkIdType NumberOfPrimitives_ = 0;
   vtkIdType CriticalPoints[NumberOfCPTypes];
 };
 

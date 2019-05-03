@@ -49,14 +49,19 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   renderer_->AddActor(mol);
 
-// VTK/Qt wedding...
+  // VTK/Qt wedding...
+  vtkRenderWindow *pWnd;
+  vtkRenderWindowInteractor *pIren;
 #if (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION > 2)
-  this->renderWindow()->AddRenderer(renderer_);
-  vtkRenderWindowInteractor *pIren = this->interactor();
+  pWnd = this->renderWindow();
+  pIren = this->interactor();
 #else
-  this->GetRenderWindow()->AddRenderer(renderer_);
-  vtkRenderWindowInteractor *pIren = this->GetInteractor();
+  pWnd = this->GetRenderWindow();
+  pIren = this->GetInteractor();
 #endif
+  assert(pWnd);
+  // pWnd->SetMultiSamples(7);
+  pWnd->AddRenderer(renderer_);
 
   assert(pIren);
   pIren->SetInteractorStyle(styleInteractor_);

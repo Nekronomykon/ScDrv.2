@@ -16,7 +16,7 @@ using namespace vtk;
 
 int main(int argc, char *argv[])
 {
-  vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(8);
+  vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(16);
   QSurfaceFormat::setDefaultFormat(QVTKMoleculeWidget::defaultFormat()); // none stereo capabilities
   
   QVTKApplication app(argc, argv);

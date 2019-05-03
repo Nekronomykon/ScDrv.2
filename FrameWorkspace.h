@@ -100,6 +100,7 @@ protected slots:
   //
   void loadPathContentFrom(const QString &);
   void setSceneBackground(const QString &);
+  void setSceneMultisample(int);
 
 protected:
   void changeEvent(QEvent *e) override;
@@ -136,7 +137,8 @@ private:
 
   QPointer<QProgressBar> progress_;
 
-  QPointer<ComboBoxColors> colors_back_;
+  QPointer<ComboBoxColors> colors_back_; // background color name
+  QPointer<QComboBox> level_AA_; // antialiasing
 
 private slots:
 };

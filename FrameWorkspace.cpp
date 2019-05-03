@@ -17,14 +17,20 @@
 
 #include <QFontDialog>
 
-#include <vtkSphereSource.h>
+// #include <vtkSphereSource.h>
+#include <vtkOpenGLRenderWindow.h>
 #include <vtkCamera.h>
 
 #include <vtkSmartPointer.h>
 
 // Constructor
-FrameWorkspace::FrameWorkspace(QWidget *parent)
-    : QMainWindow(parent), edit_workspace_(new ViewWorkspace), view_files_(new ViewFilesystem), view_file_content_(new ViewFileContent), progress_(new QProgressBar), colors_back_(new ComboBoxColors)
+FrameWorkspace::FrameWorkspace(QWidget *parent) : QMainWindow(parent),
+                                                  edit_workspace_(new ViewWorkspace),
+                                                  view_files_(new ViewFilesystem),
+                                                  view_file_content_(new ViewFileContent),
+                                                  progress_(new QProgressBar),
+                                                  colors_back_(new ComboBoxColors),
+                                                  level_AA_(new QComboBox)
 {
   this->setupUi(this);
 
@@ -44,6 +50,7 @@ FrameWorkspace::FrameWorkspace(QWidget *parent)
   QString sColBg(this->getActiveChild()->GetBackgroundColorName().c_str());
   colors_back_->setCurrentText(sColBg);
   connect(colors_back_, &ComboBoxColors::currentTextChanged, this, &FrameWorkspace::setSceneBackground);
+  connect(level_AA_, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &FrameWorkspace::setSceneMultisample);
 
   // progress_->setWidth(200);
   // this->statusBar()->insertWidget(1, progress_, 1);
@@ -86,7 +93,8 @@ int FrameWorkspace::hasRecentFiles()
 
 void FrameWorkspace::setupActions()
 {
-  const QIcon iconNew = QIcon::fromTheme("document-new", QIcon(":/images/New.png"));
+  // const QIcon iconNew = QIcon::fromTheme("document-new", QIcon(":/images/New.png"));
+  const QIcon iconNew(":/images/New.png");
   actionNew_->setIcon(iconNew);
   actionNew_->setShortcuts(QKeySequence::New);
 
@@ -191,6 +199,14 @@ void FrameWorkspace::setupToolBars()
   tbView->addSeparator();
   tbView->addAction(actionProjOrthogonal_);
   tbView->addAction(actionProjPerspective_);
+  tbView->addSeparator();
+  int nAAMax = vtkOpenGLRenderWindow::GetGlobalMaximumNumberOfMultiSamples();
+  QStringList lst;
+  QString sfmt("%1");
+  for (int j = 0; j < nAAMax; ++j)
+    lst.push_back(sfmt.arg(j));
+  level_AA_->addItems(lst);
+  tbView->addWidget(level_AA_);
 
   QToolBar *tbMol = this->addToolBar(tr("View"));
   tbMol->addAction(actionMolFast_);
@@ -274,6 +290,8 @@ void FrameWorkspace::updateUi()
 
   actionLabelAtoms_->setEnabled(bHasGraph);
   actionLabelBonds_->setEnabled(bHasGraph);
+
+  level_AA_->setEnabled(bHasGraph);
 }
 
 FrameWorkspace::Child *FrameWorkspace::getActiveChild() const
@@ -439,12 +457,27 @@ void FrameWorkspace::setSceneBackground(const QString &name_col)
   if (pOpen)
     pOpen->ResetBackgroundColorName(name_bytes);
 }
-
+void FrameWorkspace::setSceneMultisample(int idx)
+{
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  auto *pMol = pOpen->getViewStructure();
+  assert(pMol);
+  vtkRenderWindow *pWnd;
+#if (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION > 2)
+  pWnd = pMol->renderWindow();
+#else
+  pWnd = pMol->GetRenderWindow();
+#endif
+  assert(pWnd);
+  pWnd->SetMultiSamples(idx);
+  pMol->doRender();
+}
 // Auto-assigned event handlers:
 
 void FrameWorkspace::on_actionNew__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
+  Child *pOpen = this->getActiveChild();
   pOpen->doClearAll();
   pOpen->ResetFileName();
   this->updateUi();
