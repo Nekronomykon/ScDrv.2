@@ -196,7 +196,8 @@ struct TraitsBase
     idLv = 116,
     idTs = 117,
     idOg = 118,
-    idUnknownYet = 255
+    idUnknownYet = 255,
+    idAtomNumberMask = 0x0fff
   };
 
   static const double AngstromInBohr;
@@ -205,7 +206,10 @@ struct TraitsBase
   static size_t MeasureStringGroup(BaseInput & /*in*/);
   static bool ScrollDownTo(BaseInput & /*in*/, const char * /*key*/);
   static std::string ScrollDownToPrefix(BaseInput & /*in*/, const char * /*key*/, size_t /*skip*/ = 0);
-
+  static bool IsValidAtomNumber(size_t idAtomType)
+  {
+    return ((idAtomType & idAtomNumberMask) < idUnknownYet);
+  }
   static vtkIdType ElementSymbolToNumber(const char *symbol);
 };
 
@@ -483,26 +487,28 @@ public:
     {
       // Comments to strip:
       size_t nComment = one_line.find('#');
-      if(!nComment) continue;
-      if(nComment != std::string::npos)
+      if (!nComment)
+        continue;
+      if (nComment != std::string::npos)
         one_line.resize(nComment);
 
       one_line = ltrim_copy(rtrim_copy(one_line));
 
       if (one_line.empty())
         continue;
-      
+
       if (bReading)
       {
         if (one_line.find(tagClose) != std::string::npos)
           break;
-        result += one_line; /* delimiting */ result += ' ';
+        result += one_line; /* delimiting */
+        result += ' ';
       }
       else
       {
         bReading = (one_line.find(tagOpen) != std::string::npos);
       }
-      
+
       /* code */
     } while (getline(src, one_line));
 
