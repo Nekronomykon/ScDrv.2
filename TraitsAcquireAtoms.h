@@ -481,23 +481,19 @@ public:
     // * * *
     std::string result;
     std::string one_line;
-    bool bReading(false);
+    bool bRead(false);
     getline(src, one_line);
     do
     {
       // Comments to strip:
       size_t nComment = one_line.find('#');
       if (!nComment)
-        continue;
+        continue; // resulted in empty string
+        
       if (nComment != std::string::npos)
         one_line.resize(nComment);
 
-      one_line = ltrim_copy(rtrim_copy(one_line));
-
-      if (one_line.empty())
-        continue;
-
-      if (bReading)
+      if (bRead)
       {
         if (one_line.find(tagClose) != std::string::npos)
           break;
@@ -506,11 +502,15 @@ public:
       }
       else
       {
-        bReading = (one_line.find(tagOpen) != std::string::npos);
+        bRead = (one_line.find(tagOpen) != std::string::npos);
       }
 
       /* code */
     } while (getline(src, one_line));
+
+    /*
+    if(bRead) -> tag was found; yet dunno know how to use it
+    */
 
     return result;
   }
