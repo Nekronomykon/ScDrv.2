@@ -16,9 +16,9 @@
 #include "ImplFileName.h"
 #include "TraitsAcquireAtoms.h"
 
-template <class T, template <typename U> class TTraits // = TraitsEmpty
-          ,
-          class TBase // = MoleculeAcquireBase
+template <class T,
+          template <typename U> class TTraits, // = TraitsEmpty
+          class TBase                          // = MoleculeAcquireBase
           >
 class ImplReadFile
     : public TBase
@@ -100,7 +100,8 @@ public:
 
   int ParseStreamInfo(BaseInput &, vtkInformationVector *out)
   {
-    if (!out) return 0;
+    if (!out)
+      return 0;
     vtkInformation *outInfo = out->GetInformationObject(0);
     return outInfo ? 1 : 0;
   }

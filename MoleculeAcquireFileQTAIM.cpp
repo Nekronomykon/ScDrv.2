@@ -63,3 +63,24 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
   }
   return nRes;
 }
+
+int MoleculeAcquireFileQTAIM::RequestData(vtkInformation *pi, vtkInformationVector **piv, 
+vtkInformationVector *pov)
+{
+  if( !_Base::RequestData(pi, piv, pov) )
+  return  0;
+
+  CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(pov, 1));
+  if(!pCP)
+  {
+    vtkErrorMacro(<< "We do not have CriticalPoints as output.");
+    return 1;
+  }
+
+  return this->ReadCriticalPoints(pCP);
+}
+
+int MoleculeAcquireFileQTAIM::ReadCriticalPoints(CriticalPoints *)
+{
+  return 1;
+}

@@ -36,6 +36,8 @@
 // #include "vtkDomainsChemistryModule.h" // For export macro
 #include "MoleculeAcquireFileQM.h"
 
+#include "CriticalPoints.h"
+
 #include <vtkSetGet.h>
 
 class vtkMolecule;
@@ -56,32 +58,24 @@ public:
 
   void Initialize(); // override;
 
-
-  vtkIdType GetNumberOfCPs() const {return NumberOfCPs_;}
+  vtkIdType GetNumberOfCPs() const { return NumberOfCPs_; }
   vtkIdType ResetNumberOfCPs(vtkIdType nnew = 0)
   {
-    if(nnew != this->GetNumberOfCPs())
+    if (nnew != this->GetNumberOfCPs())
     {
-      std::swap(nnew,NumberOfCPs_);
+      std::swap(nnew, NumberOfCPs_);
       this->Modified();
     }
     return nnew;
   }
 
-  template <typename Stream>
-  int _ParseStreamData(Stream &src, vtkInformationVector *out)
-  {
-    int kBaseRes = 0; //_Base::ParseStreamData(src, out);
-    if (kBaseRes)
-    {
-      //CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(out, 1));
-      // here we go down read all criticals:
-      return kBaseRes;
-    }
-    return kBaseRes;
-  }
+  int RequestData(vtkInformation * /*pi*/,
+                  vtkInformationVector ** /*piv*/,
+                  vtkInformationVector * /*pov*/) override;
 
 protected:
+  virtual int ReadCriticalPoints(CriticalPoints*);
+
   enum
   {
     AtomMaximumCP = 0,
@@ -95,14 +89,14 @@ protected:
   explicit MoleculeAcquireFileQTAIM() = default;
   ~MoleculeAcquireFileQTAIM() override = default;
 
-  vtkIdType ReadNumberCPs(std::istream& sin); 
+  vtkIdType ReadNumberCPs(std::istream &sin);
 
 private:
   MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
   void operator=(const MoleculeAcquireFileQTAIM &) = delete;
 
   vtkIdType NumberOfCPs_ = 0;
-  vtkIdType CriticalPoints[NumberOfCPTypes];
+  vtkIdType SizesCPTypes[NumberOfCPTypes];
 };
 
 }; // namespace vtk

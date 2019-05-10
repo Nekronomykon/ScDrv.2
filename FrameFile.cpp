@@ -413,13 +413,13 @@ void FrameFile::doClearAll()
 
 void FrameFile::hideStructureViews()
 {
-  // this->setCurrentWidget(view_source_);
-  // while (this->count() > 1)
-  // {
-  //   this->removeTab(1);
-  // }
-  // view_current_.resize(1);
-  // view_current_[0] = view_source_; // may be excessive, but...
+  this->setCurrentWidget(view_source_);
+  while (this->count() > 1)
+  {
+    this->removeTab(1);
+  }
+  view_current_.resize(1);
+  view_current_[0] = view_source_; // may be excessive, but...
 }
 
 void FrameFile::showStructureViews()
@@ -430,6 +430,7 @@ void FrameFile::showStructureViews()
   view_atomic_->GetViewModel()->resetMolecule(this->getMolecule());
   this->addViewWidget(view_bonds_, tr("Bonds"));
   view_bonds_->GetViewModel()->resetMolecule(this->getMolecule());
+  this->addViewWidget(view_cycle_, tr("Cycles"));
 }
 
 FrameFile::FileContext FrameFile::defaultFormat() { return format_active; }

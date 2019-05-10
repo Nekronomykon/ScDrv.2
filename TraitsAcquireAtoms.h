@@ -463,8 +463,9 @@ public:
   template <typename Source>
   static std::string ReadTagContent(Source &src, const char *tag)
   {
-    assert(tag && tag[0]);
-    src.seekg(0L, std::ios_base::beg);
+    std::string result;
+    assert(tag);    // valid pointer
+    assert(tag[0]); // nonempty tag
 
     std::string tagBody(tag);
     ltrim(tagBody);
@@ -479,9 +480,10 @@ public:
     tagClose += ">";
 
     // * * *
-    std::string result;
     std::string one_line;
     bool bRead(false);
+
+    src.seekg(0L, std::ios_base::beg); // rewind()
     getline(src, one_line);
     do
     {

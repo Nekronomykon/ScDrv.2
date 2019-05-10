@@ -43,6 +43,7 @@ using namespace vtk;
 #include "ViewSource.h"
 #include "ViewMoleculeAtomic.h"
 #include "ViewMoleculeBonds.h"
+#include "ViewCyclePucker.h"
 
 #include "MoleculeAcquireFile.h"
 
@@ -249,6 +250,7 @@ private:
 
   QPointer<ViewMoleculeAtomic> view_atomic_ = nullptr;
   QPointer<ViewMoleculeBonds> view_bonds_ = nullptr;
+  QPointer<ViewCyclePucker> view_cycle_ = nullptr;
 };
 
 #endif // !Frame_File_h
