@@ -31,7 +31,7 @@ vtkStandardNewMacro(MoleculeAcquireFileEXTOUT);
 //----------------------------------------------------------------------------
 int MoleculeAcquireFileEXTOUT::ParseStreamInfo(BaseInput &infile,vtkInformationVector*)
 {
-  if (!Traits::ScrollDownTo(infile, " The nuclear coordinates:"))
+  if (!Traits::ScrollDownTo(infile, "The nuclear coordinates:"))
     return 0;
 
   size_t nAtomStr = Traits::MeasureStringGroup(infile);
@@ -50,7 +50,7 @@ int MoleculeAcquireFileEXTOUT::ParseStreamInfo(BaseInput &infile,vtkInformationV
 //----------------------------------------------------------------------------
 int MoleculeAcquireFileEXTOUT::ReadMolecule(istream &infile, vtkMolecule *pMol)
 {
-  if (!Traits::ScrollDownTo(infile, " The nuclear coordinates:"))
+  if (!Traits::ScrollDownTo(infile, "The nuclear coordinates:"))
     return 0;
   int nResult = Traits::AppendAtoms(infile, this->GetNumberOfAtoms(), pMol);
 
