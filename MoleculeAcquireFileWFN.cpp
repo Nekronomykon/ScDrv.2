@@ -149,7 +149,7 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   return 1;
 }
 
-int MoleculeAcquireFileWFN::ReadSimpleMolecule(BaseInput& file_in,Molecule* output)
+int MoleculeAcquireFileWFN::ReadMolecule(istream& file_in, vtkMolecule* output)
 {
   string str_line;
   string title;

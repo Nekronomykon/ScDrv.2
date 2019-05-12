@@ -36,12 +36,12 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileXYZ);
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileXYZ::ParseStreamInfo(BaseInput& file_in,vtkInformationVector*)
+int MoleculeAcquireFileXYZ::ParseStreamInfo(BaseInput& inp,vtkInformationVector*)
 {
   int natoms = 0;
-  // istream::pos_type current_pos = file_in.tellg();
+  // istream::pos_type current_pos = inp.tellg();
   string str_line;
-  if (!getline(file_in, str_line))
+  if (!getline(inp, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->FileName());
     return 0;
@@ -53,31 +53,31 @@ int MoleculeAcquireFileXYZ::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   this->ResetNumberOfAtoms(natoms);
 
   string title;
-  if (!std::getline(file_in, str_line))
+  if (!std::getline(inp, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading title string: " << this->FileName());
     return 0;
   }
 
-  int nStrings = Traits::MeasureStringGroup(file_in);
+  int nStrings = Traits::MeasureStringGroup(inp);
 
   return (nStrings >= natoms) ? 1 : 0;
 }
 
-int MoleculeAcquireFileXYZ::ReadSimpleMolecule(BaseInput& file_in, Molecule*output)
+int MoleculeAcquireFileXYZ::ReadMolecule(istream &inp, vtkMolecule *output)
 {
   int timestep = 0;
   int nbAtoms = 0;
   string str_line;
 
-  if (!getline(file_in, str_line))
+  if (!getline(inp, str_line))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->FileName());
     return 0;
   }
   istringstream ssinp(str_line);
   ssinp >> nbAtoms;
-  // file_in.get(); // end of line char
+  // inp.get(); // end of line char
 
   if (nbAtoms != this->GetNumberOfAtoms())
   {
@@ -86,10 +86,10 @@ int MoleculeAcquireFileXYZ::ReadSimpleMolecule(BaseInput& file_in, Molecule*outp
     return 0;
   }
   string title;
-  getline(file_in, title);  // second line is a title
+  getline(inp, title);  // second line is a title
 
   // construct vtkMolecule
-  int nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
+  int nResult = Traits::AppendAtoms(inp, this->GetNumberOfAtoms(), output);
   if (nResult)
   {
     if (nResult > 0)

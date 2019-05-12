@@ -51,7 +51,7 @@ int MoleculeAcquireFileSUM::ParseStreamInfo(BaseInput &infile,vtkInformationVect
 }
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileSUM::ReadSimpleMolecule(BaseInput &infile, vtkMolecule *pMol)
+int MoleculeAcquireFileSUM::ReadMolecule(istream &infile, vtkMolecule *pMol)
 {
   if (!Traits::ScrollDownTo(infile, "Nuclear Charges and Cartesian Coordinates:"))
     return 0;
@@ -64,7 +64,7 @@ int MoleculeAcquireFileSUM::ReadSimpleMolecule(BaseInput &infile, vtkMolecule *p
   int nResult = Traits::AppendAtoms(infile, this->GetNumberOfAtoms(), pMol);
   if (nResult)
   {
-    vtkErrorMacro("MGP format is broken badly:" << endl);
+    vtkErrorMacro("SUM format is broken badly:" << endl);
     if (nResult > 0)
       vtkErrorMacro(<< "MoleculeAcquireFileSUM error reading atom #" << nResult
         << " from " << this->FileName()

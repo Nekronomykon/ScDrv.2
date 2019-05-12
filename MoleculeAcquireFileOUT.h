@@ -56,7 +56,7 @@ namespace vtk
 
     typedef Traits::BaseInput BaseInput;
     int ParseStreamInfo(BaseInput &,vtkInformationVector*);
-    int ReadSimpleMolecule(BaseInput &, Molecule *);
+    int ReadMolecule(std::istream &, vtkMolecule *) override;
 
   protected:
     explicit MoleculeAcquireFileOUT() = default;

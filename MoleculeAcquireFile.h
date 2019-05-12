@@ -35,6 +35,28 @@ public:
   vtkTypeMacro(MoleculeAcquireFile, MoleculeAcquireBase);
   void PrintSelf(std::ostream &os, vtkIndent indent) override;
 
+  virtual int ReadMolecule(std::istream &src, vtkMolecule *)
+  {
+    assert(0);
+    return 1; // debug stop
+  }
+
+  virtual int ParseStreamData(std::istream& src, vtkInformationVector *out)
+  {
+    assert(out);
+    if (!out)
+      return 0;
+
+    vtkInformation *outInfo = out->GetInformationObject(0);
+
+    vtkMolecule *molxyz = vtkMolecule::SafeDownCast(vtkDataObject::GetData(out));
+    if (!molxyz)
+    {
+      vtkErrorMacro(<< "We do not have a vtkMolecule as output.");
+      return 1;
+    }
+    return ReadMolecule(src, molxyz);
+  }
   //
   // void ResetPos(FileInputPos pos) { posRead_ = pos; }
   // FileInputPos GetPos(FileInputPos pos) const { return posRead_; }
@@ -50,9 +72,9 @@ private:
 
   // members:
 private:
-  FileInputPos posRead_;
+  // FileInputPos posRead_;
 };
 
-} // namespace vtk
+}; // namespace vtk
 
 #endif // !MoleculeAcquire_File_h

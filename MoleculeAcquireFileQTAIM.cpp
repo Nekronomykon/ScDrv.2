@@ -52,9 +52,7 @@ void MoleculeAcquireFileQTAIM::Initialize()
 vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 {
   vtkIdType nRes = 0;
-  istringstream in_str(TraitsBase::ScrollDownToPrefix(inss
-  , "Total number of electron density critical points found ="
-  , 57));
+  istringstream in_str(TraitsBase::ScrollDownToPrefix(inss, "Total number of electron density critical points found =", 57));
   in_str >> nRes;
   assert(!this->GetNumberOfCPs());
   if (nRes)
@@ -64,23 +62,7 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
   return nRes;
 }
 
-int MoleculeAcquireFileQTAIM::RequestData(vtkInformation *pi, vtkInformationVector **piv, 
-vtkInformationVector *pov)
-{
-  if( !_Base::RequestData(pi, piv, pov) )
-  return  0;
-
-  CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(pov, 1));
-  if(!pCP)
-  {
-    vtkErrorMacro(<< "We do not have CriticalPoints as output.");
-    return 1;
-  }
-
-  return this->ReadCriticalPoints(pCP);
-}
-
-int MoleculeAcquireFileQTAIM::ReadCriticalPoints(CriticalPoints *)
+int MoleculeAcquireFileQTAIM::ReadCriticalPoints(istream &inp, CriticalPoints *pCP)
 {
   return 1;
 }

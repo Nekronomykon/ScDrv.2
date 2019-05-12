@@ -57,7 +57,7 @@ public:
 
   typedef Traits::BaseInput BaseInput;
   int ParseStreamInfo(BaseInput &, vtkInformationVector *);
-  int ReadSimpleMolecule(BaseInput &, Molecule *);
+  int ReadMolecule(istream &, vtkMolecule *) override;
 
 protected:
   explicit MoleculeAcquireFileWFX() = default;

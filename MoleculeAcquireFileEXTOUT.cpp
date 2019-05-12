@@ -48,7 +48,7 @@ int MoleculeAcquireFileEXTOUT::ParseStreamInfo(BaseInput &infile,vtkInformationV
 }
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileEXTOUT::ReadSimpleMolecule(BaseInput &infile, vtkMolecule *pMol)
+int MoleculeAcquireFileEXTOUT::ReadMolecule(istream &infile, vtkMolecule *pMol)
 {
   if (!Traits::ScrollDownTo(infile, " The nuclear coordinates:"))
     return 0;

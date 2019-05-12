@@ -48,15 +48,13 @@ namespace vtk
     typedef ImplReadFile<MoleculeAcquireFileSUM, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
     typedef TraitsLabelNumberXYZ<MoleculeAcquireFileSUM> Traits;
   public:
-    typedef Traits::BaseInput BaseInput;
-    typedef _Base::Molecule Molecule;
 
     static MoleculeAcquireFileSUM *New();
     vtkTypeMacro(MoleculeAcquireFileSUM, MoleculeAcquireFile);
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
     int ParseStreamInfo(BaseInput&,vtkInformationVector*);
-    int ReadSimpleMolecule(BaseInput&, Molecule*);
+    int ReadMolecule(std::istream &, vtkMolecule *) override;
 
   protected:
     explicit MoleculeAcquireFileSUM() = default;

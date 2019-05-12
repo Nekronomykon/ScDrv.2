@@ -63,7 +63,7 @@ int MoleculeAcquireFileOUT::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
 }
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileOUT::ReadSimpleMolecule(BaseInput &file_in, Molecule *output)
+int MoleculeAcquireFileOUT::ReadMolecule(istream &file_in, vtkMolecule *output)
 {
   int timestep = 0;
   int nbAtoms = 0;

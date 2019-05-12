@@ -399,6 +399,7 @@ bool TraitsBase::ScrollDownTo(BaseInput &in, const char *key_ptr)
     rtrim(one_line);
     if (one_line.empty())
       continue;
+    ltrim(one_line);
     if (!one_line.compare(key))
       return true;
   } while (std::getline(in, one_line));
@@ -436,4 +437,3 @@ string TraitsBase::ScrollDownToPrefix(BaseInput &in, const char *key_ptr, size_t
   }
   return one_line;
 }
-

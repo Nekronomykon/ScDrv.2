@@ -38,6 +38,8 @@
 
 #include <vtkSetGet.h>
 
+#include <istream>
+
 class vtkMolecule;
 
 namespace vtk
@@ -46,6 +48,8 @@ namespace vtk
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQM
     : public MoleculeAcquireFile
 {
+  typedef MoleculeAcquireFile _Base;
+
 public:
   static MoleculeAcquireFileQM *New();
   vtkTypeMacro(MoleculeAcquireFileQM, MoleculeAcquireFile);
@@ -73,7 +77,22 @@ public:
     return nnew;
   }
 
-  protected:
+  int ParseStreamData(std::istream &src, vtkInformationVector *out) override
+  {
+    if (!_Base::ParseStreamData(src, out))
+      return 0;
+
+    // if electronics is not available, it is almost Ok
+
+    return this->ParseElectronicData(src, out);
+  }
+
+  virtual int ParseElectronicData(std::istream &src, vtkInformationVector *out)
+  {
+    return 1;
+  }
+
+protected:
   MoleculeAcquireFileQM();
   ~MoleculeAcquireFileQM() override = default;
 

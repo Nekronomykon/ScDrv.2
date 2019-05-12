@@ -57,7 +57,7 @@ namespace vtk
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
     int ParseStreamInfo(BaseInput&,vtkInformationVector*);
-    int ReadSimpleMolecule(BaseInput&, Molecule*);
+    int ReadMolecule(istream &, vtkMolecule *) override;
 
   protected:
     explicit MoleculeAcquireFileEXTOUT() = default;

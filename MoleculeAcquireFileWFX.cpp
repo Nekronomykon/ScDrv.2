@@ -66,7 +66,7 @@ int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
   return (nAtoms > 0) ? 1 : 0;
 }
 
-int MoleculeAcquireFileWFX::ReadSimpleMolecule(BaseInput &file_in, Molecule *pMol)
+int MoleculeAcquireFileWFX::ReadMolecule(istream &file_in, vtkMolecule *pMol)
 {
   string str_line;
   string title = Traits::ReadTagContent(file_in, "Title");

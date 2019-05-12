@@ -30,11 +30,10 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileARC);
 
 //----------------------------------------------------------------------------
-void MoleculeAcquireFileARC::PrintSelf(ostream& os, vtkIndent indent)
+void MoleculeAcquireFileARC::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 }
-
 
 int MoleculeAcquireFileARC::RequestInformation(vtkInformation *vtkNotUsed(request),
                                                vtkInformationVector **vtkNotUsed(inputVector),
@@ -89,68 +88,29 @@ int MoleculeAcquireFileARC::RequestInformation(vtkInformation *vtkNotUsed(reques
   return 1;
 }
 
-int MoleculeAcquireFileARC::RequestData(vtkInformation *,
-                                        vtkInformationVector **,
-                                        vtkInformationVector *outVector)
+int MoleculeAcquireFileARC::ReadMolecule(istream &file_in, vtkMolecule *output)
 {
-  vtkInformation *outInfo = outVector->GetInformationObject(0);
-
-  vtkMolecule *output = vtkMolecule::SafeDownCast(vtkDataObject::GetData(outVector));
-
-  if (!output)
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileARC does not have a vtkMolecule as output.");
-    return 1;
-  }
-
-  if (!this->HasFileName())
+  if (!Traits::ScrollDownTo(file_in, "FINAL GEOMETRY OBTAINED"))
     return 0;
-
-  ifstream file_in(this->GetFileName());
-
-  if (!file_in.is_open())
+  string one_line;
+  if (!getline(file_in, one_line) || !getline(file_in, one_line) || !getline(file_in, one_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileARC error opening file: " << this->FileName());
+    vtkErrorMacro(<< "ARC file is unexpectedly finished: " << this->FileName());
     return 0;
   }
-
-  std::string str_line;
-  if (!std::getline(file_in, str_line))
-  {
-    vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->FileName());
-    return 0;
-  }
-  do
-  {
-    if (!file_in)
-    {
-      vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->FileName());
-      return 0;
-    }
-    if (str_line.find("FINAL GEOMETRY OBTAINED") != std::string::npos)
-      break;
-  } while (std::getline(file_in, str_line));
-
-  std::getline(file_in, str_line);
-  std::getline(file_in, str_line);
-  std::getline(file_in, str_line);
-
   // construct vtkMolecule
   int nResult = Traits::AppendAtoms(file_in, this->GetNumberOfAtoms(), output);
   if (nResult)
   {
     if (nResult > 0)
-      vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom #" << nResult
-        << " from " << this->FileName()
-        << " Premature EOF while reading molecule."
-      );
+      vtkErrorMacro(<< "MoleculeAcquireFileARC error reading atom #" << nResult
+                    << " from " << this->FileName()
+                    << " Premature EOF while reading molecule.");
     if (nResult < 0)
-      vtkErrorMacro(<< "MoleculeAcquireFileXYZ error parsing atom #" << -nResult
-        << " from " << this->FileName()
-        << " Premature EOF while reading molecule."
-      );
+      vtkErrorMacro(<< "MoleculeAcquireFileARC error parsing atom #" << -nResult
+                    << " from " << this->FileName()
+                    << " Premature EOF while reading molecule.");
     return 0;
   }
   return 1;
 }
-

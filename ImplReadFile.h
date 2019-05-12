@@ -78,26 +78,6 @@ public:
     return pT->ParseStreamData(file_in, outputVector);
   }
 
-  template <typename Stream>
-  int ParseStreamData(Stream &src, vtkInformationVector *out)
-  {
-    T *pT = static_cast<T *>(this);
-
-    assert(out);
-    if (!out)
-      return 0;
-
-    vtkInformation *outInfo = out->GetInformationObject(0);
-
-    vtkMolecule *molxyz = vtkMolecule::SafeDownCast(vtkDataObject::GetData(out));
-    if (!molxyz)
-    {
-      vtkErrorMacro(<< "We do not have a vtkMolecule as output.");
-      return 1;
-    }
-    return pT->ReadSimpleMolecule(src, molxyz);
-  }
-
   int ParseStreamInfo(BaseInput &, vtkInformationVector *out)
   {
     if (!out)

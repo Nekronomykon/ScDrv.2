@@ -52,7 +52,7 @@ int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVect
 }
 
 //----------------------------------------------------------------------------.S
-int MoleculeAcquireFileMGP::ReadSimpleMolecule(BaseInput &infile, vtkMolecule *pMol)
+int MoleculeAcquireFileMGP::ReadMolecule(istream &infile, vtkMolecule *pMol)
 {
   if (!Traits::ScrollDownTo(infile, "Nuclear Charges and Cartesian Coordinates:"))
     return 0;

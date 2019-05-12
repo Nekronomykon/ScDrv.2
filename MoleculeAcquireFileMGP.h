@@ -48,15 +48,13 @@ namespace vtk
     typedef ImplReadFile<MoleculeAcquireFileMGP, TraitsLabelNumberXYZ, MoleculeAcquireFileQTAIM> _Base;
     typedef TraitsLabelNumberXYZ<MoleculeAcquireFileMGP> Traits;
   public:
-    typedef _Base::Molecule Molecule;
 
     static MoleculeAcquireFileMGP *New();
     vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFile);
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
-    typedef Traits::BaseInput BaseInput;
     int ParseStreamInfo(BaseInput&,vtkInformationVector*);
-    int ReadSimpleMolecule(BaseInput&, Molecule*);
+    int ReadMolecule(std::istream &, vtkMolecule *) override;
 
   protected:
     explicit MoleculeAcquireFileMGP() = default;

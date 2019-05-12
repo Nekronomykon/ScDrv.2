@@ -22,7 +22,7 @@
  * NOT YET FINISHED!
  *
  * @par Thanks:
- * ScrewDriver de Blackheadborough who developed and contributed this class
+ * ScrewDriver te Blackheadborough who developed and contributed this class
  *
  * NB: It is preconverted from the MoleculeAcquireFileCUBE class
  * and yet not in its final executive form.
@@ -39,6 +39,8 @@
 #include "CriticalPoints.h"
 
 #include <vtkSetGet.h>
+
+#include <istream>
 
 class vtkMolecule;
 class CriticalPoints;
@@ -69,12 +71,23 @@ public:
     return nnew;
   }
 
-  int RequestData(vtkInformation * /*pi*/,
-                  vtkInformationVector ** /*piv*/,
-                  vtkInformationVector * /*pov*/) override;
+  int ParseStreamData(std::istream &src, vtkInformationVector *out) override
+  {
+    if (!_Base::ParseStreamData(src, out))
+      return 0;
+
+    CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(out, 1));
+    if (!pCP)
+    {
+      vtkErrorMacro(<< "We do not have CriticalPoints as output. Skip it");
+      return 1;
+    }
+
+    return ReadCriticalPoints(src, pCP);
+  }
 
 protected:
-  virtual int ReadCriticalPoints(CriticalPoints*);
+  virtual int ReadCriticalPoints(std::istream &, CriticalPoints *);
 
   enum
   {
