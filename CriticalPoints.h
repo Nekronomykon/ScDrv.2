@@ -12,27 +12,32 @@
 
 #include <vtkPoints.h>
 #include <vtkMolecule.h>
+#include <vtkFloatArray.h>
 
 #include <vtkSmartPointer.h>
 #include <vtkNew.h>
 
-class vtkPoints;
+class vtkFloatArray;
 class vtkMolecule;
 
 typedef vtkNew<vtkMolecule> NewMolecule;
 typedef vtkSmartPointer<vtkMolecule> Molecule;
 
+typedef vtkSmartPointer<vtkFloatArray> Values;
+typedef vtkNew<vtkFloatArray> NewValues;
+
+typedef vtkNew<vtkPoints> NewPoints;
+
 class CriticalPoints
-: public vtkPoints
+    : public vtkPoints
 {
 public:
-  static CriticalPoints* New();
-  vtkTypeMacro(CriticalPoints,vtkPoints)
-  void PrintSelf(ostream &os, vtkIndent indent) override;
+  static CriticalPoints *New();
+  vtkTypeMacro(CriticalPoints, vtkPoints) void PrintSelf(ostream &os, vtkIndent indent) override;
   void Initialize() override;
 
   //accessor
-  vtkMolecule* GetMolecule() const {return molecule_;}
+  vtkMolecule *GetMolecule() const { return molecule_; }
 
 protected:
   explicit CriticalPoints() = default;
@@ -45,6 +50,13 @@ private:
 private:
   NewMolecule molecule_;
 
+  // Field values:
+  NewValues fieldValues_;
+  // Hessian of the field:
+  NewPoints eigValues_;
+  NewPoints eigVectors0_;
+  NewPoints eigVectors1_;
+  NewPoints eigVectors2_;
 };
 
 #endif // !CriticalPointStructure_h
