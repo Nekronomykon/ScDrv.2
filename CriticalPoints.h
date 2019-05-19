@@ -1,5 +1,5 @@
-#ifndef CriticalPointStructure_h
-#define CriticalPointStructure_h
+#ifndef CriticalPoints_h
+#define CriticalPoints_h
 
 #ifdef _MSC_VER
 #pragma once
@@ -33,7 +33,8 @@ class CriticalPoints
 {
 public:
   static CriticalPoints *New();
-  vtkTypeMacro(CriticalPoints, vtkPoints) void PrintSelf(ostream &os, vtkIndent indent) override;
+  vtkTypeMacro(CriticalPoints, vtkPoints);
+  void PrintSelf(ostream &os, vtkIndent indent) override;
   void Initialize() override;
 
   //accessor
@@ -41,7 +42,7 @@ public:
 
 protected:
   explicit CriticalPoints() = default;
-  ~CriticalPoints() override = default;
+  ~CriticalPoints()override = default;
 
 private:
   CriticalPoints(const CriticalPoints &) = delete;
@@ -54,9 +55,10 @@ private:
   NewValues fieldValues_;
   // Hessian of the field:
   NewPoints eigValues_;
-  NewPoints eigVectors0_;
   NewPoints eigVectors1_;
   NewPoints eigVectors2_;
+  NewPoints eigVectors3_;
+  // digits as in the file format
 };
 
-#endif // !CriticalPointStructure_h
+#endif // !CriticalPoints_h
