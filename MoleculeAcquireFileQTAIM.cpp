@@ -17,6 +17,7 @@
 #include "CriticalPoints.h"
 
 #include <vtkObjectFactory.h>
+#include <vtkExecutive.h>
 
 #include <cmath>
 #include <cstring>
@@ -52,7 +53,9 @@ void MoleculeAcquireFileQTAIM::Initialize()
 vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 {
   vtkIdType nRes = 0;
-  istringstream in_str(TraitsBase::ScrollDownToPrefix(inss, "Total number of electron density critical points found =", 57));
+  istringstream in_str(TraitsBase::ScrollDownToPrefix(inss,
+                                                      "Total number of electron density critical points found =",
+                                                      57));
   in_str >> nRes;
   assert(!this->GetNumberOfCPs());
   if (nRes)
@@ -65,4 +68,36 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 int MoleculeAcquireFileQTAIM::ReadCriticalPoints(istream &inp, CriticalPoints *pCP)
 {
   return 1;
+}
+
+int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationVector *out)
+{
+  if (!_Base::ParseStreamData(src, out))
+    return 0;
+
+  CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(out, PortCritical));
+  if (!pCP)
+  {
+    vtkErrorMacro(<< "No CriticalPoints as output for" << this->GetFileName() << "Skip it");
+    return 1;
+  }
+
+  return ReadCriticalPoints(src, pCP);
+}
+
+CriticalPoints *MoleculeAcquireFileQTAIM::GetOutput()
+{
+  return this->GetOutput(PortCritical);
+}
+
+CriticalPoints *MoleculeAcquireFileQTAIM::GetOutput(int port)
+{
+  return CriticalPoints::SafeDownCast(this->GetInput(port));
+}
+
+void MoleculeAcquireFileQTAIM::SetOutputCritical(CriticalPoints *pCP, bool bUpdate)
+{
+  this->GetExecutive()->SetOutputData(PortCritical, pCP);
+  if (bUpdate && pCP)
+    this->SetOutput(pCP->GetMolecule());
 }

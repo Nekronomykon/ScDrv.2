@@ -51,6 +51,10 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQM
   typedef MoleculeAcquireFile _Base;
 
 public:
+  enum
+  {
+    PortElectronic = 1
+  };
   static MoleculeAcquireFileQM *New();
   vtkTypeMacro(MoleculeAcquireFileQM, MoleculeAcquireFile);
   void PrintSelf(ostream &os, vtkIndent indent) override;

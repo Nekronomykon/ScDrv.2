@@ -295,7 +295,14 @@ bool FrameFile::acquireUsing()
 
     // NewMolecule molNew;
     // reader->SetOutput( molNew );
-    reader->SetOutput(this->getMolecule()); // only atoms
+
+    MoleculeAcquireFileQTAIM *pQ = MoleculeAcquireFileQTAIM::SafeDownCast(reader.GetPointer());
+    if (pQ)
+    {
+      pQ->SetOutputCritical(structure_, true);
+    }
+    else
+      reader->SetOutput(this->getMolecule()); // only atoms
 
     // structure_.UpdateBonds();
     // bonds_build_->RemoveAllInputs();
@@ -338,7 +345,7 @@ inline bool FrameFile::ExportImageWith(const QString &name)
   this->SetupImageWriter(write_image.GetPointer());
   {
     vtkNew<vtkWindowToImageFilter> w2img;
-#if(VTK_MAJOR_VERSION > 8 || (VTK_MAJOR_VERSION == 8 && VTK_MINOR_VERSION > 2))
+#if (VTK_MAJOR_VERSION > 8 || (VTK_MAJOR_VERSION == 8 && VTK_MINOR_VERSION > 2))
     w2img->SetInput(pMolView->renderWindow());
 #else
     w2img->SetInput(pMolView->GetRenderWindow());

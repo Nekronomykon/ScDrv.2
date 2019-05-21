@@ -11,6 +11,7 @@
 #include <vtkObjectFactory.h>
 
 #include <vtkPoints.h>
+#include <vtkGraph.h>
 #include <vtkMolecule.h>
 #include <vtkFloatArray.h>
 
@@ -29,11 +30,11 @@ typedef vtkNew<vtkFloatArray> NewValues;
 typedef vtkNew<vtkPoints> NewPoints;
 
 class CriticalPoints
-    : public vtkPoints
+    : public vtkGraph
 {
 public:
   static CriticalPoints *New();
-  vtkTypeMacro(CriticalPoints, vtkPoints);
+  vtkTypeMacro(CriticalPoints, vtkGraph);
   void PrintSelf(ostream &os, vtkIndent indent) override;
   void Initialize() override;
 

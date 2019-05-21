@@ -58,6 +58,15 @@ public:
   vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFileQM);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
+  enum
+  {
+    PortCritical = 2
+  };
+
+  CriticalPoints *GetOutput();
+  CriticalPoints *GetOutput(int);
+  void SetOutputCritical(CriticalPoints *, bool /*bUpdateMol*/ = false);
+
   void Initialize(); // override;
 
   vtkIdType GetNumberOfCPs() const { return NumberOfCPs_; }
@@ -71,20 +80,8 @@ public:
     return nnew;
   }
 
-  int ParseStreamData(std::istream &src, vtkInformationVector *out) override
-  {
-    if (!_Base::ParseStreamData(src, out))
-      return 0;
-
-    CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(out, 1));
-    if (!pCP)
-    {
-      vtkErrorMacro(<< "We do not have CriticalPoints as output. Skip it");
-      return 1;
-    }
-
-    return ReadCriticalPoints(src, pCP);
-  }
+  int ParseStreamData(std::istream & /*src*/,
+                      vtkInformationVector * /*out*/) override;
 
 protected:
   virtual int ReadCriticalPoints(std::istream &, CriticalPoints *);

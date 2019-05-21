@@ -60,16 +60,16 @@ private:
   void operator=(const MapperCriticalPoints &) = delete;
 
   // data: Atomic;
-  vtkNew<vtkGlyph3DMapper> glyphMapACP_;
+  vtkNew<vtkGlyph3DMapper> glyphMapACP_; /* sphere / dodekahedron? */
   vtkSmartPointer<vtkPolyDataMapper> polyDataACP_;
   // data: Bonds;
-  vtkNew<vtkGlyph3DMapper> glyphMapBCP_;
+  vtkNew<vtkGlyph3DMapper> glyphMapBCP_; /* cylinder ? cone */
   vtkSmartPointer<vtkPolyDataMapper> polyDataBCP_;
   // data: Rings;
-  vtkNew<vtkGlyph3DMapper> glyphMapRCP_;
+  vtkNew<vtkGlyph3DMapper> glyphMapRCP_; /* disc ? cylinder */
   vtkSmartPointer<vtkPolyDataMapper> polyDataRCP_;
   // data: Cages;
-  vtkNew<vtkGlyph3DMapper> glyphMapCCP_;
+  vtkNew<vtkGlyph3DMapper> glyphMapCCP_; /* octahedron? */ 
   vtkSmartPointer<vtkPolyDataMapper> polyDataCCP_;
 };
 

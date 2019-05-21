@@ -42,55 +42,59 @@ class vtkDataSet;
 class vtkMolecule;
 class MolecularStructure;
 
-namespace vtk {
+namespace vtk
+{
 
-  class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireBase
+class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireBase
     : public vtkAlgorithm
+{
+protected:
+public:
+  enum
   {
-  protected:
-  public:
-    typedef vtkMolecule Molecule;
-    // typedef MolecularStructure Molecule;
+    PortMolecule = 0
+  };
+  typedef vtkMolecule Molecule;
+  // typedef MolecularStructure Molecule;
 
-    static MoleculeAcquireBase *New();
-    vtkTypeMacro(MoleculeAcquireBase, vtkAlgorithm)
-      void PrintSelf(ostream &os, vtkIndent indent) override;
+  static MoleculeAcquireBase *New();
+  vtkTypeMacro(MoleculeAcquireBase, vtkAlgorithm) void PrintSelf(ostream &os, vtkIndent indent) override;
 
-    vtkIdType GetNumberOfAtoms() const { return NumberOfAtoms_; }
-    virtual vtkIdType ResetNumberOfAtoms(vtkIdType nnew)
+  vtkIdType GetNumberOfAtoms() const { return NumberOfAtoms_; }
+  virtual vtkIdType ResetNumberOfAtoms(vtkIdType nnew)
+  {
+    if (nnew != this->GetNumberOfAtoms())
     {
-      if (nnew != this->GetNumberOfAtoms())
-      {
-        std::swap(NumberOfAtoms_, nnew);
-        this->Modified();
-      }
-      return nnew;
+      std::swap(NumberOfAtoms_, nnew);
+      this->Modified();
     }
+    return nnew;
+  }
 
-    //@{
-    /**
+  //@{
+  /**
      * Get the output data object for a port on this algorithm.
      */
-    Molecule *GetOutput();
-    Molecule *GetOutput(int);
-    virtual void SetOutput(Molecule *d);
-    //@}
+  Molecule *GetOutput();
+  Molecule *GetOutput(int);
+  virtual void SetOutput(Molecule *);
+  //@}
 
-    /**
+  /**
      * see vtkAlgorithm for details
      */
-    int ProcessRequest(vtkInformation *,
-      vtkInformationVector **,
-      vtkInformationVector *) override;
+  int ProcessRequest(vtkInformation *,
+                     vtkInformationVector **,
+                     vtkInformationVector *) override;
 
-    // this method is not recommended for use, but lots of old style filters
-    // use it
-    vtkDataObject *GetInput();
-    vtkDataObject *GetInput(int port);
-    Molecule *GetMoleculeInput(int port);
+  // this method is not recommended for use, but lots of old style filters
+  // use it
+  vtkDataObject *GetInput();
+  vtkDataObject *GetInput(int port);
+  Molecule *GetMoleculeInput(int port);
 
-    //@{
-    /**
+  //@{
+  /**
      * Set an input of this algorithm. You should not override these
      * methods because they are not the only way to connect a pipeline.
      * Note that these methods support old-style pipeline connections.
@@ -99,57 +103,51 @@ namespace vtk {
      * input index to the input port index, not an index of a connection
      * within a single port.
      */
-    void SetInputData(vtkDataObject *);
-    void SetInputData(int, vtkDataObject *);
-    //@}
+  void SetInputData(vtkDataObject *);
+  void SetInputData(int, vtkDataObject *);
+  //@}
 
-    //@{
-    /**
+  //@{
+  /**
      * Add an input of this algorithm.  Note that these methods support
      * old-style pipeline connections.  When writing new code you should
      * use the more general vtkAlgorithm::AddInputConnection().  See
      * SetInputData() for details.
      */
-    void AddInputData(vtkDataObject *);
-    void AddInputData(int, vtkDataObject *);
-    //@}
+  void AddInputData(vtkDataObject *);
+  void AddInputData(int, vtkDataObject *);
+  //@}
 
-  protected:
-    explicit MoleculeAcquireBase();
-    ~MoleculeAcquireBase() override = default;
+protected:
+  explicit MoleculeAcquireBase();
+  ~MoleculeAcquireBase() override = default;
 
-    // convenience method
-    virtual int RequestInformation(vtkInformation *request
-    , vtkInformationVector **inputVector
-    , vtkInformationVector *outputVector);
+  // convenience method
+  virtual int RequestInformation(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector);
 
-    /**
+  /**
      * This is called by the superclass.
      * This is the method you should override.
      */
-    virtual int RequestData(vtkInformation *request
-    , vtkInformationVector **inputVector
-    , vtkInformationVector *outputVector);
+  virtual int RequestData(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector);
 
-    /**
+  /**
      * This is called by the superclass.
      * This is the method you should override.
      */
-    virtual int RequestUpdateExtent(vtkInformation *
-    , vtkInformationVector **
-    , vtkInformationVector *);
+  virtual int RequestUpdateExtent(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
 
-    // see algorithm for more info
-    int FillOutputPortInformation(int port, vtkInformation *info) override;
-    int FillInputPortInformation(int port, vtkInformation *info) override;
+  // see algorithm for more info
+  int FillOutputPortInformation(int port, vtkInformation *info) override;
+  int FillInputPortInformation(int port, vtkInformation *info) override;
 
-  private:
-    MoleculeAcquireBase(const MoleculeAcquireBase &) = delete;
-    void operator=(const MoleculeAcquireBase &) = delete;
+private:
+  MoleculeAcquireBase(const MoleculeAcquireBase &) = delete;
+  void operator=(const MoleculeAcquireBase &) = delete;
 
-    //----------------------------------------------------------------------------
-    vtkIdType NumberOfAtoms_ = 0L;
-  };
+  //----------------------------------------------------------------------------
+  vtkIdType NumberOfAtoms_ = 0L;
+};
 
 }; // namespace vtk
 

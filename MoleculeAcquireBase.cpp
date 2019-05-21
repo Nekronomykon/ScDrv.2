@@ -45,7 +45,7 @@ void MoleculeAcquireBase::PrintSelf(ostream &os, vtkIndent indent)
 //----------------------------------------------------------------------------
 MoleculeAcquireBase::Molecule *MoleculeAcquireBase::GetOutput()
 {
-  return this->GetOutput(0);
+  return this->GetOutput(PortMolecule);
 }
 
 //----------------------------------------------------------------------------
@@ -57,7 +57,7 @@ MoleculeAcquireBase::Molecule *MoleculeAcquireBase::GetOutput(int port)
 //----------------------------------------------------------------------------
 void MoleculeAcquireBase::SetOutput(MoleculeAcquireBase::Molecule *d)
 {
-  this->GetExecutive()->SetOutputData(0, d);
+  this->GetExecutive()->SetOutputData(PortMolecule, d);
 }
 
 //----------------------------------------------------------------------------
