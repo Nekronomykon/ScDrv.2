@@ -8,7 +8,6 @@ using namespace vtk;
 // vtkCxxRevisionMacro(CriticalPoints, "$Revision: 1.1 $");
 //-----------------------------------------------------------------------------
 vtkStandardNewMacro(CriticalPoints)
-// Can not ng here
 
 // CriticalPoints::CriticalPoints(){}
 
