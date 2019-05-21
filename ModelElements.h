@@ -49,7 +49,7 @@ public:
   Qt::ItemFlags flags(const QModelIndex & /*index*/) const override;
 
 private:
-  vtkNew<PeriodicElements> elements_;
+  Elements elements_;
 
 };
 

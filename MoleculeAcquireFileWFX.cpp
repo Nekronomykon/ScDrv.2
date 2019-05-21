@@ -78,10 +78,10 @@ int MoleculeAcquireFileWFX::ReadMolecule(istream &file_in, vtkMolecule *pMol)
   size_t nOrbs = this->GetNumberOfOrbitals();
   size_t nPrims = this->GetNumberOfPrimitives();
 
-  size_t idAtomType = Traits::idAtomNumberMask;
+  size_t idAtomType = 0;
   size_t idx = 0;
   inpANum >> idAtomType;
-  if (!Traits::IsValidAtomNumber(idAtomType))
+  if (!Elements::IsValidAtomNumber(idAtomType))
     return 0;
   do
   {
@@ -91,9 +91,9 @@ int MoleculeAcquireFileWFX::ReadMolecule(istream &file_in, vtkMolecule *pMol)
 
     ++idx;
     --nAtomsReq;
-    idAtomType = Traits::idAtomNumberMask;
+    idAtomType = 0;
     inpANum >> idAtomType;
-  } while (Traits::IsValidAtomNumber(idAtomType));
+  } while (Elements::IsValidAtomNumber(idAtomType));
 
   return (!nAtomsReq) ? 1 : 0;
 }

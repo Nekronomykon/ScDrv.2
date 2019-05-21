@@ -33,6 +33,17 @@ class CriticalPoints
     : public vtkUndirectedGraph
 {
 public:
+  enum
+  {
+    AtomMaximumCP = 0,
+    BondSaddleCP = 1,
+    RingSaddleCP = 2,
+    CageMinimumCP = 3,
+    NonNuclearMaxCP = 4,
+    NumberOfCPTypes = 5
+  };
+
+
   static CriticalPoints *New();
   vtkTypeMacro(CriticalPoints, vtkUndirectedGraph);
   void PrintSelf(ostream &os, vtkIndent indent) override;
@@ -51,6 +62,8 @@ private:
 
 private:
   NewMolecule molecule_;
+
+  vtkIdType SizesCPTypes[NumberOfCPTypes];
 
   // Field values:
   NewValues fieldValues_;

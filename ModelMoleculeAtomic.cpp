@@ -56,13 +56,13 @@ QVariant ModelMoleculeAtomic::data(const QModelIndex &mi, int role) const
   if (role == Qt::DisplayRole)
   {
     QVariant res;
-    vtkNew<PeriodicElements> elem;
+    // vtkNew<PeriodicElements> elem;
     vtkAtom atom = ptr_mol_->GetAtom(mi.row());
     switch (mi.column())
     {
     case (ColumnElement):
     {
-      res.setValue(QString(elem->GetSymbol( atom.GetAtomicNumber() ) ) );
+      res.setValue(QString(Elements::GetElementSymbol( atom.GetAtomicNumber() ) ) );
       break;
     }
     case (ColumnNumber):

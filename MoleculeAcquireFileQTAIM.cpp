@@ -31,6 +31,12 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileQTAIM);
 
 //----------------------------------------------------------------------------
+MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM()
+{
+  this->SetNumberOfOutputPorts(3);
+}
+
+//----------------------------------------------------------------------------
 void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
@@ -78,7 +84,7 @@ int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationV
   CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(out, PortCritical));
   if (!pCP)
   {
-    vtkErrorMacro(<< "No CriticalPoints as output for" << this->GetFileName() << "Skip it");
+    vtkErrorMacro(<< "No CriticalPoints as output for " << this->GetFileName() << " -- skipping");
     return 1;
   }
 

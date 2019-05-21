@@ -69,7 +69,7 @@ MapperMolecule::MapperMolecule()
     , AtomicRadiusArrayName(nullptr)
     , RenderLattice(false)
     , GlyphDataInitialized(false)
-    , areLabelDataInitialized_(false), pad_(2)
+    , areLabelDataInitialized_(false), pad_(1.5)
 {
   // Initialize ivars:
   this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 64; // ???
@@ -318,7 +318,7 @@ void MapperMolecule::UpdateAtomGlyphPolyData()
   for (vtkIdType i = 0; i < molecule->GetNumberOfAtoms(); i++)
   {
     /**
-     * Skip ghost atoms but not ghost bonds:
+     * Skip ghost atoms but not ghos t bonds:
      *  - each atom is non-ghost for exactly one MPI node, that will handle it.
      *  - a ghost bond links an atom and a ghost atom. So there is exactly two MPI nodes
      *    that contain this ghost bond and no one that contains this bond as non-ghost.

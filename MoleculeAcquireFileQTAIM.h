@@ -86,17 +86,7 @@ public:
 protected:
   virtual int ReadCriticalPoints(std::istream &, CriticalPoints *);
 
-  enum
-  {
-    AtomMaximumCP = 0,
-    BondSaddleCP = 1,
-    RingSaddleCP = 2,
-    CageMinimumCP = 3,
-    NonNuclearMaxCP = 4,
-    NumberOfCPTypes = 5
-  };
-
-  explicit MoleculeAcquireFileQTAIM() = default;
+  explicit MoleculeAcquireFileQTAIM();
   ~MoleculeAcquireFileQTAIM() override = default;
 
   vtkIdType ReadNumberCPs(std::istream &sin);
@@ -106,7 +96,6 @@ private:
   void operator=(const MoleculeAcquireFileQTAIM &) = delete;
 
   vtkIdType NumberOfCPs_ = 0;
-  vtkIdType SizesCPTypes[NumberOfCPTypes];
 };
 
 }; // namespace vtk

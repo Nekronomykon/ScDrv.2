@@ -49,6 +49,9 @@ public:
   vtkTypeMacro(MapperCriticalPoints, vtkMapper);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
+  void SetInputData(CriticalPoints*);
+  CriticalPoints*GetInput();
+
   void Render(vtkRenderer*, vtkActor*) override;
 
 protected:

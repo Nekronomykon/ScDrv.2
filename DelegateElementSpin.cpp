@@ -15,7 +15,7 @@ QWidget* DelegateElementSpin::createEditor(QWidget *parent,
     QSpinBox *editor = new QSpinBox(parent);
     editor->setFrame(false);
     editor->setMinimum(0);
-    editor->setMaximum(PeriodicElements::NumberOfElements());
+    editor->setMaximum(Elements::NumberOfElements());
 
     return editor;
 }

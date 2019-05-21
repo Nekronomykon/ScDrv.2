@@ -29,5 +29,22 @@ void MapperCriticalPoints::PrintSelf(ostream &os, vtkIndent indent)
   this->Superclass::PrintSelf(os, indent);
 }
 
+
+//----------------------------------------------------------------------------
+void MapperCriticalPoints::SetInputData(CriticalPoints *input)
+{
+  this->SetInputDataInternal(0, input);
+}
+
+//----------------------------------------------------------------------------
+CriticalPoints *MapperCriticalPoints::GetInput()
+{
+  return CriticalPoints::SafeDownCast(this->GetExecutive()->GetInputData(0, 0));
+}
+
+
+//----------------------------------------------------------------------------
 void MapperCriticalPoints::Render(vtkRenderer*, vtkActor*)
-{}
+{
+  
+}

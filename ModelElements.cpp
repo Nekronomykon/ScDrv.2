@@ -58,14 +58,14 @@ QVariant ModelElements::data(const QModelIndex &index, int role) const
     {
       if (idElem >= 0)
       {
-        res.setValue(tr(elements_->GetSymbol(idElem)));
+        res.setValue(tr(Elements::GetElementSymbol(idElem)));
       }
       else if (idElem == -2)
-        res.setValue(tr("[L]"));
+        res.setValue(tr("[L]")); // lanthanides
       else if (idElem == -3)
-        res.setValue(tr("[A]"));
+        res.setValue(tr("[A]")); // actinides
       else if (idElem == -4)
-        res.setValue(tr("[S]"));
+        res.setValue(tr("[S]")); // superactinides
     }
     return res;
   }
