@@ -201,12 +201,12 @@ const char *Elements::Name[119] = {
 
 vtkIdType Elements::SymbolToNumber(const char *symbol)
 {
-  if (!symbol || !*symbol)
+  if (!symbol || !isalpha(symbol[0]))
     return 0L;
-  vtkIdType number(id_Q);
-  int k0 = toupper(*symbol),
-      k1 = !symbol[1] ? 0 : tolower(symbol[1]),
-      k2 = ((k0 != 'U') || !k1 || !symbol[2]) ? 0 : tolower(symbol[2]); 
+  vtkIdType number(id_Q);  
+  int k0 = toupper(symbol[0]),
+      k1 = isalpha(symbol[1]) ? tolower(symbol[1]) : 0,
+      k2 = ( (k0 == 'U') && k1 && isalpha(symbol[2]) ) ? tolower(symbol[2]) : 0; 
       // rare cases of the Uu? / Ub? / Ut? heavy elements
   switch (k0)
   {

@@ -3,6 +3,8 @@
 using namespace vtk;
 using namespace std;
 
+#include <vtkExecutive.h>
+
 #include <vtkGlyph3DMapper.h>
 
 #include <vtkCubeSource.h>
