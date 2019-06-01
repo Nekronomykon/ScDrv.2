@@ -18,7 +18,7 @@ class MapperMolecule;
 struct MoleculeMapperStyle
 {
   // atoms
-  bool bRenderAtoms_;        //
+  // bool bRenderAtoms_;        //
   short styleAtomRadius_;
   float radAtomsScale_;
   // bonds

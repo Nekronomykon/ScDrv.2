@@ -48,13 +48,13 @@
 using namespace vtk;
 
 const MoleculeMapperStyle MapperMolecule::styleFast =
-    {true, MoleculeMapperStyle::UnitRadius, 0.4f, true, false, MoleculeMapperStyle::SingleColor, 0.125f, 64, 64, 64};
+    {MoleculeMapperStyle::UnitRadius, 0.4f, true, false, MoleculeMapperStyle::SingleColor, 0.125f, 64, 64, 64};
 const MoleculeMapperStyle MapperMolecule::styleBallSticks =
-    {true, MoleculeMapperStyle::VDWRadius, 0.25f, true, false, MoleculeMapperStyle::DiscreteByAtom, 0.125f, 0, 0, 0};
+    {MoleculeMapperStyle::VDWRadius, 0.25f, true, false, MoleculeMapperStyle::DiscreteByAtom, 0.125f, 0, 0, 0};
 const MoleculeMapperStyle MapperMolecule::styleCPK =
-    {true, MoleculeMapperStyle::VDWRadius, 1.0f, false, false, 0, 0};
+    {MoleculeMapperStyle::VDWRadius, 1.0f, false, false, 0, 0};
 const MoleculeMapperStyle MapperMolecule::styleSticks =
-    {true, MoleculeMapperStyle::UnitRadius, 0.15f, true, false, MoleculeMapperStyle::DiscreteByAtom, 0.15f};
+    {MoleculeMapperStyle::UnitRadius, 0.15f, true, false, MoleculeMapperStyle::DiscreteByAtom, 0.15f};
 
 // Note this class may have an accelerated subclass ala
 // vtkOpenGLMoleculeMapper. If you change this class please

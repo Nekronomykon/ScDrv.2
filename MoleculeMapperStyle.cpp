@@ -7,7 +7,7 @@ using namespace vtk;
 void MoleculeMapperStyle::SetupMoleculeMapper(vtkMoleculeMapper *pmap) const
 {
   // atoms
-  pmap->SetRenderAtoms(bRenderAtoms_);
+  pmap->SetRenderAtoms(true);
   pmap->SetAtomicRadiusType(styleAtomRadius_);
   pmap->SetAtomicRadiusScaleFactor(radAtomsScale_);
   // bonds
