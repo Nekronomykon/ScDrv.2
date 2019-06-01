@@ -61,15 +61,9 @@ const MoleculeMapperStyle MapperMolecule::styleSticks =
 // also check that class for impacts.
 vtkStandardNewMacro(MapperMolecule)
 
-//----------------------------------------------------------------------------
-MapperMolecule::MapperMolecule()
-    : glyphAtoms_(/* Glyph3DMap::New() */)
-    , glyphBonds_(/* Glyph3DMap::New() */)
-    , styleMap_(styleFast)
-    , AtomicRadiusArrayName(nullptr)
-    , RenderLattice(false)
-    , GlyphDataInitialized(false)
-    , areLabelDataInitialized_(false), pad_(1.5)
+    //----------------------------------------------------------------------------
+    MapperMolecule::MapperMolecule()
+    : glyphAtoms_(/* Glyph3DMap::New() */), glyphBonds_(/* Glyph3DMap::New() */), styleMap_(styleFast), AtomicRadiusArrayName(nullptr), RenderLattice(false), GlyphDataInitialized(false), areLabelDataInitialized_(false), pad_(1.5)
 {
   // Initialize ivars:
   this->BondColor[0] = this->BondColor[1] = this->BondColor[2] = 64; // ???
@@ -235,16 +229,21 @@ void MapperMolecule::GlyphRender(vtkRenderer *ren, vtkActor *act)
   this->UpdateGlyphPolyData();
 
   // Pass rendering call on
-  if (this->GetStyle().HasToRenderAtoms())
+  // if (this->GetStyle().HasToRenderAtoms())
   {
     this->glyphAtoms_->Render(ren, act);
-  }
+    /**
+   * Ye ScrewDriver te Blackheadborough asketh haere:
+   * By the way: to render a molecule -- does it mean
+   * to render its atoms anyway? Does the Style need 
+   * its << bool RenderAtoms; >>?
+   **/
 
-  if (this->GetStyle().HasToRenderBonds())
-  {
-    this->glyphBonds_->Render(ren, act);
+    if (this->GetStyle().HasToRenderBonds())
+    {
+      this->glyphBonds_->Render(ren, act);
+    }
   }
-
   if (this->RenderLattice)
   {
     this->LatticeMapper->Render(ren, act);
@@ -256,39 +255,17 @@ void MapperMolecule::UpdateGlyphPolyData()
 {
   vtkMolecule *molecule = this->GetInput();
 
-  if (!this->GlyphDataInitialized 
-  ||  (
-      ( molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime()
-      || this->GetMTime() > this->AtomGlyphPolyData->GetMTime() 
-      || this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime()
-    ) 
-    && this->GetStyle().HasToRenderAtoms()
-    )
-  )
+  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime() || this->GetMTime() > this->AtomGlyphPolyData->GetMTime() || this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime())))
   {
     this->UpdateAtomGlyphPolyData();
   }
 
-  if (!this->GlyphDataInitialized 
-  ||  (
-      ( molecule->GetMTime() > this->BondGlyphPolyData->GetMTime() 
-      || this->GetMTime() > this->BondGlyphPolyData->GetMTime() 
-      || this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()
-    ) 
-    && this->GetStyle().HasToRenderBonds()
-    )
-  )
+  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->BondGlyphPolyData->GetMTime() || this->GetMTime() > this->BondGlyphPolyData->GetMTime() || this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()) && this->GetStyle().HasToRenderBonds()))
   {
     this->UpdateBondGlyphPolyData();
   }
 
-  if (!this->GlyphDataInitialized 
-  ||  (
-      ( molecule->GetMTime() > this->LatticePolyData->GetMTime()
-      || this->GetMTime() > this->LatticePolyData->GetMTime()
-      ) 
-      && this->RenderLattice)
-  )
+  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->LatticePolyData->GetMTime() || this->GetMTime() > this->LatticePolyData->GetMTime()) && this->RenderLattice))
   {
     this->UpdateLatticePolyData();
   }

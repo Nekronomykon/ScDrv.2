@@ -52,10 +52,48 @@ public:
   void SetInputData(CriticalPoints*);
   CriticalPoints*GetInput();
 
+  void RenderGlyph(vtkRenderer *, vtkActor *);
+
   void Render(vtkRenderer*, vtkActor*) override;
 
+  //@{
+  /**
+     * Get/Set the color of the atom as an rgb tuple.
+     * Default: {50, 50, 50} (dark grey)
+     */
+  vtkGetVector3Macro(AtomColor, unsigned char);
+  vtkSetVector3Macro(AtomColor, unsigned char);
+  //@}
+
+  //@{
+  /**
+     * Get/Set the color of the bond CPs and paths as an rgb tuple.
+     * Default: {50, 50, 50} (dark grey)
+     */
+  vtkGetVector3Macro(BondColor, unsigned char);
+  vtkSetVector3Macro(BondColor, unsigned char);
+  //@}
+
+  //@{
+  /**
+     * Get/Set the color of the ring CPs and paths as an rgb tuple.
+     * Default: {255, 255, 255} (white)
+     */
+  vtkGetVector3Macro(RingColor, unsigned char);
+  vtkSetVector3Macro(RingColor, unsigned char);
+  //@}
+
+  //@{
+  /**
+     * Get/Set the color of the cage CPs and paths as an rgb tuple.
+     * Default: {255, 255, 255} (white)
+     */
+  vtkGetVector3Macro(CageColor, unsigned char);
+  vtkSetVector3Macro(CageColor, unsigned char);
+  //@}
+
 protected:
-  explicit MapperCriticalPoints();
+  explicit MapperCriticalPoints() = default;
   ~MapperCriticalPoints() override = default;
 
 private:
@@ -63,16 +101,20 @@ private:
   void operator=(const MapperCriticalPoints &) = delete;
 
   // data: Atomic;
+  unsigned char AtomColor[3];
   vtkNew<vtkGlyph3DMapper> glyphMapACP_; /* sphere / dodekahedron? */
   vtkSmartPointer<vtkPolyDataMapper> polyDataACP_;
   // data: Bonds;
+  unsigned char BondColor[3];
   vtkNew<vtkGlyph3DMapper> glyphMapBCP_; /* cylinder ? cone */
   vtkSmartPointer<vtkPolyDataMapper> polyDataBCP_;
   // data: Rings;
+  unsigned char RingColor[3];
   vtkNew<vtkGlyph3DMapper> glyphMapRCP_; /* disc ? cylinder */
   vtkSmartPointer<vtkPolyDataMapper> polyDataRCP_;
   // data: Cages;
-  vtkNew<vtkGlyph3DMapper> glyphMapCCP_; /* octahedron? */ 
+  unsigned char CageColor[3];
+  vtkNew<vtkGlyph3DMapper> glyphMapCCP_; /* octahedron? */
   vtkSmartPointer<vtkPolyDataMapper> polyDataCCP_;
 };
 

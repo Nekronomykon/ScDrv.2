@@ -31,10 +31,10 @@ struct MoleculeMapperStyle
 public:
   //////////////////////////////////////////////////////////////////////////
   //
-  bool HasToRenderAtoms() const { return bRenderAtoms_; }
-  void RenderAtomsOn() { bRenderAtoms_ = true; }
-  void RenderAtomsOff() { bRenderAtoms_ = false; }
-  bool ToggleRenderAtoms() { bRenderAtoms_ = !bRenderAtoms_; return bRenderAtoms_; }
+  // bool HasToRenderAtoms() const { return bRenderAtoms_; }
+  // void RenderAtomsOn() { bRenderAtoms_ = true; }
+  // void RenderAtomsOff() { bRenderAtoms_ = false; }
+  // bool ToggleRenderAtoms() { bRenderAtoms_ = !bRenderAtoms_; return bRenderAtoms_; }
   //
   enum {
     CovalentRadius = 0,

@@ -20,10 +20,8 @@ using namespace std;
 vtkStandardNewMacro(MapperCriticalPoints);
 
 //----------------------------------------------------------------------------
-MapperCriticalPoints::MapperCriticalPoints()
-{
-
-}
+// MapperCriticalPoints::MapperCriticalPoints()
+// {}
 
 //----------------------------------------------------------------------------
 void MapperCriticalPoints::PrintSelf(ostream &os, vtkIndent indent)
@@ -46,7 +44,10 @@ CriticalPoints *MapperCriticalPoints::GetInput()
 
 
 //----------------------------------------------------------------------------
-void MapperCriticalPoints::Render(vtkRenderer*, vtkActor*)
+void MapperCriticalPoints::Render(vtkRenderer*pRen, vtkActor*pAct)
 {
-  
+  this->RenderGlyph(pRen,pAct);
 }
+
+void MapperCriticalPoints::RenderGlyph(vtkRenderer *pRen, vtkActor *pAct)
+{}

@@ -29,12 +29,11 @@ using namespace vtk;
 //-----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeMapperOpenGL)
 
-//----------------------------------------------------------------------------
-MoleculeMapperOpenGL::MoleculeMapperOpenGL()
+    //----------------------------------------------------------------------------
+    MoleculeMapperOpenGL::MoleculeMapperOpenGL()
 {
   // Setup glyph mappers
-  this->FastAtomMapper->SetScalarRange
-  (0, this->PeriodicTable->GetNumberOfElements());
+  this->FastAtomMapper->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
   this->FastAtomMapper->SetColorModeToMapScalars();
   this->FastAtomMapper->SetScalarModeToUsePointFieldData();
 
@@ -51,10 +50,8 @@ MoleculeMapperOpenGL::MoleculeMapperOpenGL()
   this->FastBondMapper->AddObserver(vtkCommand::ProgressEvent, cb);
 
   // Connect the trivial producers to forward the glyph polydata
-  this->FastAtomMapper->SetInputConnection
-  (this->AtomGlyphPointOutput->GetOutputPort());
-  this->FastBondMapper->SetInputConnection
-  (this->BondGlyphPointOutput->GetOutputPort());
+  this->FastAtomMapper->SetInputConnection(this->AtomGlyphPointOutput->GetOutputPort());
+  this->FastBondMapper->SetInputConnection(this->BondGlyphPointOutput->GetOutputPort());
 }
 
 //----------------------------------------------------------------------------
@@ -64,37 +61,34 @@ void MoleculeMapperOpenGL::Render(vtkRenderer *ren, vtkActor *act)
   this->UpdateGlyphPolyData();
 
   // Pass rendering call on
-  if (this->GetStyle().HasToRenderAtoms())
+  // if (this->GetStyle().HasToRenderAtoms())
   {
     this->FastAtomMapper->Render(ren, act);
-  }
 
-  if (this->GetStyle().HasToRenderBonds())
-  {
-    this->FastBondMapper->Render(ren, act);
+    if (this->GetStyle().HasToRenderBonds())
+    {
+      this->FastBondMapper->Render(ren, act);
+    }
   }
-
   if (this->RenderLattice)
   {
     this->LatticeMapper->Render(ren, act);
   }
 }
 
-void MoleculeMapperOpenGL::ProcessSelectorPixelBuffers(vtkHardwareSelector *sel
-, std::vector<unsigned int> &pixeloffsets
-, vtkProp *prop)
+void MoleculeMapperOpenGL::ProcessSelectorPixelBuffers(vtkHardwareSelector *sel,
+ std::vector<unsigned int> &pixeloffsets, vtkProp *prop)
 {
   // forward to helper
-  if (this->GetStyle().HasToRenderAtoms())
+  // if (this->GetStyle().HasToRenderAtoms())
   {
     this->FastAtomMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
-  }
 
-  if (this->GetStyle().HasToRenderBonds())
-  {
-    this->FastBondMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
+    if (this->GetStyle().HasToRenderBonds())
+    {
+      this->FastBondMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
+    }
   }
-
   if (this->RenderLattice)
   {
     this->LatticeMapper->ProcessSelectorPixelBuffers(sel, pixeloffsets, prop);
@@ -136,9 +130,8 @@ void MoleculeMapperOpenGL::UpdateBondGlyphPolyData()
   default:
   case (MMStyle::DiscreteByAtom):
     this->FastBondMapper->SetLookupTable(
-      this->GetBondMapper()->GetLookupTable());
-    this->FastBondMapper->SetScalarRange
-    (0, this->PeriodicTable->GetNumberOfElements());
+        this->GetBondMapper()->GetLookupTable());
+    this->FastBondMapper->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
     this->FastBondMapper->SetScalarModeToUsePointData();
     break;
   }
