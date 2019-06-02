@@ -50,7 +50,7 @@ namespace vtk
   public:
 
     static MoleculeAcquireFileMGP *New();
-    vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFile);
+    vtkTypeMacro(MoleculeAcquireFileMGP, MoleculeAcquireFileQTAIM);
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
     int ParseStreamInfo(BaseInput&,vtkInformationVector*);

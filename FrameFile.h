@@ -45,7 +45,9 @@ using namespace vtk;
 #include "ViewMoleculeBonds.h"
 #include "ViewCyclePucker.h"
 
-#include "MoleculeAcquireFile.h"
+// #include "MoleculeAcquireFile.h"
+// #include "MoleculeAcquireFileQM.h"
+#include "MoleculeAcquireFileQTAIM.h"
 
 #include "MapperMolecule.h"
 #include "MapperCriticalPoints.h"
@@ -190,24 +192,12 @@ public:
   ViewMoleculeAtomic *setEditAtomic();
 
 protected:
-  template <class A>
-  static bool acquireStructureUsing(A *pA, MolecularStructure &str)
-  {
-    assert(pA);
-    pA->SetOutput(str.getMolecule());
-    pA->Update();
-    return bool(str->GetNumberOfAtoms() > 0);
-  }
-  template <class T>
-  bool acquireUsing();
-
+  template <class>bool acquireUsing();
   template <class Reader>
   void ReadAdditionalInformation(Reader *) {}
-
   template <class Writer>
   void SetupImageWriter(Writer *) {}
 
-  // template<>
   void SetupImageWriter(vtkPNGWriter *pPNG)
   {
     pPNG->SetCompressionLevel(9);
@@ -231,9 +221,6 @@ private:
 
   FileContext format_current_;
 
-  // vtkNew<vtkMoleculeMapper> mol_mapper_;
-  // vtkIdTypeArray positions_;
-  // MolecularStructure structure_;
   NewCritPoints structure_;
   vtkNew<vtkStringArray> labelAtoms_;
   vtkNew<vtkStringArray> labelBonds_;

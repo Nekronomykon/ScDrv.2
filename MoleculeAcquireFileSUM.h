@@ -50,7 +50,7 @@ namespace vtk
   public:
 
     static MoleculeAcquireFileSUM *New();
-    vtkTypeMacro(MoleculeAcquireFileSUM, MoleculeAcquireFile);
+    vtkTypeMacro(MoleculeAcquireFileSUM, MoleculeAcquireFileQTAIM);
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
     int ParseStreamInfo(BaseInput&,vtkInformationVector*);

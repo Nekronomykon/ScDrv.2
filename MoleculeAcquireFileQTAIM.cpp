@@ -73,6 +73,17 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 
 int MoleculeAcquireFileQTAIM::ReadCriticalPoints(istream &inp, CriticalPoints *pCP)
 {
+  string strNewCP = TraitsBase::ScrollDownToPrefix(inp,"CP#");
+  if (strNewCP.empty())
+    return 0;
+
+  size_t idxCP = 0;
+  istringstream iss(strNewCP);
+  do
+  {
+    /* code */
+  } while (0);
+  
   return 1;
 }
 
@@ -88,7 +99,7 @@ int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationV
     return 1;
   }
 
-  return ReadCriticalPoints(src, pCP);
+  return this->ReadCriticalPoints(src, pCP);
 }
 
 CriticalPoints *MoleculeAcquireFileQTAIM::GetOutput()
