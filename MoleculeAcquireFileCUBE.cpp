@@ -56,15 +56,13 @@ MoleculeAcquireFileCUBE::MoleculeAcquireFileCUBE()
 //----------------------------------------------------------------------------
 vtkImageData *MoleculeAcquireFileCUBE::GetGridOutput()
 {
-  return (this->GetNumberOfOutputPorts() < 2) ? nullptr :
-    vtkImageData::SafeDownCast(this->GetOutputDataObject(1));
+  return (this->GetNumberOfOutputPorts() < 2) ? nullptr : vtkImageData::SafeDownCast(this->GetOutputDataObject(1));
 }
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileCUBE::RequestInformation(
-  vtkInformation *vtkNotUsed(request),
-  vtkInformationVector **vtkNotUsed(inputVector),
-  vtkInformationVector *vtkNotUsed(outputVector))
+int MoleculeAcquireFileCUBE::RequestInformation(vtkInformation *vtkNotUsed(request),
+                                                vtkInformationVector **vtkNotUsed(inputVector),
+                                                vtkInformationVector *vtkNotUsed(outputVector))
 {
   if (!this->HasFileName())
     return 0;
@@ -80,11 +78,11 @@ int MoleculeAcquireFileCUBE::RequestInformation(
   char title[256];
   string one_line;
   getline(file_in, one_line); // first title line
-  // file_in.getline(title, 256); 
+  // file_in.getline(title, 256);
   getline(file_in, one_line); // second title line with name of scalar field?
-//  file_in.getline(title, 256); 
+                              //  file_in.getline(title, 256);
 
-                               // the set the information for the imagedata output
+  // the set the information for the imagedata output
   vtkInformation *gridInfo = this->GetExecutive()->GetOutputInformation(1);
 
   // Read in number of atoms, x-origin, y-origin z-origin
@@ -93,26 +91,26 @@ int MoleculeAcquireFileCUBE::RequestInformation(
   if (!(file_in >> n1 >> tmpd >> tmpd >> tmpd))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file " << this->FileName()
-      << " Premature EOF while grid size.");
+                  << " Premature EOF while grid size.");
     return 0;
   }
 
   if (!(file_in >> n2 >> tmpd >> tmpd >> tmpd))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-      << " Premature EOF while grid size.");
+                  << " Premature EOF while grid size.");
     return 0;
   }
   if (!(file_in >> n3 >> tmpd >> tmpd >> tmpd))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-      << " Premature EOF while grid size.");
+                  << " Premature EOF while grid size.");
     return 0;
   }
 
   vtkDebugMacro(<< "Grid Size " << n1 << " " << n2 << " " << n3);
   gridInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
-    0, n1 - 1, 0, n2 - 1, 0, n3 - 1);
+                0, n1 - 1, 0, n2 - 1, 0, n3 - 1);
   gridInfo->Set(vtkDataObject::ORIGIN(), 0, 0, 0);
   gridInfo->Set(vtkDataObject::SPACING(), 1, 1, 1);
 
@@ -122,9 +120,9 @@ int MoleculeAcquireFileCUBE::RequestInformation(
 
 //----------------------------------------------------------------------------
 int MoleculeAcquireFileCUBE::RequestData(
-  vtkInformation *,
-  vtkInformationVector **,
-  vtkInformationVector *outputVector)
+    vtkInformation *,
+    vtkInformationVector **,
+    vtkInformationVector *outputVector)
 {
   char title[256];
   double elements[16];
@@ -134,8 +132,7 @@ int MoleculeAcquireFileCUBE::RequestData(
   bool orbitalCubeFile = false;
   int numberOfOrbitals;
 
-  vtkMolecule *output = vtkMolecule::SafeDownCast
-  (vtkDataObject::GetData(outputVector));
+  vtkMolecule *output = vtkMolecule::SafeDownCast(vtkDataObject::GetData(outputVector));
 
   if (!output)
   {
@@ -166,7 +163,7 @@ int MoleculeAcquireFileCUBE::RequestData(
   if (!(file_in >> NumberOfAtoms >> elements[3] >> elements[7] >> elements[11]))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-      << " Premature EOF while reading atoms, x-origin y-origin z-origin.");
+                  << " Premature EOF while reading atoms, x-origin y-origin z-origin.");
     return 0;
   }
   if (NumberOfAtoms < 0)
@@ -177,19 +174,19 @@ int MoleculeAcquireFileCUBE::RequestData(
   if (!(file_in >> n1 >> elements[0] >> elements[4] >> elements[8]))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-      << " Premature EOF while reading elements.");
+                  << " Premature EOF while reading elements.");
     return 0;
   }
   if (!(file_in >> n2 >> elements[1] >> elements[5] >> elements[9]))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-      << " Premature EOF while reading elements.");
+                  << " Premature EOF while reading elements.");
     return 0;
   }
   if (!(file_in >> n3 >> elements[2] >> elements[6] >> elements[10]))
   {
     vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-      << " Premature EOF while reading elements.");
+                  << " Premature EOF while reading elements.");
     return 0;
   }
   elements[12] = 0;
@@ -213,7 +210,7 @@ int MoleculeAcquireFileCUBE::RequestData(
     if (!(file_in >> atomType >> dummy >> xyz[0] >> xyz[1] >> xyz[2]))
     {
       vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-        << " Premature EOF while reading molecule.");
+                    << " Premature EOF while reading molecule.");
       // file_in.close();
       return 0;
     }
@@ -229,7 +226,7 @@ int MoleculeAcquireFileCUBE::RequestData(
     if (!(file_in >> numberOfOrbitals))
     {
       vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-        << " Premature EOF while reading number of orbitals.");
+                    << " Premature EOF while reading number of orbitals.");
       // file_in.close();
       return 0;
     }
@@ -238,7 +235,7 @@ int MoleculeAcquireFileCUBE::RequestData(
       if (!(file_in >> tmp))
       {
         vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
-          << " Premature EOF while reading orbitals.");
+                      << " Premature EOF while reading orbitals.");
         // file_in.close();
         return 0;
       }
@@ -247,12 +244,12 @@ int MoleculeAcquireFileCUBE::RequestData(
 
   vtkInformation *gridInfo = this->GetExecutive()->GetOutputInformation(1);
   gridInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
-    0, n1 - 1, 0, n2 - 1, 0, n3 - 1);
+                0, n1 - 1, 0, n2 - 1, 0, n3 - 1);
   gridInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),
-    gridInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()),
-    6);
+                gridInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()),
+                6);
   grid->SetExtent(
-    gridInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()));
+      gridInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()));
 
   grid->SetOrigin(0, 0, 0);
   grid->SetSpacing(1, 1, 1);
@@ -261,7 +258,7 @@ int MoleculeAcquireFileCUBE::RequestData(
   grid->GetPointData()->GetScalars()->SetName(title);
 
   cubedata = (float *)grid->GetPointData()->GetScalars()->GetVoidPointer(0);
-  int N1N2 = n1*n2;
+  int N1N2 = n1 * n2;
 
   for (int i = 0; i < n1; i++)
   {
@@ -273,10 +270,10 @@ int MoleculeAcquireFileCUBE::RequestData(
         if (!(file_in >> tmp))
         {
           vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file " << this->FileName()
-            << ": premature EOF while reading field scalars");
+                        << ": premature EOF while reading field scalars");
           return 0;
         }
-        cubedata[k*N1N2 + JN1 + i] = tmp;
+        cubedata[k * N1N2 + JN1 + i] = tmp;
       }
       JN1 += n1;
     }
