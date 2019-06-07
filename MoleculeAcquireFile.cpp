@@ -22,7 +22,8 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFile);
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFile::MoleculeAcquireFile()
+MoleculeAcquireFile::MoleculeAcquireFile(int nOutPorts)
+: MoleculeAcquireBase(nOutPorts)
 {
   this->SetNumberOfInputPorts(0); // only internal generation
 }

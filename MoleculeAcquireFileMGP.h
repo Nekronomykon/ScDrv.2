@@ -57,7 +57,7 @@ namespace vtk
     int ReadMolecule(std::istream &, vtkMolecule *) override;
 
   protected:
-    explicit MoleculeAcquireFileMGP() = default;
+    explicit MoleculeAcquireFileMGP();
     ~MoleculeAcquireFileMGP() override = default;
 
   private:

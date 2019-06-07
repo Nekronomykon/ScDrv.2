@@ -97,7 +97,7 @@ public:
   }
 
 protected:
-  MoleculeAcquireFileQM();
+  explicit MoleculeAcquireFileQM(int nOutPorts = 2);
   ~MoleculeAcquireFileQM() override = default;
 
 private:

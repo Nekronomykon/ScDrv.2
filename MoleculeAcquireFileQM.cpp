@@ -24,16 +24,18 @@ using namespace vtk;
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileQM);
 
-    //----------------------------------------------------------------------------
-MoleculeAcquireFileQM::MoleculeAcquireFileQM()
-: NumberOfOrbitals_(0), NumberOfPrimitives_(0)
-{}
+//----------------------------------------------------------------------------
+MoleculeAcquireFileQM::MoleculeAcquireFileQM(int nOutPorts)
+    : MoleculeAcquireFile(nOutPorts)
+    , NumberOfOrbitals_(0)
+    , NumberOfPrimitives_(0)
+{
+}
 
-    //----------------------------------------------------------------------------
-    void
-    MoleculeAcquireFileQM::PrintSelf(ostream &os, vtkIndent indent)
+//----------------------------------------------------------------------------
+void MoleculeAcquireFileQM::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "Orbitals = " << this->GetNumberOfOrbitals() << std::endl 
-  << indent << "Primitives = " << this->GetNumberOfPrimitives() << std::endl;
+  os << indent << "Orbitals = " << this->GetNumberOfOrbitals() << std::endl
+     << indent << "Primitives = " << this->GetNumberOfPrimitives() << std::endl;
 }

@@ -84,9 +84,9 @@ public:
                       vtkInformationVector * /*out*/) override;
 
 protected:
-  virtual int ReadCriticalPoints(std::istream &, CriticalPoints *);
+  virtual int ReadCritical(std::istream &, CriticalPoints *);
 
-  explicit MoleculeAcquireFileQTAIM();
+  explicit MoleculeAcquireFileQTAIM(int /*nOutPorts*/ = 3);
   ~MoleculeAcquireFileQTAIM() override = default;
 
   vtkIdType ReadNumberCPs(std::istream &sin);

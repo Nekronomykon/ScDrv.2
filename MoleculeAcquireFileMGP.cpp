@@ -27,6 +27,11 @@ using namespace vtk;
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(MoleculeAcquireFileMGP);
 
+MoleculeAcquireFileMGP::MoleculeAcquireFileMGP()
+{
+  this->SetNumberOfOutputPorts(4);
+}
+
 //----------------------------------------------------------------------------
 int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVector*)
 {

@@ -63,7 +63,7 @@ public:
   // std::ifstream& Scroll(std::ifstream& is) const { return is.seekg(posRead_,SEEK_SET); }
 
 protected:
-  explicit MoleculeAcquireFile();
+  explicit MoleculeAcquireFile(int /* nOutPorts */ = 1);
   ~MoleculeAcquireFile() override = default;
 
 private:

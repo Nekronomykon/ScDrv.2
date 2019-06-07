@@ -119,7 +119,7 @@ public:
   //@}
 
 protected:
-  explicit MoleculeAcquireBase();
+  explicit MoleculeAcquireBase(int /* nOutPorts */ = 1);
   ~MoleculeAcquireBase() override = default;
 
   // convenience method

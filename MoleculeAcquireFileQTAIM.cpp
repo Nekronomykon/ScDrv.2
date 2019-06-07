@@ -31,10 +31,9 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileQTAIM);
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM()
-{
-  this->SetNumberOfOutputPorts(3);
-}
+MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM(int nOutPorts)
+: MoleculeAcquireFileQM(nOutPorts)
+{}
 
 //----------------------------------------------------------------------------
 void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
@@ -71,7 +70,7 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
   return nRes;
 }
 
-int MoleculeAcquireFileQTAIM::ReadCriticalPoints(istream &inp, CriticalPoints *pCP)
+int MoleculeAcquireFileQTAIM::ReadCritical(istream &inp, CriticalPoints *pCP)
 {
   string strNewCP = TraitsBase::ScrollDownToPrefix(inp,"CP#");
   if (strNewCP.empty())
@@ -99,7 +98,7 @@ int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationV
     return 1;
   }
 
-  return this->ReadCriticalPoints(src, pCP);
+  return this->ReadCritical(src, pCP);
 }
 
 CriticalPoints *MoleculeAcquireFileQTAIM::GetOutput()

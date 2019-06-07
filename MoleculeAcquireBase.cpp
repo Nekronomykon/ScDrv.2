@@ -26,13 +26,12 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireBase);
 
 //----------------------------------------------------------------------------
-MoleculeAcquireBase::MoleculeAcquireBase()
-  : NumberOfAtoms_(0L)
+MoleculeAcquireBase::MoleculeAcquireBase(int nOutPorts)
 {
   // by default assume filters have one output
   // subclasses that deviate should modify this setting
   //this->SetNumberOfInputPorts(1);
-  this->SetNumberOfOutputPorts(1);
+  this->SetNumberOfOutputPorts(nOutPorts);
 }
 
 //----------------------------------------------------------------------------
