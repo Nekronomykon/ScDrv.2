@@ -299,7 +299,7 @@ bool FrameFile::acquireUsing()
     MoleculeAcquireFileQTAIM *pQ = MoleculeAcquireFileQTAIM::SafeDownCast(reader.GetPointer());
     if (pQ)
     {
-      pQ->SetOutputCritical(structure_, true);
+      pQ->SetCriticalOutput(structure_, true);
     }
     else
       reader->SetOutput(this->getMolecule()); // only atoms

@@ -41,25 +41,6 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileCUBE);
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFileCUBE::MoleculeAcquireFileCUBE()
-{
-  this->SetNumberOfOutputPorts(2);
-
-  // Add the second output for the grid data
-  vtkImageData *grid;
-  grid = vtkImageData::New();
-  grid->ReleaseData();
-  this->GetExecutive()->SetOutputData(1, grid);
-  grid->Delete();
-}
-
-//----------------------------------------------------------------------------
-vtkImageData *MoleculeAcquireFileCUBE::GetGridOutput()
-{
-  return (this->GetNumberOfOutputPorts() < 2) ? nullptr : vtkImageData::SafeDownCast(this->GetOutputDataObject(1));
-}
-
-//----------------------------------------------------------------------------
 int MoleculeAcquireFileCUBE::RequestInformation(vtkInformation *vtkNotUsed(request),
                                                 vtkInformationVector **vtkNotUsed(inputVector),
                                                 vtkInformationVector *vtkNotUsed(outputVector))
@@ -279,16 +260,6 @@ int MoleculeAcquireFileCUBE::RequestData(
     }
   }
 
-  return 1;
-}
-
-int MoleculeAcquireFileCUBE::FillOutputPortInformation(int port, vtkInformation *info)
-{
-  if (port == 0)
-  {
-    return this->Superclass::FillOutputPortInformation(port, info);
-  }
-  info->Set(vtkDataObject::DATA_TYPE_NAME(), "vtkImageData");
   return 1;
 }
 

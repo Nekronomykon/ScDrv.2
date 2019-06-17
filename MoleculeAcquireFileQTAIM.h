@@ -34,7 +34,7 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include "MoleculeAcquireFileQM.h"
+#include "MoleculeAcquireFileField.h"
 
 #include "CriticalPoints.h"
 
@@ -49,13 +49,13 @@ namespace vtk
 {
 
 class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQTAIM
-    : public MoleculeAcquireFileQM
+    : public MoleculeAcquireFileField
 {
-  typedef MoleculeAcquireFileQM _Base;
+  typedef MoleculeAcquireFileField _Base;
 
 public:
   static MoleculeAcquireFileQTAIM *New();
-  vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFileQM);
+  vtkTypeMacro(MoleculeAcquireFileQTAIM, MoleculeAcquireFileField);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
   enum
@@ -63,9 +63,9 @@ public:
     PortCritical = 2
   };
 
-  CriticalPoints *GetOutput();
-  CriticalPoints *GetOutput(int);
-  void SetOutputCritical(CriticalPoints *, bool /*bUpdateMol*/ = false);
+  CriticalPoints *GetCriticalOutput();
+  CriticalPoints *GetCriticalOutput(int);
+  void SetCriticalOutput(CriticalPoints *, bool /*bUpdateMol*/ = false);
 
   void Initialize(); // override;
 
@@ -86,7 +86,7 @@ public:
 protected:
   virtual int ReadCritical(std::istream &, CriticalPoints *);
 
-  explicit MoleculeAcquireFileQTAIM(int /*nOutPorts*/ = 3);
+  explicit MoleculeAcquireFileQTAIM();
   ~MoleculeAcquireFileQTAIM() override = default;
 
   vtkIdType ReadNumberCPs(std::istream &sin);

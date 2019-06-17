@@ -31,9 +31,15 @@ using namespace vtk;
 vtkStandardNewMacro(MoleculeAcquireFileQTAIM);
 
 //----------------------------------------------------------------------------
-MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM(int nOutPorts)
-: MoleculeAcquireFileQM(nOutPorts)
-{}
+MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM()
+: MoleculeAcquireFileField()
+{
+  CriticalPoints* pCP;
+  pCP = CriticalPoints::New();
+  pCP->ReleaseData();
+  this->GetExecutive()->SetOutputData(PortCritical,pCP);
+  pCP->Delete();
+}
 
 //----------------------------------------------------------------------------
 void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
@@ -101,17 +107,17 @@ int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationV
   return this->ReadCritical(src, pCP);
 }
 
-CriticalPoints *MoleculeAcquireFileQTAIM::GetOutput()
+CriticalPoints *MoleculeAcquireFileQTAIM::GetCriticalOutput()
 {
-  return this->GetOutput(PortCritical);
+  return this->GetCriticalOutput(PortCritical);
 }
 
-CriticalPoints *MoleculeAcquireFileQTAIM::GetOutput(int port)
+CriticalPoints *MoleculeAcquireFileQTAIM::GetCriticalOutput(int port)
 {
   return CriticalPoints::SafeDownCast(this->GetInput(port));
 }
 
-void MoleculeAcquireFileQTAIM::SetOutputCritical(CriticalPoints *pCP, bool bUpdate)
+void MoleculeAcquireFileQTAIM::SetCriticalOutput(CriticalPoints *pCP, bool bUpdate)
 {
   this->GetExecutive()->SetOutputData(PortCritical, pCP);
   if (bUpdate && pCP)

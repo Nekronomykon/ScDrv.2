@@ -4,7 +4,8 @@
 /*=========================================================================
 
   Program:   Visualization Toolkit Local Copy
-  Module:    MoleculeAcquireFileQM.h
+  Module:    MoleculeAcquireFileField
+.h
 
   Copyright (c) ScrewDriver te Blackheadborough
   All rights reserved.
@@ -15,7 +16,8 @@
 
 =========================================================================*/
 /**
- * @class   MoleculeAcquireFileQM
+ * @class   MoleculeAcquireFileField
+ *
  * @brief   Reads a data file associated with the quantum chemical calculation 
  * results; outputs a vtkMolecule object and some other data bound to it
  *
@@ -41,11 +43,12 @@
 #include <istream>
 
 class vtkMolecule;
+class vtkImageData;
 
 namespace vtk
 {
 
-class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQM
+class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileField
     : public MoleculeAcquireFile
 {
   typedef MoleculeAcquireFile _Base;
@@ -53,10 +56,11 @@ class /*VTKDOMAINSCHEMISTRY_EXPORT*/ MoleculeAcquireFileQM
 public:
   enum
   {
-    PortElectronic = 1
+    PortGrid = 1,
+    PortCritical = 2
   };
-  static MoleculeAcquireFileQM *New();
-  vtkTypeMacro(MoleculeAcquireFileQM, MoleculeAcquireFile);
+  static MoleculeAcquireFileField *New();
+  vtkTypeMacro(MoleculeAcquireFileField, MoleculeAcquireFile);
   void PrintSelf(ostream &os, vtkIndent indent) override;
 
   vtkIdType GetNumberOfOrbitals() const { return NumberOfOrbitals_; }
@@ -95,14 +99,22 @@ public:
   {
     return 1;
   }
+  /**
+   * Get/Set the output (vtkImageData) that the reader will fill
+   */
+  vtkImageData *GetGridOutput();
+
+  int FillOutputPortInformation(int, vtkInformation *) override;
 
 protected:
-  explicit MoleculeAcquireFileQM(int nOutPorts = 2);
-  ~MoleculeAcquireFileQM() override = default;
+  explicit MoleculeAcquireFileField(int nOutPorts = 2);
+  ~MoleculeAcquireFileField() override = default;
 
 private:
-  MoleculeAcquireFileQM(const MoleculeAcquireFileQM &) = delete;
-  void operator=(const MoleculeAcquireFileQM &) = delete;
+  MoleculeAcquireFileField(const MoleculeAcquireFileField
+                               &) = delete;
+  void operator=(const MoleculeAcquireFileField
+                     &) = delete;
 
 private:
   vtkIdType NumberOfOrbitals_ = 0;

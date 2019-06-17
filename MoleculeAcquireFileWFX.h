@@ -35,7 +35,7 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include "MoleculeAcquireFileQM.h"
+#include "MoleculeAcquireFileField.h"
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
@@ -46,13 +46,13 @@ namespace vtk
 {
 
 class MoleculeAcquireFileWFX
-    : public ImplReadFile<MoleculeAcquireFileWFX, TraitsReadStructureMarkup, MoleculeAcquireFileQM>
+    : public ImplReadFile<MoleculeAcquireFileWFX, TraitsReadStructureMarkup, MoleculeAcquireFileField>
 {
   typedef TraitsReadStructureMarkup<MoleculeAcquireFileWFX> Traits;
 
 public:
   static MoleculeAcquireFileWFX *New();
-  vtkTypeMacro(MoleculeAcquireFileWFX, MoleculeAcquireFileQM);
+  vtkTypeMacro(MoleculeAcquireFileWFX, MoleculeAcquireFileField);
   // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
   typedef Traits::BaseInput BaseInput;

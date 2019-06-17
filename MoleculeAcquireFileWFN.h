@@ -33,7 +33,7 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include "MoleculeAcquireFileQM.h"
+#include "MoleculeAcquireFileField.h"
 #include "ImplReadFile.h"
 #include "TraitsAcquireAtoms.h"
 
@@ -42,12 +42,12 @@ namespace vtk
 {
 
   class MoleculeAcquireFileWFN
-    : public ImplReadFile<MoleculeAcquireFileWFN, TraitsCentreWFN, MoleculeAcquireFileQM>
+    : public ImplReadFile<MoleculeAcquireFileWFN, TraitsCentreWFN, MoleculeAcquireFileField>
   {
     typedef TraitsCentreWFN<MoleculeAcquireFileWFN> Traits;
   public:
     static MoleculeAcquireFileWFN *New();
-    vtkTypeMacro(MoleculeAcquireFileWFN, MoleculeAcquireFileQM);
+    vtkTypeMacro(MoleculeAcquireFileWFN, MoleculeAcquireFileField);
     // void PrintSelf(ostream& /*os*/, vtkIndent /*indent*/) override;
 
     int ParseStreamInfo(BaseInput&,vtkInformationVector*);
