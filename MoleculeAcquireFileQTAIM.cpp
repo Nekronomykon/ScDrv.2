@@ -32,7 +32,7 @@ vtkStandardNewMacro(MoleculeAcquireFileQTAIM);
 
 //----------------------------------------------------------------------------
 MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM()
-: MoleculeAcquireFileField()
+: MoleculeAcquireFileField(3)
 {
   CriticalPoints* pCP;
   pCP = CriticalPoints::New();
@@ -82,12 +82,22 @@ int MoleculeAcquireFileQTAIM::ReadCritical(istream &inp, CriticalPoints *pCP)
   if (strNewCP.empty())
     return 0;
 
-  size_t idxCP = 0;
-  istringstream iss(strNewCP);
-  do
+  size_t idCP = 0;
+  double x, y, z;
+  string skip, line_one;
+  char c_skip;
+
+  do // by idCP
   {
+    istringstream iss(strNewCP);
     /* code */
-  } while (0);
+    iss >> idCP >> skip >> c_skip >> x >> y >> z; // Coords in Bohrs
+    
+    getline(inp, line_one);
+
+    /* finally: */
+    strNewCP = TraitsBase::ScrollDownToPrefix(inp, "CP#");
+  } while (!strNewCP.empty());
   
   return 1;
 }
@@ -109,10 +119,10 @@ int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationV
 
 CriticalPoints *MoleculeAcquireFileQTAIM::GetCriticalOutput()
 {
-  return this->GetCriticalOutput(PortCritical);
+  return this->GetCriticalOutputAt(PortCritical);
 }
 
-CriticalPoints *MoleculeAcquireFileQTAIM::GetCriticalOutput(int port)
+CriticalPoints *MoleculeAcquireFileQTAIM::GetCriticalOutputAt(int port)
 {
   return CriticalPoints::SafeDownCast(this->GetInput(port));
 }
@@ -122,4 +132,13 @@ void MoleculeAcquireFileQTAIM::SetCriticalOutput(CriticalPoints *pCP, bool bUpda
   this->GetExecutive()->SetOutputData(PortCritical, pCP);
   if (bUpdate && pCP)
     this->SetOutput(pCP->GetMolecule());
+}
+
+int MoleculeAcquireFileQTAIM::FillOutputPortInformation(int port, vtkInformation *info)
+{
+  if (port == PortMolecule || port == PortGrid)
+    return this->Superclass::FillOutputPortInformation(port, info);
+
+  info->Set(vtkDataObject::DATA_TYPE_NAME(), "CriticalPoints");
+  return 1;
 }

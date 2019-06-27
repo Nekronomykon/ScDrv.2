@@ -29,6 +29,8 @@ typedef vtkNew<vtkFloatArray> NewValues;
 
 typedef vtkNew<vtkPoints> NewPoints;
 
+#define SCDRV_CRITICAL_POINTS 88
+
 class CriticalPoints
     : public vtkUndirectedGraph
 {
@@ -48,6 +50,11 @@ public:
   vtkTypeMacro(CriticalPoints, vtkUndirectedGraph);
   void PrintSelf(ostream &os, vtkIndent indent) override;
   void Initialize() override;
+
+  /**
+   * Return what type of dataset this is.
+   */
+  int GetDataObjectType() override { return SCDRV_CRITICAL_POINTS; }
 
   //accessor
   vtkMolecule *GetMolecule() const { return molecule_; }

@@ -64,10 +64,11 @@ public:
   };
 
   CriticalPoints *GetCriticalOutput();
-  CriticalPoints *GetCriticalOutput(int);
+  CriticalPoints *GetCriticalOutputAt(int /* port */);
   void SetCriticalOutput(CriticalPoints *, bool /*bUpdateMol*/ = false);
 
   void Initialize(); // override;
+  int FillOutputPortInformation(int, vtkInformation *) override;
 
   vtkIdType GetNumberOfCPs() const { return NumberOfCPs_; }
   vtkIdType ResetNumberOfCPs(vtkIdType nnew = 0)

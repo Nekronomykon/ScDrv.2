@@ -29,7 +29,7 @@ vtkStandardNewMacro(MoleculeAcquireFileMGP);
 
 MoleculeAcquireFileMGP::MoleculeAcquireFileMGP()
 {
-  this->SetNumberOfOutputPorts(4);
+  // this->SetNumberOfOutputPorts(4);
 }
 
 //----------------------------------------------------------------------------
