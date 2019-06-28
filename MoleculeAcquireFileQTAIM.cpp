@@ -18,6 +18,7 @@
 
 #include <vtkObjectFactory.h>
 #include <vtkExecutive.h>
+#include <vtkStdString.h>
 
 #include <cmath>
 #include <cstring>
@@ -32,12 +33,12 @@ vtkStandardNewMacro(MoleculeAcquireFileQTAIM);
 
 //----------------------------------------------------------------------------
 MoleculeAcquireFileQTAIM::MoleculeAcquireFileQTAIM()
-: MoleculeAcquireFileField(3)
+    : MoleculeAcquireFileField(3)
 {
-  CriticalPoints* pCP;
+  CriticalPoints *pCP;
   pCP = CriticalPoints::New();
   pCP->ReleaseData();
-  this->GetExecutive()->SetOutputData(PortCritical,pCP);
+  this->GetExecutive()->SetOutputData(PortCritical, pCP);
   pCP->Delete();
 }
 
@@ -78,27 +79,35 @@ vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
 
 int MoleculeAcquireFileQTAIM::ReadCritical(istream &inp, CriticalPoints *pCP)
 {
-  string strNewCP = TraitsBase::ScrollDownToPrefix(inp,"CP#");
+  string strNewCP = TraitsBase::ScrollDownToPrefix(inp, "CP#");
   if (strNewCP.empty())
     return 0;
 
-  size_t idCP = 0;
   double x, y, z;
-  string skip, line_one;
+  vtkStdString skip, line_one;
   char c_skip;
+
+  pCP->Points()->Resize(this->GetNumberOfCPs());
 
   do // by idCP
   {
     istringstream iss(strNewCP);
     /* code */
+    size_t idCP = 0;
     iss >> idCP >> skip >> c_skip >> x >> y >> z; // Coords in Bohrs
-    
+    if (!idCP)
+      return 0;
+    --idCP; // now it is the index
+    if (c_skip = '=')
+      pCP->Points()->SetPoint(idCP, x, y, z);
+
+      /* next line: */
     getline(inp, line_one);
 
     /* finally: */
     strNewCP = TraitsBase::ScrollDownToPrefix(inp, "CP#");
   } while (!strNewCP.empty());
-  
+
   return 1;
 }
 

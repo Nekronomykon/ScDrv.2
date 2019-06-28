@@ -29,6 +29,7 @@ typedef vtkNew<vtkFloatArray> NewValues;
 
 typedef vtkNew<vtkPoints> NewPoints;
 
+// a type token:
 #define SCDRV_CRITICAL_POINTS 88
 
 class CriticalPoints
@@ -45,7 +46,6 @@ public:
     NumberOfCPTypes = 5
   };
 
-
   static CriticalPoints *New();
   vtkTypeMacro(CriticalPoints, vtkUndirectedGraph);
   void PrintSelf(ostream &os, vtkIndent indent) override;
@@ -59,9 +59,11 @@ public:
   //accessor
   vtkMolecule *GetMolecule() const { return molecule_; }
 
+  vtkPoints *Points() const { return points_; }
+
 protected:
   explicit CriticalPoints() = default;
-  ~CriticalPoints()override = default;
+  ~CriticalPoints() override = default;
 
 private:
   CriticalPoints(const CriticalPoints &) = delete;
@@ -69,6 +71,8 @@ private:
 
 private:
   NewMolecule molecule_;
+
+  NewPoints points_;
 
   vtkIdType SizesCPTypes[NumberOfCPTypes];
 
