@@ -7,26 +7,22 @@
 #endif //  _MSC_VER
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
-#include <vtkObject.h>
-#include <vtkObjectFactory.h>
-
-#include <vtkPoints.h>
-#include <vtkUndirectedGraph.h>
-#include <vtkMolecule.h>
-#include <vtkFloatArray.h>
-
 #include <vtkSmartPointer.h>
 #include <vtkNew.h>
 
+#include <vtkUndirectedGraph.h>
+
+class vtkPoints;
 class vtkFloatArray;
 class vtkMolecule;
 
-typedef vtkNew<vtkMolecule> NewMolecule;
 typedef vtkSmartPointer<vtkMolecule> Molecule;
+typedef vtkNew<vtkMolecule> NewMolecule;
 
 typedef vtkSmartPointer<vtkFloatArray> Values;
 typedef vtkNew<vtkFloatArray> NewValues;
 
+typedef vtkSmartPointer<vtkPoints> Points;
 typedef vtkNew<vtkPoints> NewPoints;
 
 // a type token:
@@ -49,6 +45,12 @@ public:
   static CriticalPoints *New();
   vtkTypeMacro(CriticalPoints, vtkUndirectedGraph);
   void PrintSelf(ostream &os, vtkIndent indent) override;
+
+protected:
+  explicit CriticalPoints() = default;
+  ~CriticalPoints() override = default;
+
+public:
   void Initialize() override;
 
   /**
@@ -59,11 +61,7 @@ public:
   //accessor
   vtkMolecule *GetMolecule() const { return molecule_; }
 
-  vtkPoints *Points() const { return points_; }
-
-protected:
-  explicit CriticalPoints() = default;
-  ~CriticalPoints() override = default;
+  vtkPoints *Points() const;
 
 private:
   CriticalPoints(const CriticalPoints &) = delete;

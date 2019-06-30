@@ -20,6 +20,8 @@
 #include <vtkExecutive.h>
 #include <vtkStdString.h>
 
+#include <vtkPoints.h>
+
 #include <cmath>
 #include <cstring>
 #include <fstream>
