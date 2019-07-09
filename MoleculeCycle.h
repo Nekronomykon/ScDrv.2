@@ -10,6 +10,8 @@
 
 class vtkMolecule;
 class vtkVector3d;
+class vtkMatrix3x3;
+class vtkMatrix4x4;
 
 namespace vtk
 {
@@ -18,13 +20,11 @@ class MoleculeCycle
 {
 private:
   vtkVector3d xyzCenter_;
-  vtkVector3d xyzReperX_;
-  vtkVector3d xyzReperY_;
-  vtkVector3d xyzReperZ_;
+  vtkMatrix3x3 reper_;
 
 public:
   MoleculeCycle(/* args */);
-  ~MoleculeCycle();
+  ~MoleculeCycle() = default;
 };
 
 }; // namespace vtk
