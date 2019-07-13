@@ -8,6 +8,8 @@
 
 // #include "vtkDomainsChemistryModule.h" // For export macro
 
+#include <vtkVector.h> // Small templated vector convenience class
+
 class vtkMolecule;
 class vtkVector3d;
 class vtkMatrix3x3;
@@ -20,7 +22,7 @@ class MoleculeCycle
 {
 private:
   vtkVector3d xyzCenter_;
-  vtkMatrix3x3 reper_;
+  // vtkMatrix3x3 reper_;
 
 public:
   MoleculeCycle(/* args */);

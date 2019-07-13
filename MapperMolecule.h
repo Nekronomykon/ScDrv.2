@@ -87,6 +87,13 @@ public:
   }
 
   /**
+   * glyphs
+   */
+
+  vtkPolyData* AtomGlyphAt() const { return polyAtAtoms_; }
+  vtkPolyData *BondGlyphAt() const { return polyAtBonds_; }
+
+  /**
     * Predefined styles in use:
     */
   void UseBallAndStickSettings() { this->SetStyle(styleBallSticks); }
@@ -211,9 +218,9 @@ protected:
   /**
      * Cached variables and update methods
      */
-  vtkNew<vtkPolyData> AtomGlyphPolyData;
+  vtkNew<vtkPolyData> polyAtAtoms_;
   vtkNew<vtkTrivialProducer> AtomGlyphPointOutput;
-  vtkNew<vtkPolyData> BondGlyphPolyData;
+  vtkNew<vtkPolyData> polyAtBonds_;
   vtkNew<vtkTrivialProducer> BondGlyphPointOutput;
   vtkNew<vtkStringArray> dataAtomsLabel_;
   vtkNew<vtkStringArray> dataBondsLabel_;

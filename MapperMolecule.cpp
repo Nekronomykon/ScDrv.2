@@ -121,10 +121,10 @@ vtkStandardNewMacro(MapperMolecule)
   this->glyphBonds_->AddObserver(vtkCommand::ProgressEvent, cb);
 
   // Connect the trivial producers to forward the glyph polydata
-  this->AtomGlyphPointOutput->SetOutput(this->AtomGlyphPolyData);
+  this->AtomGlyphPointOutput->SetOutput(this->AtomGlyphAt());
   this->glyphAtoms_->SetInputConnection(this->AtomGlyphPointOutput->GetOutputPort());
 
-  this->BondGlyphPointOutput->SetOutput(this->BondGlyphPolyData);
+  this->BondGlyphPointOutput->SetOutput(this->BondGlyphAt());
   this->glyphBonds_->SetInputConnection(this->BondGlyphPointOutput->GetOutputPort());
 
   this->LatticeMapper->SetInputData(this->LatticePolyData);
@@ -255,12 +255,12 @@ void MapperMolecule::UpdateGlyphPolyData()
 {
   vtkMolecule *molecule = this->GetInput();
 
-  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->AtomGlyphPolyData->GetMTime() || this->GetMTime() > this->AtomGlyphPolyData->GetMTime() || this->LookupTable->GetMTime() > this->AtomGlyphPolyData->GetMTime())))
+  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->polyAtAtoms_->GetMTime() || this->GetMTime() > this->polyAtAtoms_->GetMTime() || this->LookupTable->GetMTime() > this->polyAtAtoms_->GetMTime())))
   {
     this->UpdateAtomGlyphPolyData();
   }
 
-  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->BondGlyphPolyData->GetMTime() || this->GetMTime() > this->BondGlyphPolyData->GetMTime() || this->LookupTable->GetMTime() > this->BondGlyphPolyData->GetMTime()) && this->GetStyle().HasToRenderBonds()))
+  if (!this->GlyphDataInitialized || ((molecule->GetMTime() > this->polyAtBonds_->GetMTime() || this->GetMTime() > this->polyAtBonds_->GetMTime() || this->LookupTable->GetMTime() > this->polyAtBonds_->GetMTime()) && this->GetStyle().HasToRenderBonds()))
   {
     this->UpdateBondGlyphPolyData();
   }
@@ -277,7 +277,7 @@ void MapperMolecule::UpdateGlyphPolyData()
 // Generate scale and position information for each atom sphere
 void MapperMolecule::UpdateAtomGlyphPolyData()
 {
-  this->AtomGlyphPolyData->Initialize();
+  this->polyAtAtoms_->Initialize();
 
   vtkMolecule *molecule = this->GetInput();
 
@@ -295,7 +295,7 @@ void MapperMolecule::UpdateAtomGlyphPolyData()
   for (vtkIdType i = 0; i < molecule->GetNumberOfAtoms(); i++)
   {
     /**
-     * Skip ghost atoms but not ghos t bonds:
+     * Skip ghost atoms but not ghost bonds:
      *  - each atom is non-ghost for exactly one MPI node, that will handle it.
      *  - a ghost bond links an atom and a ghost atom. So there is exactly two MPI nodes
      *    that contain this ghost bond and no one that contains this bond as non-ghost.
@@ -324,13 +324,13 @@ void MapperMolecule::UpdateAtomGlyphPolyData()
     else
     {
       int colorArrayIdx =
-          this->AtomGlyphPolyData->GetPointData()->AddArray(colorArray);
+          this->polyAtAtoms_->GetPointData()->AddArray(colorArray);
       this->glyphAtoms_->SelectColorArray(colorArrayIdx);
     }
     colorArray->Delete();
   }
 
-  this->AtomGlyphPolyData->SetPoints(points.Get());
+  this->polyAtAtoms_->SetPoints(points.Get());
   this->glyphAtoms_->SetLookupTable(this->LookupTable);
 
   vtkNew<vtkFloatArray> scaleFactors;
@@ -401,7 +401,7 @@ void MapperMolecule::UpdateAtomGlyphPolyData()
   }
   }
 
-  this->AtomGlyphPolyData->GetPointData()->AddArray(scaleFactors);
+  this->polyAtAtoms_->GetPointData()->AddArray(scaleFactors);
   this->glyphAtoms_->SetScaleArray("Scale Factors");
 }
 
@@ -409,7 +409,7 @@ void MapperMolecule::UpdateAtomGlyphPolyData()
 // Generate position, scale, and orientation vectors for each bond cylinder
 void MapperMolecule::UpdateBondGlyphPolyData()
 {
-  this->BondGlyphPolyData->Initialize();
+  this->polyAtBonds_->Initialize();
 
   vtkMolecule *molecule = this->GetInput();
   const vtkIdType numBonds = molecule->GetNumberOfBonds();
@@ -459,12 +459,12 @@ void MapperMolecule::UpdateBondGlyphPolyData()
   orientationVectors->Allocate(3 * numCylinders);
   selectionIds->Allocate(numCylinders);
 
-  // Add arrays to BondGlyphPolyData
-  this->BondGlyphPolyData->SetPoints(cylCenters);
-  this->BondGlyphPolyData->GetPointData()->AddArray(cylScales);
-  this->BondGlyphPolyData->GetPointData()->AddArray(
+  // Add arrays to polyAtBonds_
+  this->polyAtBonds_->SetPoints(cylCenters);
+  this->polyAtBonds_->GetPointData()->AddArray(cylScales);
+  this->polyAtBonds_->GetPointData()->AddArray(
       orientationVectors);
-  this->BondGlyphPolyData->GetPointData()->AddArray(
+  this->polyAtBonds_->GetPointData()->AddArray(
       selectionIds);
 
   // Set up coloring mode
@@ -476,7 +476,7 @@ void MapperMolecule::UpdateBondGlyphPolyData()
     cylColors->SetNumberOfComponents(3);
     cylColors->Allocate(3 * numCylinders);
     cylColors->SetName("Colors");
-    this->BondGlyphPolyData->GetPointData()->SetScalars(cylColors);
+    this->polyAtBonds_->GetPointData()->SetScalars(cylColors);
     this->glyphBonds_->SetColorModeToDefault();
     this->glyphBonds_->SetScalarModeToUsePointData();
     break;
@@ -486,7 +486,7 @@ void MapperMolecule::UpdateBondGlyphPolyData()
     cylColors->SetNumberOfComponents(1);
     cylColors->Allocate(numCylinders);
     cylColors->SetName("Colors");
-    this->BondGlyphPolyData->GetPointData()->SetScalars(cylColors);
+    this->polyAtBonds_->GetPointData()->SetScalars(cylColors);
     this->glyphBonds_->SetLookupTable(this->LookupTable);
     this->glyphBonds_->SetScalarRange(0, this->PeriodicTable->GetNumberOfElements());
     this->glyphBonds_->SetScalarModeToUsePointData();
@@ -692,7 +692,7 @@ void MapperMolecule::UpdateBondGlyphPolyData()
   }
 
   // Free up some space
-  this->BondGlyphPolyData->Squeeze();
+  this->polyAtBonds_->Squeeze();
 
   // Setup glypher
   this->glyphBonds_->SetScaleArray("Scale Factors");
