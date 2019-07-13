@@ -39,7 +39,7 @@
 
 #include "MoleculeMapperStyle.h"
 
-class vtkLabelPlacementMapper;
+// class vtkLabelPlacementMapper;
 class vtkLabeledDataMapper;
 class vtkActor;
 class vtkActor2D;
@@ -106,7 +106,6 @@ private:
   typedef vtkSmartPointer<MapperMolecule> MapMolecule;
   typedef vtkSmartPointer<MapperCriticalPoints> MapCritical;
   typedef vtkSmartPointer<vtkLabeledDataMapper> MapLabelData;
-  typedef vtkSmartPointer<vtkLabelPlacementMapper> LabelMapper;
 
   typedef vtkSmartPointer<vtkRenderer> Renderer;
 
@@ -118,8 +117,6 @@ private:
   BgColorType bgColor_;
   MapMolecule mol_mapper_;
   MapCritical mapCritical_;
-  LabelMapper labelAtoms_;
-  LabelMapper labelBonds_;
   MapLabelData mapDataAtoms_;
   MapLabelData mapDataBonds_;
   AreaPicker area_picker_;

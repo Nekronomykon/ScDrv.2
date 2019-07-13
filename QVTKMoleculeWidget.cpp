@@ -19,7 +19,7 @@
 #include <vtkOpenGLActor.h>
 #include <vtkOpenGLRenderer.h>
 
-#include <vtkLabelPlacementMapper.h>
+// #include <vtkLabelPlacementMapper.h>
 #include <vtkLabeledDataMapper.h>
 
 #include <vtkNamedColors.h>
