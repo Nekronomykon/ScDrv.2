@@ -2,7 +2,7 @@
 using namespace vtk;
 
 //----------------------------------------------------------------------------
-vtkStandardNewMacro(MapperLabelAtoms)
+vtkStandardNewMacro(MapperLabelAtoms);
 
 //----------------------------------------------------------------------------
 MapperLabelAtoms::MapperLabelAtoms(){}
