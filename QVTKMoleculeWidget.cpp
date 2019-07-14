@@ -31,6 +31,7 @@
 #include <vtkInteractorStyleRubberBandPick.h>
 
 #include "MoleculeMapperOpenGL.h"
+#include "MapperLabelAtoms.h"
 #include "ComboBoxColors.h"
 
 using namespace vtk;
@@ -40,15 +41,15 @@ typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
 typedef vtkSmartPointer<vtkInteractorStyleRubberBandPick> IntStyleRbrBndPick;
 
+typdef vtkSmartPointer<MapperLabelAtoms> MapLabelAtoms;
+
 typedef vtkSmartPointer<MoleculeMapperOpenGL> MolMapperOpenGL;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-    : BaseWidget(parent), renderer_(OpenGLRenderer::New())
-    , mol_mapper_(MolMapperOpenGL::New())
-    , area_picker_(RenderedAreaPicker::New())
-    , styleInteractor_(IntStyleRbrBndPick::New())
-    , mapDataAtoms_( MapLabelData::New())
+    : BaseWidget(parent), renderer_(OpenGLRenderer::New()), mol_mapper_(MolMapperOpenGL::New())
+    , area_picker_(RenderedAreaPicker::New()), styleInteractor_(IntStyleRbrBndPick::New())
+    , mapDataAtoms_(MapLabelAtoms::New())
 {
   // VTK Renderer setup
   // renderer_->SetUseFXAA(true); // antaliasing is now On
@@ -91,7 +92,8 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   pTP->SetFontSize(14);
   pTP->ItalicOff();
 
-  mapDataAtoms_->SetLabelModeToLabelFieldData();
+  // mapDataAtoms_->SetLabelModeToLabelFieldData();
+  mapDataAtoms_->SetLabelModeToLabelIds();
   Actor2D lbl(Actor2D::New());
   lbl->SetMapper(mapDataAtoms_);
 
@@ -106,6 +108,7 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
   {
     mol_mapper_->SetInputData(pMol);
     // mol_mapper_->UpdateAtomGlyphPolyData();
+    if(mapDataAtoms_)
     mapDataAtoms_->SetInputData(mol_mapper_->AtomGlyphAt());
   }
   // render scene:

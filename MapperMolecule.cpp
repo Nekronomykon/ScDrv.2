@@ -61,8 +61,8 @@ const MoleculeMapperStyle MapperMolecule::styleSticks =
 // also check that class for impacts.
 vtkStandardNewMacro(MapperMolecule)
 
-    //----------------------------------------------------------------------------
-    MapperMolecule::MapperMolecule()
+//----------------------------------------------------------------------------
+MapperMolecule::MapperMolecule()
     : glyphAtoms_(/* Glyph3DMap::New() */), glyphBonds_(/* Glyph3DMap::New() */), styleMap_(styleFast), AtomicRadiusArrayName(nullptr), RenderLattice(false), GlyphDataInitialized(false), areLabelDataInitialized_(false), pad_(1.5)
 {
   // Initialize ivars:

@@ -20,8 +20,6 @@ using namespace std;
 vtkStandardNewMacro(MapperCriticalPoints);
 
 //----------------------------------------------------------------------------
-// MapperCriticalPoints::MapperCriticalPoints()
-// {}
 
 //----------------------------------------------------------------------------
 void MapperCriticalPoints::PrintSelf(ostream &os, vtkIndent indent)
