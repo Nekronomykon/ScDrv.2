@@ -52,6 +52,10 @@
 #include <vtkNew.h>          // For vtkNew<>
 #include <vtkSmartPointer.h> // For vtkSmartPointer<>
 
+// to avoid "error: expected constructor, destructor, or type conversion before ‘;’ token"
+// vtkStandardNewMacro(className);
+#include <vtkObjectFactory.h> 
+
 #include <vtkLabeledDataMapper.h>
 
 namespace vtk

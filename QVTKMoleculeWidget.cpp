@@ -41,7 +41,7 @@ typedef vtkSmartPointer<vtkOpenGLActor> OpenGLActor;
 typedef vtkSmartPointer<vtkOpenGLRenderer> OpenGLRenderer;
 typedef vtkSmartPointer<vtkInteractorStyleRubberBandPick> IntStyleRbrBndPick;
 
-typdef vtkSmartPointer<MapperLabelAtoms> MapLabelAtoms;
+typedef vtkSmartPointer<MapperLabelAtoms> MapLabelAtoms;
 
 typedef vtkSmartPointer<MoleculeMapperOpenGL> MolMapperOpenGL;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
@@ -83,13 +83,13 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   area_picker_->AddObserver(vtkCommand::EndPickEvent, cmdPickFragment_);
 
   vtkTextProperty *pTP = mapDataAtoms_->GetLabelTextProperty();
-  // pTP->SetFontFamilyToCourier();
+  pTP->SetFontFamilyToCourier();
   pTP->SetColor(0, 0, 1);
   pTP->ShadowOn();
   pTP->BoldOn();
   pTP->SetVerticalJustificationToCentered();
   pTP->SetJustificationToCentered();
-  pTP->SetFontSize(14);
+  pTP->SetFontSize(16);
   pTP->ItalicOff();
 
   // mapDataAtoms_->SetLabelModeToLabelFieldData();
