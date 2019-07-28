@@ -50,8 +50,8 @@ int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVect
   assert(!this->GetNumberOfAtoms());
   this->ResetNumberOfAtoms( nAtomStr );
 
-  // Here could the specific QTAIM info be parsed...
-  this->ReadNumberCPs(infile);
+  // Here the specific QTAIM info could be parsed...
+  this->ReadCriticalSizes(infile);
 
   return 1;
 }

@@ -64,7 +64,7 @@ void MoleculeAcquireFileQTAIM::Initialize()
 }
 
 //----------------------------------------------------------------------------
-vtkIdType MoleculeAcquireFileQTAIM::ReadNumberCPs(istream &inss)
+vtkIdType MoleculeAcquireFileQTAIM::ReadCriticalSizes(istream &inss)
 {
   vtkIdType nRes = 0;
   istringstream in_str(TraitsBase::ScrollDownToPrefix(inss,

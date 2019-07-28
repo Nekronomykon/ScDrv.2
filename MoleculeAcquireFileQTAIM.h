@@ -90,7 +90,7 @@ protected:
   explicit MoleculeAcquireFileQTAIM();
   ~MoleculeAcquireFileQTAIM() override = default;
 
-  vtkIdType ReadNumberCPs(std::istream &sin);
+  vtkIdType ReadCriticalSizes(std::istream & /* input */);
 
 private:
   MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
