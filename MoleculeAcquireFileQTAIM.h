@@ -70,12 +70,12 @@ public:
   void Initialize(); // override;
   int FillOutputPortInformation(int, vtkInformation *) override;
 
-  vtkIdType GetNumberOfCPs() const { return NumberOfCPs_; }
-  vtkIdType ResetNumberOfCPs(vtkIdType nnew = 0)
+  vtkIdType GetCriticalPointNumber() const { return NumberCritPoint_; }
+  vtkIdType ResetCriticalPointNumber(vtkIdType nnew = 0)
   {
-    if (nnew != this->GetNumberOfCPs())
+    if (nnew != this->GetCriticalPointNumber())
     {
-      std::swap(nnew, NumberOfCPs_);
+      std::swap(nnew, NumberCritPoint_);
       this->Modified();
     }
     return nnew;
@@ -84,19 +84,19 @@ public:
   int ParseStreamData(std::istream & /*src*/,
                       vtkInformationVector * /*out*/) override;
 
+  vtkIdType ReadCriticalInfo(std::istream & /* input */, vtkInformationVector* /* info */);
+  virtual int ReadCriticalData(std::istream &, CriticalPoints *);
+
 protected:
-  virtual int ReadCritical(std::istream &, CriticalPoints *);
 
   explicit MoleculeAcquireFileQTAIM();
   ~MoleculeAcquireFileQTAIM() override = default;
-
-  vtkIdType ReadCriticalSizes(std::istream & /* input */);
 
 private:
   MoleculeAcquireFileQTAIM(const MoleculeAcquireFileQTAIM &) = delete;
   void operator=(const MoleculeAcquireFileQTAIM &) = delete;
 
-  vtkIdType NumberOfCPs_ = 0;
+  vtkIdType NumberCritPoint_ = 0;
 };
 
 }; // namespace vtk

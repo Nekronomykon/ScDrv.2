@@ -33,7 +33,7 @@ MoleculeAcquireFileMGP::MoleculeAcquireFileMGP()
 }
 
 //----------------------------------------------------------------------------
-int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVector*)
+int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVector*info)
 {
   if (!Traits::ScrollDownTo(infile, "Nuclear Charges and Cartesian Coordinates:"))
     return 0;
@@ -51,7 +51,7 @@ int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVect
   this->ResetNumberOfAtoms( nAtomStr );
 
   // Here the specific QTAIM info could be parsed...
-  this->ReadCriticalSizes(infile);
+  this->ReadCriticalInfo(infile, info);
 
   return 1;
 }

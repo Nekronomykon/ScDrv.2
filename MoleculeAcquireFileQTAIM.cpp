@@ -49,7 +49,7 @@ void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 
-  os << indent << "Critical points = " << this->GetNumberOfCPs() << ": ["
+  os << indent << "Critical points = " << this->GetCriticalPointNumber() << ": ["
      // << (this->HasFileName() ? this->GetFileName() : "(null)" )
      << " ]" << std::endl;
 }
@@ -58,28 +58,28 @@ void MoleculeAcquireFileQTAIM::PrintSelf(ostream &os, vtkIndent indent)
 void MoleculeAcquireFileQTAIM::Initialize()
 {
   // this->Superclass::Initialize();
-  this->ResetNumberOfCPs();
+  this->ResetCriticalPointNumber();
   this->ResetNumberOfOrbitals();
   this->ResetNumberOfPrimitives();
 }
 
 //----------------------------------------------------------------------------
-vtkIdType MoleculeAcquireFileQTAIM::ReadCriticalSizes(istream &inss)
+vtkIdType MoleculeAcquireFileQTAIM::ReadCriticalInfo(istream &inss, vtkInformationVector* /* info */)
 {
   vtkIdType nRes = 0;
   istringstream in_str(TraitsBase::ScrollDownToPrefix(inss,
                                                       "Total number of electron density critical points found =",
                                                       57));
   in_str >> nRes;
-  assert(!this->GetNumberOfCPs());
+  assert(!this->GetCriticalPointNumber());
   if (nRes)
   {
-    this->ResetNumberOfCPs(nRes);
+    this->ResetCriticalPointNumber(nRes);
   }
   return nRes;
 }
 
-int MoleculeAcquireFileQTAIM::ReadCritical(istream &inp, CriticalPoints *pCP)
+int MoleculeAcquireFileQTAIM::ReadCriticalData(istream &inp, CriticalPoints *pCP)
 {
   string strNewCP = TraitsBase::ScrollDownToPrefix(inp, "CP#");
   if (strNewCP.empty())
@@ -89,7 +89,7 @@ int MoleculeAcquireFileQTAIM::ReadCritical(istream &inp, CriticalPoints *pCP)
   vtkStdString skip, line_one;
   char c_skip;
 
-  pCP->Points()->Resize(this->GetNumberOfCPs());
+  pCP->Points()->Resize(this->GetCriticalPointNumber());
 
   do // by idCP
   {
@@ -125,7 +125,7 @@ int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationV
     return 1;
   }
 
-  return this->ReadCritical(src, pCP);
+  return this->ReadCriticalData(src, pCP);
 }
 
 CriticalPoints *MoleculeAcquireFileQTAIM::GetCriticalOutput()
