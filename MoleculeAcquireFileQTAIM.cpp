@@ -93,7 +93,7 @@ int MoleculeAcquireFileQTAIM::ReadCriticalData(istream &inp, CriticalPoints *pCP
   char c_skip;
 
   double x, y, z;
-  complex<int> code;
+  complex<int> code; // for the I/O '(Re,Im)' convenience...
 
   pPts->Resize(this->GetCriticalPointNumber());
 
@@ -138,11 +138,11 @@ int MoleculeAcquireFileQTAIM::ReadCriticalData(istream &inp, CriticalPoints *pCP
         // NOTA BENE: CCP is not the sign that we have all BCPs and RCPs at hand
         //             --> conversion?
       }
-      else return 0; // ERROR!!!
+      else return 0; // DOMAIN ERROR!!!
     }
     else if(code.real() == 2)
-    { // Actually we have had these results: the potential in H--X possess 
-      // the axial symmetry of the infinite order...
+    { // Actually we have had the result of this type: the ES potential in H--X possess 
+      // the axial symmetry of the infinite order, so does the GS electronic density...
       // OUCH!
     }
     else return 0;
