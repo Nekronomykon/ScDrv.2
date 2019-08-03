@@ -130,7 +130,7 @@ int MoleculeAcquireFileQTAIM::ReadCriticalData(istream &inp, CriticalPoints *pCP
       { // read all numbers in the format described above; find all bonds between them 
         // as their indices m_0, m_1 ... m_N;
         // then add all edges of the type (m_i, idCP - 1)
-        // NOTA BENE: RCP is not the sign that we have all BCPs at hand --> conversion?
+        // NOTA BENE: RCP found does not mean that we have all BCPs at hand --> conversion?
       }
       else if(code.imag() == +3)  // a local mininum --> cage (skip == "CCP")
       { // AIMAll gives all atomic indices after the "CCP" token in the string;
