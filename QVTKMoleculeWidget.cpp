@@ -47,9 +47,7 @@ typedef vtkSmartPointer<MoleculeMapperOpenGL> MolMapperOpenGL;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-    : BaseWidget(parent), renderer_(OpenGLRenderer::New()), mol_mapper_(MolMapperOpenGL::New())
-    , area_picker_(RenderedAreaPicker::New()), styleInteractor_(IntStyleRbrBndPick::New())
-    , mapDataAtoms_(MapLabelAtoms::New())
+    : BaseWidget(parent), renderer_(OpenGLRenderer::New()), mol_mapper_(MolMapperOpenGL::New()), area_picker_(RenderedAreaPicker::New()), styleInteractor_(IntStyleRbrBndPick::New()), mapDataAtoms_(MapLabelAtoms::New())
 {
   // VTK Renderer setup
   // renderer_->SetUseFXAA(true); // antaliasing is now On
@@ -84,7 +82,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   vtkTextProperty *pTP = mapDataAtoms_->GetLabelTextProperty();
   pTP->SetFontFamilyToCourier();
-  pTP->SetColor(0, 0, 1);
+  pTP->SetColor(0.45, 0.30, 0.45);
   pTP->ShadowOn();
   pTP->BoldOn();
   pTP->SetVerticalJustificationToCentered();
@@ -92,8 +90,8 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   pTP->SetFontSize(16);
   pTP->ItalicOff();
 
-  // mapDataAtoms_->SetLabelModeToLabelFieldData();
   mapDataAtoms_->SetLabelModeToLabelIds();
+  //mapDataAtoms_->SetLabelModeToLabelFieldData();
   Actor2D lbl(Actor2D::New());
   lbl->SetMapper(mapDataAtoms_);
 
@@ -107,9 +105,8 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
   if (pMol)
   {
     mol_mapper_->SetInputData(pMol);
-    // mol_mapper_->UpdateAtomGlyphPolyData();
-    if(mapDataAtoms_)
-    mapDataAtoms_->SetInputData(mol_mapper_->AtomGlyphAt());
+    if (mapDataAtoms_)
+      mapDataAtoms_->SetInputData(mol_mapper_->AtomGlyphAt());
   }
   // render scene:
   this->doRender();
