@@ -92,17 +92,17 @@ int MoleculeAcquireFileQTAIM::ReadCriticalData(istream &inp, CriticalPoints *pCP
   vtkStdString skip, line_one;
   char c_skip;
 
-  double x, y, z;
+  double x, y, z, q[3];
   complex<int> code; // for the I/O '(Re,Im)' convenience...
 
-  pPts->Resize(this->GetCriticalPointNumber());
+  pCP->ResetPointSize(this->GetCriticalPointNumber());
 
   do // by idCP
   {
     istringstream iss(strNewCP);
     /* code */
     size_t idCP = 0;
-    iss >> idCP >> skip >> c_skip >> x >> y >> z; // Coords in Bohrs
+    iss >> idCP >> skip >> c_skip >> q[0] >> q[1] >> q[2]; // Coords in Bohrs
     if (!idCP)
       return 0;
 
@@ -113,43 +113,51 @@ int MoleculeAcquireFileQTAIM::ReadCriticalData(istream &inp, CriticalPoints *pCP
     istringstream is_type(line_one);
     is_type >> skip >> c_skip >> code >> skip;
 
-    if (code.real() == 3) // (1) does AIMAll give any other values?
-    {                     // (2) what should one do, if any point is degenerate?
-    // ..by possible values here is:
-      if (code.imag() == -3)      // a local maximum --> atom (skip == "NACP")
-      { // or not (skip == "NNACP"). In the first case:
+    if (code.real() == 3)    // (1) does AIMAll give any other values?
+    {                        // (2) what should one do, if any point is degenerate?
+                             // ..by possible values here is:
+      if (code.imag() == -3) // a local maximum --> atom as either a nuclear (skip == "NACP")
+      {                      // or a non-nuclear (skip == "NNACP") attractor. In the first case:
         // read a single number (== index + 1) after in the ElementSymbolNumber format;
-        // it is possibly equal to idCP here. 
-        // I do not know what to do otherwise ;) 
+        // it is possibly equal to idCP here.
+        // I do not know what to do otherwise ;)
+        pCP->SetAtomCriticalPointAt(idCP - 1, q);
       }
-      else if(code.imag() == -1)  // saddle point of rank 1 --> bond (skip == "BCP"):
-      { // read two numbers in the format desribed above for (-3) case; let them be n0 and n1;
+      else if (code.imag() == -1) // saddle point of rank 1 --> bond (skip == "BCP"):
+      {                           // read two numbers in the format desribed above for (-3) case;
+                                  //let them be n0 and n1;
         // then add (n0-1,idCP-1) and (n1-1,idCP-1) edges to the critical graph of the structure
+        pCP->SetBondCriticalPointAt(idCP - 1, q);
       }
-      else if(code.imag() == +1)  // saddle point of rank 2 --> ring (skip == "RCP");
-      { // read all numbers in the format described above; find all bonds between them 
-        // as their indices m_0, m_1 ... m_N;
-        // then add all edges of the type (m_i, idCP - 1)
-        // NOTA BENE: RCP found does not mean that we have all BCPs at hand --> conversion?
+      else if (code.imag() == +1) // saddle point of rank 2 --> ring (skip == "RCP");
+      {                           // read all numbers in the format described above; find all bonds between them
+                                  // as their indices m_0, m_1 ... m_N;
+                                  // then add all edges of the type (m_i, idCP - 1)
+                                  // NOTA BENE: an RCP found does not mean that we have all its constituent ACP or
+                                  // BCPs at hand --> where is the conversion?
+        pCP->SetRingCriticalPointAt(idCP - 1, q);
       }
-      else if(code.imag() == +3)  // a local mininum --> cage (skip == "CCP")
-      { // AIMAll gives all atomic indices after the "CCP" token in the string;
-        // TODO: I do not know what to do with them all. To think on about it!
-        // NOTA BENE: CCP is not the sign that we have all BCPs and RCPs at hand
-        //             --> conversion?
+      else if (code.imag() == +3) // a local mininum --> cage (skip == "CCP")
+      {                           // AIMAll gives all atomic indices after the "CCP" token in the string;
+                                  // TODO: I do not know what to do with them all. To think on about it!
+                                  // NOTA BENE: CCP is not the sign that we have all BCPs and RCPs at hand
+                                  //             --> conversion?
+        pCP->SetCageCriticalPointAt(idCP - 1, q);
       }
-      else return 0; // DOMAIN ERROR!!!
+      else
+        return 0; // DOMAIN ERROR!!!
     }
-    else if(code.real() == 2)
-    { // Actually we have had the result of this type: the ES potential in H--X possess 
+    else if (code.real() == 2)
+    { // Actually we have had the result of this type: the ES potential in H--X possess
       // the axial symmetry of the infinite order, so does the GS electronic density...
       // OUCH!
     }
-    else return 0;
-    
+    else
+      return 0;
+
     // now data are read; let us store them
-    --idCP; // now it is the index
-    pPts->SetPoint(idCP, x, y, z);
+    // --idCP; // now it is the index
+    // pPts->SetPoint(idCP, q[0], q[1], q[2]);
 
     /* finally: */
     strNewCP = TraitsBase::ScrollDownToPrefix(inp, "CP#");

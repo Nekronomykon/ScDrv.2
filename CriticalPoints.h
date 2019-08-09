@@ -15,6 +15,7 @@
 class vtkPoints;
 class vtkFloatArray;
 class vtkMolecule;
+class vtkIdTypeArray;
 
 typedef vtkSmartPointer<vtkMolecule> Molecule;
 typedef vtkNew<vtkMolecule> NewMolecule;
@@ -24,6 +25,8 @@ typedef vtkNew<vtkFloatArray> NewValues;
 
 typedef vtkSmartPointer<vtkPoints> Points;
 typedef vtkNew<vtkPoints> NewPoints;
+
+typedef vtkNew<vtkIdTypeArray> NewPointTypes;
 
 // a type token:
 #define SCDRV_CRITICAL_POINTS 88
@@ -53,6 +56,11 @@ protected:
 public:
   void Initialize() override;
 
+  bool SetAtomCriticalPointAt(vtkIdType /* idx */, const double * /* xyz */);
+  bool SetBondCriticalPointAt(vtkIdType /* idx */, const double * /* xyz */);
+  bool SetRingCriticalPointAt(vtkIdType /* idx */, const double * /* xyz */);
+  bool SetCageCriticalPointAt(vtkIdType /* idx */, const double * /* xyz */);
+
   /**
    * Return what type of dataset this is.
    */
@@ -63,6 +71,9 @@ public:
 
   vtkPoints *Points() const;
 
+  void ResetPointSize(vtkIdType nPoints = 0);
+  vtkIdType GetPointSize() const;
+
 private:
   CriticalPoints(const CriticalPoints &) = delete;
   void operator=(const CriticalPoints &) = delete;
@@ -71,6 +82,7 @@ private:
   NewMolecule molecule_;
 
   NewPoints points_;
+  NewPointTypes point_types_;
 
   vtkIdType SizesCPTypes[NumberOfCPTypes];
 
