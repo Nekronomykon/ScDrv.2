@@ -150,6 +150,7 @@ int MoleculeAcquireFileQTAIM::ReadCriticalData(istream &inp, CriticalPoints *pCP
     else if (code.real() == 2)
     { // Actually we have had the result of this type: the ES potential in H--X possess
       // the axial symmetry of the infinite order, so does the GS electronic density...
+      // published in Vestnik MGU, 2000 ;)
       // OUCH!
     }
     else
