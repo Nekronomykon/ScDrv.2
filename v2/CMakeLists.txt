@@ -32,3 +32,4 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   else()
   target_link_libraries(ScDrv ${VTK_LIBRARIES} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport Qt5::OpenGL)
 endif()
+
