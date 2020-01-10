@@ -122,8 +122,6 @@ void FrameBrowser::init()
     tabViews_->addTab(editFileContent_, QString("File content"));
     viewStructure3D_ = new ViewStructure;
     tabViews_->addTab(viewStructure3D_, QString("Structure"));
-    viewElements_ = new TableElements;
-    tabViews_->addTab(viewElements_, QString("Elements"));
 
     setCentralWidget(tabViews_);
 

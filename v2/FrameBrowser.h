@@ -8,7 +8,6 @@
 
 #include "EditTextSource.h"
 #include "ViewStructure.h"
-#include "TableElements.h"
 
 #include "ui_FrameBrowser.h"
 
@@ -35,7 +34,6 @@ public:
 
     EditTextSource* getEditText() const {return editFileContent_;}
     ViewStructure* getView3D() const {return viewStructure3D_; }
-    TableElements* getViewElements() const {return viewElements_;}
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -98,14 +96,13 @@ private:
 
     EditTextSource *editFileContent_;
     ViewStructure *viewStructure3D_;
-    TableElements* viewElements_;
 
     QAction *recentFileActs[MaxRecentFiles];
     QAction *recentFileSeparator;
     QAction *recentFileSubMenuAct;
 
-    QString curFile;
     bool bHasNoFile_; // flag to determine the binding to a file path
+    QString curFile;  // pah to a corresponding file
 };
 
 #endif // ! FrameBrowser_h__
