@@ -6,25 +6,23 @@
 #include "StyleMapMolecule.h"
 using namespace vtk;
 
-static inline bool operator==(const StyleMapMolecule &w, const StyleMapMolecule &v)
+bool StyleMapMolecule::operator==(const StyleMapMolecule &v)const
 {
-  return bool(
-    (w.styleAtomRadius_ == v.styleAtomRadius_) 
-  && (w.radAtomsScale_ == v.radAtomsScale_) 
-  && (w.styleBondColor_ == v.styleBondColor_) 
-  && (w.bRenderMulti_ == v.bRenderMulti_) && (w.radBonds_ == v.radBonds_) 
-  && (w.colorBond_[0] == v.colorBond_[0]) && (w.colorBond_[1] == v.colorBond_[1]) && (w.colorBond_[2] == v.colorBond_[2])
+  return bool((styleAtomRadius_ == v.styleAtomRadius_) 
+  && (radAtomsScale_ == v.radAtomsScale_) 
+  && (styleBondColor_ == v.styleBondColor_) 
+  && (bRenderMulti_ == v.bRenderMulti_) && (radBonds_ == v.radBonds_) 
+  && (colorBond_[0] == v.colorBond_[0]) && (colorBond_[1] == v.colorBond_[1]) && (colorBond_[2] == v.colorBond_[2])
   );
 }
 
-static inline bool operator!=(const StyleMapMolecule &w, const StyleMapMolecule &v)
+bool StyleMapMolecule::operator!=(const StyleMapMolecule &v)const
 {
-  return bool(
-    (w.styleAtomRadius_ != v.styleAtomRadius_) 
-  || (w.radAtomsScale_ != v.radAtomsScale_) 
-  || (w.styleBondColor_ != v.styleBondColor_) 
-  || (w.bRenderMulti_ != v.bRenderMulti_) || (w.radBonds_ != v.radBonds_) 
-  || (w.colorBond_[0] != v.colorBond_[0]) || (w.colorBond_[1] != v.colorBond_[1]) || (w.colorBond_[2] != v.colorBond_[2])
+  return bool((styleAtomRadius_ != v.styleAtomRadius_) 
+  || (radAtomsScale_ != v.radAtomsScale_) 
+  || (styleBondColor_ != v.styleBondColor_) 
+  || (bRenderMulti_ != v.bRenderMulti_) || (radBonds_ != v.radBonds_) 
+  || (colorBond_[0] != v.colorBond_[0]) || (colorBond_[1] != v.colorBond_[1]) || (colorBond_[2] != v.colorBond_[2])
   );
 }
 

@@ -15,14 +15,14 @@ namespace vtk
 
 class StyleMapMolecule;
 
-static bool operator==(const StyleMapMolecule &, const StyleMapMolecule &);
-static bool operator!=(const StyleMapMolecule &, const StyleMapMolecule &);
+// static bool operator==(const StyleMapMolecule &, const StyleMapMolecule &);
+// static bool operator!=(const StyleMapMolecule &, const StyleMapMolecule &);
 
 
 class StyleMapMolecule
 {
+  private:
   // atoms
-  // bool bRenderAtoms_;        //
   short styleAtomRadius_;
   float radAtomsScale_;
   // bonds
@@ -33,8 +33,8 @@ class StyleMapMolecule
   unsigned char colorBond_[3]; // transform to color4?
 
 public:
-  friend bool operator==(const StyleMapMolecule &, const StyleMapMolecule &);
-  friend bool operator!=(const StyleMapMolecule &, const StyleMapMolecule &);
+  bool operator==(const StyleMapMolecule &) const;
+  bool operator!=(const StyleMapMolecule &) const;
 
   //////////////////////////////////////////////////////////////////////////
   //
