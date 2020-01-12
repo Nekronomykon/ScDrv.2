@@ -42,7 +42,8 @@ int EditCode::SideBarWidth()
 	}
   
 	int space = this->fontMetrics().width(QLatin1Char('9')) * digits
-    + 2 * fontMetrics().height() + 4 // both sides paddings
+    + 2 * fontMetrics().height() 
+	+ 4 // both sides paddings
     ;
 
 	return space;
@@ -54,7 +55,7 @@ int EditCode::SideBarWidth()
 
 void EditCode::updateSideBarWidth(int /* newBlockCount */)
 {
-	setViewportMargins(this->SideBarWidth(), 0, 0, 0);
+	this->setViewportMargins(this->SideBarWidth(), 0, 0, 0);
 }
 
 //![slotUpdateExtraAreaWidth]

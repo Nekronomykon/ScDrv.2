@@ -6,7 +6,7 @@
 #include "StyleMapMolecule.h"
 using namespace vtk;
 
-bool StyleMapMolecule::operator==(const StyleMapMolecule &v)const
+inline bool StyleMapMolecule::operator==(const StyleMapMolecule &v)const
 {
   return bool((styleAtomRadius_ == v.styleAtomRadius_) 
   && (radAtomsScale_ == v.radAtomsScale_) 
@@ -16,7 +16,7 @@ bool StyleMapMolecule::operator==(const StyleMapMolecule &v)const
   );
 }
 
-bool StyleMapMolecule::operator!=(const StyleMapMolecule &v)const
+inline bool StyleMapMolecule::operator!=(const StyleMapMolecule &v)const
 {
   return bool((styleAtomRadius_ != v.styleAtomRadius_) 
   || (radAtomsScale_ != v.radAtomsScale_) 

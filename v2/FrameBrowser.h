@@ -39,7 +39,6 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private slots:
-    FrameBrowser* newFile();
     // void open();
     void updateRecentFileActions();
     void openRecentFile();
@@ -63,6 +62,7 @@ private slots:
 private:
     enum { MaxRecentFiles = 9 };
 
+    FrameBrowser* createNewFrame();
     bool save();
     bool saveAs();
 
@@ -70,6 +70,7 @@ private:
     void clearPath();
 
     void setupActions();
+    void setupToolBar();
     void setupDockingViews();
 
     void updateUi();

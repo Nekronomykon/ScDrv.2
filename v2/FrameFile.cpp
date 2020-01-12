@@ -2,7 +2,6 @@
 
 #include <QWidget>
 
-
 FrameFile::FrameFile(QWidget *parent)
 : QTabWidget(parent)
 , elements_(new TableElements(this))
@@ -10,3 +9,5 @@ FrameFile::FrameFile(QWidget *parent)
   this->addTab(elements_, QString("Elements"));
 }
 
+void FrameFile::updateTabs()
+{}

@@ -37,7 +37,7 @@ void FrameBrowser::closeEvent(QCloseEvent *event)
     }
 }
 
-FrameBrowser* FrameBrowser::newFile()
+FrameBrowser* FrameBrowser::createNewFrame()
 {
     FrameBrowser *other = new FrameBrowser;
     other->tile(this);
@@ -100,7 +100,8 @@ void FrameBrowser::documentWasModified()
 
 void FrameBrowser::updateUi()
 {
-
+    // finally, transfer
+    tabViews_->updateTabs();
 }
 
 void FrameBrowser::init()
@@ -125,9 +126,10 @@ void FrameBrowser::init()
 
     setCentralWidget(tabViews_);
 
-    setupActions();
-    setupDockingViews();
-    createStatusBar();
+    this->setupActions();
+    this->setupToolBar();
+    this->setupDockingViews();
+    this->createStatusBar();
 
     readSettings();
 
@@ -163,30 +165,47 @@ void FrameBrowser::setupDockingViews()
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
 } 
 
+void FrameBrowser::setupToolBar()
+{
+    QToolBar *fileToolBar = this->barTools_;
+    fileToolBar->addAction(actionNew_);
+    fileToolBar->addAction(actionOpen_);
+    fileToolBar->addAction(actionSave_);
+    fileToolBar->addSeparator();
+    fileToolBar->addAction(actionAbout_);
+    fileToolBar->addAction(actionAboutQt_);
+
+    QToolBar *editToolBar = addToolBar(tr("Edit"));
+    editToolBar->addAction(actionUndo_);
+    editToolBar->addAction(actionRedo_);
+    editToolBar->addSeparator();
+    editToolBar->addAction(actionCut_);
+    editToolBar->addAction(actionCopy_);
+    editToolBar->addAction(actionPaste_);
+    editToolBar->addSeparator();
+    editToolBar->addAction(actionClear_);
+    editToolBar->addAction(actionClearAll_);
+}
+
 //! [implicit tr context]
 void FrameBrowser::setupActions()
 {
 //! [implicit tr context]
-    QToolBar *fileToolBar = addToolBar(tr("File"));
-    // QToolBar *pTool = this->toolBar();
 
     const QIcon iconNew = QIcon::fromTheme("document-new", QIcon(":/images/New.png"));
     actionNew_->setIcon(iconNew);
     actionNew_->setShortcuts(QKeySequence::New);
     actionNew_->setStatusTip(tr("Create a new file"));
-    fileToolBar->addAction(actionNew_);
 
     const QIcon iconOpen = QIcon::fromTheme("document-open", QIcon(":/images/Open.png"));
     actionOpen_->setIcon(iconOpen);
     actionOpen_->setShortcuts(QKeySequence::Open);
     actionOpen_->setStatusTip(tr("Open an existing file"));
-    fileToolBar->addAction(actionOpen_);
 
     const QIcon iconSave = QIcon::fromTheme("document-save", QIcon(":/images/Save.png"));
     actionSave_->setIcon(iconSave);
     actionSave_->setShortcuts(QKeySequence::Save);
     actionSave_->setStatusTip(tr("Save the document to disk"));
-    fileToolBar->addAction(actionSave_);
 
     const QIcon iconSaveAs = QIcon::fromTheme("document-save-as", QIcon(":/images/SaveAs.png"));
     actionSaveAs_->setIcon(iconSaveAs);
@@ -218,7 +237,14 @@ void FrameBrowser::setupActions()
     actionExit_->setStatusTip(tr("Exit the application"));
 
     // QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
-    QToolBar *editToolBar = addToolBar(tr("Edit"));
+
+    const QIcon iconUndo = QIcon::fromTheme("edit-undo", QIcon(":/images/Undo.png"));
+    actionUndo_->setIcon(iconUndo);
+    actionUndo_->setShortcut(QKeySequence::Undo);
+
+    const QIcon iconRedo = QIcon::fromTheme("edit-redo", QIcon(":/images/Redo.png"));
+    actionRedo_->setIcon(iconRedo);
+    actionRedo_->setShortcut(QKeySequence::Redo);
 
 #ifndef QT_NO_CLIPBOARD
     const QIcon iconCut = QIcon::fromTheme("edit-cut", QIcon(":/images/Cut.png"));
@@ -239,12 +265,16 @@ void FrameBrowser::setupActions()
     actionPaste_->setStatusTip(tr("Paste the clipboard's contents into the current selection"));
     connect(actionPaste_, &QAction::triggered, editFileContent_, &EditTextSource::paste);
 
-    editToolBar->addAction(actionCut_);
-    editToolBar->addAction(actionCopy_);
-    editToolBar->addAction(actionPaste_);
-
     menuBar()->addSeparator();
 #endif // !QT_NO_CLIPBOARD
+
+    const QIcon iconClear = QIcon::fromTheme("edit-clear",QIcon(":/imaged/Clear.png"));
+    actionClear_->setIcon(iconClear);
+    // actionClear_->setShortcut(QKeySequence::Clear);
+
+    const QIcon iconClearAll = QIcon::fromTheme("edit-clear-all",QIcon(":/imaged/ClearAll.png"));
+    actionClearAll_->setIcon(iconClearAll);
+    // actionClear_->setShortcut(QKeySequence::ClearAll);
 
     const QIcon iconAbout = QIcon::fromTheme("application-about", QIcon(":/images/Help.png"));
     actionAbout_->setIcon(iconAbout);
@@ -311,7 +341,6 @@ bool FrameBrowser::maybeSave()
 
 void FrameBrowser::loadFile(const QString &fileName)
 {
-
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("SDI"),
@@ -384,7 +413,8 @@ void FrameBrowser::prependToRecentFiles(const QString &fileName)
 
 void FrameBrowser::updateRecentFileActions()
 {
-    QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    QSettings settings(QCoreApplication::organizationName()
+    , QCoreApplication::applicationName());
 
     const QStringList recentFiles = readRecentFiles(settings);
     const int count = qMin(int(MaxRecentFiles), recentFiles.size());
@@ -408,10 +438,14 @@ void FrameBrowser::openRecentFile()
 bool FrameBrowser::saveFile(const QString &fileName)
 {
     QFile file(fileName);
+    QString strTitle(tr("Save file error"));
+    QString strMessage(tr("Cannot write file %1:\n%2."));
+
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("SDI"),
-                             tr("Cannot write file %1:\n%2.")
-                             .arg(QDir::toNativeSeparators(fileName), file.errorString()));
+        QMessageBox::warning(this
+        , strTitle
+        , strMessage.arg(QDir::toNativeSeparators(fileName), file.errorString() )
+        );
         return false;
     }
 
@@ -454,7 +488,7 @@ FrameBrowser *FrameBrowser::findMainWindow(const QString &fileName) const
 {
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
-    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+    for (QWidget *widget: QApplication::topLevelWidgets()) {
         FrameBrowser *mainWin = qobject_cast<FrameBrowser *>(widget);
         if (mainWin && mainWin->curFile == canonicalFilePath)
             return mainWin;
@@ -477,7 +511,7 @@ void FrameBrowser::clearPath()
 
 void FrameBrowser::on_actionNew__triggered()
 {
-    this->newFile();
+    this->createNewFrame();
 }
 
 void FrameBrowser::on_actionOpen__triggered()
@@ -519,12 +553,14 @@ void FrameBrowser::on_actionClone__triggered()
 }
 
 void FrameBrowser::on_actionSave__triggered()
-{ 
-     this->save(); 
+{
+    QMessageBox::about(this, tr("Save"), tr("Save the content to the current path") );
+    this->save(); 
 }
 
 void FrameBrowser::on_actionSaveAs__triggered() 
 { 
+    QMessageBox::about(this, tr("Save as"), tr("Save the content to the new path") );
     this->saveAs(); 
 }
 

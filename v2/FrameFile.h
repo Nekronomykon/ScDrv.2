@@ -21,13 +21,15 @@ class FrameFile
 private:
     QPointer<TableElements> elements_;
 
-    StyleMapMolecule style_mol_;
+    StyleMapMolecule style_molecule_;
 
 public:
     explicit FrameFile(QWidget * /*parent*/ = nullptr);
     ~FrameFile() override = default;
 
     TableElements* getViewElements() const {return elements_;}
+
+    void updateTabs();
 };
 
 
