@@ -23,6 +23,7 @@ class StyleMapMolecule
 {
   private:
   // atoms
+  // bool bRenderAtoms_;
   short styleAtomRadius_;
   float radAtomsScale_;
   // bonds
