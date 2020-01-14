@@ -22,8 +22,9 @@ int main(int argc, char *argv[])
     parser.process(app);
 
     FrameBrowser *frame = nullptr;
-    foreach (const QString &filename, parser.positionalArguments()) {
-        FrameBrowser *frameFile = new FrameBrowser(nullptr, filename);
+    foreach (const QString &filename, parser.positionalArguments()) 
+    {
+        FrameBrowser *frameFile = new FrameBrowser(nullptr);
         frameFile->tile(frame);
         frameFile->show();
         frame = frameFile;

@@ -26,13 +26,16 @@ class FrameBrowser
     Q_OBJECT
 
 public:
-    FrameBrowser(QWidget* /* parent */ = nullptr);
+    explicit FrameBrowser(QWidget* /* parent */, const QString &fileName); // to dismiss:
+    // separated into two consequtive steps: [0] creation; [1]: file attachment / content loading
 //! [class definition with macro]
-    explicit FrameBrowser(QWidget* /* parent */, const QString &fileName);
+    explicit FrameBrowser(QWidget* /* parent */ = nullptr);
+
+    static FrameBrowser* CreateFrameForPath(const QString& /* fileName*/
+    , QWidget* /* parent */ = nullptr);
 
     void tile(const QMainWindow *previous);
 
-    EditTextSource* getEditText() const {return editFileContent_;}
     ViewStructure* getView3D() const {return viewStructure3D_; }
 
 protected:
@@ -63,6 +66,9 @@ private:
     enum { MaxRecentFiles = 9 };
 
     FrameBrowser* createNewFrame();
+
+    bool attachToPath(const QString& filePath, bool bDelaySync = false);
+
     bool save();
     bool saveAs();
 
@@ -95,7 +101,7 @@ private:
 
     // QTabWidget *tabViews_;
 
-    EditTextSource *editFileContent_;
+    // EditTextSource *editFileContent_;
     ViewStructure *viewStructure3D_;
 
     QAction *recentFileActs[MaxRecentFiles];

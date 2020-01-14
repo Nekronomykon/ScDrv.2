@@ -31,6 +31,9 @@ public:
     void load(QIODevice* /*pIO*/);
     void save(QIODevice* /*pIO*/);
 
+    bool loadPath(const QString&);
+    bool savePath(const QString&);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

@@ -9,6 +9,7 @@ class QWidget;
 QT_END_NAMESPACE
 
 #include "TableElements.h"
+#include "EditTextSource.h"
 
 #include "StyleMapMolecule.h"
 
@@ -20,6 +21,7 @@ class FrameFile
     Q_OBJECT
 private:
     QPointer<TableElements> elements_;
+    QPointer<EditTextSource> source_;
 
     StyleMapMolecule style_molecule_;
 
@@ -28,6 +30,9 @@ public:
     ~FrameFile() override = default;
 
     TableElements* getViewElements() const {return elements_;}
+    EditTextSource* getEditSource() const {return source_;}
+    QTextDocument* getSource() const {return !source_ ? nullptr : source_->document();}
+    bool isSourceModified() const {return !source_ ? false : this->getSource()->isModified();}
 
     void updateTabs();
 };

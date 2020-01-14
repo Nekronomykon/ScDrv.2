@@ -1,14 +1,19 @@
-#include "EditCode.h"
-
 #include "SideBarDecorator.h"
 
 #include <QFont>
 #include <QPainter>
 #include <QTextStream>
 #include <QTextBlock>
+
+#include <QDir>
+#include <QFile>
 #include <QFileInfo>
 
+#include <QMessageBox>
+
 #include "ResetCursor.h"
+
+#include "EditCode.h"
 
 //![constructor]
 
@@ -36,7 +41,8 @@ int EditCode::SideBarWidth()
 {
 	int digits = 1;
 	int num = qMax(1, this->blockCount());
-	while (num >= 10) {
+	while (num >= 10) 
+	{
 		num /= 10;
 		++digits;
 	}
@@ -93,7 +99,8 @@ void EditCode::highlightCurrentLine()
 {
 	QList<QTextEdit::ExtraSelection> extraSelections;
 
-	if (!isReadOnly()) {
+	if (!isReadOnly()) 
+	{
 		QTextEdit::ExtraSelection selection;
 
 		QColor lineColor = QColor(Qt::yellow).lighter(160);
@@ -162,3 +169,36 @@ void EditCode::save(QIODevice* pIO)
 	out << this->toPlainText();
 }
 
+bool EditCode::loadPath(const QString& fileName)
+{
+	QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) 
+	{
+		QString strTitle(tr("Load file error"));
+		QString strMessage(tr("Cannot open file %1:\n%2."));
+       	QMessageBox::warning(this
+       	, strTitle
+       	, strMessage.arg(QDir::toNativeSeparators(fileName), file.errorString() ) );
+	    return false;
+    }
+	this->load(&file);
+	return true;
+}
+
+bool EditCode::savePath(const QString& fileName)
+{
+	QFile file(fileName);
+
+    if (!file.open(QFile::WriteOnly | QFile::Text))
+	{
+		QString strTitle(tr("Save file error"));
+		QString strMessage(tr("Cannot save file %1:\n%2."));
+       	QMessageBox::warning(this
+       	, strTitle
+       	, strMessage.arg(QDir::toNativeSeparators(fileName), file.errorString() ) );
+   	    return false;
+	}
+
+	this->save(&file);
+	return true;
+}

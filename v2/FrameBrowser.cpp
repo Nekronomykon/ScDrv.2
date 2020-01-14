@@ -9,6 +9,19 @@ static inline QString recentFilesKey() { return QStringLiteral("RecentFiles"); }
 static inline QString fileKey() { return QStringLiteral("File"); }
 static inline QString keyGeometry() { return QStringLiteral("Geometry"); }
 
+FrameBrowser* FrameBrowser::CreateFrameForPath(const QString& fileName
+    , QWidget* parent)
+    {
+        FrameBrowser *pFound = FrameBrowser::findFramePath(fileName);
+        if(!pFound)
+        {
+            pFound = new FrameBrowser;
+            pFound->attachToPath(fileName,true);
+            // attach the path; if successful, load file content...
+            pFound->tile(parent);
+        }
+    }
+
 FrameBrowser::FrameBrowser(QWidget* parent)
 : QMainWindow(parent)
 {
@@ -30,7 +43,7 @@ FrameBrowser::FrameBrowser(QWidget *parent, const QString &fileName)
 void FrameBrowser::closeEvent(QCloseEvent *event)
 {
     if (maybeSave()) {
-        writeSettings();
+        this->writeSettings();
         event->accept();
     } else {
         event->ignore();
@@ -45,24 +58,30 @@ FrameBrowser* FrameBrowser::createNewFrame()
     return other;
 }
 
+bool FrameBrowser::attachToPath(const QString& filePath, bool bDelaySync)
+{
+
+}
 
 void FrameBrowser::openFile(const QString &fileName)
 {
-    FrameBrowser *existing = findMainWindow(fileName);
-    if (existing) {
-        existing->show();
-        existing->raise();
-        existing->activateWindow();
+    FrameBrowser *found = this->findMainWindow(fileName);
+    if (found)
+    {
+        found->show();
+        found->raise();
+        found->activateWindow();
         return;
     }
 
-    if (bHasNoFile_ && editFileContent_->document()->isEmpty() && !isWindowModified()) {
-        loadFile(fileName);
+    if (bHasNoFile_ && tabViews_->getSource()->isEmpty() && !isWindowModified()) {
+        this->loadFile(fileName);
         return;
     }
 
     FrameBrowser *other = new FrameBrowser(nullptr,fileName);
-    if (other->bHasNoFile_) {
+    if (other->bHasNoFile_) 
+    {
         delete other;
         return;
     }
@@ -118,9 +137,9 @@ void FrameBrowser::init()
 
     // tabViews_ = new QTabWidget;
     tabViews_->setTabPosition(QTabWidget::South);
+    tabViews_->setTabsClosable(true);
+    tabViews_->setTabShape(QTabWidget::Rounded);
 
-    editFileContent_ = new EditTextSource;
-    tabViews_->addTab(editFileContent_, QString("File content"));
     viewStructure3D_ = new ViewStructure;
     tabViews_->addTab(viewStructure3D_, QString("Structure"));
 
@@ -133,7 +152,7 @@ void FrameBrowser::init()
 
     readSettings();
 
-    connect(editFileContent_->document(), &QTextDocument::contentsChanged,
+    connect(tabViews_->getSource(), &QTextDocument::contentsChanged,
             this, &FrameBrowser::documentWasModified);
 
     setUnifiedTitleAndToolBarOnMac(true);
@@ -143,14 +162,13 @@ void FrameBrowser::init()
 
 void FrameBrowser::tile(const QMainWindow *previous)
 {
-    if (!previous)
-        return;
     int topFrameWidth = previous->geometry().top() - previous->pos().y();
-    if (!topFrameWidth)
+    if (!topFrameWidth || !previous)
         topFrameWidth = 40;
-    const QPoint pos = previous->pos() + 2 * QPoint(topFrameWidth, topFrameWidth);
+        const QPoint prev = !previous ? QPoint(topFrameWidth, topFrameWidth) : previous->pos();
+    const QPoint pos = prev + 2 * QPoint(topFrameWidth, topFrameWidth);
     if (QApplication::desktop()->availableGeometry(this).contains(rect().bottomRight() + pos))
-        move(pos);
+        this->move(pos);
 }
 
 void FrameBrowser::setupDockingViews()
@@ -163,6 +181,7 @@ void FrameBrowser::setupDockingViews()
   pInit->setWidget(viewFiles_);
   // pNext = new QDockWidget(tr("Workspace"), this);
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
+  // this->tabifyDockWidget(pInit,pNext);
 } 
 
 void FrameBrowser::setupToolBar()
@@ -200,7 +219,7 @@ void FrameBrowser::setupActions()
     const QIcon iconOpen = QIcon::fromTheme("document-open", QIcon(":/images/Open.png"));
     actionOpen_->setIcon(iconOpen);
     actionOpen_->setShortcuts(QKeySequence::Open);
-    actionOpen_->setStatusTip(tr("Open an existing file"));
+    actionOpen_->setStatusTip(tr("Open an found file"));
 
     const QIcon iconSave = QIcon::fromTheme("document-save", QIcon(":/images/Save.png"));
     actionSave_->setIcon(iconSave);
@@ -251,21 +270,21 @@ void FrameBrowser::setupActions()
     actionCut_->setIcon(iconCut);
     actionCut_->setShortcuts(QKeySequence::Cut);
     actionCut_->setStatusTip(tr("Cut the current selection's contents to the clipboard"));
-    connect(actionCut_, &QAction::triggered, editFileContent_, &EditTextSource::cut);
+    connect(actionCut_, &QAction::triggered, tabViews_->getEditSource(), &EditTextSource::cut);
 
     const QIcon iconCopy = QIcon::fromTheme("edit-copy", QIcon(":/images/Copy.png"));
     actionCopy_->setIcon(iconCopy);
     actionCopy_->setShortcuts(QKeySequence::Copy);
     actionCopy_->setStatusTip(tr("Copy the current selection's contents to the clipboard"));
-    connect(actionCopy_, &QAction::triggered, editFileContent_, &EditTextSource::copy);
+    connect(actionCopy_, &QAction::triggered, tabViews_->getEditSource(), &EditTextSource::copy);
 
     const QIcon iconPaste = QIcon::fromTheme("edit-paste", QIcon(":/images/Paste.png"));
     actionPaste_->setIcon(iconPaste);
     actionPaste_->setShortcuts(QKeySequence::Paste);
     actionPaste_->setStatusTip(tr("Paste the clipboard's contents into the current selection"));
-    connect(actionPaste_, &QAction::triggered, editFileContent_, &EditTextSource::paste);
+    connect(actionPaste_, &QAction::triggered, tabViews_->getEditSource(), &EditTextSource::paste);
 
-    menuBar()->addSeparator();
+    // menuBar()->addSeparator();
 #endif // !QT_NO_CLIPBOARD
 
     const QIcon iconClear = QIcon::fromTheme("edit-clear",QIcon(":/imaged/Clear.png"));
@@ -288,8 +307,8 @@ void FrameBrowser::setupActions()
 #ifndef QT_NO_CLIPBOARD
     actionCut_->setEnabled(false);
     actionCopy_->setEnabled(false);
-    connect(editFileContent_, &EditTextSource::copyAvailable, actionCut_, &QAction::setEnabled);
-    connect(editFileContent_, &EditTextSource::copyAvailable, actionCopy_, &QAction::setEnabled);
+    connect(tabViews_->getEditSource(), &EditTextSource::copyAvailable, actionCut_, &QAction::setEnabled);
+    connect(tabViews_->getEditSource(), &EditTextSource::copyAvailable, actionCopy_, &QAction::setEnabled);
 #endif // !QT_NO_CLIPBOARD
 }
 
@@ -320,7 +339,7 @@ void FrameBrowser::writeSettings()
 
 bool FrameBrowser::maybeSave()
 {
-    if (!editFileContent_->document()->isModified())
+    if (!tabViews_->isSourceModified())
         return true;
     const QMessageBox::StandardButton ret
         = QMessageBox::warning(this, tr("SDI"),
@@ -341,21 +360,11 @@ bool FrameBrowser::maybeSave()
 
 void FrameBrowser::loadFile(const QString &fileName)
 {
-    QFile file(fileName);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("SDI"),
-                             tr("Cannot read file %1:\n%2.")
-                             .arg(QDir::toNativeSeparators(fileName), file.errorString()));
-        return;
-    }
-
-    QTextStream in(&file);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    editFileContent_->setPlainText(in.readAll());
-    QApplication::restoreOverrideCursor();
-
-    setCurrentFile(fileName);
+    if ( tabViews_->getEditSource()->loadPath(fileName) )
+    {
+    this->setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
+    }
 }
 
 void FrameBrowser::setRecentFilesVisible(bool visible)
@@ -389,8 +398,9 @@ static void writeRecentFiles(const QStringList &files, QSettings &settings)
 
 bool FrameBrowser::hasRecentFiles()
 {
-    QSettings settings(QCoreApplication::organizationName()
-    , QCoreApplication::applicationName());
+    QSettings settings;// ( QCoreApplication::organizationName()
+    // , QCoreApplication::applicationName() );
+
     const int count = settings.beginReadArray(recentFilesKey());
     settings.endArray();
     return count > 0;
@@ -398,8 +408,8 @@ bool FrameBrowser::hasRecentFiles()
 
 void FrameBrowser::prependToRecentFiles(const QString &fileName)
 {
-    QSettings settings(QCoreApplication::organizationName()
-    , QCoreApplication::applicationName());
+    QSettings settings; // ( QCoreApplication::organizationName()
+    // , QCoreApplication::applicationName() );
 
     const QStringList oldRecentFiles = readRecentFiles(settings);
     QStringList recentFiles = oldRecentFiles;
@@ -408,13 +418,13 @@ void FrameBrowser::prependToRecentFiles(const QString &fileName)
     if (oldRecentFiles != recentFiles)
         writeRecentFiles(recentFiles, settings);
 
-    setRecentFilesVisible(!recentFiles.isEmpty());
+    this->setRecentFilesVisible(!recentFiles.isEmpty());
 }
 
 void FrameBrowser::updateRecentFileActions()
 {
-    QSettings settings(QCoreApplication::organizationName()
-    , QCoreApplication::applicationName());
+    QSettings settings; // (QCoreApplication::organizationName()
+    // , QCoreApplication::applicationName());
 
     const QStringList recentFiles = readRecentFiles(settings);
     const int count = qMin(int(MaxRecentFiles), recentFiles.size());
@@ -437,26 +447,13 @@ void FrameBrowser::openRecentFile()
 
 bool FrameBrowser::saveFile(const QString &fileName)
 {
-    QFile file(fileName);
-    QString strTitle(tr("Save file error"));
-    QString strMessage(tr("Cannot write file %1:\n%2."));
-
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::warning(this
-        , strTitle
-        , strMessage.arg(QDir::toNativeSeparators(fileName), file.errorString() )
-        );
-        return false;
-    }
-
-    QTextStream out(&file);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    out << editFileContent_->toPlainText();
-    QApplication::restoreOverrideCursor();
-
-    setCurrentFile(fileName);
+    bool bRes(tabViews_->getEditSource()->savePath(fileName));
+    if(bRes)
+    {
+    this->setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);
-    return true;
+    }
+    return bRes;
 }
 
 void FrameBrowser::setCurrentFile(const QString &fileName)
@@ -464,19 +461,22 @@ void FrameBrowser::setCurrentFile(const QString &fileName)
     static int sequenceNumber = 1;
 
     bHasNoFile_ = fileName.isEmpty();
-    if (bHasNoFile_) {
-        curFile = tr("document%1.txt").arg(sequenceNumber++);
-    } else {
+    if (bHasNoFile_)
+    {
+        curFile = tr("~/document%1.txt").arg(sequenceNumber++);
+    }
+    else
+    {
         curFile = QFileInfo(fileName).canonicalFilePath();
     }
 
-    editFileContent_->document()->setModified(false);
-    setWindowModified(false);
+    tabViews_->getSource()->setModified(false);
+    this->setWindowModified(false);
 
     if (!bHasNoFile_ && windowFilePath() != curFile)
         FrameBrowser::prependToRecentFiles(curFile);
 
-    setWindowFilePath(curFile);
+    this->setWindowFilePath(curFile);
 }
 
 QString FrameBrowser::strippedName(const QString &fullFileName)
@@ -499,8 +499,8 @@ FrameBrowser *FrameBrowser::findMainWindow(const QString &fileName) const
 
 void FrameBrowser::clearContent()
 {
-    editFileContent_->clear();
-    editFileContent_->document()->setModified(true);
+    tabViews_->getEditSource()->clear();
+    tabViews_->getSource()->setModified(true);
 }
 
 void FrameBrowser::clearPath()
