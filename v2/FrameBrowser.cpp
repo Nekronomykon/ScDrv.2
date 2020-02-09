@@ -13,13 +13,14 @@ FrameBrowser* FrameBrowser::CreateFrameForPath(const QString& fileName
     , QWidget* parent)
     {
         FrameBrowser *pFound = FrameBrowser::findFramePath(fileName);
-        if(!pFound)
+        if(!pFound || pFound->isWindowModified()) // to reopen if changed?
         {
             pFound = new FrameBrowser;
             pFound->attachToPath(fileName,true);
             // attach the path; if successful, load file content...
             pFound->tile(parent);
         }
+        return pFound;
     }
 
 FrameBrowser::FrameBrowser(QWidget* parent)
