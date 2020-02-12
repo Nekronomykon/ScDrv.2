@@ -9,19 +9,20 @@ static inline QString recentFilesKey() { return QStringLiteral("RecentFiles"); }
 static inline QString fileKey() { return QStringLiteral("File"); }
 static inline QString keyGeometry() { return QStringLiteral("Geometry"); }
 
-FrameBrowser* FrameBrowser::CreateFrameForPath(const QString& fileName
+FrameBrowser* FrameBrowser::createForPath(const QString& fileName
     , QWidget* parent)
     {
-        FrameBrowser *pFound = FrameBrowser::findFramePath(fileName);
-        if(!pFound)
+        FrameBrowser *pFound = FrameBrowser::findByPath(fileName);
+        if(!pFound || pFound->isWindowModified()) // to reopen if changed?
         {
             pFound = new FrameBrowser;
             pFound->attachToPath(fileName,true);
             // attach the path; if successful, load file content...
             pFound->tile(parent);
         }
+        return pFound;
     }
-
+// construction:
 FrameBrowser::FrameBrowser(QWidget* parent)
 : QMainWindow(parent)
 {
@@ -42,12 +43,12 @@ FrameBrowser::FrameBrowser(QWidget *parent, const QString &fileName)
 
 void FrameBrowser::closeEvent(QCloseEvent *event)
 {
-    if (maybeSave()) {
+    if (this->maybeSave()) {
         this->writeSettings();
         event->accept();
-    } else {
-        event->ignore();
     }
+    else 
+        event->ignore();
 }
 
 FrameBrowser* FrameBrowser::createNewFrame()
@@ -60,12 +61,12 @@ FrameBrowser* FrameBrowser::createNewFrame()
 
 bool FrameBrowser::attachToPath(const QString& filePath, bool bDelaySync)
 {
-
+    return true;
 }
 
 void FrameBrowser::openFile(const QString &fileName)
 {
-    FrameBrowser *found = this->findMainWindow(fileName);
+    FrameBrowser *found = FrameBrowser::findByPath(fileName);
     if (found)
     {
         found->show();
@@ -160,7 +161,7 @@ void FrameBrowser::init()
     this->updateUi();
 }
 
-void FrameBrowser::tile(const QMainWindow *previous)
+void FrameBrowser::tile(const QWidget *previous)
 {
     int topFrameWidth = previous->geometry().top() - previous->pos().y();
     if (!topFrameWidth || !previous)
@@ -247,12 +248,12 @@ void FrameBrowser::setupActions()
     actionClose_->setIcon(iconClose);
     actionClose_->setShortcut(tr("Ctrl+W"));
     actionClose_->setStatusTip(tr("Close this window"));
-    connect(actionClose_, &QAction::triggered, this, &QWidget::close);
+    // connect(actionClose_, &QAction::triggered, this, &QWidget::close);
 
     const QIcon iconExit = QIcon::fromTheme("application-exit", QIcon(":/images/Exit.png"));
     actionExit_->setIcon(iconExit);
     actionExit_->setShortcuts(QKeySequence::Quit);
-    connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
+    // connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
     actionExit_->setStatusTip(tr("Exit the application"));
 
     // QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
@@ -484,7 +485,7 @@ QString FrameBrowser::strippedName(const QString &fullFileName)
     return QFileInfo(fullFileName).fileName();
 }
 
-FrameBrowser *FrameBrowser::findMainWindow(const QString &fileName) const
+FrameBrowser *FrameBrowser::findByPath(const QString &fileName)
 {
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
@@ -516,10 +517,13 @@ void FrameBrowser::on_actionNew__triggered()
 
 void FrameBrowser::on_actionOpen__triggered()
 {
-    auto flags = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
+    auto flags = QFileDialog::DontUseNativeDialog 
+    | QFileDialog::DontUseCustomDirectoryIcons;
+
     QString flt_open; // // tabViews_->describeOpenFormats();
     QString *flt_sel = nullptr;
-    QMessageBox::about(this, tr("Open a file"), tr("Trying to open a file"));
+    
+    // QMessageBox::about(this, tr("Open a file"), tr("Trying to open a file"));
     QString fileName = QFileDialog::getOpenFileName(this
     , tr("Open a file")
     , tr(".")
@@ -528,6 +532,7 @@ void FrameBrowser::on_actionOpen__triggered()
     , flags);
     if (fileName.isEmpty()) 
         return;
+        
     this->clearContent();
     this->clearPath();
     this->loadFile(fileName);
@@ -564,10 +569,28 @@ void FrameBrowser::on_actionSaveAs__triggered()
     this->saveAs(); 
 }
 
+void FrameBrowser::on_actionClose__triggered()
+{
+    this->close();
+}
+
+void FrameBrowser::on_actionExit__triggered()
+{
+    qApp->closeAllWindows();
+}
+
+
 void FrameBrowser::on_actionClearAll__triggered()
 {
     QMessageBox::about(this, tr("Clear all"), tr("Clear all current content of the document") );
+    // bool bSet = this->hasPathAttached();
     this->clearContent();
+    // this->setModified(bSet);
+}
+
+void FrameBrowser::on_actionOptions__triggered()
+{
+    QMessageBox::about(this, tr("Options"), tr("Here should be the form / window to see and change program settings") );
 }
 
 void FrameBrowser::on_actionAbout__triggered()
@@ -576,7 +599,7 @@ void FrameBrowser::on_actionAbout__triggered()
     // info.showModal();
     QMessageBox::about(this, tr("ScDrv Text Browser")
     , tr("The <b>ScDrv</b> software parses structure text files to find molecular structures.<br>\
-It makes use of the <b>SDI</b> example that demonstrates<br>\
+It makes use of <b>SDI</b> and some other examples that demonstrates<br>\
 how to write single document interface applications using Qt."));
 }
 

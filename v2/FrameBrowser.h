@@ -31,10 +31,10 @@ public:
 //! [class definition with macro]
     explicit FrameBrowser(QWidget* /* parent */ = nullptr);
 
-    static FrameBrowser* CreateFrameForPath(const QString& /* fileName*/
-    , QWidget* /* parent */ = nullptr);
+    static FrameBrowser* createForPath(const QString& /* fileName*/, QWidget* /* parent */ = nullptr);
+    static FrameBrowser *findByPath(const QString &fileName);
 
-    void tile(const QMainWindow *previous);
+    void tile(const QWidget *previous);
 
     ViewStructure* getView3D() const {return viewStructure3D_; }
 
@@ -48,19 +48,49 @@ private slots:
     void documentWasModified();
 
     // menuFile_
-    void on_actionNew__triggered();
-    void on_actionClone__triggered();
+    void on_actionNew__triggered();     // [New]            --> create a new empty file browser frame
     //
-    void on_actionOpen__triggered();
-    void on_actionReload__triggered();
+    void on_actionClone__triggered();   // [Clone]          --> make this frame unattached to any file path 
+                                        // with 'modified' flag set. An easy means of copying content to edit ;)
     //
-    void on_actionSave__triggered();
-    void on_actionSaveAs__triggered();
+    void on_actionOpen__triggered();    // [Open]           --> query for a file path; while it is obtained and valid, 
+                                        // and if this frame is attached already to a path or modified, try 
+                                        // to find it opened already and still unmodified; if such not found,
+                                        // create a new browser frame, attach it to the path and then read its content 
+                                        // as the data text source. 
+                                        // Otherwise, attach the path to this frame and read its content as the data text source.
+    //
+    void on_actionReload__triggered();  // [Reload]         --> meaningful if this frame is attached to a valid file path; 
+                                        // If so, and if it is modified, query for the changes to be abandoned. 
+                                        // If Ok, save its current path, do [Clear all], attach the path (again) 
+                                        // to this frame and read its content as the data source.
+                                        // If Retry, save its current path, create a new browser frame, attach it 
+                                        // to the path and read its content as the data source. 
+                                        // if Cancel, cancel it ;)
+    //
+    void on_actionSave__triggered();    // [Save]           --> meaningful if modified flag is set here;
+                                        // If frame is unattached, do [Save as]; otherwise replace the content 
+                                        // of the attached path with the current source dump, 
+                                        // clear the 'modified' flag and create a new source dump 
+    //
+    void on_actionSaveAs__triggered();  // [Save as]        --> query for the valid file path, possibly nonexistent;
+                                        // If successful, and path is writable, rename/move accordingly the current 
+                                        // source dump, clear the 'modified' flag and create a new source dump
+    //
+    void on_actionClose__triggered();    // [Close]          --> trying to close this browser frame
+    //
+    void on_actionExit__triggered();     // [Exit]           --> trying to close all browser frames    
+    //
     // menuEdit_
-    void on_actionClearAll__triggered();
+    void on_actionClearAll__triggered();    // [Clear all]  --> remove / empty all data from this frame.
+                                            // If path is attached, modified flag is set; otherwise is is cleared
+    // menuView_
+    // menuMolecule_
+    // menuTools_
+    void on_actionOptions__triggered(); // [Options]        --> the most common form of setup...
     // menuHelp_
-    void on_actionAbout__triggered();
-    void on_actionAboutQt__triggered();
+    void on_actionAbout__triggered();   // [About]      --> show the info box / screen / frame of the program
+    void on_actionAboutQt__triggered(); // [About At]   --> show the Qt information box
 
 private:
     enum { MaxRecentFiles = 9 };
@@ -95,7 +125,6 @@ private:
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
     static QString strippedName(const QString &fullFileName);
-    FrameBrowser *findMainWindow(const QString &fileName) const;
 
     ViewFilesystem *viewFiles_;
 
@@ -109,7 +138,7 @@ private:
     QAction *recentFileSubMenuAct;
 
     bool bHasNoFile_; // flag to determine the binding to a file path
-    QString curFile;  // pah to a corresponding file
+    QString curFile;  // path to a corresponding file
 };
 
 #endif // ! FrameBrowser_h__

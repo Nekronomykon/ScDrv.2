@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>:ScDrv[*]:</string>
+   <string>ScDrv[*]</string>
   </property>
   <widget class="FrameFile" name="tabViews_"/>
   <widget class="QMenuBar" name="barMenu_">
@@ -102,6 +102,7 @@
     </widget>
     <addaction name="actionToggleLayout_"/>
     <addaction name="actionFullScreen_"/>
+    <addaction name="actionSetFont_"/>
     <addaction name="separator"/>
     <addaction name="menuProject_"/>
     <addaction name="separator"/>
@@ -115,7 +116,6 @@
     <property name="title">
      <string>&amp;Tools</string>
     </property>
-    <addaction name="actionSetFont_"/>
     <addaction name="actionSourceEdit_"/>
     <addaction name="actionSourceCast_"/>
     <addaction name="separator"/>
