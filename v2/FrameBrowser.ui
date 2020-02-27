@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>ScDrv[*]</string>
   </property>
-  <widget class="FrameFile" name="tabViews_"/>
+  <widget class="FrameFile" name="fileStructure_"/>
   <widget class="QMenuBar" name="barMenu_">
    <property name="geometry">
     <rect>

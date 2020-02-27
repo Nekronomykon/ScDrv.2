@@ -23,6 +23,8 @@ public:
   explicit ViewFilesystem(QWidget* /*parent*/ = nullptr);
   ~ViewFilesystem() override = default;
 
+  BrowseFiles* getFilesView() const {return list_files_;}
+
 public slots:
   void listDirectoryIndex(const QModelIndex& /*idx*/);
 private:

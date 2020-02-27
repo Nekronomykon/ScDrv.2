@@ -4,11 +4,15 @@
 
 FrameFile::FrameFile(QWidget *parent)
 : QTabWidget(parent)
-// , elements_(new TableElements(this))
 , source_(new EditTextSource(this))
 {
+    this->setTabPosition(QTabWidget::South);
+    // this->setTabsClosable(true);
+    this->setTabBarAutoHide(true);
+    this->setTabShape(QTabWidget::Rounded);
+
   // this->addTab(elements_, QString("Elements"));
-  this->addTab(source_, QString("Source[*]") );
+  this->addTab(source_, QString("Source") );
 }
 
 void FrameFile::updateTabs()
@@ -18,4 +22,9 @@ void FrameFile::updateTabs()
   {
     bool bModified = this->isSourceModified();
   }
+}
+
+bool FrameFile::interpretSource(const QString& pathcontext)
+{
+  return true;
 }

@@ -1,13 +1,19 @@
 #ifndef FrameBrowser_h__
 #define FrameBrowser_h__
 
+#ifdef _MSC_VER
+#pragma once
+#else  // !_MSC_VER
+#endif //  _MSC_VER
+
+#include <QPointer>
 #include <QMainWindow>
 #include <QList>
 
 #include "ViewFilesystem.h"
 
-#include "EditTextSource.h"
-#include "ViewStructure.h"
+// #include "EditTextSource.h"
+// #include "ViewStructure.h"
 
 #include "ui_FrameBrowser.h"
 
@@ -26,17 +32,20 @@ class FrameBrowser
     Q_OBJECT
 
 public:
-    explicit FrameBrowser(QWidget* /* parent */, const QString &fileName); // to dismiss:
+    // explicit FrameBrowser(QWidget* /* parent */, const QString &fileName); // to dismiss:
     // separated into two consequtive steps: [0] creation; [1]: file attachment / content loading
 //! [class definition with macro]
     explicit FrameBrowser(QWidget* /* parent */ = nullptr);
 
     static FrameBrowser* createForPath(const QString& /* fileName*/, QWidget* /* parent */ = nullptr);
-    static FrameBrowser *findByPath(const QString &fileName);
+    static FrameBrowser* findByPath(const QString &fileName);
+
+    static FrameBrowser* provideForPath(const QString& /*filepath*/, QWidget* /* parent */ = nullptr);
 
     void tile(const QWidget *previous);
 
-    ViewStructure* getView3D() const {return viewStructure3D_; }
+    // ViewStructure* getView3D() const {return viewStructure3D_; }
+    bool hasValidPath() const;
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -46,6 +55,11 @@ private slots:
     void updateRecentFileActions();
     void openRecentFile();
     void documentWasModified();
+
+    void navigateToPathModel(const QModelIndex& /*filepath*/ );
+    void navigateToPath(const QString& /*filepath*/ ); // [Navigate] --> save this file path if valid and modified; 
+    // then clear;
+    // then open filepath in this frame:
 
     // menuFile_
     void on_actionNew__triggered();     // [New]            --> create a new empty file browser frame
@@ -97,7 +111,8 @@ private:
 
     FrameBrowser* createNewFrame();
 
-    bool attachToPath(const QString& filePath, bool bDelaySync = false);
+    bool attachToPath(const QString& filePath);
+    void markPathAsValid(bool /* bValid */ = true);
 
     bool save();
     bool saveAs();
@@ -126,19 +141,20 @@ private:
     void setCurrentFile(const QString &fileName);
     static QString strippedName(const QString &fullFileName);
 
-    ViewFilesystem *viewFiles_;
+    QPointer<ViewFilesystem> viewFiles_;
 
     // QTabWidget *tabViews_;
 
     // EditTextSource *editFileContent_;
-    ViewStructure *viewStructure3D_;
+    // ViewStructure *viewStructure3D_;
 
     QAction *recentFileActs[MaxRecentFiles];
     QAction *recentFileSeparator;
     QAction *recentFileSubMenuAct;
 
-    bool bHasNoFile_; // flag to determine the binding to a file path
-    QString curFile;  // path to a corresponding file
+    bool bHasNoFile_;   // flag to determine the binding to a file path
+    bool hasValidPath_; // flag to determine the binding to a file path
+    QString pathCurrent_;  // path to a corresponding file
 };
 
 #endif // ! FrameBrowser_h__

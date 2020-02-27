@@ -9,37 +9,39 @@ static inline QString recentFilesKey() { return QStringLiteral("RecentFiles"); }
 static inline QString fileKey() { return QStringLiteral("File"); }
 static inline QString keyGeometry() { return QStringLiteral("Geometry"); }
 
-FrameBrowser* FrameBrowser::createForPath(const QString& fileName
-    , QWidget* parent)
-    {
-        FrameBrowser *pFound = FrameBrowser::findByPath(fileName);
-        if(!pFound || pFound->isWindowModified()) // to reopen if changed?
-        {
-            pFound = new FrameBrowser;
-            pFound->attachToPath(fileName,true);
-            // attach the path; if successful, load file content...
-            pFound->tile(parent);
-        }
-        return pFound;
-    }
+
+
+FrameBrowser* FrameBrowser::provideForPath(const QString& fileName, QWidget* parent)
+{
+    FrameBrowser *pFound = FrameBrowser::findByPath(fileName);
+    if(!pFound || pFound->isWindowModified()) // to reopen if changed?
+        pFound = createForPath(fileName,parent);
+    return pFound;
+}
+
+FrameBrowser* FrameBrowser::createForPath(const QString& fileName, QWidget* parent)
+{
+    FrameBrowser *pNew = new FrameBrowser;
+    pNew->attachToPath(fileName);
+    // attach the path; if successful, load file content...
+    pNew->tile(parent);
+    return pNew;
+}
 // construction:
 FrameBrowser::FrameBrowser(QWidget* parent)
 : QMainWindow(parent)
+, viewFiles_(new ViewFilesystem)
+, bHasNoFile_ (true)
+, hasValidPath_(false)
 {
     init();
     setCurrentFile(QString());
 }
 
-FrameBrowser::FrameBrowser(QWidget *parent, const QString &fileName)
-: QMainWindow(parent)
-{
-    init();
+bool FrameBrowser::hasValidPath() const {return hasValidPath_; }
 
-    if(fileName.isEmpty())
-        this->setCurrentFile(fileName);
-    else  
-        this->loadFile(fileName);
-}
+void FrameBrowser::markPathAsValid(bool bValid) { hasValidPath_ = bValid; }
+
 
 void FrameBrowser::closeEvent(QCloseEvent *event)
 {
@@ -59,9 +61,53 @@ FrameBrowser* FrameBrowser::createNewFrame()
     return other;
 }
 
-bool FrameBrowser::attachToPath(const QString& filePath, bool bDelaySync)
+bool FrameBrowser::attachToPath(const QString& filePath)
 {
     return true;
+}
+
+void FrameBrowser::navigateToPathModel(const QModelIndex& idx)
+{
+    auto* pmFile = viewFiles_->getFilesView()->GetViewModel();
+    QFileInfo fi = pmFile->fileInfo(idx);
+    QString path (fi.canonicalFilePath());
+
+#ifdef EXTENDED_BOX_TRACING
+    QMessageBox::about(this,tr("Browse to a file"), tr("Trying to load following path:\n%1\n -- as obtained from the browser bar")
+    .arg(path)
+    );
+#endif
+
+    if(fi.isFile())
+    this->navigateToPath(path);
+    else 
+    if(fi.isSymbolicLink())
+    // what to do? resolve?
+    ;
+    else
+    if(fi.isDir())
+    // viewFiles_->browseDir(fi.canonicalFilePath())
+    ;
+}
+
+void FrameBrowser::navigateToPath(const QString& pathfile)
+{
+    // if(!this->getPathBound().compare(pathfile)) // if the pathfile is exactly the path openede here already...
+        // return; // skip and flee
+
+    if (this->hasValidPath() 
+    && fileStructure_->isSourceModified() 
+    && !this->maybeSave() ) 
+    {
+        // new file navigation cancelled due to the unsaved
+        // viewFiles_->showPath( this->getPathName() );
+        return;
+    }
+    // this->doClearAll();
+    this->clearContent();
+    this->clearPath();
+    // (re)load
+    this->loadFile(pathfile);
 }
 
 void FrameBrowser::openFile(const QString &fileName)
@@ -75,12 +121,15 @@ void FrameBrowser::openFile(const QString &fileName)
         return;
     }
 
-    if (bHasNoFile_ && tabViews_->getSource()->isEmpty() && !isWindowModified()) {
+    if (!this->hasValidPath() 
+    && fileStructure_->getSource()->isEmpty() 
+    && !fileStructure_->isSourceModified()) 
+    {
         this->loadFile(fileName);
         return;
     }
 
-    FrameBrowser *other = new FrameBrowser(nullptr,fileName);
+    FrameBrowser *other = FrameBrowser::createForPath(fileName,this);
     if (other->bHasNoFile_) 
     {
         delete other;
@@ -92,17 +141,17 @@ void FrameBrowser::openFile(const QString &fileName)
 
 bool FrameBrowser::save()
 {
-    return bHasNoFile_ ? saveAs() : saveFile(curFile);
+    return this->hasValidPath() ? this->saveFile(pathCurrent_) : this->saveAs() ;
 }
 
 bool FrameBrowser::saveAs()
 {
     auto flags = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
-    QString flt_save; // tabViews_->describeSaveFormats();
+    QString flt_save; // fileStructure_->describeSaveFormats();
     QString* flt_sel;
     QString fileName = QFileDialog::getSaveFileName(this
     , tr("Save as")
-    , curFile
+    , pathCurrent_
     , flt_save
     , flt_sel
     , flags
@@ -121,30 +170,22 @@ void FrameBrowser::documentWasModified()
 void FrameBrowser::updateUi()
 {
     // finally, transfer
-    tabViews_->updateTabs();
+    fileStructure_->updateTabs();
 }
 
 void FrameBrowser::init()
 {
+    this->setAttribute(Qt::WA_DeleteOnClose);
     this->setupUi(this);
-
-    setAttribute(Qt::WA_DeleteOnClose);
-
-    bHasNoFile_ = true;
 
     // Docking views
 
     // Central views
 
-    // tabViews_ = new QTabWidget;
-    tabViews_->setTabPosition(QTabWidget::South);
-    tabViews_->setTabsClosable(true);
-    tabViews_->setTabShape(QTabWidget::Rounded);
+    // viewStructure3D_ = new ViewStructure;
+    // fileStructure_->addTab(viewStructure3D_, QString("Structure"));
 
-    viewStructure3D_ = new ViewStructure;
-    tabViews_->addTab(viewStructure3D_, QString("Structure"));
-
-    setCentralWidget(tabViews_);
+    // setCentralWidget(fileStructure_);
 
     this->setupActions();
     this->setupToolBar();
@@ -153,10 +194,10 @@ void FrameBrowser::init()
 
     readSettings();
 
-    connect(tabViews_->getSource(), &QTextDocument::contentsChanged,
+    connect(fileStructure_->getSource(), &QTextDocument::contentsChanged,
             this, &FrameBrowser::documentWasModified);
 
-    setUnifiedTitleAndToolBarOnMac(true);
+    this->setUnifiedTitleAndToolBarOnMac(true);
 
     this->updateUi();
 }
@@ -174,16 +215,19 @@ void FrameBrowser::tile(const QWidget *previous)
 
 void FrameBrowser::setupDockingViews()
 {
-    viewFiles_= new ViewFilesystem;
+    // viewFiles_= new ViewFilesystem;
 
   QDockWidget *pInit;
-  QDockWidget *pNext;
+  // QDockWidget *pNext;
   pInit = new QDockWidget(tr("Files"), this);
   pInit->setWidget(viewFiles_);
   // pNext = new QDockWidget(tr("Workspace"), this);
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
   // this->tabifyDockWidget(pInit,pNext);
-} 
+
+    connect(viewFiles_->getFilesView(), &BrowseFiles::clicked
+    , this, &FrameBrowser::navigateToPathModel); 
+}
 
 void FrameBrowser::setupToolBar()
 {
@@ -271,19 +315,19 @@ void FrameBrowser::setupActions()
     actionCut_->setIcon(iconCut);
     actionCut_->setShortcuts(QKeySequence::Cut);
     actionCut_->setStatusTip(tr("Cut the current selection's contents to the clipboard"));
-    connect(actionCut_, &QAction::triggered, tabViews_->getEditSource(), &EditTextSource::cut);
+    connect(actionCut_, &QAction::triggered, fileStructure_->getEditSource(), &EditTextSource::cut);
 
     const QIcon iconCopy = QIcon::fromTheme("edit-copy", QIcon(":/images/Copy.png"));
     actionCopy_->setIcon(iconCopy);
     actionCopy_->setShortcuts(QKeySequence::Copy);
     actionCopy_->setStatusTip(tr("Copy the current selection's contents to the clipboard"));
-    connect(actionCopy_, &QAction::triggered, tabViews_->getEditSource(), &EditTextSource::copy);
+    connect(actionCopy_, &QAction::triggered, fileStructure_->getEditSource(), &EditTextSource::copy);
 
     const QIcon iconPaste = QIcon::fromTheme("edit-paste", QIcon(":/images/Paste.png"));
     actionPaste_->setIcon(iconPaste);
     actionPaste_->setShortcuts(QKeySequence::Paste);
     actionPaste_->setStatusTip(tr("Paste the clipboard's contents into the current selection"));
-    connect(actionPaste_, &QAction::triggered, tabViews_->getEditSource(), &EditTextSource::paste);
+    connect(actionPaste_, &QAction::triggered, fileStructure_->getEditSource(), &EditTextSource::paste);
 
     // menuBar()->addSeparator();
 #endif // !QT_NO_CLIPBOARD
@@ -308,8 +352,8 @@ void FrameBrowser::setupActions()
 #ifndef QT_NO_CLIPBOARD
     actionCut_->setEnabled(false);
     actionCopy_->setEnabled(false);
-    connect(tabViews_->getEditSource(), &EditTextSource::copyAvailable, actionCut_, &QAction::setEnabled);
-    connect(tabViews_->getEditSource(), &EditTextSource::copyAvailable, actionCopy_, &QAction::setEnabled);
+    connect(fileStructure_->getEditSource(), &EditTextSource::copyAvailable, actionCut_, &QAction::setEnabled);
+    connect(fileStructure_->getEditSource(), &EditTextSource::copyAvailable, actionCopy_, &QAction::setEnabled);
 #endif // !QT_NO_CLIPBOARD
 }
 
@@ -340,7 +384,7 @@ void FrameBrowser::writeSettings()
 
 bool FrameBrowser::maybeSave()
 {
-    if (!tabViews_->isSourceModified())
+    if (!fileStructure_->isSourceModified())
         return true;
     const QMessageBox::StandardButton ret
         = QMessageBox::warning(this, tr("SDI"),
@@ -361,7 +405,8 @@ bool FrameBrowser::maybeSave()
 
 void FrameBrowser::loadFile(const QString &fileName)
 {
-    if ( tabViews_->getEditSource()->loadPath(fileName) )
+    if (fileStructure_->getEditSource()->loadPath(fileName) 
+    && fileStructure_->interpretSource(fileName))
     {
     this->setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
@@ -448,7 +493,7 @@ void FrameBrowser::openRecentFile()
 
 bool FrameBrowser::saveFile(const QString &fileName)
 {
-    bool bRes(tabViews_->getEditSource()->savePath(fileName));
+    bool bRes(fileStructure_->getEditSource()->savePath(fileName));
     if(bRes)
     {
     this->setCurrentFile(fileName);
@@ -464,20 +509,20 @@ void FrameBrowser::setCurrentFile(const QString &fileName)
     bHasNoFile_ = fileName.isEmpty();
     if (bHasNoFile_)
     {
-        curFile = tr("~/document%1.txt").arg(sequenceNumber++);
+        pathCurrent_ = tr("~/document%1.txt").arg(sequenceNumber++);
     }
     else
     {
-        curFile = QFileInfo(fileName).canonicalFilePath();
+        pathCurrent_ = QFileInfo(fileName).canonicalFilePath();
     }
 
-    tabViews_->getSource()->setModified(false);
+    fileStructure_->getSource()->setModified(false);
     this->setWindowModified(false);
 
-    if (!bHasNoFile_ && windowFilePath() != curFile)
-        FrameBrowser::prependToRecentFiles(curFile);
+    if (!bHasNoFile_ && this->windowFilePath().compare(pathCurrent_) )
+        FrameBrowser::prependToRecentFiles(pathCurrent_);
 
-    this->setWindowFilePath(curFile);
+    this->setWindowFilePath(pathCurrent_);
 }
 
 QString FrameBrowser::strippedName(const QString &fullFileName)
@@ -491,7 +536,7 @@ FrameBrowser *FrameBrowser::findByPath(const QString &fileName)
 
     for (QWidget *widget: QApplication::topLevelWidgets()) {
         FrameBrowser *mainWin = qobject_cast<FrameBrowser *>(widget);
-        if (mainWin && mainWin->curFile == canonicalFilePath)
+        if (mainWin && mainWin->pathCurrent_ == canonicalFilePath)
             return mainWin;
     }
 
@@ -500,13 +545,13 @@ FrameBrowser *FrameBrowser::findByPath(const QString &fileName)
 
 void FrameBrowser::clearContent()
 {
-    tabViews_->getEditSource()->clear();
-    tabViews_->getSource()->setModified(true);
+    fileStructure_->getEditSource()->clear();
+    fileStructure_->getSource()->setModified(true);
 }
 
 void FrameBrowser::clearPath()
 {
-    curFile = QString();
+    pathCurrent_ = QString();
     bHasNoFile_ = true;
 }
 
@@ -520,7 +565,7 @@ void FrameBrowser::on_actionOpen__triggered()
     auto flags = QFileDialog::DontUseNativeDialog 
     | QFileDialog::DontUseCustomDirectoryIcons;
 
-    QString flt_open; // // tabViews_->describeOpenFormats();
+    QString flt_open; // // fileStructure_->describeOpenFormats();
     QString *flt_sel = nullptr;
     
     // QMessageBox::about(this, tr("Open a file"), tr("Trying to open a file"));
@@ -540,8 +585,8 @@ void FrameBrowser::on_actionOpen__triggered()
 
 void FrameBrowser::on_actionReload__triggered()
 {
-    QString sPath = curFile;
-    this->loadFile(curFile);
+    QString sPath = pathCurrent_;
+    this->loadFile(pathCurrent_);
     this->setWindowModified(false);
 }
 void FrameBrowser::on_actionClone__triggered()
@@ -578,7 +623,6 @@ void FrameBrowser::on_actionExit__triggered()
 {
     qApp->closeAllWindows();
 }
-
 
 void FrameBrowser::on_actionClearAll__triggered()
 {

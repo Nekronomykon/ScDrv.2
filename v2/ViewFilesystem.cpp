@@ -7,9 +7,9 @@ ViewFilesystem::ViewFilesystem(QWidget* parent)
   , browse_dir_(new BrowseFilesystem)
   , list_files_(new BrowseFiles)
 {
-  this->addWidget(browse_dir_);
   this->addWidget(list_files_);
-
+this->addWidget(browse_dir_);
+  
   connect(browse_dir_, &BrowseFilesystem::clicked
     , this, &ViewFilesystem::listDirectoryIndex);
 
@@ -24,7 +24,7 @@ void ViewFilesystem::listDirectoryIndex(const QModelIndex& idx)
 {
   auto *pMList = list_files_->GetViewModel();
   auto *pMTree = browse_dir_->GetViewModel();
-  QString allname = pMTree->filePath(idx);
+  // QString allname = pMTree->filePath(idx);
   QFileInfo fi = pMTree->fileInfo(idx);
   QString dir = fi.isDir() ? fi.canonicalFilePath() : fi.canonicalPath();
   list_files_->setRootIndex(pMList->index(dir));

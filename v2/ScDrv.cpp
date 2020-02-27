@@ -1,13 +1,13 @@
 #include <QVTKApplication.h>
 #include <QCommandLineParser>
 
-#include <QSystemTrayIcon>
+// #include <QSystemTrayIcon>
 
 #include "FrameBrowser.h"
 
 int main(int argc, char *argv[])
 {
-    QSurfaceFormat::setDefaultFormat(ViewStructure::defaultFormat());
+    // QSurfaceFormat::setDefaultFormat(ViewStructure::defaultFormat());
     
     QVTKApplication app(argc,argv);
     QCoreApplication::setApplicationName("ScDrv Browser");
@@ -24,12 +24,16 @@ int main(int argc, char *argv[])
     FrameBrowser *frame = nullptr;
     foreach (const QString &filename, parser.positionalArguments()) 
     {
-        FrameBrowser *frameFile = new FrameBrowser(nullptr);
-        frameFile->tile(frame);
-        frameFile->show();
-        frame = frameFile;
+        FrameBrowser *frameFile = FrameBrowser::provideForPath(filename,frame);
+        if(frameFile)
+        {
+            frameFile->tile(frame);
+            frameFile->show();
+            frame = frameFile;
+        }
     }
 
+    // finally, if none of valid file path is given from the command line
     if (!frame) {
         frame = new FrameBrowser;
         frame->show();
