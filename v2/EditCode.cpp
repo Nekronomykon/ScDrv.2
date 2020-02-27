@@ -47,7 +47,7 @@ int EditCode::SideBarWidth()
 		++digits;
 	}
   
-	int space = this->fontMetrics().width(QLatin1Char('9')) * digits
+	int space = this->fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits
     + 2 * fontMetrics().height() 
 	+ 4 // both sides paddings
     ;
