@@ -8,7 +8,7 @@ ViewFilesystem::ViewFilesystem(QWidget* parent)
   , list_files_(new BrowseFiles)
 {
   this->addWidget(list_files_);
-this->addWidget(browse_dir_);
+  this->addWidget(browse_dir_);
   
   connect(browse_dir_, &BrowseFilesystem::clicked
     , this, &ViewFilesystem::listDirectoryIndex);

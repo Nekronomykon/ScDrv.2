@@ -15,10 +15,7 @@ QT_END_NAMESPACE
 
 // #include "TableElements.h"
 #include "EditTextSource.h"
-
-#include "StyleMapMolecule.h"
-
-using namespace vtk;
+#include "ViewStructure.h"
 
 class FrameFile
 : public QTabWidget
@@ -27,8 +24,8 @@ class FrameFile
 private:
     // QPointer<TableElements> elements_;
     QPointer<EditTextSource> source_;
+    QPointer<ViewStructure> visual_;
 
-    StyleMapMolecule style_molecule_;
 
 public:
     explicit FrameFile(QWidget * /*parent*/ = nullptr);

@@ -99,11 +99,11 @@ void EditCode::highlightCurrentLine()
 {
 	QList<QTextEdit::ExtraSelection> extraSelections;
 
-	if (!isReadOnly()) 
+	// if (!isReadOnly()) 
 	{
 		QTextEdit::ExtraSelection selection;
 
-		QColor lineColor = QColor(Qt::yellow).lighter(160);
+		QColor lineColor =  QColor(this->isReadOnly() ? Qt::darkGray : Qt::yellow).lighter(160);
 
 		selection.format.setBackground(lineColor);
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
