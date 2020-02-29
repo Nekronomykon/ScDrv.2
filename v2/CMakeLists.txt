@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 PROJECT(ScDrv)
 
-find_package(VTK "8.2" REQUIRED)
+find_package(VTK "8.5" REQUIRED)
 # include(${VTK_USE_FILE})
 
 # Instruct CMake to run moc automatically when needed.

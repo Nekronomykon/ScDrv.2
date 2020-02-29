@@ -10,7 +10,7 @@
     <height>480</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="layoutView_">
+  <layout class="QHBoxLayout" name="layoutView_" stretch="0,1">
    <property name="leftMargin">
     <number>6</number>
    </property>
@@ -24,13 +24,37 @@
     <number>6</number>
    </property>
    <item>
-    <layout class="QVBoxLayout" name="layoutTools_"/>
+    <layout class="QVBoxLayout" name="layoutTools_">
+     <item>
+      <widget class="ComboBoxColors" name="colors_"/>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QOpenGLWidget" name="view_"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ComboBoxColors</class>
+   <extends>QComboBox</extends>
+   <header>ComboBoxColors.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
