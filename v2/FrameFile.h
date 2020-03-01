@@ -13,7 +13,11 @@ QT_BEGIN_NAMESPACE
 class QWidget;
 QT_END_NAMESPACE
 
-// #include "TableElements.h"
+#include <vtkMolecule.h>
+
+#include <vtkNew.h>
+#include <vtkSmartPointer.h>
+
 #include "EditTextSource.h"
 #include "ViewStructure.h"
 
@@ -26,6 +30,8 @@ private:
     QPointer<EditTextSource> source_;
     QPointer<ViewStructure> visual_;
 
+protected:
+    typedef vtkSmartPointer<vtkMolecule>    Molecule;
 
 public:
     explicit FrameFile(QWidget * /*parent*/ = nullptr);
@@ -41,6 +47,9 @@ public:
     // building an internal data representation for the source 
     bool interpretSource(const QString& /*context << path*/); 
     // argument is used mostly to interpret the information concerinig those data format
+
+private:
+    Molecule molecule_;
 };
 
 

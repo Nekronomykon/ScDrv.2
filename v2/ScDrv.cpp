@@ -3,11 +3,15 @@
 
 // #include <QSystemTrayIcon>
 
+#include <QVTKOpenGLWidget.h>
+#include <QVTKOpenGLNativeWidget.h>
+
 #include "FrameBrowser.h"
 
 int main(int argc, char *argv[])
 {
-    // QSurfaceFormat::setDefaultFormat(ViewStructure::defaultFormat());
+    // before initializing QApplication, set the default surface format
+    QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
     
     QVTKApplication app(argc,argv);
     QCoreApplication::setApplicationName("ScDrv Browser");

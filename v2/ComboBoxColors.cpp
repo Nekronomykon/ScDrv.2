@@ -6,7 +6,7 @@
 ComboBoxColors::ComboBoxColors(QWidget *parent)
     : QComboBox(parent)
 {
-  // this->addItem(QString("-- background color name --"));
+  this->addItem(QString("-- color name --")); // placeholder
   this->addItems(ColorNames());
 }
 

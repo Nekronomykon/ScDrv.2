@@ -6,6 +6,7 @@ FrameFile::FrameFile(QWidget *parent)
 : QTabWidget(parent)
 , source_(new EditTextSource(this))
 , visual_(new ViewStructure(this))
+, molecule_(Molecule::New())
 {
     this->setTabPosition(QTabWidget::South);
     // this->setTabsClosable(true);
