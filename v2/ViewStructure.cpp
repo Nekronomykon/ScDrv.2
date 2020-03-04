@@ -8,17 +8,17 @@
 
 #include <vtkLODActor.h>
 #include <vtkOpenGLRenderer.h>
-#include <vtkOpenGLMoleculeMapper.h>
+// #include <vtkOpenGLMoleculeMapper.h>
 
 typedef vtkSmartPointer<vtkOpenGLRenderer> RendererOpenGL;
 typedef vtkSmartPointer<vtkLODActor> ActorLOD;
-typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> MapMoleculeOpenGL;
+// typedef vtkSmartPointer<vtkOpenGLMoleculeMapper> MapMoleculeOpenGL;
 
 ViewStructure::ViewStructure(QWidget* parent)
 : QWidget(parent)
 , renderer_(RendererOpenGL::New())
 , actorMol_(ActorLOD::New())
-, mapMolecule_(MapMoleculeOpenGL::New())
+, mapMolecule_(MapMolecule::New())
 {
     this->setupUi(this);
     //QDoubleValidator* pVR = new QDoubleValidator(0.0,1.0,6);
@@ -51,7 +51,7 @@ void ViewStructure::readBackgroundRed()
 
     renderer_->SetBackground(colorBg_.GetData());
     renderer_->Render();
-    view_->repaint();
+    // view_->repaint();
 }
 
 void ViewStructure::readBackgroundGreen()
@@ -64,7 +64,7 @@ void ViewStructure::readBackgroundGreen()
 
     renderer_->SetBackground(colorBg_.GetData());
     renderer_->Render();
-    view_->repaint();
+    // view_->repaint();
 }
 
 void ViewStructure::readBackgroundBlue()
@@ -77,7 +77,7 @@ void ViewStructure::readBackgroundBlue()
 
     renderer_->SetBackground(colorBg_.GetData());
     renderer_->Render();
-    view_->repaint();
+    // view_->repaint();
 }
 
 void ViewStructure::chooseColorName(const QString &name_col)
