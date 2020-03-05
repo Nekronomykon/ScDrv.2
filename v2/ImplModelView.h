@@ -7,6 +7,7 @@
 #endif //  _MSC_VER
 
 #include <QWidget>
+#include <QPointer>
 
 #include <QTreeView>
 #include <QListView>
@@ -37,7 +38,7 @@ public:
   }
 
 private:
-  Model *ptrModel_;
+  QPointer<Model> ptrModel_;
 };
 
 #endif // !Impl_ModelView_h
