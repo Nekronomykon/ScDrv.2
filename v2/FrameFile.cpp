@@ -6,6 +6,7 @@ FrameFile::FrameFile(QWidget *parent)
 : QTabWidget(parent)
 , source_(new EditTextSource(this))
 , visual_(new ViewStructure(this))
+, atomic_(new ViewTextAtomic(this))
 , molecule_(Molecule::New())
 {
     this->setTabPosition(QTabWidget::South);
@@ -18,6 +19,7 @@ FrameFile::FrameFile(QWidget *parent)
   this->addTab(source_, QString("Source") );
 
   this->addTab(visual_,QString("Structure"));
+  this->addTab(atomic_,QString("Atoms as text"));
 }
 
 void FrameFile::updateTabs()

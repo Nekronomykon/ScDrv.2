@@ -47,7 +47,7 @@ void ViewStructure::readBackgroundRed()
 
     colorBg_.SetRed(strval.toDouble());
     QString resFmt(tr("%1"));
-    editBgRed_->setText( resFmt.arg( colorBg_.GetRed()   ) );
+    editBgRed_->setText( resFmt.arg( colorBg_.GetRed(), 10   ) );
 
     renderer_->SetBackground(colorBg_.GetData());
     renderer_->Render();
@@ -60,7 +60,7 @@ void ViewStructure::readBackgroundGreen()
 
     colorBg_.SetGreen(strval.toDouble());
     QString resFmt(tr("%1"));
-    editBgGreen_->setText( resFmt.arg( colorBg_.GetGreen()   ) );
+    editBgGreen_->setText( resFmt.arg( colorBg_.GetGreen(), 10   ) );
 
     renderer_->SetBackground(colorBg_.GetData());
     renderer_->Render();
@@ -73,7 +73,7 @@ void ViewStructure::readBackgroundBlue()
 
     colorBg_.SetBlue(strval.toDouble());
     QString resFmt(tr("%1"));
-    editBgBlue_->setText( resFmt.arg( colorBg_.GetBlue()   ) );
+    editBgBlue_->setText( resFmt.arg( colorBg_.GetBlue(), 10 ) );
 
     renderer_->SetBackground(colorBg_.GetData());
     renderer_->Render();
@@ -95,9 +95,9 @@ void ViewStructure::chooseColorName(const QString &name_col)
     QString resFmt(tr("%1"));
 
     colors_->setCurrentText(nameColor_);
-    editBgRed_  ->setText( resFmt.arg( colorBg_.GetRed()   ) );
-    editBgGreen_->setText( resFmt.arg( colorBg_.GetGreen() ) );
-    editBgBlue_ ->setText( resFmt.arg( colorBg_.GetBlue()  ) );
+    editBgRed_  ->setText( resFmt.arg( colorBg_.GetRed(), 10   ) );
+    editBgGreen_->setText( resFmt.arg( colorBg_.GetGreen(), 10 ) );
+    editBgBlue_ ->setText( resFmt.arg( colorBg_.GetBlue(), 10  ) );
 
     renderer_->SetBackground(colorBg_.GetData());
     renderer_->Render();

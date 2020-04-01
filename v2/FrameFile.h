@@ -20,6 +20,7 @@ QT_END_NAMESPACE
 
 #include "EditTextSource.h"
 #include "ViewStructure.h"
+#include "ViewTextAtomic.h"
 
 class FrameFile
 : public QTabWidget
@@ -29,6 +30,7 @@ private:
     // QPointer<TableElements> elements_;
     QPointer<EditTextSource> source_;
     QPointer<ViewStructure> visual_;
+    QPointer<ViewTextAtomic> atomic_;
 
 protected:
     typedef vtkSmartPointer<vtkMolecule>    Molecule;
@@ -39,6 +41,7 @@ public:
 
     EditTextSource* getEditSource() const {return source_;}
     QTextDocument* getSource() const {return !source_ ? nullptr : source_->document();}
+    ViewTextAtomic* getEditTextAtomic() const {return atomic_;}
 
     bool isSourceModified() const {return !source_ ? false : this->getSource()->isModified();}
 
