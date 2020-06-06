@@ -16,12 +16,13 @@
       "externalConsole": true,
       "MIMode": "gdb",
       "setupCommands": [
-          {
-              "description": "Enable pretty-printing for gdb",
-              "text": "-enable-pretty-printing",
-              "ignoreFailures": true
-          }
-      ]
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "visualizerFile": "/home/serge/.config/Code/User/workspaceStorage/54e3ebeac2723e4f382a67906b2f4532/tonka3000.qtvsctools/qt.natvis.xml"
     },
     {
       "name": "(Windows) Launch",
@@ -32,7 +33,8 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
-      "externalConsole": true
+      "externalConsole": true,
+      "visualizerFile": "/home/serge/.config/Code/User/workspaceStorage/54e3ebeac2723e4f382a67906b2f4532/tonka3000.qtvsctools/qt.natvis.xml"
     }
   ]
 }

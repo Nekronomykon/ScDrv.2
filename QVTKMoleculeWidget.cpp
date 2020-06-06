@@ -47,7 +47,12 @@ typedef vtkSmartPointer<MoleculeMapperOpenGL> MolMapperOpenGL;
 typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
-    : BaseWidget(parent), renderer_(OpenGLRenderer::New()), mol_mapper_(MolMapperOpenGL::New()), area_picker_(RenderedAreaPicker::New()), styleInteractor_(IntStyleRbrBndPick::New()), mapDataAtoms_(MapLabelAtoms::New())
+    : BaseWidget(parent)
+    , renderer_(OpenGLRenderer::New())
+    , mol_mapper_(MolMapperOpenGL::New())
+    , area_picker_(RenderedAreaPicker::New())
+    , styleInteractor_(IntStyleRbrBndPick::New())
+    , mapDataAtoms_(MapLabelAtoms::New())
 {
   // VTK Renderer setup
   // renderer_->SetUseFXAA(true); // antaliasing is now On
@@ -59,15 +64,11 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   // VTK/Qt wedding...
   vtkRenderWindow *pWnd;
-  vtkRenderWindowInteractor *pIren;
-#if (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION > 2)
   pWnd = this->renderWindow();
-  pIren = this->interactor();
-#else
-  pWnd = this->GetRenderWindow();
-  pIren = this->GetInteractor();
-#endif
   assert(pWnd);
+
+  vtkRenderWindowInteractor *pIren;
+  pIren = this->interactor();
   // pWnd->SetMultiSamples(7);
   pWnd->AddRenderer(renderer_);
 
@@ -115,9 +116,5 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
 void QVTKMoleculeWidget::doRender()
 {
   renderer_->SetBackground(bgColor_.GetData());
-#if (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION > 2)
   this->renderWindow()->Render();
-#else
-  this->GetRenderWindow()->Render();
-#endif
 }

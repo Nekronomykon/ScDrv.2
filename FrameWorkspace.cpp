@@ -464,11 +464,7 @@ void FrameWorkspace::setSceneMultisample(int idx)
   auto *pMol = pOpen->getViewStructure();
   assert(pMol);
   vtkRenderWindow *pWnd;
-#if (VTK_MAJOR_VERSION >= 8 && VTK_MINOR_VERSION > 2)
   pWnd = pMol->renderWindow();
-#else
-  pWnd = pMol->GetRenderWindow();
-#endif
   assert(pWnd);
   pWnd->SetMultiSamples(idx);
   pMol->doRender();

@@ -13,7 +13,7 @@ TableElements::TableElements(QWidget *parent)
 
   QFontMetrics fm = this->fontMetrics();
 
-  int w1 = fm.width(QLatin1Char('9')) * 4;
+  int w1 = fm.horizontalAdvance(QLatin1Char('9')) * 4;
   int h1 = fm.height(); // * 3 / 2;
 
   Model* pM = this->GetViewModel();
