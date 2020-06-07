@@ -6,7 +6,7 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-#include "CodeEditor.h"
+#include "EditCode.h"
 
 #include <QTemporaryFile>
 #include <QWidget>
@@ -16,7 +16,7 @@ EditTextSource --- editor class; owner and proxy for the temporarily persistent 
 */
 
 class EditTextSource
-    : public CodeEditor
+    : public EditCode
 {
   Q_OBJECT
 public:
@@ -24,7 +24,7 @@ public:
   ~EditTextSource() override;
 
   //
-  void dump();
+  bool dump();
   QString getDumpPath() const;
 
 

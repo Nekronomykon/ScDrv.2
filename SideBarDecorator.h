@@ -10,7 +10,7 @@
 #include <QPaintEvent>
 #include <QWidget>
 
-class CodeEditor;
+class EditCode;
 
 //![codeeditordefinition]
 //![extraarea]
@@ -19,14 +19,14 @@ class SideBarDecorator
     : public QWidget
 {
 public:
-  explicit SideBarDecorator(CodeEditor *editor);
+  explicit SideBarDecorator(EditCode *editor);
   QSize sizeHint() const override;
 
 protected:
   void paintEvent(QPaintEvent *event) override;
 
 private:
-  CodeEditor *theHost_;
+  EditCode *ptrHost_;
 };
 
 //![extraarea]

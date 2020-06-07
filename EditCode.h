@@ -17,13 +17,13 @@ class SideBarDecorator;
 
 //![codeeditordefinition]
 
-class CodeEditor : public QPlainTextEdit
+class EditCode : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    explicit CodeEditor(QWidget* /*parent*/ = nullptr);
-    ~CodeEditor () override;
+    explicit EditCode(QWidget* /*parent*/ = nullptr);
+    ~EditCode () override;
 
     void SideBarDecoratorPaintEvent(QPaintEvent *);
     int SideBarWidth();

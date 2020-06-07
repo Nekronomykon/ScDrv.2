@@ -69,33 +69,33 @@ public:
 
   vtkRenderer *GetRenderer() const { return renderer_; }
   vtkCamera *GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
-  MapperMolecule *GetMoleculeMapper() const { return mol_mapper_; }
+  MapperMolecule *GetMoleculeMapper() const { return mapMolecule_; }
 
   void SetMoleculeSpaceFill()
   {
-    mol_mapper_->UseSpaceFillSettings();
+    mapMolecule_->UseSpaceFillSettings();
     this->doRender();
   }
   void SetMoleculeBallsSticks()
   {
-    mol_mapper_->UseBallAndStickSettings();
+    mapMolecule_->UseBallAndStickSettings();
     this->doRender();
   }
   void SetMoleculeSticksOnly()
   {
-    mol_mapper_->UseSticksOnlySettings();
+    mapMolecule_->UseSticksOnlySettings();
     this->doRender();
   }
   void SetMoleculeFastRender()
   {
-    mol_mapper_->UseFastRenderSettings();
+    mapMolecule_->UseFastRenderSettings();
     this->doRender();
   }
 
-  bool MoleculeIsSpaceFill() const { return mol_mapper_->IsSetSpaceFill(); }
-  bool MoleculeIsBallsSticks() const { return mol_mapper_->IsSetBallsSticks(); }
-  bool MoleculeIsSticks() const { return mol_mapper_->IsSetSticksOnly(); }
-  bool MoleculeIsFast() const { return mol_mapper_->IsSetFastRender(); }
+  bool MoleculeIsSpaceFill() const { return mapMolecule_->IsSetSpaceFill(); }
+  bool MoleculeIsBallsSticks() const { return mapMolecule_->IsSetBallsSticks(); }
+  bool MoleculeIsSticks() const { return mapMolecule_->IsSetSticksOnly(); }
+  bool MoleculeIsFast() const { return mapMolecule_->IsSetFastRender(); }
 
   BgColorType &backgroundColor() { return bgColor_; }
 
@@ -115,11 +115,11 @@ private:
 private:
   Renderer renderer_;
   BgColorType bgColor_;
-  MapMolecule mol_mapper_;
+  MapMolecule mapMolecule_;
   MapCritical mapCritical_;
   MapLabelData mapDataAtoms_;
   MapLabelData mapDataBonds_;
-  AreaPicker area_picker_;
+  AreaPicker pickSelect_;
   InteractorStyle styleInteractor_;
   vtkNew<CommandPickFragment> cmdPickFragment_;
 };

@@ -1,27 +1,21 @@
+#include "EditCode.h"
+
 #include "SideBarDecorator.h"
 
 #include <QFont>
 #include <QPainter>
 #include <QTextStream>
 #include <QTextBlock>
-
-#include <QDir>
-#include <QFile>
 #include <QFileInfo>
 
-#include <QMessageBox>
-
 #include "ResetCursor.h"
-
-#include "EditCode.h"
 
 //![constructor]
 
 EditCode::EditCode(QWidget *parent)
-	: QPlainTextEdit(parent)
-	, side_bar_(new SideBarDecorator(this))
+	: QPlainTextEdit(parent), side_bar_(new SideBarDecorator(this))
 {
-	QFont fontSrc("Courier", 12);
+	QFont fontSrc("Courier", 10);
 	fontSrc.setStyleHint(QFont::Monospace);
 	this->setFont(fontSrc);
 
@@ -29,8 +23,12 @@ EditCode::EditCode(QWidget *parent)
 	connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateSideBar(QRect, int)));
 	connect(this, &EditCode::cursorPositionChanged, this, &EditCode::highlightCurrentLine);
 
-	this->updateSideBarWidth(100);
+	this->updateSideBarWidth(0);
 	this->highlightCurrentLine();
+}
+
+EditCode::~EditCode()
+{
 }
 
 //![constructor]
@@ -39,18 +37,20 @@ EditCode::EditCode(QWidget *parent)
 
 int EditCode::SideBarWidth()
 {
+
 	int digits = 1;
 	int num = qMax(1, this->blockCount());
-	while (num >= 10) 
+	while (num >= 10)
 	{
 		num /= 10;
 		++digits;
 	}
-  
-	int space = this->fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits
-    + 2 * fontMetrics().height() 
-	+ 4 // both sides paddings
-    ;
+
+	if (digits < 5)
+		digits = 5;
+
+	int space = this->fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + 2 * fontMetrics().height() + 4 // both sides paddings
+		;
 
 	return space;
 }
@@ -61,7 +61,7 @@ int EditCode::SideBarWidth()
 
 void EditCode::updateSideBarWidth(int /* newBlockCount */)
 {
-	this->setViewportMargins(this->SideBarWidth(), 0, 0, 0);
+	setViewportMargins(this->SideBarWidth(), 0, 0, 0);
 }
 
 //![slotUpdateExtraAreaWidth]
@@ -87,7 +87,7 @@ void EditCode::resizeEvent(QResizeEvent *e)
 {
 	QPlainTextEdit::resizeEvent(e);
 
-	QRect cr = this->contentsRect();
+	QRect cr = contentsRect();
 	side_bar_->setGeometry(QRect(cr.left(), cr.top(), this->SideBarWidth(), cr.height()));
 }
 
@@ -99,15 +99,15 @@ void EditCode::highlightCurrentLine()
 {
 	QList<QTextEdit::ExtraSelection> extraSelections;
 
-	// if (!isReadOnly()) 
+	if (!isReadOnly())
 	{
 		QTextEdit::ExtraSelection selection;
 
-		QColor lineColor =  QColor(this->isReadOnly() ? Qt::darkGray : Qt::yellow).lighter(160);
+		QColor lineColor = QColor(Qt::yellow).lighter(160);
 
 		selection.format.setBackground(lineColor);
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-		selection.cursor = this->textCursor();
+		selection.cursor = textCursor();
 		selection.cursor.clearSelection();
 		extraSelections.append(selection);
 	}
@@ -133,18 +133,18 @@ void EditCode::SideBarDecoratorPaintEvent(QPaintEvent *event)
 	int bottom = top + (int)this->blockBoundingRect(block).height();
 	//![extraAreaPaintEvent_1]
 
-  int nH = this->fontMetrics().height() + 1;
+	int nH = this->fontMetrics().height() + 1;
 	//![extraAreaPaintEvent_2]
 	while (block.isValid() && top <= event->rect().bottom())
-  {
+	{
 
 		if (block.isVisible() && bottom >= event->rect().top())
-    {
+		{
 			QString number = QString::number(blockNumber + 1);
 			painter.setPen(Qt::black);
-			painter.drawText(nH, top, side_bar_->width() - 2 * nH, nH - 1,
-				Qt::AlignRight // | Qt::AlignVCenter
-        , number);
+			painter.drawText(nH, top, side_bar_->width() - 2 * nH, nH - 1
+			,	Qt::AlignRight // | Qt::AlignVCenter
+			,	number);
 		}
 
 		block = block.next();
@@ -155,50 +155,17 @@ void EditCode::SideBarDecoratorPaintEvent(QPaintEvent *event)
 }
 //![extraAreaPaintEvent_2]
 
-void EditCode::load(QIODevice* pIO)
+void EditCode::load(QIODevice *pIO)
 {
 	QTextStream in(pIO);
 	ResetCursor rc(Qt::WaitCursor);
 	this->setPlainText(in.readAll());
 }
 
-void EditCode::save(QIODevice* pIO)
+void EditCode::save(QIODevice *pIO)
 {
+  pIO->setTextModeEnabled(true);
 	QTextStream out(pIO);
 	ResetCursor rc(Qt::WaitCursor);
 	out << this->toPlainText();
-}
-
-bool EditCode::loadPath(const QString& fileName)
-{
-	QFile file(fileName);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) 
-	{
-		QString strTitle(tr("Load file error"));
-		QString strMessage(tr("Cannot open file %1:\n%2."));
-       	QMessageBox::warning(this
-       	, strTitle
-       	, strMessage.arg(QDir::toNativeSeparators(fileName), file.errorString() ) );
-	    return false;
-    }
-	this->load(&file);
-	return true;
-}
-
-bool EditCode::savePath(const QString& fileName)
-{
-	QFile file(fileName);
-
-    if (!file.open(QFile::WriteOnly | QFile::Text))
-	{
-		QString strTitle(tr("Save file error"));
-		QString strMessage(tr("Cannot save file %1:\n%2."));
-       	QMessageBox::warning(this
-       	, strTitle
-       	, strMessage.arg(QDir::toNativeSeparators(fileName), file.errorString() ) );
-   	    return false;
-	}
-
-	this->save(&file);
-	return true;
 }

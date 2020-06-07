@@ -49,8 +49,8 @@ typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
     : BaseWidget(parent)
     , renderer_(OpenGLRenderer::New())
-    , mol_mapper_(MolMapperOpenGL::New())
-    , area_picker_(RenderedAreaPicker::New())
+    , mapMolecule_(MolMapperOpenGL::New())
+    , pickSelect_(RenderedAreaPicker::New())
     , styleInteractor_(IntStyleRbrBndPick::New())
     , mapDataAtoms_(MapLabelAtoms::New())
 {
@@ -58,7 +58,7 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   // renderer_->SetUseFXAA(true); // antaliasing is now On
 
   Actor mol(OpenGLActor::New());
-  mol->SetMapper(mol_mapper_.Get());
+  mol->SetMapper(mapMolecule_.Get());
 
   renderer_->AddActor(mol);
 
@@ -74,12 +74,12 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
   assert(pIren);
   pIren->SetInteractorStyle(styleInteractor_);
-  pIren->SetPicker(area_picker_);
+  pIren->SetPicker(pickSelect_);
 
-  cmdPickFragment_->ResetMoleculeMapper(mol_mapper_.Get());
+  cmdPickFragment_->ResetMoleculeMapper(mapMolecule_.Get());
   cmdPickFragment_->ResetRenderer(renderer_.Get());
-  cmdPickFragment_->ResetAreaPicker(area_picker_.Get());
-  area_picker_->AddObserver(vtkCommand::EndPickEvent, cmdPickFragment_);
+  cmdPickFragment_->ResetAreaPicker(pickSelect_.Get());
+  pickSelect_->AddObserver(vtkCommand::EndPickEvent, cmdPickFragment_);
 
   vtkTextProperty *pTP = mapDataAtoms_->GetLabelTextProperty();
   pTP->SetFontFamilyToCourier();
@@ -92,7 +92,6 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
   pTP->ItalicOff();
 
   mapDataAtoms_->SetLabelModeToLabelIds();
-  //mapDataAtoms_->SetLabelModeToLabelFieldData();
   Actor2D lbl(Actor2D::New());
   lbl->SetMapper(mapDataAtoms_);
 
@@ -101,13 +100,13 @@ QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
 
 void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
 {
-  mol_mapper_->RemoveAllInputs();
+  mapMolecule_->RemoveAllInputs();
   mapDataAtoms_->RemoveAllInputs();
   if (pMol)
   {
-    mol_mapper_->SetInputData(pMol);
+    mapMolecule_->SetInputData(pMol);
     if (mapDataAtoms_)
-      mapDataAtoms_->SetInputData(mol_mapper_->AtomGlyphAt());
+      mapDataAtoms_->SetInputData(mapMolecule_->AtomGlyphAt());
   }
   // render scene:
   this->doRender();

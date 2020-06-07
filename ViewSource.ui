@@ -21,13 +21,13 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CodeEditor</class>
+   <class>EditCode</class>
    <extends>QPlainTextEdit</extends>
-   <header>CodeEditor.h</header>
+   <header>EditCode.h</header>
   </customwidget>
   <customwidget>
    <class>EditTextSource</class>
-   <extends>CodeEditor</extends>
+   <extends>EditCode</extends>
    <header>EditTextSource.h</header>
   </customwidget>
  </customwidgets>

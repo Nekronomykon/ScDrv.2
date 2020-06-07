@@ -2,24 +2,26 @@
 
 #include <QFileInfo>
 
-EditTextSource::EditTextSource(QWidget* parent)
-  : CodeEditor (parent)
-  , file_dump_(tr("./SqD-XXXXXX.sq-drv"))
+EditTextSource::EditTextSource(QWidget *parent)
+    : EditCode(parent), file_dump_(tr("./SqD-XXXXXX.sq-drv"))
 {
   file_dump_.setAutoRemove(true);
-  file_dump_.open();
+  this->dump();
 }
-
+`
 EditTextSource::~EditTextSource()
 {
-  file_dump_.close();
+  file_dump_.close(); // it is insisted...
 }
 
-void EditTextSource::dump()
+bool EditTextSource::dump()
 {
+  if (!file_dump_.open())
+    return false;
+  file_dump_.resize(0L);
   this->save(&file_dump_);
-  file_dump_.flush();
-  file_dump_.seek(0L);
+  file_dump_.close();
+  return true;
 }
 
 QString EditTextSource::getDumpPath() const
