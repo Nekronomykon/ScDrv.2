@@ -11,6 +11,7 @@
 
 #include <QEvent>
 #include <QCloseEvent>
+#include <QPrinter>
 
 #include <QProgressBar>
 
@@ -23,7 +24,6 @@
 
 #include <QMainWindow>
 #include "ui_FrameWorkspace.h"
-
 
 class FrameWorkspace
     : public QMainWindow,
@@ -77,26 +77,6 @@ public:
 public slots:
   //
 protected slots:
-  void on_actionNew__triggered();
-  void on_actionOpen__triggered();
-  //
-  void on_actionExportScene__triggered();
-  void on_actionExportCoords__triggered();
-  //
-  void on_actionToggleLayout__triggered();
-  //
-  void on_actionSourceEdit__triggered();
-  void on_actionSourceCast__triggered();
-  //
-  void on_actionProjOrthogonal__triggered();
-  void on_actionProjPerspective__triggered();
-  //
-  void on_actionMolFast__triggered();
-  void on_actionMolBalls__triggered();
-  void on_actionMolStick__triggered();
-  void on_actionMolSpace__triggered();
-  //
-  void on_actionSetFont__triggered();
   //
   void loadPathContentFrom(const QString &);
   void setSceneBackground(const QString &);
@@ -138,9 +118,35 @@ private:
   QPointer<QProgressBar> progress_;
 
   QPointer<ComboBoxColors> colors_back_; // background color name
-  QPointer<QComboBox> level_AA_; // antialiasing
+  QPointer<QComboBox> level_AA_;         // antialiasing
+
+  // QPointer<QPrinter> printer_;
 
 private slots:
+  void on_actionNew__triggered();
+  void on_actionClone__triggered();
+  //
+  void on_actionOpen__triggered();
+  //
+  void on_actionExportScene__triggered();
+  void on_actionExportCoords__triggered();
+  //
+  void on_actionPrint__triggered();
+  //
+  void on_actionToggleLayout__triggered();
+  //
+  void on_actionSourceEdit__triggered();
+  void on_actionSourceCast__triggered();
+  //
+  void on_actionProjOrthogonal__triggered();
+  void on_actionProjPerspective__triggered();
+  //
+  void on_actionMolFast__triggered();
+  void on_actionMolBalls__triggered();
+  void on_actionMolStick__triggered();
+  void on_actionMolSpace__triggered();
+  //
+  void on_actionSetFont__triggered();
 };
 
 #endif // !Frame_Workspace_h

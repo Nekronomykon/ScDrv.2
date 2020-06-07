@@ -97,6 +97,9 @@ public:
   bool MoleculeIsSticks() const { return mapMolecule_->IsSetSticksOnly(); }
   bool MoleculeIsFast() const { return mapMolecule_->IsSetFastRender(); }
 
+  void ResetMultisample(int /*idAA*/);
+  void ProjectParallel(bool /* bPar  */ = true);
+
   BgColorType &backgroundColor() { return bgColor_; }
 
 private:

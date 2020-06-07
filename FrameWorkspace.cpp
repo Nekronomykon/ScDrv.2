@@ -11,10 +11,12 @@
 #include <QSettings>
 #include <QMdiSubWindow>
 #include <QMessageBox>
-#include <QFileDialog>
 #include <QSplitter>
 #include <QListWidget>
 
+#include <QFileDialog>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 #include <QFontDialog>
 
 // #include <vtkSphereSource.h>
@@ -30,6 +32,7 @@ FrameWorkspace::FrameWorkspace(QWidget *parent) : QMainWindow(parent),
                                                   view_file_content_(new ViewFileContent),
                                                   progress_(new QProgressBar),
                                                   colors_back_(new ComboBoxColors),
+                                                  // printer_(new QPrinter(QPrinter::HighResolution)),
                                                   level_AA_(new QComboBox)
 {
   this->setupUi(this);
@@ -296,7 +299,7 @@ void FrameWorkspace::updateUi()
 
 FrameWorkspace::Child *FrameWorkspace::getActiveChild() const
 {
-  return this->viewMoleculeFile_;
+  return this->file_;
 }
 
 void FrameWorkspace::changeEvent(QEvent *e)
@@ -463,19 +466,29 @@ void FrameWorkspace::setSceneMultisample(int idx)
   assert(pOpen);
   auto *pMol = pOpen->getViewStructure();
   assert(pMol);
-  vtkRenderWindow *pWnd;
-  pWnd = pMol->renderWindow();
-  assert(pWnd);
-  pWnd->SetMultiSamples(idx);
-  pMol->doRender();
+  pMol->ResetMultisample(idx);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 // Auto-assigned event handlers:
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void FrameWorkspace::on_actionNew__triggered()
 {
   Child *pOpen = this->getActiveChild();
   pOpen->doClearAll();
   pOpen->ResetFileName();
+  this->updateUi();
+}
+
+void FrameWorkspace::on_actionClone__triggered()
+{
+  Child *pChild = this->getActiveChild();
+  assert(pChild);
+  /**
+   * if(pChild->hasPathAttached())
+   * pChild->detachPath(); pChild->setModified(true);
+   **/
   this->updateUi();
 }
 
@@ -602,7 +615,8 @@ void FrameWorkspace::on_actionExportScene__triggered()
 
   QFileDialog::Options opts = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
   QString str_fmt;
-  QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]"), fi.completeBaseName(), tr("PostScript file (*.eps);;PNG image file (*.png);;JPEG inage file (*.jpg);;Bitmap (*.bmp);;All files (*.*)") // temporarily constant
+  QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]"), fi.completeBaseName()
+  , tr("PostScript file (*.eps);;PNG image file (*.png);;JPEG inage file (*.jpg);;Bitmap (*.bmp);;All files (*.*)") // temporarily constant
                                                    ,
                                                    &str_fmt, opts);
 
@@ -644,4 +658,17 @@ void FrameWorkspace::on_actionSetFont__triggered()
       &ok, pW->font(), this, tr("Set text edit font"), settings);
   if (ok)
     pW->setFont(font);
+}
+
+void FrameWorkspace::on_actionPrint__triggered()
+{
+  QPrinter printer(QPrinter::HighResolution);
+  QPrintDialog dialog(&printer, this);
+  dialog.setWindowTitle(tr("Print Document"));
+  // if (editor->textCursor().hasSelection())
+    // dialog.addEnabledOption(QAbstractPrintDialog::PrintSelection);
+  if (dialog.exec() != QDialog::Accepted)
+  {
+    return;
+  }
 }

@@ -8,7 +8,7 @@ EditTextSource::EditTextSource(QWidget *parent)
   file_dump_.setAutoRemove(true);
   this->dump();
 }
-`
+
 EditTextSource::~EditTextSource()
 {
   file_dump_.close(); // it is insisted...

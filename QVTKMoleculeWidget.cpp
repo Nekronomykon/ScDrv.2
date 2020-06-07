@@ -117,3 +117,15 @@ void QVTKMoleculeWidget::doRender()
   renderer_->SetBackground(bgColor_.GetData());
   this->renderWindow()->Render();
 }
+
+void QVTKMoleculeWidget::ResetMultisample(int idAA)
+{
+  vtkRenderWindow* pWnd = this->renderWindow();
+  pWnd->SetMultiSamples(idAA);
+  this->doRender();
+}
+
+void QVTKMoleculeWidget::ProjectParallel(bool bPar)
+{
+  
+}

@@ -13,14 +13,14 @@
   <property name="windowTitle">
    <string>[ScDrv]</string>
   </property>
-  <widget class="FrameFile" name="viewMoleculeFile_"/>
+  <widget class="FrameFile" name="file_"/>
   <widget class="QMenuBar" name="barMenu_">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile_">
@@ -44,6 +44,7 @@
      <addaction name="separator"/>
     </widget>
     <addaction name="actionNew_"/>
+    <addaction name="actionClone_"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_"/>
     <addaction name="actionReload_"/>
@@ -51,8 +52,11 @@
     <addaction name="separator"/>
     <addaction name="actionSave_"/>
     <addaction name="actionSaveAs_"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint_"/>
     <addaction name="menuExport_"/>
     <addaction name="separator"/>
+    <addaction name="actionClose_"/>
     <addaction name="actionExit_"/>
    </widget>
    <widget class="QMenu" name="menuHelp_">
@@ -156,11 +160,18 @@
    </attribute>
   </widget>
   <action name="actionNew_">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>&amp;New..</string>
+   </property>
+  </action>
+  <action name="actionClone_">
+   <property name="text">
+    <string>C&amp;lone</string>
+   </property>
+  </action>
+  <action name="actionClose_">
+   <property name="text">
+    <string>&amp;Close</string>
    </property>
   </action>
   <action name="actionOpen_">
@@ -173,7 +184,7 @@
   </action>
   <action name="actionPrint_">
    <property name="text">
-    <string>Print</string>
+    <string>&amp;Print..</string>
    </property>
   </action>
   <action name="actionHelp_">
@@ -373,6 +384,16 @@
   <action name="actionSetFont_">
    <property name="text">
     <string>Set text &amp;font..</string>
+   </property>
+  </action>
+  <action name="actionC_lone">
+   <property name="text">
+    <string>C&amp;lone</string>
+   </property>
+  </action>
+  <action name="action_Print">
+   <property name="text">
+    <string>&amp;Print..</string>
    </property>
   </action>
  </widget>
