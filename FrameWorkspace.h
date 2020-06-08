@@ -120,7 +120,7 @@ private:
   QPointer<ComboBoxColors> colors_back_; // background color name
   QPointer<QComboBox> level_AA_;         // antialiasing
 
-  QPointer<QPrinterInfo> printer_info_;
+  // QPointer<QPrinterInfo> printer_info_;
 
 private slots:
   void on_actionNew__triggered();

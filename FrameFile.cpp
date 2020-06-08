@@ -74,12 +74,10 @@ bool FrameFile::ResetBackgroundColorName(const vtkStdString &name)
     return true;
 
   vtkNew<vtkNamedColors> name_colors;
-  if (!name_colors->ColorExists(name))
+  if (!view_molecule_->BackgroundColorByNameAt(name, name_colors.Get() ))
     return false;
   nameBgColor_ = name;
-  name_colors->GetColor(name, view_molecule_->backgroundColor());
   ResetDefaultBgColorName(name);
-  view_molecule_->doRender();
   return true;
 }
 

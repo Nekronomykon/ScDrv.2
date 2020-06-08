@@ -21,7 +21,7 @@
 
 // #include <vtkSphereSource.h>
 #include <vtkOpenGLRenderWindow.h>
-#include <vtkCamera.h>
+// #include <vtkCamera.h>
 
 #include <vtkSmartPointer.h>
 
@@ -32,7 +32,7 @@ FrameWorkspace::FrameWorkspace(QWidget *parent) : QMainWindow(parent),
                                                   view_file_content_(new ViewFileContent),
                                                   progress_(new QProgressBar),
                                                   colors_back_(new ComboBoxColors),
-                                                  // printer_(new QPrinter(QPrinter::HighResolution)),
+                                                  // printer_info_(new QPrinterInfo),
                                                   level_AA_(new QComboBox)
 {
   this->setupUi(this);

@@ -27,10 +27,14 @@
 
 #include <vtkColor.h>
 #include <vtkStdString.h>
-#include <vtkMolecule.h>
+#include <vtkCamera.h>
+#include <vtkNamedColors.h>
 
 #include <vtkInteractorStyle.h>
 #include <vtkAreaPicker.h>
+
+#include <vtkMolecule.h>
+/// here, the end of reforms ;)
 
 #include "MapperMolecule.h"
 #include "MapperCriticalPoints.h"
@@ -63,13 +67,17 @@ public:
   typedef vtkSmartPointer<vtkInteractorStyle> InteractorStyle;
 
 protected:
+  void doRender();
+
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
-  void doRender();
+  bool isProjectOrthogonal() const {return isProjectOrthogonal_;}
 
   vtkRenderer *GetRenderer() const { return renderer_; }
   vtkCamera *GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
   MapperMolecule *GetMoleculeMapper() const { return mapMolecule_; }
+
+  bool BackgroundColorByNameAt(vtkStdString name, vtkNamedColors*);
 
   void SetMoleculeSpaceFill()
   {
@@ -116,7 +124,7 @@ private:
   
 
 private:
-
+  bool isProjectOrthogonal_;
   Renderer renderer_;
   BgColorType bgColor_;
   MapMolecule mapMolecule_;

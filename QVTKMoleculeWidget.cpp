@@ -48,11 +48,9 @@ typedef vtkSmartPointer<vtkRenderedAreaPicker> RenderedAreaPicker;
 
 QVTKMoleculeWidget::QVTKMoleculeWidget(QWidget *parent)
     : BaseWidget(parent)
+    , isProjectOrthogonal_(false)
     , renderer_(OpenGLRenderer::New())
-    , mapMolecule_(MolMapperOpenGL::New())
-    , pickSelect_(RenderedAreaPicker::New())
-    , styleInteractor_(IntStyleRbrBndPick::New())
-    , mapDataAtoms_(MapLabelAtoms::New())
+    , mapMolecule_(MolMapperOpenGL::New()), pickSelect_(RenderedAreaPicker::New()), styleInteractor_(IntStyleRbrBndPick::New()), mapDataAtoms_(MapLabelAtoms::New())
 {
   // VTK Renderer setup
   // renderer_->SetUseFXAA(true); // antaliasing is now On
@@ -115,23 +113,35 @@ void QVTKMoleculeWidget::ShowMolecule(vtkMolecule *pMol)
 void QVTKMoleculeWidget::doRender()
 {
   renderer_->SetBackground(bgColor_.GetData());
+  vtkCamera *pCam = this->GetActiveCamera();
+  if(this->isProjectOrthogonal())
+    pCam->ParallelProjectionOn();
+  else
+    pCam->ParallelProjectionOff();
   this->renderWindow()->Render();
+}
+
+bool QVTKMoleculeWidget::BackgroundColorByNameAt(vtkStdString name, vtkNamedColors* pTable)
+{
+  if(!pTable || !pTable->ColorExists(name))
+  return false;
+  pTable->GetColor(name, bgColor_);
+  this->doRender();
+  return true;
 }
 
 void QVTKMoleculeWidget::ResetMultisample(int idAA)
 {
-  vtkRenderWindow* pWnd = this->renderWindow();
+  vtkRenderWindow *pWnd = this->renderWindow();
   pWnd->SetMultiSamples(idAA);
   this->doRender();
 }
 
 void QVTKMoleculeWidget::ProjectParallel(bool bPar)
 {
-  vtkCamera *pCam = this->GetActiveCamera();
-  assert(pCam);
-  if (!pCam) return;
-    if (bPar) pCam->ParallelProjectionOn(); 
-    else pCam->ParallelProjectionOff();
+  if (bPar == isProjectOrthogonal_)
+    return;
+  else
+    bPar = isProjectOrthogonal_;
   this->doRender();
-  
 }
