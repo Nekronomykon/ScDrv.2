@@ -59,6 +59,10 @@ inline QStringList FrameFile::getRecentFiles() { return recent_files; }
 
 inline QStringList &FrameFile::recentFiles() { return recent_files; }
 
+QString FrameFile::keyRecentFiles() { return QStringLiteral("RecentFiles"); }
+QString FrameFile::keyFile() { return QStringLiteral("File"); }
+QString FrameFile::keyDefaultBgColor() { return QStringLiteral("BackgroundColor"); }
+
 void FrameFile::resetRecentFiles(QStringList again_recent)
 {
   std::swap(recent_files, again_recent);
@@ -99,7 +103,10 @@ void FrameFile::BuildFileContext()
   all_formats[FileContext("AIMAll Molecular Graph files", &FrameFile::acquireAsMGP)] = "mgp";
   all_formats[FileContext("AIMAll atomic summae files", &FrameFile::acquireAsSUM)] = "sum";
   all_formats[FileContext("AIMAll Extreme output", &FrameFile::acquireAsExtOut)] = "extout";
-  // all_formats[FileContext("Portable Network Graphics file", nullptr, &FrameFile::writeSceneAsPNG)] = "png";
+  all_formats[FileContext("Portable Network Graphics file", nullptr, &FrameFile::writeSceneAsPNG)] = "png";
+  all_formats[FileContext("Encapsulated PostScript file", nullptr,&FrameFile::writeSceneAsPostScript)] = "eps";
+  all_formats[FileContext("Joint Photographic Experts Group file", nullptr,&FrameFile::writeSceneAsJPEG)] = "jpeg";
+  all_formats[FileContext("Flat bitmap file", nullptr,&FrameFile::writeSceneAsBitmap)] = "bmp";
 }
 
 FrameFile::FileContext FrameFile::CastInputPathFormat(const QString &path)
@@ -126,10 +133,6 @@ FrameFile::FileContext FrameFile::CastInputPathFormat(const QString &path)
   }
   return res;
 }
-
-QString FrameFile::keyRecentFiles() { return QStringLiteral("RecentFiles"); }
-QString FrameFile::keyFile() { return QStringLiteral("File"); }
-QString FrameFile::keyDefaultBgColor() { return QStringLiteral("BackgroundColor"); }
 
 void FrameFile::storeRecentFiles(QSettings &s)
 {
@@ -183,7 +186,7 @@ int FrameFile::addViewWidget(QPointer<W> &ww, const QString &title)
   return this->addTab(ww, title);
 }
 
-QString FrameFile::FileInputFilter()
+QString FrameFile::InputFilter()
 {
   QString res(tr("Known file types ("));
   std::set<QString> regx;
@@ -192,8 +195,8 @@ QString FrameFile::FileInputFilter()
   auto it_fmt = all_formats.cbegin();
   do
   {
-    //if (!it_fmt.key().hasBuild())
-    //  continue;
+    if (!it_fmt.key().hasBuild())
+      continue;
 
     by_format += it_fmt.key();
     QString mask(tr("*."));
@@ -223,6 +226,48 @@ QString FrameFile::FileInputFilter()
   res += tr("All files (*.*)");
   return res;
 }
+
+QString FrameFile::ExportFilter()
+{
+  QString res(tr("Known file types ("));
+  std::set<QString> regx;
+
+  QString by_format;
+  auto it_fmt = all_formats.cbegin();
+  do
+  {
+    if (!it_fmt.key().hasExport())
+      continue;
+
+    by_format += it_fmt.key();
+    QString mask(tr("*."));
+    mask += it_fmt.value();
+
+    regx.insert(mask);
+
+    by_format += " (";
+    by_format += mask;
+    by_format += ");;";
+  } while (++it_fmt != all_formats.cend());
+
+  assert(!regx.empty());
+
+  QString reg;
+  for (const QString &extn : regx)
+  {
+    reg += extn;
+    reg += " ";
+  }
+  res += reg.trimmed();
+  res += ");;";
+
+  res += by_format;
+
+  // If format is not uniquely detected, treat is as plain text
+  res += tr("All files (*.*)");
+  return res;
+}
+
 
 FrameFile::FileContext FrameFile::SetupFileInputContext(const QString &key)
 {
@@ -345,11 +390,7 @@ inline bool FrameFile::ExportImageWith(const QString &name)
   this->SetupImageWriter(write_image.GetPointer());
   {
     vtkNew<vtkWindowToImageFilter> w2img;
-#if (VTK_MAJOR_VERSION > 8 || (VTK_MAJOR_VERSION == 8 && VTK_MINOR_VERSION > 2))
     w2img->SetInput(pMolView->renderWindow());
-#else
-    w2img->SetInput(pMolView->GetRenderWindow());
-#endif
     write_image->SetInputConnection(w2img->GetOutputPort());
   }
   write_image->SetFileName(FileNameRoot::getPtrFrom(name));

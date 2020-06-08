@@ -11,7 +11,7 @@
 
 #include <QEvent>
 #include <QCloseEvent>
-#include <QPrinter>
+#include <QPrinterInfo>
 
 #include <QProgressBar>
 
@@ -99,7 +99,7 @@ private:
 
   void initRecentActions();
 
-  void updateUi();
+  void updateUi(); // check the state and update UI
 
   // data members:
 private slots:
@@ -120,7 +120,7 @@ private:
   QPointer<ComboBoxColors> colors_back_; // background color name
   QPointer<QComboBox> level_AA_;         // antialiasing
 
-  // QPointer<QPrinter> printer_;
+  QPointer<QPrinterInfo> printer_info_;
 
 private slots:
   void on_actionNew__triggered();

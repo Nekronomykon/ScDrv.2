@@ -499,7 +499,7 @@ void FrameWorkspace::on_actionOpen__triggered()
                                  | QFileDialog::DontUseCustomDirectoryIcons // uniformity
       ;
 
-  QString all_context = FrameFile::FileInputFilter();
+  QString all_context = FrameFile::InputFilter();
   QString fmt_name;
   QString dir_name = QDir::currentPath();
 
@@ -519,6 +519,38 @@ void FrameWorkspace::on_actionOpen__triggered()
   QFileInfo fi(all_paths.front());
   this->loadPathContentFrom(fi.canonicalFilePath());
   this->updateUi();
+}
+
+void FrameWorkspace::on_actionExportScene__triggered()
+{
+  FrameFile *pOpen = this->getActiveChild();
+  /// pMolView-> ExportToPNG();
+
+  QString open_file = pOpen->GetFileName(); // could be empty
+  QFileInfo fi(open_file);
+  QString name_filter = FrameFile::ExportFilter();
+
+  QFileDialog::Options opts = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
+  QString str_fmt;
+  QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]"), fi.completeBaseName(), name_filter, &str_fmt, opts);
+
+  if (!save_file.isEmpty())
+  {
+    // && pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file)
+    // pOpen->formattedOutput(save_file);
+    // pOpen->writeSceneAsPNG(save_file); // it does work:
+    if (save_file.endsWith(".png") || str_fmt.endsWith("(*.png)"))
+      pOpen->writeSceneAsPNG(save_file);
+    else if (save_file.endsWith(".jpg") || str_fmt.endsWith("(*.jpg)"))
+      pOpen->writeSceneAsJPEG(save_file);
+    else if (save_file.endsWith(".bmp") || str_fmt.endsWith("(*.bmp)"))
+      pOpen->writeSceneAsBitmap(save_file);
+    else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
+      pOpen->writeSceneAsPostScript(save_file);
+    else
+      QMessageBox::information(this, tr("Unknown format"), tr("Show me the easy way from here to PDF, please!"),
+                               QMessageBox::Close);
+  }
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()
@@ -553,11 +585,8 @@ void FrameWorkspace::on_actionProjOrthogonal__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  vtkCamera *pCam = pMolView->GetActiveCamera();
-  assert(pCam);
-  if (pCam)
-    pCam->ParallelProjectionOn();
-  pMolView->doRender();
+  pMolView->ProjectParallel(true);
+  this->updateUi();
 }
 
 void FrameWorkspace::on_actionProjPerspective__triggered()
@@ -565,11 +594,8 @@ void FrameWorkspace::on_actionProjPerspective__triggered()
   FrameFile *pOpen = this->getActiveChild();
   FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
   assert(pMolView);
-  vtkCamera *pCam = pMolView->GetActiveCamera();
-  assert(pCam);
-  if (pCam)
-    pCam->ParallelProjectionOff();
-  pMolView->doRender();
+  pMolView->ProjectParallel(false);
+  this->updateUi();
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()
@@ -605,40 +631,6 @@ void FrameWorkspace::on_actionMolSpace__triggered()
   this->updateUi();
 }
 
-void FrameWorkspace::on_actionExportScene__triggered()
-{
-  FrameFile *pOpen = this->getActiveChild();
-  /// pMolView-> ExportToPNG();
-
-  QString open_file = pOpen->GetFileName(); // could be empty
-  QFileInfo fi(open_file);
-
-  QFileDialog::Options opts = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
-  QString str_fmt;
-  QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]"), fi.completeBaseName()
-  , tr("PostScript file (*.eps);;PNG image file (*.png);;JPEG inage file (*.jpg);;Bitmap (*.bmp);;All files (*.*)") // temporarily constant
-                                                   ,
-                                                   &str_fmt, opts);
-
-  if (!save_file.isEmpty())
-  {
-    // && pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file)
-    // pOpen->formattedOutput(save_file);
-    // pOpen->writeSceneAsPNG(save_file); // it does work:
-    if (save_file.endsWith(".png") || str_fmt.endsWith("(*.png)"))
-      pOpen->writeSceneAsPNG(save_file);
-    else if (save_file.endsWith(".jpg") || str_fmt.endsWith("(*.jpg)"))
-      pOpen->writeSceneAsJPEG(save_file);
-    else if (save_file.endsWith(".bmp") || str_fmt.endsWith("(*.bmp)"))
-      pOpen->writeSceneAsBitmap(save_file);
-    else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
-      pOpen->writeSceneAsPostScript(save_file);
-    else
-      QMessageBox::information(this, tr("Unknown format"), tr("Show me the easy way from here to PDF, please!"),
-                               QMessageBox::Close);
-  }
-}
-
 void FrameWorkspace::on_actionExportCoords__triggered()
 {
 }
@@ -663,12 +655,14 @@ void FrameWorkspace::on_actionSetFont__triggered()
 void FrameWorkspace::on_actionPrint__triggered()
 {
   QPrinter printer(QPrinter::HighResolution);
+  printer.setOutputFormat(QPrinter::PdfFormat);
+  printer.setPaperSize(QPrinter::A4);
   QPrintDialog dialog(&printer, this);
   dialog.setWindowTitle(tr("Print Document"));
   // if (editor->textCursor().hasSelection())
-    // dialog.addEnabledOption(QAbstractPrintDialog::PrintSelection);
+  // dialog.addEnabledOption(QAbstractPrintDialog::PrintSelection);
   if (dialog.exec() != QDialog::Accepted)
-  {
     return;
-  }
+
+  // go on printing:
 }

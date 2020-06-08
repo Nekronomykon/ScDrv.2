@@ -31,7 +31,7 @@ class FileFormatContext
 {
   typedef typename T::TypeFileName TypeFileName;
   typedef bool (T::*BuildOperation)(void);
-  typedef bool (T::*ExportOperation)(const TypeFileName &) const;
+  typedef bool (T::*ExportOperation)(const TypeFileName &);
 
 public:
   explicit FileFormatContext(TypeFileName name = TypeFileName()
@@ -62,7 +62,7 @@ public:
 
   bool hasExport() const
   {
-    return bool(build_operation_ != nullptr);
+    return bool(export_operation_ != nullptr);
   }
 
   bool isCompatible(const TypeFileName &text)

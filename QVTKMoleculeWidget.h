@@ -116,6 +116,7 @@ private:
   
 
 private:
+
   Renderer renderer_;
   BgColorType bgColor_;
   MapMolecule mapMolecule_;

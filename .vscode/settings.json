@@ -55,7 +55,15 @@
     "utility": "cpp",
     "variant": "cpp",
     "algorithm": "cpp",
-    "xstring": "cpp"
+    "xstring": "cpp",
+    "hash_map": "cpp",
+    "bit": "cpp",
+    "map": "cpp",
+    "set": "cpp",
+    "iterator": "cpp",
+    "memory_resource": "cpp",
+    "random": "cpp",
+    "string": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

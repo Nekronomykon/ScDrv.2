@@ -88,7 +88,8 @@ public:
   static QStringList &recentFiles();
   static void resetRecentFiles(QStringList /*rclf*/ = QStringList());
 
-  static QString FileInputFilter();
+  static QString InputFilter();
+  static QString ExportFilter();
   static void BuildFileContext();
   static FileContext SetupFileInputContext(const QString &);
   static void ClearFileInputContext();
@@ -183,7 +184,7 @@ public:
   vtkMolecule *getMolecule() const;
   void UpdateBonds();
 
-  // views
+  // faceting all views:
   EditTextSource *getEditSource() const;
   EditTextSource *setEditSource();
   QVTKMoleculeWidget *getViewStructure() const;
@@ -192,7 +193,8 @@ public:
   ViewMoleculeAtomic *setEditAtomic();
 
 protected:
-  template <class>bool acquireUsing();
+  template <class>
+  bool acquireUsing();
   template <class Reader>
   void ReadAdditionalInformation(Reader *) {}
   template <class Writer>

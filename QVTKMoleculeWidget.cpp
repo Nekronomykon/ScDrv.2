@@ -127,5 +127,11 @@ void QVTKMoleculeWidget::ResetMultisample(int idAA)
 
 void QVTKMoleculeWidget::ProjectParallel(bool bPar)
 {
+  vtkCamera *pCam = this->GetActiveCamera();
+  assert(pCam);
+  if (!pCam) return;
+    if (bPar) pCam->ParallelProjectionOn(); 
+    else pCam->ParallelProjectionOff();
+  this->doRender();
   
 }
