@@ -118,6 +118,7 @@ void QVTKMoleculeWidget::doRender()
     pCam->ParallelProjectionOn();
   else
     pCam->ParallelProjectionOff();
+  // finally...
   this->renderWindow()->Render();
 }
 
@@ -142,6 +143,6 @@ void QVTKMoleculeWidget::ProjectParallel(bool bPar)
   if (bPar == isProjectOrthogonal_)
     return;
   else
-    bPar = isProjectOrthogonal_;
+    isProjectOrthogonal_ = bPar;
   this->doRender();
 }

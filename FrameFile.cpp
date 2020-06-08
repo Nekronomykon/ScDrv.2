@@ -266,6 +266,13 @@ QString FrameFile::ExportFilter()
   return res;
 }
 
+bool FrameFile::hasValidPath() const
+{
+  if (pathFile_.isEmpty())
+    return false;
+  QFileInfo fi(pathFile_);
+  return QFile::exists(fi.canonicalFilePath());
+}
 
 FrameFile::FileContext FrameFile::SetupFileInputContext(const QString &key)
 {

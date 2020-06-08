@@ -44,8 +44,6 @@ FrameWorkspace::FrameWorkspace(QWidget *parent) : QMainWindow(parent),
   this->restoreSettings();
 
   // Set up action signals and slots
-  connect(actionExit_, &QAction::triggered, qApp, &QApplication::closeAllWindows);
-  connect(actionAboutQt_, &QAction::triggered, qApp, &QApplication::aboutQt);
 
   connect(edit_workspace_, &ViewWorkspace::currentTextChanged,
           this, &FrameWorkspace::loadPathContentFrom);
@@ -76,10 +74,10 @@ void FrameWorkspace::openAllFiles(const QStringList &all)
 void FrameWorkspace::loadFileContents(const QString &from)
 {
   // the complete full path is assumed here in `from'
-  FileFormat fmt = FrameFile::CastInputPathFormat(from);
+  FileFormat fmt = Child::CastInputPathFormat(from);
   if (fmt.hasBuild())
   {
-    FrameFile *pOpen = this->getActiveChild();
+    Child *pOpen = this->getActiveChild();
     pOpen->resetFormat(fmt);
     pOpen->readCurrentFormatFrom(from);
     this->addFileToWorkspace(from, fmt);
@@ -89,7 +87,7 @@ void FrameWorkspace::loadFileContents(const QString &from)
 int FrameWorkspace::hasRecentFiles()
 {
   QSettings settings;
-  int count = settings.beginReadArray(FrameFile::keyRecentFiles());
+  int count = settings.beginReadArray(Child::keyRecentFiles());
   settings.endArray();
   return (count >= 0) ? count : 0;
 }
@@ -263,19 +261,20 @@ void FrameWorkspace::updateUi()
   bool bHasChild(pActive != nullptr);
 
   bool bHasPath(bHasChild && pActive->HasFileName());
+  // actionReload_->isEnabled(pActive && pActive->hasValidPath());
   actionSave_->setEnabled(bHasPath && pActive->isModified());
   actionReload_->setEnabled(bHasPath && pActive->isModified());
 
-  FrameFile::ViewMolecule *pV = !pActive ? nullptr : pActive->getViewStructure();
+  Child::ViewMolecule *pV = !pActive ? nullptr : pActive->getViewStructure();
   bool bHasGraph(bHasChild && pV != nullptr);
 
   //vtkCamera*pCam = !pV ? nullptr : pV->GetActiveCamera();
 
-  // actionProjOrthogonal_->setChecked(pCam ? pCam->GetParallelProjection() : false);
   actionProjOrthogonal_->setEnabled(bHasGraph);
+  actionProjOrthogonal_->setChecked(pV ? pV->isProjectOrthogonal() : false);
 
-  // actionProjPerspective_->setChecked(pCam ? !pCam->GetParallelProjection() : false);
   actionProjPerspective_->setEnabled(bHasGraph);
+  actionProjPerspective_->setChecked(pV ? !pV->isProjectOrthogonal() : false);
 
   actionMolBalls_->setChecked(bHasGraph ? pV->MoleculeIsBallsSticks() : false);
   actionMolBalls_->setEnabled(bHasGraph);
@@ -398,7 +397,7 @@ FrameWorkspace::Child *FrameWorkspace::addLinkToWorkspace(const QString & /* pat
 //                                  : if requested. It is assumed that 'path' contains
 //                                  : a fully qualified (absolute) path to a file
 //----------------------------------------------------------------------------------------
-//                           Returns : pointer to a corresponding FrameFile object,
+//                           Returns : pointer to a corresponding Child object,
 //                                   : if there is any
 //----------------------------------------------------------------------------------------
 FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, FileFormat fmt)
@@ -432,7 +431,7 @@ void FrameWorkspace::storeSettings()
 {
   QSettings settings;
 
-  FrameFile::storeRecentFiles(settings);
+  Child::storeRecentFiles(settings);
   settings.setValue("Geometry", this->saveGeometry());
 }
 
@@ -444,9 +443,9 @@ void FrameWorkspace::loadPathContentFrom(const QString &file_path)
   assert(list.size() == 1);
   QListWidgetItem *pItem = list.front();
 
-  SetupDefaultFileContext<FrameFile> context(pItem->data(Qt::UserRole).toString());
+  SetupDefaultFileContext<Child> context(pItem->data(Qt::UserRole).toString());
 
-  FrameFile *pFile = this->provideFileFrame(file_path);
+  Child *pFile = this->provideFileFrame(file_path);
   this->updateUi();
 }
 
@@ -456,7 +455,7 @@ void FrameWorkspace::setSceneBackground(const QString &name_col)
 
   // ComboBoxColors::ResetDefaultBackgroundColorName(name_bytes);
 
-  FrameFile *pOpen = this->getActiveChild();
+  Child *pOpen = this->getActiveChild();
   if (pOpen)
     pOpen->ResetBackgroundColorName(name_bytes);
 }
@@ -473,6 +472,25 @@ void FrameWorkspace::setSceneMultisample(int idx)
 // Auto-assigned event handlers:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
+void FrameWorkspace::on_actionExit__triggered()
+{
+  qApp->closeAllWindows();
+}
+
+void FrameWorkspace::on_actionAbout__triggered()
+{
+  // FrameInfo info(this);
+  // info.showModal();
+  QMessageBox::about(this, tr("ScDrv Text Browser"), tr("The <b>ScDrv</b> software parses structure text files to find molecular structures.<br>\
+It makes use of <b>SDI</b> and some other examples that demonstrates<br>\
+how to write single document interface applications using Qt."));
+}
+
+void FrameWorkspace::on_actionAboutQt__triggered()
+{
+  qApp->aboutQt();
+}
+
 void FrameWorkspace::on_actionNew__triggered()
 {
   Child *pOpen = this->getActiveChild();
@@ -485,11 +503,24 @@ void FrameWorkspace::on_actionClone__triggered()
 {
   Child *pChild = this->getActiveChild();
   assert(pChild);
+  assert(pChild->hasValidPath());
   /**
-   * if(pChild->hasPathAttached())
+   * assert(pChild->hasValidPath());
    * pChild->detachPath(); pChild->setModified(true);
    **/
   this->updateUi();
+}
+
+void FrameWorkspace::on_actionClose__triggered()
+{
+  this->close();
+  /**
+  Child *pChild = this->getActiveChild();
+  assert(pChild);
+   * if(pChild->hasPathAttached())
+   * pChild->detachPath(); pChild->setModified(true);
+  this->updateUi();
+   **/
 }
 
 void FrameWorkspace::on_actionOpen__triggered()
@@ -499,12 +530,12 @@ void FrameWorkspace::on_actionOpen__triggered()
                                  | QFileDialog::DontUseCustomDirectoryIcons // uniformity
       ;
 
-  QString all_context = FrameFile::InputFilter();
+  QString all_context = Child::InputFilter();
   QString fmt_name;
   QString dir_name = QDir::currentPath();
 
   QStringList all_paths =
-      // FrameFile::queryInputFiles(fmt_name);
+      // Child::queryInputFiles(fmt_name);
       QFileDialog::getOpenFileNames(this, tr("Input files"), dir_name, all_context, &fmt_name, options);
 
   if (all_paths.isEmpty())
@@ -521,14 +552,20 @@ void FrameWorkspace::on_actionOpen__triggered()
   this->updateUi();
 }
 
+void FrameWorkspace::on_actionReload__triggered()
+{
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen && pOpen->hasValidPath());
+}
+
 void FrameWorkspace::on_actionExportScene__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  /// pMolView-> ExportToPNG();
+  Child *pOpen = this->getActiveChild();
+  /// pView-> ExportToPNG();
 
   QString open_file = pOpen->GetFileName(); // could be empty
   QFileInfo fi(open_file);
-  QString name_filter = FrameFile::ExportFilter();
+  QString name_filter = Child::ExportFilter();
 
   QFileDialog::Options opts = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
   QString str_fmt;
@@ -536,6 +573,8 @@ void FrameWorkspace::on_actionExportScene__triggered()
 
   if (!save_file.isEmpty())
   {
+    // STUB line
+    QMessageBox::information(this, tr("Output format"), str_fmt);
     // && pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file)
     // pOpen->formattedOutput(save_file);
     // pOpen->writeSceneAsPNG(save_file); // it does work:
@@ -548,7 +587,7 @@ void FrameWorkspace::on_actionExportScene__triggered()
     else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
       pOpen->writeSceneAsPostScript(save_file);
     else
-      QMessageBox::information(this, tr("Unknown format"), tr("Show me the easy way from here to PDF, please!"),
+      QMessageBox::information(this, tr("Unknown format"), tr("Show me it! There is an easy way from here to PDF. Please!"),
                                QMessageBox::Close);
   }
 }
@@ -563,81 +602,96 @@ void FrameWorkspace::on_actionToggleLayout__triggered()
 
 void FrameWorkspace::on_actionSourceEdit__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::EditSource *pEditSrc = pOpen->setEditSource();
+  Child *pOpen = this->getActiveChild();
+  Child::EditSource *pEditSrc = pOpen->setEditSource();
   pEditSrc->setReadOnly(false);
 }
 
 void FrameWorkspace::on_actionSourceCast__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::EditSource *pEditSrc = pOpen->setEditSource();
-  pEditSrc->setReadOnly(true);
-  pEditSrc->dump();
-
-  // now we should invoke the current format context to interpret:
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  Child::EditSource *pEditSrc = pOpen->setEditSource();
+  if (pEditSrc)
+  {
+    pEditSrc->setReadOnly(true);
+    pEditSrc->dump();
+    {
+      // now we should invoke the current format context to interpret:
+    }
+  }
 }
-
 //
+void FrameWorkspace::on_actionClearAll__triggered()
+{
+}
 
 void FrameWorkspace::on_actionProjOrthogonal__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  assert(pMolView);
-  pMolView->ProjectParallel(true);
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  Child::ViewMolecule *pView = pOpen->setViewStructure();
+  assert(pView);
+  pView->ProjectParallel(true);
   this->updateUi();
 }
 
 void FrameWorkspace::on_actionProjPerspective__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  assert(pMolView);
-  pMolView->ProjectParallel(false);
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  Child::ViewMolecule *pView = pOpen->setViewStructure();
+  assert(pView);
+  pView->ProjectParallel(false);
   this->updateUi();
 }
 
 void FrameWorkspace::on_actionMolFast__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  assert(pMolView);
-  pMolView->SetMoleculeFastRender();
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  Child::ViewMolecule *pView = pOpen->setViewStructure();
+  assert(pView);
+  pView->SetMoleculeFastRender();
   this->updateUi();
 }
 void FrameWorkspace::on_actionMolBalls__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  assert(pMolView);
-  pMolView->SetMoleculeBallsSticks();
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  Child::ViewMolecule *pView = pOpen->setViewStructure();
+  assert(pView);
+  pView->SetMoleculeBallsSticks();
   this->updateUi();
 }
 void FrameWorkspace::on_actionMolStick__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  assert(pMolView);
-  pMolView->SetMoleculeSticksOnly();
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  Child::ViewMolecule *pView = pOpen->setViewStructure();
+  assert(pView);
+  pView->SetMoleculeSticksOnly();
   this->updateUi();
 }
 void FrameWorkspace::on_actionMolSpace__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
-  FrameFile::ViewMolecule *pMolView = pOpen->setViewStructure();
-  assert(pMolView);
-  pMolView->SetMoleculeSpaceFill();
+  Child *pOpen = this->getActiveChild();
+  assert(pOpen);
+  Child::ViewMolecule *pView = pOpen->setViewStructure();
+  assert(pView);
+  pView->SetMoleculeSpaceFill();
   this->updateUi();
 }
 
 void FrameWorkspace::on_actionExportCoords__triggered()
 {
+  QMessageBox::information(this, tr("Action"),
+                           tr("Here should be the model coodinates export"));
 }
 
 void FrameWorkspace::on_actionSetFont__triggered()
 {
-  FrameFile *pOpen = this->getActiveChild();
+  Child *pOpen = this->getActiveChild();
   assert(pOpen);
   QWidget *pW = pOpen->setEditSource();
   assert(pW);
@@ -665,4 +719,18 @@ void FrameWorkspace::on_actionPrint__triggered()
     return;
 
   // go on printing:
+}
+
+void FrameWorkspace::on_actionPageSetup__triggered()
+{
+  QPrintPreviewDialog dialog(this);
+  // STUB yet blocked
+  // connect(&dialog,&QPrintPreviewDialog::paintRequested,file_,&Child::doPrintActive);
+  if (dialog.exec() != QDialog::Accepted)
+    return;
+  // go on printing???
+}
+
+void FrameWorkspace::on_actionOptions__triggered()
+{
 }

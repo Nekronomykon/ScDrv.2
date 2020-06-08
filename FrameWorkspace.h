@@ -123,17 +123,49 @@ private:
   // QPointer<QPrinterInfo> printer_info_;
 
 private slots:
-  void on_actionNew__triggered();
-  void on_actionClone__triggered();
+  // most common actions generally finished ;)
+  void on_actionExit__triggered();    // [Exit]       --> trying to close all browser frames and finalize the program
+  void on_actionAbout__triggered();   // [About]      --> show the info box / screen / frame of the program
+  void on_actionAboutQt__triggered(); // [About At]   --> show the Qt information box
+
+  // next actions, by menu:
+  // menuFile_
+  void on_actionNew__triggered();   // [New]            --> create a new empty file browser frame
+  void on_actionClone__triggered(); // [Clone]          --> make this frame unattached to any file path
+                                    // with 'modified' flag set. An easy means of copying content to edit ;)
   //
-  void on_actionOpen__triggered();
+  void on_actionOpen__triggered(); // [Open]           --> query for a file path; while it is obtained and valid,
+                                   // and if this frame is attached already to a path or modified, try
+                                   // to find it opened already and still unmodified; if such not found,
+                                   // create a new browser frame, attach it to the path and then read its content
+                                   // as the data text source.
+                                   // Otherwise, attach the path to this frame and read its content as the data text source.
   //
-  void on_actionExportScene__triggered();
+  void on_actionReload__triggered(); // [Reload]         --> meaningful if this frame is attached to a valid file path;
+                                     // If so, and if it is modified, query for the changes to be abandoned.
+                                     // If Ok, save its current path, do [Clear all], attach the path (again)
+                                     // to this frame and read its content as the data source.
+                                     // If Retry, save its current path, create a new browser frame, attach it
+                                     // to the path and read its content as the data source.
+                                     // if Cancel, cancel it ;)
+  //
+  void on_actionExportScene__triggered(); // [Export --> Scene] --> save the current scene into an image file:
   void on_actionExportCoords__triggered();
   //
   void on_actionPrint__triggered();
+  void on_actionPageSetup__triggered();
   //
-  void on_actionToggleLayout__triggered();
+  void on_actionClose__triggered(); // [Close]          --> trying to close this browser frame
+  //
+  //
+  // menuEdit_
+  void on_actionClearAll__triggered(); // [Clear all]  --> remove / empty all data from this frame.
+                                       // If path is attached, modified flag is set; otherwise is is cleared
+  // menuView_
+  void on_actionOptions__triggered(); // [Options]        --> the most common form of setup...
+                                      // menuHelp_
+  // menuView_
+  void on_actionToggleLayout__triggered(); // [Toggle Layout] --> toggle RTL <=> LTR UI Layout...
   //
   void on_actionSourceEdit__triggered();
   void on_actionSourceCast__triggered();
@@ -146,7 +178,10 @@ private slots:
   void on_actionMolStick__triggered();
   void on_actionMolSpace__triggered();
   //
+  // menuTools_
   void on_actionSetFont__triggered();
+  // menuFile_
+  //
 };
 
 #endif // !Frame_Workspace_h
