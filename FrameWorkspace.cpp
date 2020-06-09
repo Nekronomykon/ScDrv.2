@@ -94,8 +94,9 @@ int FrameWorkspace::hasRecentFiles()
 
 void FrameWorkspace::setupActions()
 {
-  // const QIcon iconNew = QIcon::fromTheme("document-new", QIcon(":/images/New.png"));
-  const QIcon iconNew(":/images/New.png");
+  // TODO: setup all theme-named icons:
+  // https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
+  const QIcon iconNew = QIcon::fromTheme("document-new", QIcon(":/images/New.png"));
   actionNew_->setIcon(iconNew);
   actionNew_->setShortcuts(QKeySequence::New);
 
