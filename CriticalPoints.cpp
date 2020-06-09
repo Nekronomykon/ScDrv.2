@@ -48,7 +48,7 @@ void CriticalPoints::PrintSelf(ostream &os, vtkIndent indent)
 //-----------------------------------------------------------------------------
 bool CriticalPoints::SetAtomCriticalPointAt(vtkIdType idx, const double *xyz)
 {
-  if (this->GetPointSize() >= idx)
+  if (this->GetPointSize() <= idx)
     return false;
   points_->SetPoint(idx, xyz);
   point_types_->SetValue(idx, AtomMaximumCP);
@@ -58,7 +58,7 @@ bool CriticalPoints::SetAtomCriticalPointAt(vtkIdType idx, const double *xyz)
 //-----------------------------------------------------------------------------
 bool CriticalPoints::SetBondCriticalPointAt(vtkIdType idx, const double *xyz)
 {
-  if (this->GetPointSize() >= idx)
+  if (this->GetPointSize() <= idx)
     return false;
   points_->SetPoint(idx, xyz);
   point_types_->SetValue(idx, BondSaddleCP);
