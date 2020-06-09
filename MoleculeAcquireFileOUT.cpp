@@ -43,7 +43,7 @@ int MoleculeAcquireFileOUT::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
 
   if (!std::getline(file_in, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileOUT error: premature EOF in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileOUT error: premature EOF in " << this->path());
     return 0;
   }
   do
@@ -74,7 +74,7 @@ int MoleculeAcquireFileOUT::ReadMolecule(istream &file_in, vtkMolecule *output)
 
   if (!getline(file_in, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileOUT error: premature EOF in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileOUT error: premature EOF in " << this->path());
     return 0;
   }
   do
@@ -86,7 +86,7 @@ int MoleculeAcquireFileOUT::ReadMolecule(istream &file_in, vtkMolecule *output)
     {
       if (!getline(file_in, str_line))
       {
-        vtkErrorMacro(<< "MoleculeAcquireFileOUT error: premature EOF in " << this->FileName());
+        vtkErrorMacro(<< "MoleculeAcquireFileOUT error: premature EOF in " << this->path());
         return 0;
       }
 
@@ -96,11 +96,11 @@ int MoleculeAcquireFileOUT::ReadMolecule(istream &file_in, vtkMolecule *output)
       {
         if (nResult > 0)
           vtkErrorMacro(<< "MoleculeAcquireFileOUT error reading atom #" << nResult
-                        << " from " << this->FileName()
+                        << " from " << this->path()
                         << " Premature EOF while reading molecule.");
         if (nResult > 0)
           vtkErrorMacro(<< "MoleculeAcquireFileOUT error parsing atom #" << -nResult
-                        << " from " << this->FileName()
+                        << " from " << this->path()
                         << " Premature EOF while reading molecule.");
         return 0;
       }

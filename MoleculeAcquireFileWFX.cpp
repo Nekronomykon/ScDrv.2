@@ -36,7 +36,7 @@ int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
   string title(Traits::ReadTagContent(file_in, "Title"));
   if (title.empty())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Title> section in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Title> section in " << this->path());
   }
   // this->ResetTitle(title);
 
@@ -44,7 +44,7 @@ int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
   inpNAtoms >> nAtoms;
   if (!nAtoms)
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Number of Nuclei> section in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Number of Nuclei> section in " << this->path());
     return 0;
   }
   this->ResetNumberOfAtoms(nAtoms);
@@ -52,14 +52,14 @@ int MoleculeAcquireFileWFX::ParseStreamInfo(BaseInput &file_in, vtkInformationVe
   bufAtomNumbers_ = Traits::ReadTagContent(file_in, "Atomic Numbers");
   if (bufAtomNumbers_.empty())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Atomic Numbers> section in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Atomic Numbers> section in " << this->path());
     return 0;
   }
 
   bufAtomCoords_ = Traits::ReadTagContent(file_in, "Nuclear Cartesian Coordinates");
   if (bufAtomCoords_.empty())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Nuclear Cartesian Coordinates> section in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFX error reading <Nuclear Cartesian Coordinates> section in " << this->path());
     return 0;
   }
 

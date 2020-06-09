@@ -83,7 +83,7 @@ public:
     if (!obj.readTextSource(name))
       return false;
 
-    obj.ResetFileName(name);
+    obj.resetPath(name);
     obj.getEditSource()->setReadOnly(false);
     bool bRes = true;
     if (this->hasBuild())
@@ -102,9 +102,9 @@ public:
     return (this->hasExport()) ? obj.*export_operation_(name) : false;
   }
 
-  friend bool operator< <>(const FileFormatContext<T> &f0, const FileFormatContext<T> &f1);
-  friend bool operator== <>(const FileFormatContext<T> &f0, const FileFormatContext<T> &f1);
-  friend bool operator!= <>(const FileFormatContext<T> &f0, const FileFormatContext<T> &f1);
+  friend bool operator <  <>(const FileFormatContext<T> &f0, const FileFormatContext<T> &f1);
+  friend bool operator == <>(const FileFormatContext<T> &f0, const FileFormatContext<T> &f1);
+  friend bool operator != <>(const FileFormatContext<T> &f0, const FileFormatContext<T> &f1);
 
 private:
   TypeFileName name_format_;

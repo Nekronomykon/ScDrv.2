@@ -40,7 +40,7 @@ int MoleculeAcquireFileMGP::ParseStreamInfo(BaseInput &infile,vtkInformationVect
   string one_line;
   if(!getline(infile,one_line) || !getline(infile, one_line) || !getline(infile, one_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileMGP unexpectedly finished in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileMGP unexpectedly finished in " << this->path());
     return 0;
   }
 
@@ -64,7 +64,7 @@ int MoleculeAcquireFileMGP::ReadMolecule(istream &infile, vtkMolecule *pMol)
   string one_line;
   if (!getline(infile, one_line) || !getline(infile, one_line) || !getline(infile, one_line))
   {
-    vtkErrorMacro(<< "MGP file is unexpectedly finished: " << this->FileName());
+    vtkErrorMacro(<< "MGP file is unexpectedly finished: " << this->path());
     return 0;
   }
   int nResult = Traits::AppendAtoms(infile, this->GetNumberOfAtoms(), pMol);
@@ -73,12 +73,12 @@ int MoleculeAcquireFileMGP::ReadMolecule(istream &infile, vtkMolecule *pMol)
     vtkErrorMacro("MGP format is broken badly:" << endl);
     if (nResult > 0)
       vtkErrorMacro(<< "MoleculeAcquireFileMGP error reading atom #" << nResult
-        << " from " << this->FileName()
+        << " from " << this->path()
         << " Premature EOF while reading molecule."
       );
     if (nResult < 0)
       vtkErrorMacro(<< "MoleculeAcquireFileMGP error parsing atom #" << -nResult
-        << " from " << this->FileName()
+        << " from " << this->path()
         << " Premature EOF while reading molecule."
       );
     return 0;

@@ -257,24 +257,24 @@ void FrameWorkspace::updateRecentFilesMenu()
 
 void FrameWorkspace::updateUi()
 {
-  Child *pActive = this->getActiveChild();
-  bool bHasChild(pActive != nullptr);
+  Child *pFile = this->getActiveChild();
+  bool bHasChild(pFile != nullptr);
 
-  bool bHasPath(bHasChild && pActive->HasFileName());
+  bool bHasPath(bHasChild && pFile->hasPath());
   // actionReload_->isEnabled(pActive && pActive->hasValidPath());
-  actionSave_->setEnabled(bHasPath && pActive->isModified());
-  actionReload_->setEnabled(bHasPath && pActive->isModified());
+  actionSave_->setEnabled(bHasPath && pFile->isModified());
 
-  Child::ViewMolecule *pV = !pActive ? nullptr : pActive->getViewStructure();
+
+  actionReload_->setEnabled( bHasChild && pFile->hasValidPath() );
+
+  Child::ViewMolecule *pV = !pFile ? nullptr : pFile->getViewStructure();
   bool bHasGraph(bHasChild && pV != nullptr);
 
-  //vtkCamera*pCam = !pV ? nullptr : pV->GetActiveCamera();
-
   actionProjOrthogonal_->setEnabled(bHasGraph);
-  actionProjOrthogonal_->setChecked(pV ? pV->isProjectOrthogonal() : false);
+  actionProjOrthogonal_->setChecked(!pV ? false : pV->isProjectOrthogonal());
 
   actionProjPerspective_->setEnabled(bHasGraph);
-  actionProjPerspective_->setChecked(pV ? !pV->isProjectOrthogonal() : false);
+  actionProjPerspective_->setChecked(!pV ? false : pV->isProjectPerspective() );
 
   actionMolBalls_->setChecked(bHasGraph ? pV->MoleculeIsBallsSticks() : false);
   actionMolBalls_->setEnabled(bHasGraph);
@@ -495,7 +495,7 @@ void FrameWorkspace::on_actionNew__triggered()
 {
   Child *pOpen = this->getActiveChild();
   pOpen->doClearAll();
-  pOpen->ResetFileName();
+  pOpen->resetPath();
   this->updateUi();
 }
 
@@ -504,10 +504,8 @@ void FrameWorkspace::on_actionClone__triggered()
   Child *pChild = this->getActiveChild();
   assert(pChild);
   assert(pChild->hasValidPath());
-  /**
-   * assert(pChild->hasValidPath());
-   * pChild->detachPath(); pChild->setModified(true);
-   **/
+  pChild->resetPath();
+  pChild->setModified(true);
   this->updateUi();
 }
 
@@ -525,9 +523,9 @@ void FrameWorkspace::on_actionClose__triggered()
 
 void FrameWorkspace::on_actionOpen__triggered()
 {
-  QFileDialog::Options options = QFileDialog::DontUseNativeDialog           // portability
-                                 | QFileDialog::ReadOnly                    // read-only is also to read
-                                 | QFileDialog::DontUseCustomDirectoryIcons // uniformity
+  QFileDialog::Options options =  QFileDialog::DontUseNativeDialog         // portability
+                                | QFileDialog::ReadOnly                    // read-only is also to read
+                                | QFileDialog::DontUseCustomDirectoryIcons // uniformity
       ;
 
   QString all_context = Child::InputFilter();
@@ -562,8 +560,9 @@ void FrameWorkspace::on_actionExportScene__triggered()
 {
   Child *pOpen = this->getActiveChild();
   /// pView-> ExportToPNG();
+  assert(pOpen);
 
-  QString open_file = pOpen->GetFileName(); // could be empty
+  QString open_file(pOpen->path()); // could be empty
   QFileInfo fi(open_file);
   QString name_filter = Child::ExportFilter();
 
@@ -571,25 +570,23 @@ void FrameWorkspace::on_actionExportScene__triggered()
   QString str_fmt;
   QString save_file = QFileDialog::getSaveFileName(this, tr("[Image file name]"), fi.completeBaseName(), name_filter, &str_fmt, opts);
 
-  if (!save_file.isEmpty())
-  {
-    // STUB line
-    QMessageBox::information(this, tr("Output format"), str_fmt);
-    // && pOpen->ImplementOutputFormat(FileFrame::CastOutputPathFormat(str_fmt), save_file)
-    // pOpen->formattedOutput(save_file);
-    // pOpen->writeSceneAsPNG(save_file); // it does work:
-    if (save_file.endsWith(".png") || str_fmt.endsWith("(*.png)"))
-      pOpen->writeSceneAsPNG(save_file);
-    else if (save_file.endsWith(".jpg") || str_fmt.endsWith("(*.jpg)"))
-      pOpen->writeSceneAsJPEG(save_file);
-    else if (save_file.endsWith(".bmp") || str_fmt.endsWith("(*.bmp)"))
-      pOpen->writeSceneAsBitmap(save_file);
-    else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
-      pOpen->writeSceneAsPostScript(save_file);
-    else
-      QMessageBox::information(this, tr("Unknown format"), tr("Show me it! There is an easy way from here to PDF. Please!"),
-                               QMessageBox::Close);
-  }
+  if (save_file.isEmpty())
+    return; // cancelled
+
+  // STUB line
+  QMessageBox::information(this, tr("Output format"), str_fmt);
+  // Child::FileContext fmt = Child::ContextFrom
+  if (save_file.endsWith(".png") || str_fmt.endsWith("(*.png)"))
+    pOpen->writeSceneAsPNG(save_file);
+  else if (save_file.endsWith(".jpg") || str_fmt.endsWith("(*.jpg)"))
+    pOpen->writeSceneAsJPEG(save_file);
+  else if (save_file.endsWith(".bmp") || str_fmt.endsWith("(*.bmp)"))
+    pOpen->writeSceneAsBitmap(save_file);
+  else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
+    pOpen->writeSceneAsPostScript(save_file);
+  else
+    QMessageBox::information(this, tr("Unknown format"), tr("Show me it! There is an easy way from here to PDF. Please!"),
+                             QMessageBox::Close);
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()

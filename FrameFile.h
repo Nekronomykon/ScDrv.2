@@ -221,7 +221,6 @@ private:
   static QMap<FileContext, QString> all_formats;
   static FileContext format_active;
 
-  QString pathFile_;
   bool isModified_ = false;
 
   FileContext format_current_;

@@ -41,14 +41,14 @@ int MoleculeAcquireFileARC::RequestInformation(vtkInformation *vtkNotUsed(reques
 {
   vtkInformation *outInfo = outputVector->GetInformationObject(0);
 
-  if (!this->HasFileName())
+  if (!this->hasPath())
     return 0;
 
-  std::ifstream file_in(this->GetFileName());
+  std::ifstream file_in(this->getPath());
 
   if (!file_in.is_open())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileARC error opening file: " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileARC error opening file: " << this->path());
     return 0;
   }
 
@@ -57,14 +57,14 @@ int MoleculeAcquireFileARC::RequestInformation(vtkInformation *vtkNotUsed(reques
   std::string str_line;
   if (!std::getline(file_in, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->path());
     return 0;
   }
   do
   {
     if (!file_in)
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->FileName());
+      vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->path());
       return 0;
     }
     if (str_line.find("FINAL GEOMETRY OBTAINED") != std::string::npos)
@@ -75,7 +75,7 @@ int MoleculeAcquireFileARC::RequestInformation(vtkInformation *vtkNotUsed(reques
   {
     if (!std::getline(file_in, str_line))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->FileName());
+      vtkErrorMacro(<< "MoleculeAcquireFileARC: unexpected EOF at " << this->path());
       return 0;
     }
 
@@ -95,7 +95,7 @@ int MoleculeAcquireFileARC::ReadMolecule(istream &file_in, vtkMolecule *output)
   string one_line;
   if (!getline(file_in, one_line) || !getline(file_in, one_line) || !getline(file_in, one_line))
   {
-    vtkErrorMacro(<< "ARC file is unexpectedly finished: " << this->FileName());
+    vtkErrorMacro(<< "ARC file is unexpectedly finished: " << this->path());
     return 0;
   }
   // construct vtkMolecule
@@ -104,11 +104,11 @@ int MoleculeAcquireFileARC::ReadMolecule(istream &file_in, vtkMolecule *output)
   {
     if (nResult > 0)
       vtkErrorMacro(<< "MoleculeAcquireFileARC error reading atom #" << nResult
-                    << " from " << this->FileName()
+                    << " from " << this->path()
                     << " Premature EOF while reading molecule.");
     if (nResult < 0)
       vtkErrorMacro(<< "MoleculeAcquireFileARC error parsing atom #" << -nResult
-                    << " from " << this->FileName()
+                    << " from " << this->path()
                     << " Premature EOF while reading molecule.");
     return 0;
   }

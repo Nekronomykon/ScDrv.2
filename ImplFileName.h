@@ -44,16 +44,13 @@ private:
 protected:
 
 public:
-  const TypeFileName &FileName() const { return nameFile_; }
-  TypeFileName &      FileName()       { return nameFile_; }
-  TypeFileName     GetFileName() const { return nameFile_; }
+  const TypeFileName &path() const { return nameFile_; }
+  TypeFileName &      path()       { return nameFile_; }
+  TypeFileName     getPath() const { return nameFile_; }
 
-  bool HasFileName() const
-  {
-    return !isItEmpty(nameFile_);
-  }
+  bool hasPath() const  { return !isItEmpty(nameFile_);  }
 
-  TypeFileName ResetFileName(TypeFileName nameNew = TypeFileName())
+  TypeFileName resetPath(TypeFileName nameNew = TypeFileName())
   {
     nameNew.swap(nameFile_);
     T* pT = static_cast<T*>(this);
@@ -61,10 +58,9 @@ public:
     return nameNew;
   }
 
-  const char *GetFileNamePtr() const
+  const char *getPathPtr() const
   {
-    const T *pT = static_cast<const T *>(this);
-    return pT->HasFileName() ? getPtrFrom(nameFile_) : nullptr;
+    return isItEmpty(nameFile_) ? nullptr : getPtrFrom(nameFile_);
   }
 
   void InterpretFileName(){}

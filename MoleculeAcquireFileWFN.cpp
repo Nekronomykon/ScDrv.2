@@ -36,14 +36,14 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   string title;
   if (!getline(file_in, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading title string: " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading title string: " << this->path());
     return 0;
   }
   title = str_line;
 
   if (!getline(file_in, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading sizes string: " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading sizes string: " << this->path());
     return 0;
   }
 
@@ -60,7 +60,7 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
         >> nPrims >> skip                    // "PRIMITIVES"
         >> nAtoms))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN error: wrong SIZES string at " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFN error: wrong SIZES string at " << this->path());
     return 0;
   }
 
@@ -69,7 +69,7 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
     vtkErrorMacro(<< "MoleculeAcquireFileWFN error: wrong SIZES: nCenters=" << nAtoms
                   << " nOrbitals=" << nOrbs
                   << " nPrimitives=" << nPrims
-                  << " at " << this->FileName());
+                  << " at " << this->path());
     return 0;
   }
 
@@ -84,7 +84,7 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   {
     if (!getline(file_in, str_line))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading atom string #" << i + 1 << " in " << this->FileName());
+      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading atom string #" << i + 1 << " in " << this->path());
       return 0;
     }
   }
@@ -94,7 +94,7 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   {
     if (!getline(file_in, str_line))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading CENTRE ASSIGNMENTS string #" << (++i) << " in " << this->FileName());
+      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading CENTRE ASSIGNMENTS string #" << (++i) << " in " << this->path());
       return 0;
     }
   }
@@ -102,7 +102,7 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   {
     if (!getline(file_in, str_line))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading TYPE ASSIGNMENTS string #" << (++i) << " in " << this->FileName());
+      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading TYPE ASSIGNMENTS string #" << (++i) << " in " << this->path());
       return 0;
     }
   }
@@ -113,7 +113,7 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   {
     if (!getline(file_in, str_line))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading EXPONENTS string #" << (++i) << " in " << this->FileName());
+      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading EXPONENTS string #" << (++i) << " in " << this->path());
       return 0;
     }
   }
@@ -122,14 +122,14 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
   {
     if (!getline(file_in, str_line))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ORBITAL #" << (++j) << " header in " << this->FileName());
+      vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ORBITAL #" << (++j) << " header in " << this->path());
       return 0;
     }
     for (int i = 0; i < nTextSectionHeight; ++i)
     {
       if (!getline(file_in, str_line))
       {
-        vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ORBITAL #" << (++j) << " in string #" << (++i) << " in " << this->FileName());
+        vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ORBITAL #" << (++j) << " in string #" << (++i) << " in " << this->path());
         return 0;
       }
     }
@@ -137,12 +137,12 @@ int MoleculeAcquireFileWFN::ParseStreamInfo(BaseInput& file_in,vtkInformationVec
 
   if (!getline(file_in, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading END DATA string in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading END DATA string in " << this->path());
     return 0;
   }
   if (!getline(file_in, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ENERGY/VIRIAL string in " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading ENERGY/VIRIAL string in " << this->path());
     return 0;
   }
 
@@ -159,14 +159,14 @@ int MoleculeAcquireFileWFN::ReadMolecule(istream& file_in, vtkMolecule* output)
   {
     if (!getline(file_in, str_line))
     {
-      vtkErrorMacro("MoleculeAcquireFileWFN error: premature EOF while reading title from" << this->FileName());
+      vtkErrorMacro("MoleculeAcquireFileWFN error: premature EOF while reading title from" << this->path());
       return 0;
     }
   } while (str_line.empty());
 
   if (!getline(file_in, str_line))
   {
-    vtkErrorMacro("MoleculeAcquireFileWFN error: premature EOF while reading sizes from" << this->FileName());
+    vtkErrorMacro("MoleculeAcquireFileWFN error: premature EOF while reading sizes from" << this->path());
     return 0;
   }
 
@@ -182,13 +182,13 @@ int MoleculeAcquireFileWFN::ReadMolecule(istream& file_in, vtkMolecule* output)
         >> nPrims >> skip                    // "PRIMITIVES"
         >> nAtoms))
   {
-    vtkErrorMacro("MoleculeAcquireFileWFN error: wrong SIZES string at " << this->FileName());
+    vtkErrorMacro("MoleculeAcquireFileWFN error: wrong SIZES string at " << this->path());
     return 0;
   }
 
   if (nAtoms != this->GetNumberOfAtoms())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading atom number " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading atom number " << this->path()
                   << " Premature EOF while reading molecule.");
     // file_in.close();
     return 0;
@@ -200,11 +200,11 @@ int MoleculeAcquireFileWFN::ReadMolecule(istream& file_in, vtkMolecule* output)
   {
     if (nResult > 0)
       vtkErrorMacro(<< "MoleculeAcquireFileWFN error reading atom #" << nResult
-                    << " from " << this->FileName()
+                    << " from " << this->path()
                     << " Premature EOF while reading molecule.");
     if (nResult > 0)
       vtkErrorMacro(<< "MoleculeAcquireFileWFN error parsing atom #" << -nResult
-                    << " from " << this->FileName()
+                    << " from " << this->path()
                     << " Premature EOF while reading molecule.");
     return 0;
   }

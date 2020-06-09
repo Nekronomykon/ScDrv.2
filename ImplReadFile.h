@@ -46,14 +46,14 @@ public:
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
     T *pT = static_cast<T *>(this);
 
-    if (!pT->HasFileName())
+    if (!pT->hasPath())
       return 0;
 
-    std::ifstream file_in(pT->GetFileName());
+    std::ifstream file_in(pT->getPath());
 
     if (!file_in.is_open())
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileXYZ error opening file: " << pT->FileName());
+      vtkErrorMacro(<< "ImplReadFile<> error opening file: " << pT->path());
       return 0;
     }
 
@@ -64,14 +64,14 @@ public:
   {
     T *pT = static_cast<T *>(this);
 
-    if (!pT->HasFileName())
+    if (!pT->hasPath())
       return 0;
 
-    std::ifstream file_in(pT->GetFileName());
+    std::ifstream file_in(pT->getPath());
 
     if (!file_in.is_open())
     {
-      vtkErrorMacro(<< "Error opening file: " << pT->FileName());
+      vtkErrorMacro(<< "Error opening file: " << pT->path());
       return 0;
     }
 

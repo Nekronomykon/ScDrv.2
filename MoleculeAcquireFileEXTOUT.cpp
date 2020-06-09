@@ -59,12 +59,12 @@ int MoleculeAcquireFileEXTOUT::ReadMolecule(istream &infile, vtkMolecule *pMol)
     vtkErrorMacro("EXTOUT format is broken badly:" << endl);
     if (nResult > 0)
       vtkErrorMacro(<< "MoleculeAcquireFileEXTOUT error reading atom #" << nResult
-        << " from " << this->FileName()
+        << " from " << this->path()
         << " Premature EOF while reading molecule."
       );
     if (nResult < 0)
       vtkErrorMacro(<< "MoleculeAcquireFileEXTOUT error parsing atom #" << -nResult
-        << " from " << this->FileName()
+        << " from " << this->path()
         << " Premature EOF while reading molecule."
       );
     return 0;

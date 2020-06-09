@@ -175,7 +175,7 @@ int MoleculeAcquireFileQTAIM::ParseStreamData(std::istream &src, vtkInformationV
   CriticalPoints *pCP = CriticalPoints::SafeDownCast(vtkDataObject::GetData(out, PortCritical));
   if (!pCP)
   {
-    vtkErrorMacro(<< "No CriticalPoints as output for " << this->GetFileName() << " -- skipping");
+    vtkErrorMacro(<< "No CriticalPoints as output for " << this->getPath() << " -- skipping");
     return 1;
   }
 

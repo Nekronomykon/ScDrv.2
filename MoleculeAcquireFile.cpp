@@ -33,9 +33,9 @@ void MoleculeAcquireFile::PrintSelf(ostream &os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 
-  bool bHas = this->HasFileName();
+  bool bHas = this->hasPath();
 
   os << indent << "FileName"
-    << (bHas ? this->GetFileName() : "(null)");
+    << (bHas ? this->getPath() : "(null)");
   os << std::endl;
 }

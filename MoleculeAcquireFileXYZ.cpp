@@ -43,7 +43,7 @@ int MoleculeAcquireFileXYZ::ParseStreamInfo(BaseInput& inp,vtkInformationVector*
   string str_line;
   if (!getline(inp, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->path());
     return 0;
   }
   istringstream ssinp(str_line);
@@ -55,7 +55,7 @@ int MoleculeAcquireFileXYZ::ParseStreamInfo(BaseInput& inp,vtkInformationVector*
   string title;
   if (!std::getline(inp, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading title string: " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading title string: " << this->path());
     return 0;
   }
 
@@ -72,7 +72,7 @@ int MoleculeAcquireFileXYZ::ReadMolecule(istream &inp, vtkMolecule *output)
 
   if (!getline(inp, str_line))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading number of atoms:" << this->path());
     return 0;
   }
   istringstream ssinp(str_line);
@@ -81,7 +81,7 @@ int MoleculeAcquireFileXYZ::ReadMolecule(istream &inp, vtkMolecule *output)
 
   if (nbAtoms != this->GetNumberOfAtoms())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom number " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom number " << this->path()
       << " Premature EOF while reading molecule.");
     return 0;
   }
@@ -94,12 +94,12 @@ int MoleculeAcquireFileXYZ::ReadMolecule(istream &inp, vtkMolecule *output)
   {
     if (nResult > 0)
       vtkErrorMacro(<< "MoleculeAcquireFileXYZ error reading atom #" << nResult
-        << " from " << this->FileName()
+        << " from " << this->path()
         << " Premature EOF while reading molecule."
       );
     if (nResult < 0)
       vtkErrorMacro(<< "MoleculeAcquireFileXYZ error parsing atom #" << -nResult
-        << " from " << this->FileName()
+        << " from " << this->path()
         << " Premature EOF while reading molecule."
       );
     return 0;

@@ -45,14 +45,14 @@ int MoleculeAcquireFileCUBE::RequestInformation(vtkInformation *vtkNotUsed(reque
                                                 vtkInformationVector **vtkNotUsed(inputVector),
                                                 vtkInformationVector *vtkNotUsed(outputVector))
 {
-  if (!this->HasFileName())
+  if (!this->hasPath())
     return 0;
 
-  ifstream file_in(this->GetFileName());
+  ifstream file_in(this->getPath());
 
   if (!file_in.is_open())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error opening file: " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error opening file: " << this->path());
     return 0;
   }
 
@@ -71,20 +71,20 @@ int MoleculeAcquireFileCUBE::RequestInformation(vtkInformation *vtkNotUsed(reque
   int n1, n2, n3;
   if (!(file_in >> n1 >> tmpd >> tmpd >> tmpd))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file " << this->path()
                   << " Premature EOF while grid size.");
     return 0;
   }
 
   if (!(file_in >> n2 >> tmpd >> tmpd >> tmpd))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                   << " Premature EOF while grid size.");
     return 0;
   }
   if (!(file_in >> n3 >> tmpd >> tmpd >> tmpd))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                   << " Premature EOF while grid size.");
     return 0;
   }
@@ -123,16 +123,14 @@ int MoleculeAcquireFileCUBE::RequestData(
   // Output 0 (the default is the vtkMolecule)
   // Output 1 will be the gridded Image data
 
-  if (!this->HasFileName())
-  {
+  if (!this->hasPath())
     return 0;
-  }
 
-  ifstream file_in(this->GetFileName());
+  ifstream file_in(this->getPath());
 
   if (!file_in.is_open())
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error opening file: " << this->FileName());
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error opening file: " << this->path());
     return 0;
   }
 
@@ -143,7 +141,7 @@ int MoleculeAcquireFileCUBE::RequestData(
   //
   if (!(file_in >> NumberOfAtoms >> elements[3] >> elements[7] >> elements[11]))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                   << " Premature EOF while reading atoms, x-origin y-origin z-origin.");
     return 0;
   }
@@ -154,19 +152,19 @@ int MoleculeAcquireFileCUBE::RequestData(
   }
   if (!(file_in >> n1 >> elements[0] >> elements[4] >> elements[8]))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                   << " Premature EOF while reading elements.");
     return 0;
   }
   if (!(file_in >> n2 >> elements[1] >> elements[5] >> elements[9]))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                   << " Premature EOF while reading elements.");
     return 0;
   }
   if (!(file_in >> n3 >> elements[2] >> elements[6] >> elements[10]))
   {
-    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+    vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                   << " Premature EOF while reading elements.");
     return 0;
   }
@@ -190,7 +188,7 @@ int MoleculeAcquireFileCUBE::RequestData(
   {
     if (!(file_in >> atomType >> dummy >> xyz[0] >> xyz[1] >> xyz[2]))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+      vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                     << " Premature EOF while reading molecule.");
       // file_in.close();
       return 0;
@@ -206,7 +204,7 @@ int MoleculeAcquireFileCUBE::RequestData(
   {
     if (!(file_in >> numberOfOrbitals))
     {
-      vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+      vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                     << " Premature EOF while reading number of orbitals.");
       // file_in.close();
       return 0;
@@ -215,7 +213,7 @@ int MoleculeAcquireFileCUBE::RequestData(
     {
       if (!(file_in >> tmp))
       {
-        vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->FileName()
+        vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file: " << this->path()
                       << " Premature EOF while reading orbitals.");
         // file_in.close();
         return 0;
@@ -250,7 +248,7 @@ int MoleculeAcquireFileCUBE::RequestData(
       {
         if (!(file_in >> tmp))
         {
-          vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file " << this->FileName()
+          vtkErrorMacro(<< "MoleculeAcquireFileCUBE error reading file " << this->path()
                         << ": premature EOF while reading field scalars");
           return 0;
         }

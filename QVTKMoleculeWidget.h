@@ -53,7 +53,6 @@ namespace vtk
 
 class QVTKMoleculeWidget
     : public QVTKOpenGLNativeWidget
-// : public QVTKOpenGLWidget
 {
   Q_OBJECT
 public:
@@ -71,7 +70,8 @@ protected:
 
 public:
   void ShowMolecule(vtkMolecule * /*pMol*/ = nullptr);
-  bool isProjectOrthogonal() const {return isProjectOrthogonal_;}
+  bool isProjectOrthogonal()  const { return  isProjectOrthogonal_; }
+  bool isProjectPerspective() const { return !isProjectOrthogonal_; }
 
   vtkRenderer *GetRenderer() const { return renderer_; }
   vtkCamera *GetActiveCamera() { return !renderer_ ? nullptr : renderer_->GetActiveCamera(); }
@@ -124,7 +124,7 @@ private:
   
 
 private:
-  bool isProjectOrthogonal_;
+  bool isProjectOrthogonal_ = false;
   Renderer renderer_;
   BgColorType bgColor_;
   MapMolecule mapMolecule_;

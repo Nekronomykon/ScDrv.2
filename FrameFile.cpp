@@ -268,9 +268,9 @@ QString FrameFile::ExportFilter()
 
 bool FrameFile::hasValidPath() const
 {
-  if (pathFile_.isEmpty())
+  if (!this->hasPath())
     return false;
-  QFileInfo fi(pathFile_);
+  QFileInfo fi(this->getPath());
   return QFile::exists(fi.canonicalFilePath());
 }
 
@@ -332,16 +332,16 @@ bool FrameFile::interpretNone()
   return true;
 }
 
-template <class T>
+template <class TGet>
 bool FrameFile::acquireUsing()
 {
   // convert to const char*
   TypeFileName str = this->dumpSource();
   if (!str.isEmpty())
   {
-    vtkSmartPointer<T> reader(vtkSmartPointer<T>::New());
+    vtkSmartPointer<TGet> reader(vtkSmartPointer<TGet>::New());
     QByteArray bytes = str.toLatin1();
-    reader->ResetFileName(bytes.data());
+    reader->resetPath(bytes.data());
 
     // NewMolecule molNew;
     // reader->SetOutput( molNew );
@@ -451,7 +451,7 @@ ViewMoleculeAtomic *FrameFile::setEditAtomic()
 
 void FrameFile::InterpretFileName()
 {
-  this->setWindowTitle(this->GetFileName() + tr("[*]"));
+  this->setWindowTitle(this->getPath() + tr("[*]"));
 }
 
 void FrameFile::doClearAll()
@@ -492,8 +492,8 @@ FrameFile::FileContext FrameFile::getFormat() const { return format_current_; }
 
 void FrameFile::doReload()
 {
-  if (this->HasFileName())
-    this->readCurrentFormatFrom(this->GetFileName());
+  if (this->hasValidPath())
+    this->readCurrentFormatFrom(this->getPath());
 }
 
 bool FrameFile::readTextSource(const TypeFileName &from)
