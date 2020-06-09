@@ -253,6 +253,7 @@ void FrameWorkspace::openRecentFile()
 
 void FrameWorkspace::updateRecentFilesMenu()
 {
+  // STUB born
 }
 
 void FrameWorkspace::updateUi()
@@ -493,19 +494,20 @@ void FrameWorkspace::on_actionAboutQt__triggered()
 
 void FrameWorkspace::on_actionNew__triggered()
 {
-  Child *pOpen = this->getActiveChild();
-  pOpen->doClearAll();
-  pOpen->resetPath();
+  // FrameWorkspace::NewWorkspace(this);
+  Child *pFile = this->getActiveChild();
+  pFile->doClearAll();
+  pFile->resetPath();
   this->updateUi();
 }
 
 void FrameWorkspace::on_actionClone__triggered()
 {
-  Child *pChild = this->getActiveChild();
-  assert(pChild);
-  assert(pChild->hasValidPath());
-  pChild->resetPath();
-  pChild->setModified(true);
+  Child *pFile = this->getActiveChild();
+  assert(pFile);
+  assert(pFile->hasValidPath());
+  pFile->resetPath();
+  pFile->setModified(true);
   this->updateUi();
 }
 
@@ -585,8 +587,7 @@ void FrameWorkspace::on_actionExportScene__triggered()
   else if (save_file.endsWith(".eps") || str_fmt.endsWith("(*.eps)"))
     pOpen->writeSceneAsPostScript(save_file);
   else
-    QMessageBox::information(this, tr("Unknown format"), tr("Show me it! There is an easy way from here to PDF. Please!"),
-                             QMessageBox::Close);
+    QMessageBox::information(this, tr("Unknown format"), tr("Show me it! There is an easy way from here to PDF. Please!"));
 }
 
 void FrameWorkspace::on_actionToggleLayout__triggered()
