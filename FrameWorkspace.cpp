@@ -104,7 +104,7 @@ void FrameWorkspace::setupActions()
   actionOpen_->setIcon(iconOpen);
   actionOpen_->setShortcuts(QKeySequence::Open);
 
-  const QIcon iconReload = QIcon::fromTheme("document-reload", QIcon(":/images/Reload.png"));
+  const QIcon iconReload = QIcon::fromTheme("document-revert", QIcon(":/images/Reload.png"));
   actionReload_->setIcon(iconReload);
   actionOpen_->setShortcuts(QKeySequence::Open);
 
@@ -148,10 +148,10 @@ void FrameWorkspace::setupActions()
   actionClearAll_->setIcon(iconClearAll);
   actionClearAll_->setShortcuts(QKeySequence::DeleteCompleteLine);
 
-  const QIcon iconSrcEdit = QIcon::fromTheme("edit-source", QIcon(":/images/SrcEdit.png"));
+  const QIcon iconSrcEdit = QIcon::fromTheme("text-x-generic", QIcon(":/images/SrcEdit.png"));
   actionSourceEdit_->setIcon(iconSrcEdit);
 
-  const QIcon iconSrcCast = QIcon::fromTheme("edit-compile", QIcon(":/images/SrcCast.png"));
+  const QIcon iconSrcCast = QIcon::fromTheme("text-x-script", QIcon(":/images/SrcCast.png"));
   actionSourceCast_->setIcon(iconSrcCast);
 
   const QIcon iconOrtho(":/images/ProjOrtho.png");
@@ -179,16 +179,16 @@ void FrameWorkspace::setupToolBars()
   barTools_->addAction(actionOpen_);
   barTools_->addAction(actionSave_);
 
-  QToolBar *editToolBar = this->addToolBar(tr("Edit"));
-  editToolBar->addAction(actionUndo_);
-  editToolBar->addAction(actionRedo_);
-  editToolBar->addSeparator();
-  editToolBar->addAction(actionCut_);
-  editToolBar->addAction(actionCopy_);
-  editToolBar->addAction(actionPaste_);
-  editToolBar->addSeparator();
-  editToolBar->addAction(actionClear_);
-  editToolBar->addAction(actionClearAll_);
+  QToolBar *tbEdit = this->addToolBar(tr("Edit"));
+  tbEdit->addAction(actionUndo_);
+  tbEdit->addAction(actionRedo_);
+  tbEdit->addSeparator();
+  tbEdit->addAction(actionCut_);
+  tbEdit->addAction(actionCopy_);
+  tbEdit->addAction(actionPaste_);
+  tbEdit->addSeparator();
+  tbEdit->addAction(actionClear_);
+  tbEdit->addAction(actionClearAll_);
 
   QToolBar *tbSrc = this->addToolBar(tr("Source"));
   tbSrc->addAction(actionSourceEdit_);
@@ -232,7 +232,7 @@ void FrameWorkspace::setupDockingViews()
   pNext->setWidget(pForm);
   this->addDockWidget(Qt::LeftDockWidgetArea, pInit);
   this->tabifyDockWidget(pInit, pNext);
-  pInit->show();
+  // pInit->show();
 }
 
 void FrameWorkspace::initRecentActions()
@@ -319,15 +319,11 @@ void FrameWorkspace::changeEvent(QEvent *e)
 void FrameWorkspace::closeEvent(QCloseEvent *event)
 {
   this->storeSettings();
-  //mdiArea_->closeAllSubWindows();
-  //if (mdiArea_->currentSubWindow())
-  //{
-  //  event->ignore();
-  //}
-  //else
-  //{
-  event->accept();
-  //}
+  Child *pRes = this->getActiveChild();
+  if (pRes->isModified()) // TODO: try to save it here and now!!!
+    event->ignore();
+  else
+    event->accept();
 }
 
 FrameWorkspace::Child *FrameWorkspace::provideFileFrame(const QString &name)
@@ -399,8 +395,8 @@ FrameWorkspace::Child *FrameWorkspace::addLinkToWorkspace(const QString & /* pat
 //                                  : if requested. It is assumed that 'path' contains
 //                                  : a fully qualified (absolute) path to a file
 //----------------------------------------------------------------------------------------
-//                           Returns : pointer to a corresponding Child object,
-//                                   : if there is any
+//                          Returns : pointer to a corresponding Child object,
+//                                  : if there is any
 //----------------------------------------------------------------------------------------
 FrameWorkspace::Child *FrameWorkspace::addFileToWorkspace(const QString &path, FileFormat fmt)
 {
@@ -527,7 +523,7 @@ void FrameWorkspace::on_actionClose__triggered()
 void FrameWorkspace::on_actionOpen__triggered()
 {
   QFileDialog::Options options =  QFileDialog::DontUseNativeDialog         // portability
-                                | QFileDialog::ReadOnly                    // read-only is also to read
+                                | QFileDialog::ReadOnly                    // is also Ok to read
                                 | QFileDialog::DontUseCustomDirectoryIcons // uniformity
       ;
 

@@ -163,6 +163,9 @@
    <property name="text">
     <string>&amp;New..</string>
    </property>
+   <property name="toolTip">
+    <string>Create a new workspace frame</string>
+   </property>
   </action>
   <action name="actionClone_">
    <property name="text">
