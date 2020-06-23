@@ -3,13 +3,13 @@
         {
             "name": "Linux",
             "includePath": [
-                "/home/serge/include/vtk-8.90/*",
-                "/home/serge/Qt/5.12.7/gcc_64/include/*",
-                "/home/serge/Qt/5.12.7/gcc_64/include/QtCore/*",
-                "/home/serge/Qt/5.12.7/gcc_64/include/QtGui/*",
-                "/home/serge/Qt/5.12.7/gcc_64/include/QtWidgets/*",
-                "/home/serge/Qt/5.12.7/gcc_64/include/QtOpenGL/*",
-                "/home/serge/Qt/5.12.7/gcc_64/include/QtPrintSupport/*",
+                "/home/serge/include/vtk-9.0/*",
+                "/home/serge/Qt/5.15.0/gcc_64/include/*",
+                "/home/serge/Qt/5.15.0/gcc_64/include/QtCore/*",
+                "/home/serge/Qt/5.15.0/gcc_64/include/QtGui/*",
+                "/home/serge/Qt/5.15.0/gcc_64/include/QtWidgets/*",
+                "/home/serge/Qt/5.15.0/gcc_64/include/QtOpenGL/*",
+                "/home/serge/Qt/5.15.0/gcc_64/include/QtPrintSupport/*",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}"
             ],
@@ -19,18 +19,18 @@
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64",
             "configurationProvider": "vector-of-bool.cmake-tools",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "compileCommands": "${workspaceFolder}/Build/compile_commands.json"
         },
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Serge\\VTK\\include\\vtk-8.90\\*",
-                "C:\\Qt\\5.12.7\\msvc2017_64\\include\\*",
-                "C:\\Qt\\5.12.7\\msvc2017_64\\include\\QtCore\\*",
-                "C:\\Qt\\5.12.7\\msvc2017_64\\include\\QtGui\\*",
-                "C:\\Qt\\5.12.7\\msvc2017_64\\include\\QtWidgets\\*",
-                "C:\\Qt\\5.12.7\\msvc2017_64\\include\\QtOpenGL\\*",
-                "C:\\Qt\\5.12.7\\msvc2017_64\\include\\QtPrintSupport\\*",
+                "C:\\Serge\\VTK\\include\\vtk-9.0\\*",
+                "C:\\Qt\\5.15.0\\msvc2017_64\\include\\*",
+                "C:\\Qt\\5.15.0\\msvc2017_64\\include\\QtCore\\*",
+                "C:\\Qt\\5.15.0\\msvc2017_64\\include\\QtGui\\*",
+                "C:\\Qt\\5.15.0\\msvc2017_64\\include\\QtWidgets\\*",
+                "C:\\Qt\\5.15.0\\msvc2017_64\\include\\QtOpenGL\\*",
+                "C:\\Qt\\5.15.0\\msvc2017_64\\include\\QtPrintSupport\\*",
                 "${workspaceFolder}\\**",
                 "${workspaceFolder}"
             ],
