@@ -1,5 +1,5 @@
-#ifndef Code_Editor_h
-#define Code_Editor_h
+#ifndef Edit_Code__H_
+#define Edit_Code__H_
 
 #ifdef _MSC_VER
 #pragma once
@@ -10,37 +10,59 @@
 
 #include <QResizeEvent>
 #include <QPaintEvent>
-#include <QPlainTextEdit>
+
 #include <QIODevice>
 
+#include <QTextEdit>
+#include <QPlainTextEdit>
+
 class SideBarDecorator;
+
+#include "HighlightBrackets.h"
+#include "InfoTextBlockBrackets.h"
 
 //![codeeditordefinition]
 
 class EditCode : public QPlainTextEdit
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit EditCode(QWidget* /*parent*/ = nullptr);
-    ~EditCode () override;
+  explicit EditCode(QWidget * /*parent*/ = nullptr);
+  ~EditCode() override = default;
 
-    void SideBarDecoratorPaintEvent(QPaintEvent *);
-    int SideBarWidth();
+  void SideBarDecoratorPaintEvent(QPaintEvent *);
+  int SideBarWidth();
 
-    void load(QIODevice* /*pIO*/);
-    void save(QIODevice* /*pIO*/);
+  void load(QIODevice * /*pIO*/);
+  void save(QIODevice * /*pIO*/);
+
+  bool loadFromPath(const QString & /*pathname*/);
+  bool saveToPath(const QString & /*pathname*/);
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+  typedef QTextEdit::ExtraSelection ExtraSel;
+  typedef QList<ExtraSel> ListExtraSelection;
+
+  void resizeEvent(QResizeEvent *event) override;
+
+  void  highlightMatchBrackets();
+  void  highlightCurrentLine();
+
+  void  selectSymbolAt( int /* pos */ );
+
+  bool matchToRight(QTextBlock, char cWhat, int iFrom, int iDepth, char cFrom);
+  bool matchToLeft(QTextBlock, char cWhat, int iFrom, int iDepth, char cFrom);
 
 private slots:
-    void updateSideBarWidth(int /*newBlockCount*/);
-    void highlightCurrentLine();
-    void updateSideBar(const QRect &, int);
+  void updateSideBarWidth(int /*newBlockCount*/);
+  void updateCursorEnvironment();
+  void updateSideBar(const QRect &, int);
 
 private:
-    QPointer<SideBarDecorator> side_bar_;
+  QFont fontSrc_;
+  QPointer<SideBarDecorator> side_bar_;
+  QPointer<HighlightBrackets> highlight_;
 };
 
-#endif // !Code_Editor_h
+#endif // !Edit_Code__H_

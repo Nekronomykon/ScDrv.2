@@ -2,20 +2,20 @@
 
 #include "EditCode.h"
 
-SideBarDecorator::SideBarDecorator(EditCode *pEdit)
-    : QWidget(pEdit), ptrHost_(pEdit)
+SideBarDecorator::SideBarDecorator(EditCode *editor)
+    : QWidget(editor), theHost_(editor)
 {
-  Q_ASSERT(pEdit);
+  Q_ASSERT(editor);
 }
 
 QSize SideBarDecorator::sizeHint() const
 {
-  Q_ASSERT(ptrHost_);
-  return QSize(ptrHost_->SideBarWidth(), 0);
+  Q_ASSERT(theHost_);
+  return QSize(theHost_->SideBarWidth(), 0);
 }
 
 void SideBarDecorator::paintEvent(QPaintEvent *event)
 {
   // Q_ASSERT(host_);
-  ptrHost_->SideBarDecoratorPaintEvent(event);
+  theHost_->SideBarDecoratorPaintEvent(event);
 }

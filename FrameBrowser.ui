@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FrameBrowser</class>
+ <widget class="QMainWindow" name="FrameBrowser">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ScDrv[*]</string>
+  </property>
+  <widget class="FrameFile" name="frameDoc_"/>
+  <widget class="QMenuBar" name="barMenu_">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile_">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menuRecent_">
+     <property name="title">
+      <string>R&amp;ecent</string>
+     </property>
+     <addaction name="actionCleanup_"/>
+     <addaction name="actionForget_"/>
+     <addaction name="actionForgetAll_"/>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="actionNew_"/>
+    <addaction name="actionClone_"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpen_"/>
+    <addaction name="menuRecent_"/>
+    <addaction name="actionReload_"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_"/>
+    <addaction name="actionSaveAs_"/>
+    <addaction name="separator"/>
+    <addaction name="actionProperties_"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose_"/>
+    <addaction name="actionExit_"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp_">
+    <property name="title">
+     <string>&amp;?</string>
+    </property>
+    <addaction name="actionAbout_"/>
+    <addaction name="actionAboutQt_"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit_">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionUndo_"/>
+    <addaction name="actionRedo_"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut_"/>
+    <addaction name="actionCopy_"/>
+    <addaction name="actionPaste_"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_"/>
+    <addaction name="actionClearAll_"/>
+   </widget>
+   <widget class="QMenu" name="menuTools_">
+    <property name="title">
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="actionOptions_"/>
+   </widget>
+   <widget class="QMenu" name="menuView_">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="menuM_olecular_style">
+     <property name="title">
+      <string>M&amp;olecular style</string>
+     </property>
+     <addaction name="actionMoleculeFast_"/>
+     <addaction name="separator"/>
+     <addaction name="actionMoleculeAsBallsSticks_"/>
+     <addaction name="actionMoleculeAsCPK_"/>
+     <addaction name="actionMoleculeAsSticks_"/>
+     <addaction name="separator"/>
+     <addaction name="actionMoleculeLabelAtoms_"/>
+    </widget>
+    <widget class="QMenu" name="menuTextOptions_">
+     <property name="title">
+      <string>T&amp;ext options</string>
+     </property>
+     <addaction name="actionSetFont_"/>
+    </widget>
+    <addaction name="actionTextSource_"/>
+    <addaction name="menuTextOptions_"/>
+    <addaction name="actionViewMolecule_"/>
+    <addaction name="menuM_olecular_style"/>
+    <addaction name="separator"/>
+    <addaction name="actionElements_"/>
+   </widget>
+   <addaction name="menuFile_"/>
+   <addaction name="menuEdit_"/>
+   <addaction name="menuView_"/>
+   <addaction name="menuTools_"/>
+   <addaction name="menuHelp_"/>
+  </widget>
+  <widget class="QStatusBar" name="barStatus_"/>
+  <widget class="QToolBar" name="barTools_">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionNew_">
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+  </action>
+  <action name="actionExit_">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="statusTip">
+    <string>Close all windows and exit the application</string>
+   </property>
+  </action>
+  <action name="actionClose_">
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="statusTip">
+    <string>Close this window</string>
+   </property>
+  </action>
+  <action name="actionAbout_">
+   <property name="text">
+    <string>&amp;About </string>
+   </property>
+   <property name="statusTip">
+    <string>Show the application's About box</string>
+   </property>
+  </action>
+  <action name="actionAboutQt_">
+   <property name="text">
+    <string>About &amp;Qt</string>
+   </property>
+   <property name="statusTip">
+    <string>Show the Qt library's About box</string>
+   </property>
+  </action>
+  <action name="actionOpen_">
+   <property name="text">
+    <string>&amp;Open..</string>
+   </property>
+  </action>
+  <action name="actionClone_">
+   <property name="text">
+    <string>C&amp;lone</string>
+   </property>
+  </action>
+  <action name="actionReload_">
+   <property name="text">
+    <string>&amp;Reload</string>
+   </property>
+  </action>
+  <action name="actionSave_">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionSaveAs_">
+   <property name="text">
+    <string>Save &amp;as..</string>
+   </property>
+  </action>
+  <action name="actionUndo_">
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo_">
+   <property name="text">
+    <string>&amp;Redo</string>
+   </property>
+  </action>
+  <action name="actionCut_">
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+   <property name="statusTip">
+    <string>Cut the current selection's contents into the clipboard</string>
+   </property>
+  </action>
+  <action name="actionCopy_">
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="statusTip">
+    <string>Copy the current selection's contents to the clipboard</string>
+   </property>
+  </action>
+  <action name="actionPaste_">
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+   <property name="statusTip">
+    <string>Paste the clipboard's contents into the current selection</string>
+   </property>
+  </action>
+  <action name="actionClear_">
+   <property name="text">
+    <string>C&amp;lear</string>
+   </property>
+  </action>
+  <action name="actionClearAll_">
+   <property name="text">
+    <string>Clear &amp;all</string>
+   </property>
+  </action>
+  <action name="actionOptions_">
+   <property name="text">
+    <string>&amp;Options..</string>
+   </property>
+  </action>
+  <action name="action_empty">
+   <property name="text">
+    <string>(empty)</string>
+   </property>
+  </action>
+  <action name="actionForget_">
+   <property name="text">
+    <string>&amp;Forget</string>
+   </property>
+  </action>
+  <action name="actionForgetAll_">
+   <property name="text">
+    <string>Forget &amp;all</string>
+   </property>
+  </action>
+  <action name="actionCleanup_">
+   <property name="text">
+    <string>&amp;Cleanup</string>
+   </property>
+  </action>
+  <action name="actionProperties_">
+   <property name="text">
+    <string>&amp;Properties..</string>
+   </property>
+   <property name="statusTip">
+    <string>View and edit the properties of the document file</string>
+   </property>
+  </action>
+  <action name="actionTextSource_">
+   <property name="text">
+    <string>&amp;Text source</string>
+   </property>
+  </action>
+  <action name="actionViewMolecule_">
+   <property name="text">
+    <string>&amp;Molecule</string>
+   </property>
+  </action>
+  <action name="actionElements_">
+   <property name="text">
+    <string>E&amp;lements..</string>
+   </property>
+   <property name="statusTip">
+    <string>Show the table of the elements</string>
+   </property>
+  </action>
+  <action name="actionMoleculeFast_">
+   <property name="text">
+    <string>Fast</string>
+   </property>
+  </action>
+  <action name="actionMoleculeAsBallsSticks_">
+   <property name="text">
+    <string>Balls-sticks</string>
+   </property>
+  </action>
+  <action name="actionMoleculeAsCPK_">
+   <property name="text">
+    <string>CPK</string>
+   </property>
+  </action>
+  <action name="actionMoleculeAsSticks_">
+   <property name="text">
+    <string>Sticks</string>
+   </property>
+  </action>
+  <action name="actionMoleculeLabelAtoms_">
+   <property name="text">
+    <string>Label atoms</string>
+   </property>
+  </action>
+  <action name="actionSetFont_">
+   <property name="text">
+    <string>Set &amp;font..</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FrameFile</class>
+   <extends>QTabWidget</extends>
+   <header>FrameFile.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

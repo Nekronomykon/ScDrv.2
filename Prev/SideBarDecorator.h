@@ -26,7 +26,7 @@ protected:
   void paintEvent(QPaintEvent *event) override;
 
 private:
-  EditCode *theHost_;
+  EditCode *ptrHost_;
 };
 
 //![extraarea]

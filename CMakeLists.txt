@@ -1,34 +1,60 @@
-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-PROJECT(ScDrv)
+PROJECT(ScDrv LANGUAGES CXX)
 
-find_package(VTK "8.2" REQUIRED)
-# include(${VTK_USE_FILE})
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+find_package(VTK 9 COMPONENTS
+  CommonColor
+  CommonCore
+  DomainsChemistry
+  FiltersSources
+  IOChemistry
+  IOGeometry
+  IOImage
+  ImagingCore
+  ImagingSources
+  InteractionStyle
+  RenderingCore
+  RenderingFreeType
+  RenderingGL2PSOpenGL2
+  RenderingLOD
+  RenderingOpenGL2
+  GUISupportQt
+  REQUIRED QUIET)
+add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x050F00)
+
+#if (NOT Qt6_FOUND)
+#  find_package(Qt5 5.15 COMPONENTS Core Widgets Gui PrintSupport OpenGL REQUIRED)
+#else()
+  find_package(Qt6 6.0 COMPONENTS Core Widgets Gui PrintSupport OpenGL REQUIRED)
+#  find_package(Qt6 COMPONENTS Core5Compat REQUIRED)
+#  target_link_libraries(ScDrv Qt6::Core5Compat)
+#endif()
 
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-find_package(Qt5Widgets REQUIRED QUIET)
-find_package(Qt5Core REQUIRED QUIET)
-find_package(Qt5Gui REQUIRED QUIET)
-find_package(Qt5PrintSupport REQUIRED QUIET)
-find_package(Qt5OpenGL REQUIRED QUIET)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_AUTOUIC ON)
 
 file(GLOB UI_FILES *.ui)
 file(GLOB HDR_FILES *.h)
 file(GLOB CXX_FILES *.cxx)
-file(GLOB CPP_FILES *.cpp)
 file(GLOB RC_FILES *.qrc)
 
 
-qt5_wrap_ui(UISources ${UI_FILES} )
+qt_wrap_ui(UISources ${UI_FILES} )
+
 # CMAKE_AUTOMOC in ON so the MOC headers will be automatically wrapped.
 add_executable(ScDrv MACOSX_BUNDLE ${CXX_FILES} ${CPP_FILES} ${UISources} ${RC_FILES} ${HDR_FILES})
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-  target_link_libraries(ScDrv ${VTK_LIBRARIES} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport Qt5::OpenGL Qt5::WinMain)
-  else()
-  target_link_libraries(ScDrv ${VTK_LIBRARIES} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport Qt5::OpenGL)
+if(Windows)
+  target_link_libraries(ScDrv Qt::WinMain)
 endif()
+
+target_link_libraries(ScDrv ${VTK_LIBRARIES} Qt::Core Qt::Gui Qt::Widgets Qt::PrintSupport Qt::OpenGL)
+

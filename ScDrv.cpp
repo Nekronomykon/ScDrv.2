@@ -1,46 +1,49 @@
-#include <QCommandLineParser>
-#include <QCommandLineOption>
-
-#include <QThread>
+#include <QVTKOpenGLNativeWidget.h>
+#include <QVTKApplication.h>
 
 #include <QSurfaceFormat>
+#include <QCoreApplication>
 
-#include "QVTKMoleculeWidget.h" // to specify Surface Format, as below
-using namespace vtk;
+#include <QCommandLineParser>
+#include <QStringList>
 
-#include <QVTKApplication.h>
-#include <vtkOpenGLRenderWindow.h>
-
-#include "FrameWorkspace.h"
-
+#include "FrameBrowser.h"
 
 int main(int argc, char *argv[])
 {
-  vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(16);
-  QSurfaceFormat::setDefaultFormat(QVTKMoleculeWidget::defaultFormat()); // none stereo capabilities
-  
+  QSurfaceFormat::setDefaultFormat(ViewMolecule::defaultFormat());
+
+  // QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+  // QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+
   QVTKApplication app(argc, argv);
-  // app.setAttribute(Qt::AA_NativeWindows, false);
-  QCoreApplication::setApplicationName("ScrewDriver");
+
+  QCoreApplication::setApplicationName("ScDrv Browser");
   QCoreApplication::setOrganizationName("Nekronomykon");
   QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
   QCommandLineParser parser;
-  parser.setApplicationDescription("Viewer / editor of molecular structure text files");
+  parser.setApplicationDescription(QCoreApplication::applicationName());
   parser.addHelpOption();
   parser.addVersionOption();
-
-  // adding other cmdline options above ^^^
-
-  parser.addPositionalArgument("file(s)", "The file(s) to open");
+  parser.addPositionalArgument("file", "The file(s) to open.");
   parser.process(app);
+  
+  const QStringList files_to_open = parser.positionalArguments();
 
-  FrameFile::BuildFileContext();
+  FrameBrowser *pFrame = nullptr;
 
-  FrameWorkspace mainWin;
-  for (const auto &arg : parser.positionalArguments())
-    mainWin.addPathToWorkspace(arg);
+  for(const QString& a_file: files_to_open)
+  {
+      FrameBrowser *pNew = FrameBrowser::provideBrowserFor(a_file);
+      pNew->tile(pFrame);
+      pNew->show();
+  }
 
-  mainWin.show();
+  if(!pFrame) pFrame = FrameBrowser::createNewBrowser();
+
+  pFrame->show();
+
   return app.exec();
 }

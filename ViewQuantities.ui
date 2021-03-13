@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ViewQuantities</class>
+ <widget class="QWidget" name="ViewQuantities">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QToolBox" name="boxTools_">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>320</width>
+     <height>450</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QListWidget" name="pageAtoms_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Atoms</string>
+    </attribute>
+   </widget>
+   <widget class="QListWidget" name="pageBonds_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Bonds</string>
+    </attribute>
+   </widget>
+   <widget class="QListWidget" name="pageAngles_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Angles</string>
+    </attribute>
+   </widget>
+   <widget class="QListWidget" name="pageTetras_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Out-of-plane bendings</string>
+    </attribute>
+   </widget>
+   <widget class="QListWidget" name="pageTorsions_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Torsions</string>
+    </attribute>
+   </widget>
+   <widget class="QListWidget" name="pagePolyhedra_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Polyhedra</string>
+    </attribute>
+   </widget>
+   <widget class="QListWidget" name="pagePaths_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Paths</string>
+    </attribute>
+   </widget>
+   <widget class="QListWidget" name="pageCycles_">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>320</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <attribute name="label">
+     <string>Cycles</string>
+    </attribute>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

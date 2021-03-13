@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/ScDrv.png</file>
+        <file>images/SqDrv.png</file>
         <file>images/AboutKit.png</file>
         <file>images/Clear.png</file>
         <file>images/ClearAll.png</file>
@@ -21,7 +21,7 @@
         <file>images/Open.png</file>
         <file>images/Paste.png</file>
         <file>images/PgSetup.png</file>
-        <file>images/Preview.png</file>
+        <file>images/PreView.png</file>
         <file>images/Print.png</file>
         <file>images/ProjOrtho.png</file>
         <file>images/ProjPersp.png</file>
