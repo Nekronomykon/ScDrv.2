@@ -12,8 +12,8 @@ A cross-platform tool for chemists with computers with the emphasis on the molec
 * numerical analysis
 
 ## Depends on:
-* [VTK](http://vtk.org) (currently using version 8.2.0)
-* [Qt](http://qt.io) (currently using version 5.12.2)
+* [VTK](http://vtk.org) (currently using version 9.0.x)
+* [Qt](http://qt.io) (currently using version 6.1.0)
 
 ## Distribulion
 Open source
