@@ -23,6 +23,8 @@ class ViewFilesystem
 public:
     explicit ViewFilesystem(QWidget * /* parent */ = nullptr);
 
+    void showPath(const QString& /* path */);
+
     QFileSystemModel* modelSystem() const{ return modelFileSystem_; }
     QTreeView* fileSystem() const { return treeFileSystem_; }
     QListView* getFileSelector() const { return listFiles_; }

@@ -30,6 +30,17 @@ ViewFilesystem::ViewFilesystem(QWidget *parent)
     connect(listFiles_, &QTreeView::doubleClicked, this, &ViewFilesystem::listFilesAt);
 }
 
+void ViewFilesystem::showPath(const QString &path)
+{
+    QFileInfo fi(path);
+    QModelIndex idx = modelFileSystem_->index(fi.exists() ? path : fi.canonicalPath());
+    QString set_root = fi.isDir() ? fi.canonicalFilePath() : fi.canonicalPath();
+    QModelIndex idx_root = modelFileSystem_->index(set_root);
+    listFiles_->setRootIndex(idx_root);
+    treeFileSystem_->setCurrentIndex(idx_root);
+    listFiles_->setCurrentIndex(idx);
+}
+
 QFileInfo ViewFilesystem::fileInfo(const QModelIndex &idx)
 {
     return modelFileSystem_->fileInfo(idx);

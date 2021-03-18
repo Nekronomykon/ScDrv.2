@@ -250,9 +250,11 @@ void FrameBrowser::updateUi()
 void FrameBrowser::navigateTo(const QString &path)
 {
   QFileInfo fi(path);
-  frameDoc_->openTextFile(path, fi.exists());
+  frameDoc_->openTextFile(fi.canonicalFilePath(), fi.exists());
+  files_->showPath(path);
+
   QString ex_type(fi.suffix());
-#ifndef QT_DEBUG_MESSAGE_BOX
+#ifdef QT_DEBUG_MESSAGE_BOX
   QMessageBox::information(this, tr("Extension"), ex_type, QMessageBox::Ok);
 #endif
   if (!ex_type.compare(tr("xyz")))

@@ -2,12 +2,12 @@
 #define Format_For__h_
 
 #ifdef _MSC_VER
-#pragma once
+#  pragma once
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-#include <QString>
 #include <QFileInfo>
+#include <QString>
 
 template <class Host>
 struct FileFormatFor
@@ -17,8 +17,13 @@ struct FileFormatFor
   typedef void (Host::*Operation)(void);
   Operation operation_ = nullptr;
 
-  bool checkInfo(const QFileInfo &info) const { return bool(!extension_.compare(info.suffix())); }
-  void applyFor(Host &host)
+  bool operator!() const { return bool(operation_ == nullptr); }
+
+  bool checkInfo(const QFileInfo& info) const
+  {
+    return bool(!extension_.compare(info.suffix()));
+  }
+  void applyFor(Host& host)
   {
     assert(operation_);
     if (operation_)
