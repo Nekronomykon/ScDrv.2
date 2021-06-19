@@ -17,7 +17,15 @@ struct FileFormatFor
   typedef void (Host::*Operation)(void);
   Operation operation_ = nullptr;
 
+public:
   bool operator!() const { return bool(operation_ == nullptr); }
+
+  const QString& name() const { return name_; }
+  bool hasName() const { return !name_.isEmpty(); }
+  const QString& extension() const { return extension_; }
+  bool hasFileExtension() const { return !extension_.isEmpty(); }
+
+  bool hasAction() const { return bool((Operation) nullptr != operation_); }
 
   bool checkInfo(const QFileInfo& info) const
   {

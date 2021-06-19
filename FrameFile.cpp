@@ -1,23 +1,21 @@
 #include "FrameFile.h"
 
-#include <QMessageBox>
-
-#include <QFileDialog>
-#include <QFileInfo>
-#include <QByteArray>
-
-#include <vtkSimpleBondPerceiver.h>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include <vtkCMLMoleculeReader.h>
-#include <vtkPDBReader.h>
 #include <vtkGaussianCubeReader.h>
 #include <vtkGaussianCubeReader2.h>
+#include <vtkPDBReader.h>
+#include <vtkSimpleBondPerceiver.h>
 #include <vtkXYZMolReader.h>
 #include <vtkXYZMolReader2.h>
 
-#include <vector>
-#include <string>
-#include <sstream>
+#include <QByteArray>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QMessageBox>
 
 using namespace std;
 // namespace fs = std::filesystem;
@@ -26,11 +24,21 @@ typedef vtkNew<vtkSimpleBondPerceiver> NewSimpleBondMaker;
 typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
 
 /* static */ const FileFormat FrameFile::formatInput[] = {
-    {QString("XMol XYZ file(s)"), QString("xyz"), &FrameFile::ReadFileXYZ},
-    {QString("Brookhaven Protein DB file(s)"), QString("pdb"), &FrameFile::ReadFilePDB},
-    {QString("Gaussian Cube file(s)"), QString("cube"), &FrameFile::ReadFileCube},
-    {QString("Chemical MarkUp CML file(s)"), QString("cml")},
-    {QString(), QString()}};
+  { QString("AIMAll exteded output"), QString("extout") },
+  { QString("AIMAll molecular graph"), QString("mgp") },
+  { QString("AIMAll summary"), QString("sum") },
+  // What else from the AIMAll output formats?
+  // --> http://aim.tkgristmill.com/readme.html
+  { QString("XMol XYZ"), QString("xyz"), &FrameFile::ReadFileXYZ },
+  { QString("Brookhaven Protein DB"), QString("pdb"),
+    &FrameFile::ReadFilePDB },
+  { QString("Gaussian formatted checkpoint"), QString("fchk")}, 
+  { QString("Gaussian cube"), QString("cube"), &FrameFile::ReadFileCube },
+  { QString("Chemical MarkUp CML"), QString("cml") }, /// ???
+  { QString("Wavefinction"), QString("wfn") },
+  { QString("Wavefinction extended"), QString("wfx") },
+  // { QString(), QString() }
+};
 
 /* static */ QString FrameFile::filterInput()
 {
@@ -41,24 +49,34 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
   ::assumed that any format has the only file extension,
     associated with file with the format mentioned
     ::
+    */
   set<QString> allEx;
-  foreach(fmt : all.available.formats())
-  {
-    if(!fmt->readable())
-        continue;
-    QString xtnsn = fmt->usedFileExtension();
-    allEx.add(xtsn);
-    res += rdr->FormatName() += tr(" (*.") += xtnsn += tr(");;")
+  for (const FileFormat& fmt : formatInput) {
+    // if(!fmt.hasAction()) --> only the text file:
+    //  continue;
+    if(!fmt.hasName() || !fmt.hasFileExtension()) // --> nameless formats are skipped:
+      continue;
+    QString xtnsn = fmt.extension();
+    allEx.insert(xtnsn);
+    QString fmt_desc(tr("%1 file(s) (*.%2);;").arg(fmt.name()).arg(xtnsn));
+    // res += fmt.name() ;
+    // res += QString("file(s) (*.");
+    // res += xtnsn;
+    // res += tr(");;");
+    res += fmt_desc;
+    // QMessageBox::information(nullptr,xtnsn,fmt_desc);
   }
-  if(!allEx.isEmpty() )
-  {
-    res = avlbl;
-    foreaach(xnosch : allEx)
-     res += tr(" *.") += xnosch;
+
+  // Make "All registered" section:
+  QString reged;
+  if (!allEx.empty()) {
+    for (const QString& xnosch : allEx)
+      if(!xnosch.isEmpty()) avlbl += tr(" *.") += xnosch;
   }
-  */
-  res += all;
-  return res;
+  avlbl += ");;";
+  avlbl += res;
+  avlbl += all;
+  return avlbl;
 }
 
 /* static */ QString FrameFile::filterOutput()
@@ -91,22 +109,26 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
   return res;
 }
 
-/* static */ QString FrameFile::QuerySavePath(QWidget *parent, QString src, QString &context)
+/* static */ QString FrameFile::QuerySavePath(QWidget* parent, QString src,
+                                              QString& context)
 {
-  QFileDialog::Options opts = QFileDialog::DontUseNativeDialog | QFileDialog::DontUseCustomDirectoryIcons;
+  QFileDialog::Options opts = QFileDialog::DontUseNativeDialog |
+    QFileDialog::DontUseCustomDirectoryIcons;
   QString fmt = FrameFile::filterOutput();
   QString fmt_context;
-  QString path = QFileDialog::getSaveFileName(parent, tr("Path to save file"), src,
-                                              fmt, &fmt_context, opts);
+  QString path = QFileDialog::getSaveFileName(parent, tr("Path to save file"),
+                                              src, fmt, &fmt_context, opts);
   context = fmt_context;
   return path;
 }
 
-FrameFile::FrameFile(QWidget *parent)
-    : QTabWidget(parent),
-      edit_src_(new EditCode(this)), view_mol_(new ViewMolecule(this)), view_val_(new ViewQuantities(this)),
-      molecule_(AMolecule::New()),
-      make_bonds_(ASimpleBondMaker::New())
+FrameFile::FrameFile(QWidget* parent)
+  : QTabWidget(parent)
+  , edit_src_(new EditCode(this))
+  , view_mol_(new ViewMolecule(this))
+  , view_val_(new ViewQuantities(this))
+  , molecule_(AMolecule::New())
+  , make_bonds_(ASimpleBondMaker::New())
 // , source_(new FormStructureText(this))
 // , view_(new FormStructureView(this))
 // , split_(new QSplitter(this))
@@ -123,8 +145,10 @@ FrameFile::FrameFile(QWidget *parent)
   id_view_mol_ = this->addTab(view_mol_, tr("Molecule"));
   id_view_val_ = this->addTab(view_val_, tr("Structure"));
 
-  connect(this, &FrameFile::currentChanged, this, &FrameFile::castChangedViews);
-  // connect(this, &FrameFile::currentChanging, this, &FrameFile::castChangedViews);
+  connect(this, &FrameFile::currentChanged, this,
+          &FrameFile::castChangedViews);
+  // connect(this, &FrameFile::currentChanging, this,
+  // &FrameFile::castChangedViews);
 }
 
 bool FrameFile::isUntitled() const
@@ -137,30 +161,39 @@ bool FrameFile::hasSourcePath() const
   return !path_src_bound_.isEmpty();
 }
 
-const QString &FrameFile::pathSource() const
+const QString& FrameFile::pathSource() const
 {
   return path_src_bound_;
 }
 
-EditCode *FrameFile::editSource()
+EditCode* FrameFile::editSource()
 {
   if (edit_src_)
     this->setCurrentWidget(edit_src_);
   return edit_src_;
 }
 
-EditCode *FrameFile::getEditSource() const { return edit_src_; }
+EditCode* FrameFile::getEditSource() const
+{
+  return edit_src_;
+}
 
-QTextDocument *FrameFile::getSourceDocument() const { return edit_src_->document(); }
+QTextDocument* FrameFile::getSourceDocument() const
+{
+  return edit_src_->document();
+}
 
-ViewMolecule *FrameFile::viewMolecule()
+ViewMolecule* FrameFile::viewMolecule()
 {
   if (view_mol_)
     this->setCurrentWidget(view_mol_);
   return view_mol_;
 }
 
-ViewMolecule *FrameFile::getViewMolecule() const { return view_mol_; }
+ViewMolecule* FrameFile::getViewMolecule() const
+{
+  return view_mol_;
+}
 
 QString FrameFile::describeInputFormats() const
 {
@@ -175,14 +208,12 @@ bool FrameFile::changePathToBind(bool bSync)
   if (path.isEmpty())
     return false; // cancelled
   // setup format:
-  if (edit_src_->loadFromPath(path))
-  {
+  if (edit_src_->loadFromPath(path)) {
     path_src_bound_ = path;
     // apply format, if bSync
     return bSync ? this->SourceToStructure() : true; // TODO: rewrite
-  }
-  else            // something went wrong...
-    return false; // stub
+  } else                                             // something went wrong...
+    return false;                                    // stub
 }
 
 bool FrameFile::querySave()
@@ -194,27 +225,24 @@ bool FrameFile::querySave()
   QString query(tr("Current content of the document"));
 
   QString path(this->pathSource());
-  if (!path.isEmpty())
-  {
+  if (!path.isEmpty()) {
     query += "based upon the path\n";
     query += path;
   }
   query += "\nis modified. Do you want to save the changes?";
-  int reply = QMessageBox::question(this, tr("Modified"), query,
-                                    // QMessageBox::YesToAll | QMessageBox::NoToAll |
-                                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                                    QMessageBox::Cancel);
+  int reply = QMessageBox::question(
+    this, tr("Modified"), query,
+    // QMessageBox::YesToAll | QMessageBox::NoToAll |
+    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+    QMessageBox::Cancel);
   if (reply == QMessageBox::Cancel)
     return false;
   // ????????
-  if (reply == QMessageBox::Yes || reply == QMessageBox::YesToAll)
-  {
-    if (!path.isEmpty())
-    {
+  if (reply == QMessageBox::Yes || reply == QMessageBox::YesToAll) {
+    if (!path.isEmpty()) {
       this->doSave(); // silent update
       return true;
-    }
-    else
+    } else
       return !this->changePathToBind(); // ???????? TO RETHINK!
   }
   // ???? HERE TO CHECK CAREFULLY!!!!
@@ -240,11 +268,10 @@ bool FrameFile::hasPendingTasks() const
 
 bool FrameFile::canBeClosed() const
 {
-  return this->isModified() ? true
-                            : this->hasPendingTasks();
+  return this->isModified() ? true : this->hasPendingTasks();
 }
 
-bool FrameFile::openTextFile(const QString &path, bool bExistent)
+bool FrameFile::openTextFile(const QString& path, bool bExistent)
 {
   auto edit = this->editSource();
   edit->loadFromPath(path);
@@ -255,9 +282,18 @@ bool FrameFile::openTextFile(const QString &path, bool bExistent)
   return this->SourceToStructure(); // NEVERTHELESS STILL A STUB!
 }
 
-void FrameFile::ReadFileXYZ() { this->ReadMoleculeAs<vtkXYZMolReader2>(); }
-void FrameFile::ReadFilePDB() { this->ReadMoleculeAs<vtkPDBReader>(); }
-void FrameFile::ReadFileCube() { this->ReadMoleculeAs<vtkGaussianCubeReader2>(); }
+void FrameFile::ReadFileXYZ()
+{
+  this->ReadMoleculeAs<vtkXYZMolReader2>();
+}
+void FrameFile::ReadFilePDB()
+{
+  this->ReadMoleculeAs<vtkPDBReader>();
+}
+void FrameFile::ReadFileCube()
+{
+  this->ReadMoleculeAs<vtkGaussianCubeReader2>();
+}
 
 bool FrameFile::SourceToStructure()
 {
@@ -265,13 +301,13 @@ bool FrameFile::SourceToStructure()
   auto edit = this->getEditSource();
   edit->setReadOnly(true);
 
-  QStringList allText = edit_src_->toPlainText().split('\n'); // work it out with "\r\n", etc
+  QStringList allText =
+    edit_src_->toPlainText().split('\n'); // work it out with "\r\n", etc
 
   int idAtom = 0;
   int idString = 0;
 
-  do
-  {
+  do {
     QString strOne = allText.at(idString);
     int kComment = strOne.indexOf('#');
     if (kComment >= 0)
@@ -293,8 +329,7 @@ bool FrameFile::SourceToStructure()
     vector<string> parsed;
     string one_string;
     inp >> one_string;
-    do
-    {
+    do {
       parsed.push_back(one_string);
       one_string.resize(0);
       inp >> one_string;
@@ -304,7 +339,7 @@ bool FrameFile::SourceToStructure()
 
   } while (++idString < allText.size());
 
-  //if (!mol_new->GetNumberOfAtoms())
+  // if (!mol_new->GetNumberOfAtoms())
   // return false;
 
   // molecule_->DeepCopy(mol_new);
@@ -353,8 +388,7 @@ void FrameFile::ReadMoleculeAs()
   reader->Update();
 
   bool bHaveNewMol = true; // bool(new_mol->GetNumberOfAtoms() > 0);
-  if (bHaveNewMol)
-  {
+  if (bHaveNewMol) {
     make_bonds_->Update();
     this->getViewMolecule()->mapMolecule(molecule_);
   }

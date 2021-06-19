@@ -21,7 +21,7 @@ EditCode::EditCode(QWidget *parent)
     : QPlainTextEdit(parent)
     , side_bar_(new SideBarDecorator(this))
     , highlight_(new HighlightBrackets(this->document()))
-    , fontSrc_("Monospace", 11)
+    , fontSrc_("Monospace", 10)
 {
   fontSrc_.setStyleHint(QFont::Monospace);
   this->setFont(fontSrc_);

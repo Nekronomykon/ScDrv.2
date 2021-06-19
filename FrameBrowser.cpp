@@ -160,6 +160,12 @@ void FrameBrowser::setupActions()
   const QIcon iconProps = QIcon::fromTheme("document-properties", QIcon(":/images/Options.png"));
   actionProperties_->setIcon(iconProps);
 
+  const QIcon iconEditTxt(":/images/SrcEdit.png");
+  actionTextSource_->setIcon(iconEditTxt);
+
+  const QIcon iconCastSrc(":/images/SrcCast.png");
+  actionViewMolecule_->setIcon(iconCastSrc);
+
   const QIcon iconFast(":/images/MolFast.png");
   actionMoleculeFast_->setIcon(iconFast);
 
@@ -315,6 +321,8 @@ void FrameBrowser::on_actionExit__triggered()
 void FrameBrowser::on_actionAboutQt__triggered()
 {
   qApp->aboutQt();
+  // finally
+  this->updateUi();
 }
 //
 ///////////////////////////////////////////////////////////////////////
@@ -325,6 +333,7 @@ void FrameBrowser::on_actionNew__triggered()
   FrameBrowser *pNew = FrameBrowser::createNewBrowser();
   pNew->tile(this);
   pNew->show();
+  this->updateUi();
 }
 //
 ///////////////////////////////////////////////////////////////////////
@@ -372,7 +381,7 @@ void FrameBrowser::on_actionElements__triggered()
 ///
 void FrameBrowser::on_actionMoleculeFast__triggered()
 {
-  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleFast))
+  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleFast)) ;
     this->updateUi();
 }
 //
@@ -381,7 +390,7 @@ void FrameBrowser::on_actionMoleculeFast__triggered()
 ///
 void FrameBrowser::on_actionMoleculeAsSticks__triggered()
 {
-  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleStyx))
+  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleStyx)) ;
     this->updateUi();
 }
 //
@@ -390,7 +399,7 @@ void FrameBrowser::on_actionMoleculeAsSticks__triggered()
 ///
 void FrameBrowser::on_actionMoleculeAsBallsSticks__triggered()
 {
-  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleBnS))
+  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleBnS)) ;
     this->updateUi();
 }
 //
@@ -399,7 +408,7 @@ void FrameBrowser::on_actionMoleculeAsBallsSticks__triggered()
 ///
 void FrameBrowser::on_actionMoleculeAsCPK__triggered()
 {
-  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleCPK))
+  if (frameDoc_->viewMolecule()->setMoleculeStyle(StyleMapMolecule::styleCPK)) ;
     this->updateUi();
 }
 //
@@ -421,8 +430,8 @@ void FrameBrowser::on_actionSaveAs__triggered()
   QString path_to_set = FrameFile::QuerySavePath(this, frameDoc_->pathSource(), name_format);
   if (!path_to_set.isEmpty())
   {
-    this->updateUi();
   }
+  this->updateUi();
 }
 //
 ///////////////////////////////////////////////////////////////////////
@@ -439,6 +448,7 @@ void FrameBrowser::on_actionSetFont__triggered()
                            QString(), QFontDialog::MonospacedFonts);
   if (bOk)
     pEdit->setFont(font_edit);
+    this->updateUi();
 }
 //
 //////////////////////////////////////////////////////////////////////
@@ -450,6 +460,9 @@ void FrameBrowser::on_actionProperties__triggered()
   DialogFileProperties dlgProperties(frameDoc_->pathSource(), this);
   // dlgProperties.setModal(true);
   int kRes = dlgProperties.exec();
+
+  // finally
+  this->updateUi();
 }
 //
 //////////////////////////////////////////////////////////////////////
@@ -459,6 +472,7 @@ void FrameBrowser::on_actionTextSource__triggered()
 {
   EditCode *pEdit = frameDoc_->editSource();
 
+  // finally
   this->updateUi();
 }
 //
@@ -468,6 +482,8 @@ void FrameBrowser::on_actionTextSource__triggered()
 void FrameBrowser::on_actionViewMolecule__triggered()
 {
   ViewMolecule *pView = frameDoc_->viewMolecule();
+
+  // finally
   this->updateUi();
 }
 //
@@ -482,4 +498,6 @@ void FrameBrowser::on_actionAbout__triggered()
 
   QMessageBox::about(this, tr("About"),
                      message.arg(QT_VERSION_STR).arg(QT_VERSION).arg(vtkVersion::GetVTKVersionFull()));
+  // finally
+  this->updateUi();
 }

@@ -22,7 +22,7 @@ namespace vtk
   {
     // private:
     // atoms
-    // bool bRenderAtoms_;
+    // bool bRenderAtoms_; // --> always render if available
     short styleAtomRadius_;
     float radAtomsScale_;
     // bonds
