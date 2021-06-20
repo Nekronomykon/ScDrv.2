@@ -31,9 +31,9 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
   // --> http://aim.tkgristmill.com/readme.html
   { QString("XMol XYZ"), QString("xyz"), &FrameFile::ParseXYZ },
   { QString("Brookhaven Protein DB"), QString("pdb"),
-    &FrameFile::ReadFilePDB },
+    &FrameFile::ParsePDB },
   { QString("Gaussian formatted checkpoint"), QString("fchk") },
-  { QString("Gaussian cube"), QString("cube"), &FrameFile::ReadFileCube },
+  { QString("Gaussian cube"), QString("cube"), &FrameFile::ParseCUBE },
   { QString("Chemical MarkUp CML"), QString("cml") }, /// ???
   { QString("Wavefinction"), QString("wfn") },
   { QString("Wavefinction extended"), QString("wfx") },
