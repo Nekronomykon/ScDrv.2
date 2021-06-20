@@ -32,7 +32,7 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
   { QString("XMol XYZ"), QString("xyz"), &FrameFile::ReadFileXYZ },
   { QString("Brookhaven Protein DB"), QString("pdb"),
     &FrameFile::ReadFilePDB },
-  { QString("Gaussian formatted checkpoint"), QString("fchk")}, 
+  { QString("Gaussian formatted checkpoint"), QString("fchk") },
   { QString("Gaussian cube"), QString("cube"), &FrameFile::ReadFileCube },
   { QString("Chemical MarkUp CML"), QString("cml") }, /// ???
   { QString("Wavefinction"), QString("wfn") },
@@ -54,24 +54,21 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
   for (const FileFormat& fmt : formatInput) {
     // if(!fmt.hasAction()) --> only the text file:
     //  continue;
-    if(!fmt.hasName() || !fmt.hasFileExtension()) // --> nameless formats are skipped:
+    if (!fmt.hasName() ||
+        !fmt.hasFileExtension()) // --> nameless formats are skipped:
       continue;
     QString xtnsn = fmt.extension();
     allEx.insert(xtnsn);
     QString fmt_desc(tr("%1 file(s) (*.%2);;").arg(fmt.name()).arg(xtnsn));
-    // res += fmt.name() ;
-    // res += QString("file(s) (*.");
-    // res += xtnsn;
-    // res += tr(");;");
     res += fmt_desc;
-    // QMessageBox::information(nullptr,xtnsn,fmt_desc);
   }
 
   // Make "All registered" section:
   QString reged;
   if (!allEx.empty()) {
     for (const QString& xnosch : allEx)
-      if(!xnosch.isEmpty()) avlbl += tr(" *.") += xnosch;
+      if (!xnosch.isEmpty())
+        avlbl += tr(" *.") += xnosch;
   }
   avlbl += ");;";
   avlbl += res;
@@ -294,7 +291,18 @@ void FrameFile::ReadFileCube()
 {
   this->ReadMoleculeAs<vtkGaussianCubeReader2>();
 }
-
+void FrameFile::ParseEXTOUT()
+{
+  // this->ReadMoleculeAs<vtk::ReadMoleculeFileEXTOUT>();
+}
+void FrameFile::ParseSUM()
+{
+  // this->ReadMoleculeAs<vtk::ReadMoleculeFileSUM>();
+}
+void FrameFile::ParseMGP()
+{
+  this->ReadMoleculeAs<vtk::ReadMoleculeFileMGP>();
+}
 bool FrameFile::SourceToStructure()
 {
   // NewMoleculeField mol_new;
