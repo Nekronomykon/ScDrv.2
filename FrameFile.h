@@ -23,6 +23,8 @@
 #include <vtkMoleculeAlgorithm.h>
 #include <vtkMoleculeReaderBase.h>
 
+#include "ReadMoleculeFileMGP.h"
+
 #include "StyleMapMolecule.h"
 
 #include "EditCode.h"
@@ -88,6 +90,9 @@ public:
   void ReadFileXYZ();
   void ReadFilePDB();
   void ReadFileCube();
+  void ParseEXTOUT();
+  void ParseMGP();
+  void ParseSUM();
 
   // signals:
 
