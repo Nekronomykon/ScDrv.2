@@ -87,9 +87,9 @@ public:
   bool canBeClosed() const;
   bool openTextFile(const QString & /* path */, bool /* bExistent */ = true);
 
-  void ReadFileXYZ();
-  void ReadFilePDB();
-  void ReadFileCube();
+  void ParseXYZ();
+  void ParsePDB();
+  void ParseCUBE();
   void ParseEXTOUT();
   void ParseMGP();
   void ParseSUM();

@@ -263,12 +263,13 @@ void FrameBrowser::navigateTo(const QString &path)
 #ifdef QT_DEBUG_MESSAGE_BOX
   QMessageBox::information(this, tr("Extension"), ex_type, QMessageBox::Ok);
 #endif
+// the simplest form of the format/by-extension casting ;)
   if (!ex_type.compare(tr("xyz")))
-    frameDoc_->ReadFileXYZ();
+    frameDoc_->ParseXYZ();
   if (!ex_type.compare(tr("pdb")))
-    frameDoc_->ReadFilePDB();
+    frameDoc_->ParsePDB();
   if (!ex_type.compare(tr("cube")))
-    frameDoc_->ReadFileCube();
+    frameDoc_->ParseCUBE();
 }
 
 void FrameBrowser::closeEvent(QCloseEvent *event)

@@ -24,12 +24,12 @@ typedef vtkNew<vtkSimpleBondPerceiver> NewSimpleBondMaker;
 typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
 
 /* static */ const FileFormat FrameFile::formatInput[] = {
-  { QString("AIMAll exteded output"), QString("extout") },
-  { QString("AIMAll molecular graph"), QString("mgp") },
-  { QString("AIMAll summary"), QString("sum") },
+  { QString("AIMAll exteded output"), QString("extout"), &FrameFile::ParseEXTOUT },
+  { QString("AIMAll molecular graph"), QString("mgp"), &FrameFile::ParseMGP },
+  { QString("AIMAll summary"), QString("sum"), &FrameFile::ParseSUM },
   // What else from the AIMAll output formats?
   // --> http://aim.tkgristmill.com/readme.html
-  { QString("XMol XYZ"), QString("xyz"), &FrameFile::ReadFileXYZ },
+  { QString("XMol XYZ"), QString("xyz"), &FrameFile::ParseXYZ },
   { QString("Brookhaven Protein DB"), QString("pdb"),
     &FrameFile::ReadFilePDB },
   { QString("Gaussian formatted checkpoint"), QString("fchk") },
@@ -279,15 +279,15 @@ bool FrameFile::openTextFile(const QString& path, bool bExistent)
   return this->SourceToStructure(); // NEVERTHELESS STILL A STUB!
 }
 
-void FrameFile::ReadFileXYZ()
+void FrameFile::ParseXYZ()
 {
   this->ReadMoleculeAs<vtkXYZMolReader2>();
 }
-void FrameFile::ReadFilePDB()
+void FrameFile::ParsePDB()
 {
   this->ReadMoleculeAs<vtkPDBReader>();
 }
-void FrameFile::ReadFileCube()
+void FrameFile::ParseCUBE()
 {
   this->ReadMoleculeAs<vtkGaussianCubeReader2>();
 }
@@ -301,7 +301,7 @@ void FrameFile::ParseSUM()
 }
 void FrameFile::ParseMGP()
 {
-  this->ReadMoleculeAs<vtk::ReadMoleculeFileMGP>();
+  // this->ReadMoleculeAs<vtk::ReadMoleculeFileMGP>();
 }
 bool FrameFile::SourceToStructure()
 {
