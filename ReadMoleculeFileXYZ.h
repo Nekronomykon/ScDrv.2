@@ -1,5 +1,5 @@
-#ifndef __Read_MoleculeFile_Base_h
-#define __Read_MoleculeFile_Base_h
+#ifndef __Read_MoleculeFile_XYZ_h
+#define __Read_MoleculeFile_XYZ_h
 
 #include <vtkXYZMolReader2.h>
 
@@ -9,4 +9,4 @@ namespace vtk {
 typedef vtkXYZMolReader2 ReadMoleculeFileXYZ;
 };
 
-#endif //!__Read_MoleculeFile_Base_h
+#endif //!__Read_MoleculeFile_XYZ_h

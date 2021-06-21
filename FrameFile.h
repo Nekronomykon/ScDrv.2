@@ -23,7 +23,7 @@
 #include <vtkMoleculeAlgorithm.h>
 #include <vtkMoleculeReaderBase.h>
 
-#include "ReadMoleculeFileMGP.h"
+#include "ReadMoleculeFileBase.h"
 
 #include "StyleMapMolecule.h"
 

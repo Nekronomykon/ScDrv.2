@@ -12,12 +12,16 @@
 #include <vtkXYZMolReader.h>
 #include <vtkXYZMolReader2.h>
 
+#include "ReadMoleculeFileMGP.h"
+#include "ReadMoleculeFileXYZ.h"
+
 #include <QByteArray>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
 
 using namespace std;
+using namespace vtk;
 // namespace fs = std::filesystem;
 
 typedef vtkNew<vtkSimpleBondPerceiver> NewSimpleBondMaker;
