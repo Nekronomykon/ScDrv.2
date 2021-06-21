@@ -12,13 +12,13 @@
 #include <vtkXYZMolReader.h>
 #include <vtkXYZMolReader2.h>
 
-#include "ReadMoleculeFileMGP.h"
-#include "ReadMoleculeFileXYZ.h"
-
 #include <QByteArray>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+
+#include "ReadMoleculeFileMGP.h"
+#include "ReadMoleculeFileXYZ.h"
 
 using namespace std;
 using namespace vtk;
@@ -28,14 +28,14 @@ typedef vtkNew<vtkSimpleBondPerceiver> NewSimpleBondMaker;
 typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
 
 /* static */ const FileFormat FrameFile::formatInput[] = {
-  { QString("AIMAll exteded output"), QString("extout"), &FrameFile::ParseEXTOUT },
+  { QString("AIMAll exteded output"), QString("extout"),
+    &FrameFile::ParseEXTOUT },
   { QString("AIMAll molecular graph"), QString("mgp"), &FrameFile::ParseMGP },
   { QString("AIMAll summary"), QString("sum"), &FrameFile::ParseSUM },
   // What else from the AIMAll output formats?
   // --> http://aim.tkgristmill.com/readme.html
   { QString("XMol XYZ"), QString("xyz"), &FrameFile::ParseXYZ },
-  { QString("Brookhaven Protein DB"), QString("pdb"),
-    &FrameFile::ParsePDB },
+  { QString("Brookhaven Protein DB"), QString("pdb"), &FrameFile::ParsePDB },
   { QString("Gaussian formatted checkpoint"), QString("fchk") },
   { QString("Gaussian cube"), QString("cube"), &FrameFile::ParseCUBE },
   { QString("Chemical MarkUp CML"), QString("cml") }, /// ???
@@ -43,6 +43,19 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
   { QString("Wavefinction extended"), QString("wfx") },
   // { QString(), QString() }
 };
+
+/* static */ FileFormat FrameFile::chooseFormatByExtension(
+  const QString& exten)
+{
+  FileFormat fmt_res;
+  for (const FileFormat& fmt : formatInput) {
+    if (!fmt.hasExtension(exten))
+      continue;
+    fmt_res = fmt;
+    break;
+  }
+  return fmt_res;
+}
 
 /* static */ QString FrameFile::filterInput()
 {
@@ -61,7 +74,8 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
     if (!fmt.hasName() ||
         !fmt.hasFileExtension()) // --> nameless formats are skipped:
       continue;
-    QString xtnsn = fmt.extension();
+    QString xtnsn =
+      fmt.extension(); // <-- here to care whether there are moar extensions
     allEx.insert(xtnsn);
     QString fmt_desc(tr("%1 file(s) (*.%2);;").arg(fmt.name()).arg(xtnsn));
     res += fmt_desc;
@@ -212,9 +226,9 @@ bool FrameFile::changePathToBind(bool bSync)
   if (edit_src_->loadFromPath(path)) {
     path_src_bound_ = path;
     // apply format, if bSync
-    return bSync ? this->SourceToStructure() : true; // TODO: rewrite
-  } else                                             // something went wrong...
-    return false;                                    // stub
+    return bSync ? this->castSource() : true; // TODO: rewrite
+  } else                                      // something went wrong...
+    return false;                             // stub
 }
 
 bool FrameFile::querySave()
@@ -274,40 +288,73 @@ bool FrameFile::canBeClosed() const
 
 bool FrameFile::openTextFile(const QString& path, bool bExistent)
 {
-  auto edit = this->editSource();
-  edit->loadFromPath(path);
+  this->loadSource(path, bExistent);
+  return this->castSource(); // NEVERTHELESS STILL A STUB!
+}
+
+bool FrameFile::loadSource(const QString& path, bool bExistent)
+{
   this->path_src_bound_ = path;
+
+  auto edit = this->editSource();
+  if (!edit->loadFromPath(path))
+    return false;
   edit->document()->setModified(false);
   edit->setReadOnly(!bExistent);
 
-  return this->SourceToStructure(); // NEVERTHELESS STILL A STUB!
+  return true;
+}
+bool FrameFile::ParseXYZ()
+{
+  return this->ReadMoleculeAs<vtk::ReadMoleculeFileXYZ>();
+}
+bool FrameFile::ParsePDB()
+{
+  return this->ReadMoleculeAs<vtkPDBReader>();
+}
+bool FrameFile::ParseCUBE()
+{
+  return this->ReadMoleculeAs<vtkGaussianCubeReader2>();
+}
+bool FrameFile::ParseEXTOUT()
+{
+  return
+    // this->ReadMoleculeAs<vtk::ReadMoleculeFileEXTOUT>();
+    false;
+}
+bool FrameFile::ParseSUM()
+{
+  return
+    // this->ReadMoleculeAs<vtk::ReadMoleculeFileSUM>();
+    false;
+}
+bool FrameFile::ParseMGP()
+{
+  return
+    // this->ReadMoleculeAs<vtk::ReadMoleculeFileMGP>();
+    false;
 }
 
-void FrameFile::ParseXYZ()
+//////////////////////////////////////////////////////////////////////////
+//
+bool FrameFile::castSource()
 {
-  this->ReadMoleculeAs<vtk::ReadMoleculeFileXYZ>();
+  // NewMoleculeField mol_new;
+  // this->setViewOnlySource();
+  auto edit = this->getEditSource();
+  edit->setReadOnly(true);
+
+  QString path = this->getPathBound();
+  QFileInfo fi(path);
+  FileFormat fmt = FrameFile::chooseFormatByExtension(fi.suffix());
+  if (!fmt)
+    return true; // --> "text-only" mode is the only possible:
+  if (!fmt.applyFor(*this))
+    return false; // --> unsuccesful attempt to apply known foramt...
+  // this->setViewCastStructure();
+  return true; // ->
 }
-void FrameFile::ParsePDB()
-{
-  this->ReadMoleculeAs<vtkPDBReader>();
-}
-void FrameFile::ParseCUBE()
-{
-  this->ReadMoleculeAs<vtkGaussianCubeReader2>();
-}
-void FrameFile::ParseEXTOUT()
-{
-  // this->ReadMoleculeAs<vtk::ReadMoleculeFileEXTOUT>();
-}
-void FrameFile::ParseSUM()
-{
-  // this->ReadMoleculeAs<vtk::ReadMoleculeFileSUM>();
-}
-void FrameFile::ParseMGP()
-{
-  // this->ReadMoleculeAs<vtk::ReadMoleculeFileMGP>();
-}
-bool FrameFile::SourceToStructure()
+bool FrameFile::wasCastSource()
 {
   // NewMoleculeField mol_new;
   auto edit = this->getEditSource();
@@ -368,7 +415,7 @@ void FrameFile::castChangedViews(int id)
 {
   if (edit_src_ == ptrActiveWidget_) // --> deactivating edit_src_
   {
-    if (this->SourceToStructure())
+    if (this->castSource())
       this->ShowTheStructure();
   }
   if ((id_edit_src_ >= 0) && (id == id_edit_src_)) // --> activating edit_src_
@@ -380,10 +427,11 @@ void FrameFile::castChangedViews(int id)
 }
 
 template <class Reader>
-void FrameFile::ReadMoleculeAs()
+bool FrameFile::ReadMoleculeAs()
 {
+  assert(this->hasSourcePath());
   if (!this->hasSourcePath())
-    return;
+    return false;
   QFileInfo fi(this->pathSource());
   QByteArray bytes = fi.canonicalFilePath().toLatin1();
 
@@ -398,10 +446,8 @@ void FrameFile::ReadMoleculeAs()
   make_bonds_->SetOutput(molecule_);
 
   reader->Update();
-
-  bool bHaveNewMol = true; // bool(new_mol->GetNumberOfAtoms() > 0);
-  if (bHaveNewMol) {
-    make_bonds_->Update();
-    this->getViewMolecule()->mapMolecule(molecule_);
-  }
+  bool bResult(new_mol->GetNumberOfAtoms() > 0);
+  if (bResult)
+    molecule_->DeepCopy(new_mol);
+  return bResult;
 }

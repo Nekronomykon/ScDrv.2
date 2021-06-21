@@ -14,7 +14,7 @@ struct FileFormatFor
 {
   QString name_;
   QString extension_;
-  typedef void (Host::*Operation)(void);
+  typedef bool (Host::*Operation)(void);
   Operation operation_ = nullptr;
 
 public:
@@ -24,6 +24,7 @@ public:
   bool hasName() const { return !name_.isEmpty(); }
   const QString& extension() const { return extension_; }
   bool hasFileExtension() const { return !extension_.isEmpty(); }
+  bool hasExtension(const QString& x) const { return !x.compare(extension_); }
 
   bool hasAction() const { return bool((Operation) nullptr != operation_); }
 
@@ -31,10 +32,10 @@ public:
   {
     return bool(!extension_.compare(info.suffix()));
   }
-  void applyFor(Host& host)
+  bool applyFor(Host& host)
   {
     assert(operation_);
-    if (operation_)
+    return (!operation_) ? true :
       (host.*operation_)();
   }
 };

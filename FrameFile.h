@@ -2,36 +2,29 @@
 #define Frame_File__H_
 
 #ifdef _MSC_VER
-#pragma once
+#  pragma once
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
 // #include <filesystem>
 
-#include <QPointer>
-
 #include <vtkMolecule.h>
-
-#include <vtkNew.h>
-#include <vtkSmartPointer.h>
-
-#include <QTabWidget>
-#include <QSplitter>
-
-#include <vtkVectorFieldTopology.h>
-
 #include <vtkMoleculeAlgorithm.h>
 #include <vtkMoleculeReaderBase.h>
+#include <vtkNew.h>
+#include <vtkSmartPointer.h>
+#include <vtkVectorFieldTopology.h>
 
-#include "ReadMoleculeFileBase.h"
-
-#include "StyleMapMolecule.h"
+#include <QPointer>
+#include <QSplitter>
+#include <QTabWidget>
 
 #include "EditCode.h"
+#include "FormatFor.h"
+#include "ReadMoleculeFileBase.h"
+#include "StyleMapMolecule.h"
 #include "ViewMolecule.h"
 #include "ViewQuantities.h"
-
-#include "FormatFor.h"
 
 typedef vtkNew<vtkMolecule> NewMolecule;
 typedef vtkSmartPointer<vtkMolecule> AMolecule;
@@ -57,24 +50,26 @@ private:
   static const FileFormat formatInput[];
 
 public:
+  static FileFormat chooseFormatByExtension(const QString& exten);
   static QString filterInput();
   static QString filterOutput();
 
-  static QString QuerySavePath(QWidget *parent, QString src, QString & /* context */);
+  static QString QuerySavePath(QWidget* parent, QString src,
+                               QString& /* context */);
 
 public:
-  explicit FrameFile(QWidget * /*parent*/ = nullptr);
+  explicit FrameFile(QWidget* /*parent*/ = nullptr);
 
   bool isUntitled() const;
   bool hasSourcePath() const;
-  const QString &pathSource() const;
+  const QString& pathSource() const;
 
-  EditCode *editSource();
-  EditCode *getEditSource() const;
-  QTextDocument *getSourceDocument() const;
+  EditCode* editSource();
+  EditCode* getEditSource() const;
+  QTextDocument* getSourceDocument() const;
 
-  ViewMolecule *viewMolecule();
-  ViewMolecule *getViewMolecule() const;
+  ViewMolecule* viewMolecule();
+  ViewMolecule* getViewMolecule() const;
 
   QString describeInputFormats() const;
 
@@ -85,25 +80,31 @@ public:
   bool isModified() const;
   bool hasPendingTasks() const;
   bool canBeClosed() const;
-  bool openTextFile(const QString & /* path */, bool /* bExistent */ = true);
 
-  void ParseXYZ();
-  void ParsePDB();
-  void ParseCUBE();
-  void ParseEXTOUT();
-  void ParseMGP();
-  void ParseSUM();
+  bool openTextFile(const QString& /* path */, bool /* bExistent */ = true);
+
+  bool ParseXYZ();
+  bool ParsePDB();
+  bool ParseCUBE();
+  bool ParseEXTOUT();
+  bool ParseMGP();
+  bool ParseSUM();
 
   // signals:
 
 protected:
-  bool SourceToStructure();
+  bool loadSource(const QString& /* path */, bool /* bExistent */ = true);
+  bool castSource();
+
+  const QString& getPathBound()const {return path_src_bound_;}
+
   void ShowTheStructure();
 
   template <class Reader>
-  void ReadMoleculeAs();
+  bool ReadMoleculeAs();
 
 private:
+  bool wasCastSource(); // storage stub; unknown mind writings...
   // std::filesystem::path path_bound_;
   QString path_src_bound_ = QString();
   //
@@ -131,7 +132,9 @@ private:
 
   AMolAlgorithm make_bonds_;
 
-  QWidget *ptrActiveWidget_ = nullptr;
+  vtkSmartPointer<vtk::ReadMoleculeFileBase> ptrReader_;
+
+  QWidget* ptrActiveWidget_ = nullptr;
 
 private slots:
   void castChangedViews(int id);
