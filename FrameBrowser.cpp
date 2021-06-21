@@ -191,6 +191,11 @@ void FrameBrowser::setupActions()
   // , QIcon(":/images/SetFont.png")
   );
   actionSetFont_->setIcon(iconSetFont);
+  
+  const QIcon iconOptions = QIcon::fromTheme("preferences-system"
+    // , QIcon(":/images/Options.png")
+  );
+  actionOptions_->setIcon(iconOptions);
 
   const QIcon iconCastSrc(":/images/SrcCast.png");
   actionViewMolecule_->setIcon(iconCastSrc);
