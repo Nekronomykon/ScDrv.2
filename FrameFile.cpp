@@ -168,17 +168,17 @@ FrameFile::FrameFile(QWidget* parent)
 
 bool FrameFile::isUntitled() const
 {
-  return path_src_bound_.isEmpty();
+  return pathSource_.isEmpty();
 }
 
 bool FrameFile::hasSourcePath() const
 {
-  return !path_src_bound_.isEmpty();
+  return !pathSource_.isEmpty();
 }
 
-const QString& FrameFile::pathSource() const
+const QString& FrameFile::getPathSource() const
 {
-  return path_src_bound_;
+  return pathSource_;
 }
 
 EditCode* FrameFile::editSource()
@@ -219,12 +219,12 @@ QString FrameFile::describeInputFormats() const
 bool FrameFile::changePathToBind(bool bSync)
 {
   QString format;
-  QString path = QuerySavePath(this, this->pathSource(), format);
+  QString path = QuerySavePath(this, this->getPathSource(), format);
   if (path.isEmpty())
     return false; // cancelled
   // setup format:
   if (edit_src_->loadFromPath(path)) {
-    path_src_bound_ = path;
+    pathSource_ = path;
     // apply format, if bSync
     return bSync ? this->castSource() : true; // TODO: rewrite
   } else                                      // something went wrong...
@@ -239,7 +239,7 @@ bool FrameFile::querySave()
 
   QString query(tr("Current content of the document"));
 
-  QString path(this->pathSource());
+  QString path(this->getPathSource());
   if (!path.isEmpty()) {
     query += "based upon the path\n";
     query += path;
@@ -265,7 +265,7 @@ bool FrameFile::querySave()
 }
 void FrameFile::doSave()
 {
-  edit_src_->saveToPath(this->pathSource());
+  edit_src_->saveToPath(this->getPathSource());
   this->getSourceDocument()->setModified(false);
 }
 bool FrameFile::isModified() const
@@ -294,7 +294,7 @@ bool FrameFile::openTextFile(const QString& path, bool bExistent)
 
 bool FrameFile::loadSource(const QString& path, bool bExistent)
 {
-  this->path_src_bound_ = path;
+  this->pathSource_ = path;
 
   auto edit = this->editSource();
   if (!edit->loadFromPath(path))
@@ -344,7 +344,7 @@ bool FrameFile::castSource()
   auto edit = this->getEditSource();
   edit->setReadOnly(true);
 
-  QString path = this->getPathBound();
+  QString path = this->getPathSource();
   QFileInfo fi(path);
   FileFormat fmt = FrameFile::chooseFormatByExtension(fi.suffix());
   if (!fmt)
@@ -432,7 +432,7 @@ bool FrameFile::ReadMoleculeAs()
   assert(this->hasSourcePath());
   if (!this->hasSourcePath())
     return false;
-  QFileInfo fi(this->pathSource());
+  QFileInfo fi(this->getPathSource());
   QByteArray bytes = fi.canonicalFilePath().toLatin1();
 
   NewMolecule new_mol;

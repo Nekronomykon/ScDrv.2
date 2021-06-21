@@ -62,7 +62,7 @@ public:
 
   bool isUntitled() const;
   bool hasSourcePath() const;
-  const QString& pathSource() const;
+  const QString& getPathSource() const;
 
   EditCode* editSource();
   EditCode* getEditSource() const;
@@ -96,8 +96,6 @@ protected:
   bool loadSource(const QString& /* path */, bool /* bExistent */ = true);
   bool castSource();
 
-  const QString& getPathBound()const {return path_src_bound_;}
-
   void ShowTheStructure();
 
   template <class Reader>
@@ -106,7 +104,7 @@ protected:
 private:
   bool wasCastSource(); // storage stub; unknown mind writings...
   // std::filesystem::path path_bound_;
-  QString path_src_bound_ = QString();
+  QString pathSource_ = QString();
   //
   // AMoleculeField molecule_;
   //
