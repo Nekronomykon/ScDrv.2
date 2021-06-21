@@ -281,7 +281,7 @@ bool FrameFile::openTextFile(const QString& path, bool bExistent)
 
 void FrameFile::ParseXYZ()
 {
-  this->ReadMoleculeAs<vtkXYZMolReader2>();
+  this->ReadMoleculeAs<vtk::ReadMoleculeFileXYZ>();
 }
 void FrameFile::ParsePDB()
 {
