@@ -219,7 +219,7 @@ QString FrameFile::describeInputFormats() const
 bool FrameFile::changePathToBind(bool bSync)
 {
   QString format;
-  QString path = QuerySavePath(this, this->getPathSource(), format);
+  QString path = FrameFile::QuerySavePath(this, this->getPathSource(), format);
   if (path.isEmpty())
     return false; // cancelled
   // setup format:
