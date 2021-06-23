@@ -6,8 +6,6 @@
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
-// #include <filesystem>
-
 #include <vtkMolecule.h>
 #include <vtkMoleculeAlgorithm.h>
 #include <vtkMoleculeReaderBase.h>
