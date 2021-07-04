@@ -16,6 +16,11 @@ class ChooseColor
 public:
   ChooseColor(QWidget * /*parent*/ = nullptr);
 
+  static QString getDefaultColorName();
+  static void resetDefaultColorName(const QString&);
+
+  void adjustColorName();
+
 private:
   static QStringList ColorNames();
   static QString name_color_bg;

@@ -50,7 +50,8 @@ public:
   ~ViewMolecule() override = default;
 
   void doRender();
-  void resetBgColor(const QString &name);
+  void adjustBgColor();
+  void setBgColor(const QString &name);
 
   bool setMoleculeStyle(const StyleMapMolecule& style);
 
@@ -80,6 +81,8 @@ public:
 private:
   static vtkNew<vtkNamedColors> colors_bg;
   static vtkStdString name_bg_color;
+
+  QString name_color_bg_;
   vtkColor3d color_bg_;
 
   // ---

@@ -2,16 +2,11 @@
 
 #include <vtkNamedColors.h>
 
-QString ChooseColor::name_color_bg(tr("alice_blue"));
+QString ChooseColor::name_color_bg(tr("gainsboro"));
 
-ChooseColor::ChooseColor(QWidget *parent)
-    : QComboBox(parent)
-{
-  // this->addItem(QString("-- user --")); // placeholder
-  this->addItems(ColorNames());
-}
-
-QStringList ChooseColor::ColorNames()
+/* static */ QString ChooseColor::getDefaultColorName(){return name_color_bg;}
+/* static */ void ChooseColor::resetDefaultColorName(const QString&name){name_color_bg = name;}
+/* static */ QStringList ChooseColor::ColorNames()
 {
   static QStringList allNames;
 
@@ -34,3 +29,14 @@ QStringList ChooseColor::ColorNames()
 
   return allNames;
 }
+
+ChooseColor::ChooseColor(QWidget *parent)
+    : QComboBox(parent)
+{
+  // this->addItem(QString("-- user --")); // placeholder
+  this->addItems(ColorNames());
+  this->setCurrentText(ChooseColor::getDefaultColorName());
+}
+
+void adjustColorName()
+

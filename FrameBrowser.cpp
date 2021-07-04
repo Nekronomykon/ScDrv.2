@@ -322,8 +322,11 @@ void FrameBrowser::closeEvent(QCloseEvent* event)
 //
 void FrameBrowser::setSceneBgColor()
 {
+  QString new_name_bg = choose_color_->currentText();
+  ChooseColor::resetDefaultColorName(new_name_bg);
   ViewMolecule* pView = frameDoc_->viewMolecule();
-  pView->resetBgColor(choose_color_->currentText());
+  pView->adjustBgColor();
+  // ??? choose_color_->adjustColorName();
 }
 
 void FrameBrowser::loadIndexedFile(const QModelIndex& idx)

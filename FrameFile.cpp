@@ -348,9 +348,9 @@ bool FrameFile::castSource()
   QFileInfo fi(path);
   FileFormat fmt = FrameFile::chooseFormatByExtension(fi.suffix());
   if (!fmt)
-    return true; // --> "text-only" mode is the only possible:
+    return true; // --> "text-only" mode is the only possible alternative:
   if (!fmt.applyFor(*this))
-    return false; // --> unsuccesful attempt to apply known foramt...
+    return false; // --> unsuccesful attempt to apply known format...
   // this->setViewCastStructure();
   return true; // ->
 }
@@ -429,10 +429,11 @@ void FrameFile::castChangedViews(int id)
 template <class Reader>
 bool FrameFile::ReadMoleculeAs()
 {
-  assert(this->hasSourcePath());
-  if (!this->hasSourcePath())
-    return false;
-  QFileInfo fi(this->getPathSource());
+  QString path = this->getPathSource();
+  // --- what we really need here
+  // --- to avoid the real pathSource dependence:
+  // QString path = edit_src_->writeTemporaryContent();
+  QFileInfo fi(path);
   QByteArray bytes = fi.canonicalFilePath().toLatin1();
 
   NewMolecule new_mol;
@@ -441,13 +442,21 @@ bool FrameFile::ReadMoleculeAs()
 
   reader->SetOutput(new_mol);
   reader->SetFileName(bytes.data());
-
-  make_bonds_->SetInputData(new_mol);
-  make_bonds_->SetOutput(molecule_);
-
   reader->Update();
   bool bResult(new_mol->GetNumberOfAtoms() > 0);
-  if (bResult)
-    molecule_->DeepCopy(new_mol);
+
+#ifndef QT_MESSAGE_BOX_INFO_DEBUG
+  QMessageBox::information(
+    this,
+    tr("Reading molecule from:\nPath: %1\nNumber of atoms read: %2\n")
+      .arg(path)
+      .arg(new_mol->GetNumberOfAtoms()));
+#endif //! QT_MESSAGE_BOX_INFO_DEBUG
+
+  // make_bonds_->SetInputData(new_mol);
+  // make_bonds_->SetOutput(molecule_);
+  // make_bonds_->E??
+
+  // if (bResult) molecule_->DeepCopy(new_mol);
   return bResult;
 }

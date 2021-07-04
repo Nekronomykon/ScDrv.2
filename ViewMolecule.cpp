@@ -1,22 +1,21 @@
 #include "ViewMolecule.h"
 
-#include <QByteArray>
-
-#include <vtkRenderWindow.h>
 #include <vtkActor.h>
-#include <vtkMoleculeMapper.h>
-
-#include <vtkWindowToImageFilter.h>
-
-#include <vtkImageWriter.h>
 #include <vtkBMPWriter.h>
+#include <vtkImageWriter.h>
+#include <vtkInteractorStyleRubberBandPick.h>
+#include <vtkJPEGWriter.h>
+#include <vtkMoleculeMapper.h>
 #include <vtkPNGWriter.h>
 #include <vtkPNMWriter.h>
-#include <vtkJPEGWriter.h>
-#include <vtkTIFFWriter.h>
 #include <vtkPostScriptWriter.h>
+#include <vtkRenderWindow.h>
+#include <vtkTIFFWriter.h>
+#include <vtkWindowToImageFilter.h>
 
-#include <vtkInteractorStyleRubberBandPick.h>
+#include <QByteArray>
+
+#include "ChooseColor.h"
 #include "InteractorHighlightMouse.h"
 
 typedef vtkSmartPointer<MouseInteractorHighLightActor> AMouseInStyHighlight;
@@ -27,13 +26,15 @@ vtkNew<vtkNamedColors> ViewMolecule::colors_bg;
 
 vtkStdString ViewMolecule::name_bg_color("alice_blue");
 
-ViewMolecule::ViewMolecule(QWidget *parent, Qt::WindowFlags flags)
-    : Superclass(parent, flags), color_bg_(colors_bg->GetColor3d(name_bg_color.c_str()).GetData()),
-      //             ^^^^  ViewMolecule::LastBgColorPtr()... Gainsboro?
-      styleMol_(StyleMapMolecule::styleFast),
-      actorMol_(AnActor::New()),
-      mapperMol_(AMapMol::New()),
-      track_camera_(AnInterStyleRBPick::New())
+ViewMolecule::ViewMolecule(QWidget* parent, Qt::WindowFlags flags)
+  : Superclass(parent, flags)
+  , color_bg_(colors_bg->GetColor3d(name_bg_color.c_str()).GetData())
+  ,
+  //             ^^^^  ViewMolecule::LastBgColorPtr()... Gainsboro?
+  styleMol_(StyleMapMolecule::styleFast)
+  , actorMol_(AnActor::New())
+  , mapperMol_(AMapMol::New())
+  , track_camera_(AnInterStyleRBPick::New())
 {
   // vtkRenderWindow *pRW = this->renderWindow();
 
@@ -43,7 +44,7 @@ ViewMolecule::ViewMolecule(QWidget *parent, Qt::WindowFlags flags)
 
 void ViewMolecule::doRender()
 {
-  vtkRenderWindow *pRW = this->renderWindow();
+  vtkRenderWindow* pRW = this->renderWindow();
   pRW->RemoveRenderer(renderer_);
   renderer_->RemoveActor(actorMol_);
   //
@@ -57,48 +58,55 @@ void ViewMolecule::doRender()
   pRW->Render();
 }
 
-void ViewMolecule::resetBgColor(const QString &name)
+void ViewMolecule::adjustBgColor()
 {
-  QByteArray name_bytes = name.toLatin1();
-  color_bg_ = colors_bg->GetColor3d(name_bytes.data());
-
-  //
-  this->doRender();
+  setBgColor(ChooseColor::getDefaultColorName());
 }
+void ViewMolecule::setBgColor(const QString& name)
+{
 
-bool ViewMolecule::setMoleculeStyle(const StyleMapMolecule &style)
+  int ncmp = name_color_bg_.compare(name);
+  if (ncmp) {
+    name_color_bg_ = name; // == resetBgColor()
+    QByteArray name_bytes = name.toLatin1();
+    vtkColor3d color_new_bg = colors_bg->GetColor3d(name_bytes.data());
+    if (color_new_bg != color_bg_) {
+      color_bg_ = color_new_bg;
+      this->doRender();
+    }
+  }
+}
+//
+
+bool ViewMolecule::setMoleculeStyle(const StyleMapMolecule& style)
 {
   bool bRes(true); // (style_mol_ != style);
-  if (bRes)
-  {
+  if (bRes) {
     styleMol_ = style;
     this->doRender();
   }
   return bRes;
 }
 
-void ViewMolecule::mapMolecule(vtkMolecule *pMol)
+void ViewMolecule::mapMolecule(vtkMolecule* pMol)
 {
-
 }
 
 template <class W>
-bool ViewMolecule::writeImageFormat(const QString &fileName, bool rgba, int scale)
+bool ViewMolecule::writeImageFormat(const QString& fileName, bool rgba,
+                                    int scale)
 {
   assert(!fileName.isEmpty());
   if (fileName.isEmpty())
     return false;
-  vtkRenderWindow *renWin = this->renderWindow();
+  vtkRenderWindow* renWin = this->renderWindow();
   vtkNew<W> writer;
   vtkNew<vtkWindowToImageFilter> window_to_image_filter;
   window_to_image_filter->SetInput(renWin);
   window_to_image_filter->SetScale(scale); // image quality
-  if (rgba)
-  {
+  if (rgba) {
     window_to_image_filter->SetInputBufferTypeToRGBA();
-  }
-  else
-  {
+  } else {
     window_to_image_filter->SetInputBufferTypeToRGB();
   }
   // Read from the front buffer.
@@ -113,7 +121,7 @@ bool ViewMolecule::writeImageFormat(const QString &fileName, bool rgba, int scal
   return true;
 }
 
-void ViewMolecule::writeImage(const std::string &fileName, bool rgba)
+void ViewMolecule::writeImage(const std::string& fileName, bool rgba)
 {
   /*
   vtkRenderWindow *renWin = this->renderWindow();
@@ -134,8 +142,8 @@ void ViewMolecule::writeImage(const std::string &fileName, bool rgba)
     std::locale loc;
     std::transform(ext.begin(), ext.end(), ext.begin(),
                    [=](char const &c) { return std::tolower(c, loc); });
-    vtkSmartPointer<vtkImageWriter> writer; // = vtkSmartPointer<vtkImageWriter>::New();
-    if (ext == ".bmp")
+    vtkSmartPointer<vtkImageWriter> writer; // =
+  vtkSmartPointer<vtkImageWriter>::New(); if (ext == ".bmp")
     {
       writer = vtkSmartPointer<vtkBMPWriter>::New();
     }
