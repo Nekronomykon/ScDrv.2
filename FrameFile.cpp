@@ -446,11 +446,9 @@ bool FrameFile::ReadMoleculeAs()
   bool bResult(new_mol->GetNumberOfAtoms() > 0);
 
 #ifndef QT_MESSAGE_BOX_INFO_DEBUG
-  QMessageBox::information(
-    this,
-    tr("Reading molecule from:\nPath: %1\nNumber of atoms read: %2\n")
-      .arg(path)
-      .arg(new_mol->GetNumberOfAtoms()));
+QString message( tr("Reading molecule from:\nPath: %1\nNumber of atoms read: %2\n") );
+  QMessageBox::information( this, QString("Reading a molecule"),
+  message.arg(path).arg(new_mol->GetNumberOfAtoms()) );
 #endif //! QT_MESSAGE_BOX_INFO_DEBUG
 
   // make_bonds_->SetInputData(new_mol);

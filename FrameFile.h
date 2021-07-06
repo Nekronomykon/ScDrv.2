@@ -11,7 +11,7 @@
 #include <vtkMoleculeReaderBase.h>
 #include <vtkNew.h>
 #include <vtkSmartPointer.h>
-#include <vtkVectorFieldTopology.h>
+// #include <vtkVectorFieldTopology.h>
 
 #include <QPointer>
 #include <QSplitter>
@@ -30,8 +30,8 @@ typedef vtkSmartPointer<vtkMolecule> AMolecule;
 typedef vtkNew<vtkMoleculeAlgorithm> NewMolAlgorithm;
 typedef vtkSmartPointer<vtkMoleculeAlgorithm> AMolAlgorithm;
 
-typedef vtkNew<vtkVectorFieldTopology> NewFieldTopology;
-typedef vtkSmartPointer<vtkVectorFieldTopology> AFieldTopology;
+// typedef vtkNew<vtkVectorFieldTopology> NewFieldTopology;
+// typedef vtkSmartPointer<vtkVectorFieldTopology> AFieldTopology;
 
 using namespace std;
 using namespace vtk;
@@ -124,7 +124,7 @@ private:
   int id_view_val_ = -1;
 
   AMolecule molecule_;
-  AFieldTopology field_;
+  // AFieldTopology field_;
 
   AMolAlgorithm make_bonds_;
 

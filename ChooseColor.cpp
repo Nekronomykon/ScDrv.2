@@ -38,5 +38,8 @@ ChooseColor::ChooseColor(QWidget *parent)
   this->setCurrentText(ChooseColor::getDefaultColorName());
 }
 
-void adjustColorName()
+void ChooseColor::adjustColorName()
+{
+  ChooseColor::resetDefaultColorName(this->currentText());
+}
 
