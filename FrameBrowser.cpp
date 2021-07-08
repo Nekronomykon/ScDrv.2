@@ -19,6 +19,10 @@ static inline QString keyRecentFiles()
 {
   return QStringLiteral("FileRecent");
 }
+static inline QString keyBackColor()
+{
+  return QStringLiteral("BackgroundColor");
+}
 static inline QString keyGeometry()
 {
   return QStringLiteral("Geometry");
@@ -82,7 +86,12 @@ void FrameBrowser::tile(const QMainWindow* previous)
 void FrameBrowser::readSettings()
 {
   QSettings settings; // (QCoreApplication::organizationName(),
-                      // QCoreApplication::applicationName());
+  // QCoreApplication::applicationName());
+  QString nameBgColor = settings.value(keyBackColor(), QString()).toString();
+  if (nameBgColor.isEmpty())
+    nameBgColor = tr("black"); // hard-coded
+  ChooseColor::resetDefaultColorName(nameBgColor);
+
   const QByteArray geometry =
     settings.value(keyGeometry(), QByteArray()).toByteArray();
   if (geometry.isEmpty()) {
@@ -99,7 +108,8 @@ void FrameBrowser::writeSettings()
 
 {
   QSettings settings; // (QCoreApplication::organizationName(),
-                      // QCoreApplication::applicationName());
+  // QCoreApplication::applicationName());
+  settings.setValue(keyBackColor(), ChooseColor::getDefaultColorName());
   settings.setValue(keyGeometry(), this->saveGeometry());
 }
 //
@@ -188,12 +198,12 @@ void FrameBrowser::setupActions()
   actionTextSource_->setIcon(iconEditTxt);
 
   const QIcon iconSetFont = QIcon::fromTheme("preferences-desktop-font"
-  // , QIcon(":/images/SetFont.png")
+                                             // , QIcon(":/images/SetFont.png")
   );
   actionSetFont_->setIcon(iconSetFont);
-  
+
   const QIcon iconOptions = QIcon::fromTheme("preferences-system"
-    // , QIcon(":/images/Options.png")
+                                             // , QIcon(":/images/Options.png")
   );
   actionOptions_->setIcon(iconOptions);
 
