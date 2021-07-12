@@ -21,10 +21,12 @@ public:
   // save the current content to a temporary file and return its path
   QString dumpTemporary();
 
-  template<typename Parser>
+  template <typename Parser>
   bool parseCurrentContent(Parser* parser);
 
 private:
+  static constexpr const char* name_template = "ScD-XXXXXX-src.sqdrv";
+
   QPointer<QTemporaryFile> source_tmp_;
 };
 
