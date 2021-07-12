@@ -17,7 +17,7 @@
 #include <QSplitter>
 #include <QTabWidget>
 
-#include "EditCode.h"
+#include "EditSource.h"
 #include "FormatFor.h"
 #include "ReadMoleculeFileBase.h"
 #include "StyleMapMolecule.h"
@@ -116,7 +116,7 @@ private:
   // QPointer<ViewStructure> view_str_;
   // int id_view_str_;
   //
-  QPointer<EditCode> edit_src_;
+  QPointer<EditSource> edit_src_;
   int id_edit_src_ = -1;
   QPointer<ViewMolecule> view_mol_;
   int id_view_mol_ = -1;

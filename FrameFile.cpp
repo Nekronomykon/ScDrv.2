@@ -139,7 +139,7 @@ typedef vtkSmartPointer<vtkSimpleBondPerceiver> ASimpleBondMaker;
 
 FrameFile::FrameFile(QWidget* parent)
   : QTabWidget(parent)
-  , edit_src_(new EditCode(this))
+  , edit_src_(new EditSource(this))
   , view_mol_(new ViewMolecule(this))
   , view_val_(new ViewQuantities(this))
   , molecule_(AMolecule::New())

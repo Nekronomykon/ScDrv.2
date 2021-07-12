@@ -196,6 +196,7 @@ void FrameBrowser::setupActions()
 
   const QIcon iconEditTxt(":/images/SrcEdit.png");
   actionTextSource_->setIcon(iconEditTxt);
+  frameDoc_->setTabIcon(0, iconEditTxt);
 
   const QIcon iconSetFont = QIcon::fromTheme("preferences-desktop-font"
                                              // , QIcon(":/images/SetFont.png")
@@ -209,6 +210,7 @@ void FrameBrowser::setupActions()
 
   const QIcon iconCastSrc(":/images/SrcCast.png");
   actionViewMolecule_->setIcon(iconCastSrc);
+  frameDoc_->setTabIcon(1, iconCastSrc);
 
   const QIcon iconFast(":/images/MolFast.png");
   actionMoleculeFast_->setIcon(iconFast);
