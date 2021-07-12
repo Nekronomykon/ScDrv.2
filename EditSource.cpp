@@ -31,7 +31,7 @@ bool EditSource::parseCurrentContent(Parser* parser)
   QString path_res;
   // save the current content to a temporary file
   if (!source_tmp_)
-    source_tmp_ = new QTemporaryFile(tr("ScD-XXXXXX.sqdrv"));
+    source_tmp_ = new QTemporaryFile(tr("ScD-XXXXXX-src.sqdrv"));
 
   if (!source_tmp_->open())
     return false;
