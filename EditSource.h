@@ -2,7 +2,7 @@
 #define EditSource_h__
 
 #ifdef _MSC_VER
-#  pragma once
+#pragma once
 #else  // !_MSC_VER
 #endif //  _MSC_VER
 
@@ -16,16 +16,18 @@ class EditSource : public EditCode
 {
   Q_OBJECT
 public:
-  EditSource(QWidget* parent = nullptr);
+  EditSource(QWidget *parent = nullptr);
 
   // save the current content to a temporary file and return its path
   QString dumpTemporary();
 
   template <typename Parser>
-  bool parseCurrentContent(Parser* parser);
+  bool parseCurrentContentWith(Parser *parser);
+
+  static QString nameTemplate();
 
 private:
-  static constexpr const char* name_template = "ScD-XXXXXX-src.sqdrv";
+  static constexpr const char *name_template = "ScD-XXXXXX-src.sqdrv";
 
   QPointer<QTemporaryFile> source_tmp_;
 };
