@@ -10,14 +10,26 @@
 
 namespace vtk {
 
-class ReadMoleculeFileMGP : public ReadMoleculeFileBase
+class /* VTKIOCHEMISTRY_EXPORT */ ReadMoleculeFileMGP
+  : public ReadMoleculeFileBase
 {
 private:
   /* data */
 public:
+  static ReadMoleculeFileMGP* New();
+  vtkTypeMacro(ReadMoleculeFileMGP, ReadMoleculeFileBase);
+  void PrintSelf(ostream& os, vtkIndent indent) override;
+
+  ///@{
+  /**
+   * Get/Set the name of the XYZ Molecule file
+   */
+  vtkSetStdStringFromCharMacro(FileName);
+  vtkGetCharFromStdStringMacro(FileName);
+  ///@}
 protected:
   ReadMoleculeFileMGP(/* args */);
-  ~ReadMoleculeFileMGP();
+  ~ReadMoleculeFileMGP() override = default;
 };
 
 };
