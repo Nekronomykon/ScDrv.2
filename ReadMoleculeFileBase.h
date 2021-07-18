@@ -7,8 +7,9 @@
 #endif //  _MSC_VER
 
 #include <vtkMoleculeAlgorithm.h>
-
 #include <vtkMoleculeReaderBase.h>
+
+#include "ReadMoleculeFileRoot.h"
 
 namespace vtk {
 

@@ -22,13 +22,23 @@ public:
 
   ///@{
   /**
+   * Get/Set the output (vtkMolecule) that the reader will fill
+   */
+  vtkMolecule* GetOutput();
+  void SetOutput(vtkMolecule*) override;
+  ///@}
+
+  ///@{
+  /**
    * Get/Set the name of the XYZ Molecule file
    */
   vtkSetStdStringFromCharMacro(FileName);
   vtkGetCharFromStdStringMacro(FileName);
   ///@}
 protected:
-  ReadMoleculeFileMGP(/* args */);
+  std::string FileName = ""; // vtkStdString???
+
+  ReadMoleculeFileMGP();
   ~ReadMoleculeFileMGP() override = default;
 };
 
